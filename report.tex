@@ -66,13 +66,69 @@
 
     \subsection{Prozessumgebung}
 
-
+    \newpage
     \section{Anforderungen}
-
     \subsection{Funktionale Anforderungen}
 
-    \subsection{Grenz- und Vorbedingungen}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & FR-001 \\ \hline
+            \textbf{Anforderung} & Suche von Log und Cache Files \\ \hline
+            \textbf{Beschreibung} & In einem bestimmten Verzeichnis durchsucht das System jegliche Dateinamen inkl. dieser in Unterordnern, um Log \& Cache Files zu identifizieren.  \\ \hline
+            \textbf{Akzeptanzkriterien} &
+            \begin{itemize}
+                \item Der deamon kann via CLI gestartet werden.
+                \item Alle Konfigurationen und Aktionen des deamon sind via CLI verfügbar.
+            \end{itemize}
+            \\ \hline
+        \end{tabular}
+        \caption{Funktionale Anforderung FR-001}\label{tab:table2}
+    \end{table}
 
+
+    \newpage
+    \subsection{Grenz- und Vorbedingungen}
+    TODO systemunabhängigkeit, evtl. erweiterbarkeit des ui (kommunikation zwischen cli und deamon),
+    Folgend 2 eher nicht funktionale Anforderungen
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & FR-001 \\ \hline
+            \textbf{Anforderung} & Hintergrundprozess mit periodischem Task (deamon) \\ \hline
+            \textbf{Beschreibung} & Das System muss einen Hintergrundprozess implementieren, der periodisch Aktionen durchführen kann. \\ \hline
+            \textbf{Akzeptanzkriterien} &
+            \begin{itemize}
+                \item Nach dem Start des Prozesses, ist dieser für den Benutzer nicht mehr ersichtlich.
+                \item Der Hintergrundprozess ist erweiterbar, sodass dieser periodisch und autonom Aktionen durchführen kann.
+            \end{itemize}
+            \\ \hline
+        \end{tabular}
+        \caption{Funktionale Anforderung FR-001}\label{tab:table}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & FR-002 \\ \hline
+            \textbf{Anforderung} & Benutzerschnittstelle via Konsole (CLI) \\ \hline
+            \textbf{Beschreibung} & Mit dem laufenden deamon soll via Konsole interagiert werden können \\ \hline
+            \textbf{Akzeptanzkriterien} &
+            \begin{itemize}
+                \item Der deamon kann via CLI gestartet werden.
+                \item Alle Konfigurationen und Aktionen des deamon sind via CLI verfügbar
+            \end{itemize}
+            \\ \hline
+        \end{tabular}
+        \caption{Funktionale Anforderung FR-002}\label{tab:table2}
+    \end{table}
 
     \section{Usability}
 
