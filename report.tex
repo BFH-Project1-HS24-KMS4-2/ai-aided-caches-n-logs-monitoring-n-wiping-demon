@@ -5,6 +5,7 @@
 \usepackage{tocbibind} % For adding ToC to the table of contents
 \usepackage{titlesec}  % For customizing titles
 \usepackage[ngerman]{babel}
+\usepackage{wasysym}
 
 
 \titleformat{\chapter}[block]   % Set chapter format to block style (both on same line)
@@ -66,10 +67,51 @@
 
     \chapter{Spezifikation}
 
-
+    \newpage
     \section{Systemabgrenzung}
 
     \subsection{Systemumgebung}
+
+    \subsubsection{Komponenten}
+
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/comp-diag-aclom}
+        \caption{UML Komponentendiagramm}
+        \label{fig:comp-diag}
+    \end{figure}
+    
+    \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
+    Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
+    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Befehle aus. Ausserdem stellt er der
+    CLI eine REST-Schnittstelle zur Verfügung.
+    Ein eingebettetes Datenbanksystem speichert die Applikationsdaten.}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|p{2.5cm}|p{6cm}|p{3cm}|}
+            \hline
+            \textbf& \textbf{Zweck} & \textbf{Technologien (primär)} \\
+            \hline
+            \textbf{CLI} & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell) \\
+            \hline
+            \textbf{Controller} & Implementiert die Endpunkte der REST-Schnittstelle & Java, Spring (Data) \\
+            \hline
+            \textbf{Domain Service} & Applikationslogik & Java, Spring \\
+            \hline
+            \textbf{Task Scheduler} & Führt Funktionen periodisch aus & Java, Spring \\
+            \hline
+            \textbf{Repository} & Stellt den Zugang zu den persisiterten Daten zur Verfüfung & Java, Spring (Data) \\
+            \hline
+            \textbf{Embedded Database} & Speichert Applikationsdaten & SQLite \\
+            \hline
+        \end{tabular}
+        \caption{Beschreibung der Komponenten}\label{tab:table3}
+    \end{table}
+
+    \newpage
 
     \subsection{Prozessumgebung}
 
