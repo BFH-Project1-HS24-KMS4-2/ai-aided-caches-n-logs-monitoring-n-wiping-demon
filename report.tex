@@ -4,6 +4,8 @@
 \usepackage{listings}  % For code snippets
 \usepackage{tocbibind} % For adding ToC to the table of contents
 \usepackage{titlesec}  % For customizing titles
+\usepackage[ngerman]{babel}
+
 
 \titleformat{\chapter}[block]   % Set chapter format to block style (both on same line)
 {\normalfont\huge\bfseries}     % Format for the chapter number and title
@@ -23,10 +25,15 @@
 % Title Page
     \begin{titlepage}
         \centering
-        {\LARGE AI-Aided Caches-n-Logs Monitoring-n-Wipin}\\[1em]
-        {\large Luca Scherer, Janic Scherer, Luca Ammann}\\[2em]
-        \textit{BFH, Project 1 (BTI3031) 24/25}\\
-        \textit{Betreuer: Simon Kramer}
+        \textit{Berner Fachhochschule}\\[0.2em]
+        \textit{BTI3031 Project 1}
+        \vfill
+        {\huge \textbf{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}}\\[4em]
+        {\large Luca Scherer, Janic Scherer, Luca Ammann }\\[0.5em]
+        \begin{tabular}{ll}
+        \textbf{Betreuer:}\hspace{0.5em}Dr. Simon Kramer \\
+        \end{tabular}
+
         \vfill
         \textit{\today}
     \end{titlepage}
