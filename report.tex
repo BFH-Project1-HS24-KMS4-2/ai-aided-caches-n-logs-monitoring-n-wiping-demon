@@ -210,6 +210,24 @@
 
     \chapter{Bereitstellung/Integration}
 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/DeplDiagram}
+        \caption{UML Deploymentdiagramm}
+        \label{fig:depl-diag}
+    \end{figure}
+
+    Das ganze System befindet sich während der Laufzeit auf dem Host-Gerät des Anwenders.
+    Dazu werden zwei separate jar-Dateien ausgeliefert.
+    Das Erste sollte bereits beim Start des Geräts ausgeführt werden und die JVM für den Daemon starten.
+    Dieser startet einen Webservice, der REST-Schnittstellen für die Steuerung des Daemons anbietet.
+    Dieser REST-Service kommuniziert ausserdem über JDBC mit einem RDBMS, welches in Form von einer einzigen Datei (SQLite)
+    im Daemon embedded ist.
+
+    Das zweite jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
+    Dieses jar startet wiederum eine zweite jvm, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
+    Diese CLI sendet dann über HTTP die entsprechenden Anfragen an den Daemon, die zur Erfüllung der Anweisungen des Anwenders führen.
+
 
     \section{Lizenzierung}
 
