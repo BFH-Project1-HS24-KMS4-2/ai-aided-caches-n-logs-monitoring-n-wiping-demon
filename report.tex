@@ -41,7 +41,7 @@
         {\huge \textbf{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}}\\[4em]
         {\large Luca Scherer, Janic Scherer, Luca Ammann }\\[0.5em]
         \begin{tabular}{ll}
-        \textbf{Betreuer:}\hspace{0.5em}Dr. Simon Kramer \\
+            \textbf{Betreuer:}\hspace{0.5em}Dr. Simon Kramer \\
         \end{tabular}
 
         \vfill
@@ -90,7 +90,7 @@
         \caption{UML Komponentendiagramm}
         \label{fig:comp-diag}
     \end{figure}
-    
+
     \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
     Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
     Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Befehle aus. Ausserdem stellt er der
@@ -126,38 +126,38 @@
 
     \newpage
     \section{Anforderungen}
+    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
+
     \subsection{Funktionale Anforderungen}
 
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.4cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID} & FR-001 \\ \hline
-            \textbf{Anforderung} & Suche von Log und Cache Files \\ \hline
-            \textbf{Beschreibung} & In einem bestimmten Verzeichnis durchsucht das System jegliche Dateinamen inkl. dieser in Unterordnern, um Log \& Cache Files zu identifizieren.  \\ \hline
-            \textbf{Akzeptanzkriterien} &
-            \begin{itemize}
-                \item Der deamon kann via CLI gestartet werden.
-                \item Alle Konfigurationen und Aktionen des deamon sind via CLI verfügbar.
-            \end{itemize}
-            \\ \hline
-        \end{tabular}
-        \caption{Funktionale Anforderung FR-001}\label{tab:table2}
-    \end{table}
-
+    Alle funktionalen Anforderungen werden in Form von User Stories im Scrum Product Backlog geführt. Dieser wird laufend erweitert beziehungsweise konkretisiert. Eine User Story gilt erst als abgeschlossen, sobald alle dazugehörende Akzeptanzkriterien erfüllt sind. Folgende funktionale Anforderungen wurden definiert und in User Stories inkl. Akzeptanzkriterien abgebildet:
+    \begin{itemize}
+        \item Das System findet jegliche Log- oder Cache-Dateien, welche sich in einem angegebenen Verzeichnis befinden. Dabei werden auch alle Unterverzeichnisse berücksichtigt.
+        \item Das System durchsucht periodisch angegebene Verzeichnisse inkl. Unterverzeichnisse nach Log- oder Cache-Dateien.
+        \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinerander zu vergleichen.
+        \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
+        \item Das System kann den Verwendungszweck von angegebenen Dateien erkennen und nach folgenden Merkalen kategorisieren oder bewerten:
+        \begin{itemize}
+            \item Dateityp
+            \item Verwendungszweck
+            \item Schädlichkeit
+            \item Leer- bzw. löschbar
+        \end{itemize}
+        \item Das System kann angegebene Dateien, nach einer Bestätigung des Benutzers leeren oder löschen.
+    \end{itemize}
+    TODO: Backlog einbinden/beschreiben
 
     \newpage
     \subsection{Grenz- und Vorbedingungen}
-    TODO systemunabhängigkeit, evtl. erweiterbarkeit des ui (kommunikation zwischen cli und deamon),
-    Folgend 2 eher nicht funktionale Anforderungen
+    Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw. Grenz- oder Vorbedingungen nicht explizit als User Story geführt. Aus dem Projekt-Proposal und dem initialen Termin ergaben sich nachfolgende nichtfunktionale Anforderungen.
+    Diese beeinflussten massgeblich die Architektur des Systems. Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
         \centering
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & FR-001 \\ \hline
+            \textbf{ID} & NFR-001 \\ \hline
             \textbf{Anforderung} & Hintergrundprozess mit periodischem Task (deamon) \\ \hline
             \textbf{Beschreibung} & Das System muss einen Hintergrundprozess implementieren, der periodisch Aktionen durchführen kann. \\ \hline
             \textbf{Akzeptanzkriterien} &
@@ -167,7 +167,7 @@
             \end{itemize}
             \\ \hline
         \end{tabular}
-        \caption{Funktionale Anforderung FR-001}\label{tab:table}
+        \caption{Nichtfunktionale Anforderung NFR-001}\label{tab:table}
     \end{table}
 
     \begin{table}[h!]
@@ -175,9 +175,9 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & FR-002 \\ \hline
+            \textbf{ID} & NFR-002 \\ \hline
             \textbf{Anforderung} & Benutzerschnittstelle via Konsole (CLI) \\ \hline
-            \textbf{Beschreibung} & Mit dem laufenden deamon soll via Konsole interagiert werden können \\ \hline
+            \textbf{Beschreibung} & Mit dem laufenden deamon soll via Konsole interagiert werden können. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
                 \item Der deamon kann via CLI gestartet werden.
@@ -185,9 +185,49 @@
             \end{itemize}
             \\ \hline
         \end{tabular}
-        \caption{Funktionale Anforderung FR-002}\label{tab:table2}
+        \caption{Nichtfunktionale Anforderung NFR-002}\label{tab:table2}
     \end{table}
 
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & NFR-003 \\ \hline
+            \textbf{Anforderung} & Systemunabhängigkeit \\ \hline
+            \textbf{Beschreibung} & Lauffähigkeit mit vollem Funktionsumfang auf gängigen Betriebssystemen. \\ \hline
+            \textbf{Akzeptanzkriterien} &
+            \begin{itemize}
+                \item Hintergrundprozess sowie Konsolenschnittstelle sind auf allen gängigen Betriebssystemen lauffähig und mit vollem Funktionsumfang verwendbar.
+                \item Neuimplementierte Features werden auf aktuellen Versionen von Windows, Linux (Ubuntu) und MacOS getestet.
+            \end{itemize}
+            \\ \hline
+        \end{tabular}
+        \caption{Nichtfunktionale Anforderung NFR-003}\label{tab:table2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & NFR-004 \\ \hline
+            \textbf{Anforderung} & Codequalität \& erweiterbare Architektur \\ \hline
+            \textbf{Beschreibung} & Minimaler, modularer und selbserklärender Code  \\ \hline
+            \textbf{Akzeptanzkriterien} &
+            \begin{itemize}
+                \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B. GUI)
+                \item Unit-Tests decken mindestens 80\% des Codes ab.
+                \item Statische Analysen zeigen keine schwerwiegenden verstösse gegen Linting-Regeln.
+                \item Anwendungen von gängigen Design-Prinzipen vie SOLID, DRY, KISS etc.
+                \item Für jede Codeerweiterung wird eine Codereview durch einen zweiten Entwickler vorgenommen.
+            \end{itemize}
+            \\ \hline
+        \end{tabular}
+        \caption{Nichtfunktionale Anforderung NFR-004}\label{tab:table2}
+    \end{table}
+
+    \newpage
     \section{Usability}
 
     \subsection{Personas}
