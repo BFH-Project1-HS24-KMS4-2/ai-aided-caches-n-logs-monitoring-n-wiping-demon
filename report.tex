@@ -316,6 +316,106 @@
 
     \section{Architektur}
 
+    \subsection{Architekturentscheid}
+    In diesem Abschnitt soll erläutert werden, was wir uns für Gedanken bezüglich der Architektur gemacht haben
+    und für was wir uns schlussendlich aus welchen Gründen entschieden haben.
+
+    Als erstes war uns aus den Anforderungen klar, dass wir einen Daemon brauchen, also ein Programm, welches immer im
+    Hintergrund (seit Start des Computers) laufen soll.
+    Also muss das bereits in eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
+
+    Als nächstes gibt es die Anforderung, dass Pfad-Analysen zu einem späteren Zeitpunkt verglichen werden können sollen.
+    So war für uns auch klar, dass wir eine Datenbank (RDBMS) brauchen.
+    Dazu haben wir verschiedene Varianten:
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|l|p{8cm}|p{3cm}|p{3cm}|}
+            \hline
+            \textbf{Variante} & \textbf{Erläuterung} & \textbf{Vorteile} & \textbf{Nachteile} \\
+            \hline
+            In-Memory & In diesem Fall würde die Datenbank mit dem Start des Programms mitinitialisiert und beim Beenden des Programms auch wieder gelöscht.
+            Das bedeutet die Datenbank lebt nur während der Laufzeit des Programms und braucht auch den Speicher des Programms mit.
+            & - & - \\
+            \hline
+            Embedded & Hier wird die Datenbank in Form von Files innerhalb des Programms (Programm-Ressourcen) mitgeliefert und bleibt
+            somit persistent solange es nicht gelöscht wird im Verzeichnis des Programms.
+            &
+            \begin{itemize}
+                \item Braucht keine externe Infrastruktur
+                \item Offline-Verfügbarkeit
+                \item Performance
+            \end{itemize} &
+            \begin{itemize}
+                \item Datenverlust bei einem Problem des Anwender-Systems
+            \end{itemize} \\
+            \hline
+            Remote & Hier läuft die Datenbank auf einem externen System und ist über das Netzwerk für unser Programm erreichbar.
+            Somit persistent solange auf dem externen System nichts gelöscht wird oder das System nicht beschädigt wird.
+            & Datensicherheit, Kapazität & Nicht erreichbar ohne Netzwerkverbindung, braucht externe Infrastruktur (Kosten, Aufwand) \\
+            \hline
+        \end{tabular}
+        \caption{Tabelle der DB-Varianten}
+        \label{tab:varianten}
+    \end{table}
+
+    \textbf{Begründung zur Variante In-Memory}: Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons persistieren möchten.
+    Damit der Anwender auch nach einem Neustart zum Beispiel immer noch Zugriff auf seine Datei-Analysen hat.
+
+    \textbf{Begründung zur Variante Embedded}: Diese Variante passt für unseren Use-Case am Besten, da wir nur ein kleines System entwickeln.
+    Dadurch brauchen wir keine grosse Kapazität an Speicher.
+    Es ist auch etwas einfacher für uns um es einzurichten, da wir in diesem Modul nicht viel Kapazität haben um in Infrastruktur zu investieren.
+    Ausserdem müssen wir auch keine Verantwortung für die Datensicherheit des Anwenders übernehmen in diesem Projekt.
+    Dazu streben wir an unser System vorallem offline zu betreiben.
+
+    \textbf{Begründung zur Variante Remote}: Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
+    Es wäre eher nur Mehraufwand, der sich nicht lohnt und für uns Richtung overkill für unser Projekt geht.
+
+    Für die Anforderung, dass periodisch Dateipfade analysiert werden sollen, war für uns klar dass wir dafür so etwas wie einen
+    Task-Scheduler brauchen.
+    Und da wir den Daemon genau für das haben ist auch klar, dass diese Tasks am einfachsten über den Daemon gesteuert werden können.
+    So ist es auch für die Kommunikation einfacher, da die Resultate der Analyse-Tasks direkt wieder zum Daemon zurückkommuniziert werden können
+    und so auch einfach weiterverarbeitet werden können, was vor allem das Speichern in die Datenbank betrifft.
+
+    Als Letztes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
+    aufrufen kann.
+    Dafür gibt es wieder mehrere Möglichkeiten, die folgend beschrieben werden.
+    
+    \textbf{\large{CLI}}
+
+    CLI Erläuterung...
+
+    \textbf{Vorteile}
+
+    \begin{itemize}
+        \item
+    \end{itemize}
+
+    \textbf{Nachteile}
+
+    \begin{itemize}
+        \item
+    \end{itemize}
+    
+    \textbf{\large{GUI}}
+
+    GUI Erläuterung...
+
+    \textbf{Vorteile}
+
+    \begin{itemize}
+        \item
+    \end{itemize}
+
+    \textbf{Nachteile}
+
+    \begin{itemize}
+        \item
+    \end{itemize}
+
+    \subsection{Technologieentscheid}
+
 
     \section{Prozesse}
     \url{https://www.ganttlab.com} \\
