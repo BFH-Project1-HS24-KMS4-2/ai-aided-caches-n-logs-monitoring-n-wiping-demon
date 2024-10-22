@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: My CLI API
+  version: 1.0.0
+  description: A command-line tool for monitoring and wiping cache and log files.
+
+paths:
+  /search:
+    get:
+      summary: Searches the specified directory for specific files
+      parameters:
+        - name: path
+          in: query
+          description: The full path to the directory you want to search.
+          required: true
+          schema:
+            type: string
+        - name: mode
+          in: query
+          description: Specifies the search mode (log, cache, full, pattern). Default is full.
+          required: false
+          schema:
+            type: string
+            enum:
+              - log
+              - cache
+              - full
+              - pattern
+            default: full
+        - name: pattern
+          in: query
+          description: Specifies the regex pattern to match files (required if mode is pattern).
+          required: false
+          schema:
+            type: string
+        - name: no-subdirs
+          in: query
+          description: Prevents searching subdirectories (default is false).
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numberOfFiles:
+                    type: integer
+                    example: 4
+                  files:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                        - /var/log/syslog
+                        - /var/log/auth.log
+                        - C:\Windows\Temp\log.txt
+                        - C:\Windows\Temp\log2.txt
+        '400':
+          description: Invalid input
+        '404':
+          description: Directory not found
+        '500':
+          description: Internal server error
