@@ -20,7 +20,18 @@ tbd run <path>
 ```bash
 tbd run /path/to/daemon.jar
 ```
-
+Success message:
+```
+Daemon started successfully.
+```
+Already running message:
+```
+Daemon is already running.
+```
+Error message:
+```
+Failed to start daemon.
+```
 ---
 
 ### 2. `search`
@@ -54,7 +65,16 @@ tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-su
   ```bash
   tbd search /path/to/directory --mode pattern --pattern ".*\.log$"
   ```
-
+Successful search:
+```
+Listing files in /path/to/directory...
+relative/path/from/search/directory/file1.log
+relative/path/from/search/directory/file2.log
+```
+Error message:
+```
+Failed to search directory.
+```
 ---
 
 ## Notes:
