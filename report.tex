@@ -6,6 +6,7 @@
 \usepackage{titlesec}  % For customizing titles
 \usepackage[ngerman]{babel}
 \usepackage{wasysym}
+\usepackage{parskip} % Include this in the preamble
 
 
 \usepackage{geometry}
@@ -77,6 +78,8 @@
     \chapter{Spezifikation}
 
     \newpage
+
+
     \section{Systemabgrenzung}
 
     \subsection{Systemumgebung}
@@ -102,21 +105,21 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|p{2.5cm}|p{5.5cm}|p{3cm}|}
             \hline
-            \textbf& \textbf{Zweck} & \textbf{Technologien (primär)} \\
+            \textbf                    & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
             \hline
-            \textbf{Shell} & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell) \\
+            \textbf{Shell}               & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
             \hline
             \textbf{Rest Adapter} & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung} & Java, Spring (Web) \\
             \hline
-            \textbf{Rest Controller} & Implementiert die Endpunkte der REST-Schnittstelle & Java, Spring (Web) \\
+            \textbf{Rest Controller}        & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)            \\
             \hline
-            \textbf{Domain Service} & Applikationslogik & Java, Spring \\
+            \textbf{Domain Service}    & Applikationslogik                                                 & Java, Spring                   \\
             \hline
-            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus & Java, Spring \\
+            \textbf{Monitoring Scheduler}    & Führt Monitoring-Funktionen periodisch aus                                   & Java, Spring                   \\
             \hline
-            \textbf{Repository} & Stellt den Zugang zu den persisiterten Daten zur Verfüfung & Java, Spring (Data) \\
+            \textbf{Repository}        & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
             \hline
-            \textbf{Embedded Database} & Speichert Applikationsdaten & SQLite \\
+            \textbf{Embedded Database} & Speichert Applikationsdaten                                       & SQLite                         \\
             \hline
         \end{tabular}
         \caption{Beschreibung der Komponenten}\label{tab:table3}
@@ -127,6 +130,8 @@
     \subsection{Prozessumgebung}
 
     \newpage
+
+
     \section{Anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
 
@@ -150,6 +155,7 @@
     TODO: Backlog einbinden/beschreiben
 
     \newpage
+
     \subsection{Grenz- und Vorbedingungen}
     Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw. Grenz- oder Vorbedingungen nicht explizit als User Story geführt. Aus dem Projekt-Proposal und dem initialen Termin ergaben sich nachfolgende nichtfunktionale Anforderungen.
     Diese beeinflussten massgeblich die Architektur des Systems. Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
@@ -159,8 +165,8 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & NFR-001 \\ \hline
-            \textbf{Anforderung} & Hintergrundprozess mit periodischem Task (deamon) \\ \hline
+            \textbf{ID}           & NFR-001                                                                                            \\ \hline
+            \textbf{Anforderung}  & Hintergrundprozess mit periodischem Task (deamon)                                                  \\ \hline
             \textbf{Beschreibung} & Das System muss einen Hintergrundprozess implementieren, der periodisch Aktionen durchführen kann. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -177,8 +183,8 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & NFR-002 \\ \hline
-            \textbf{Anforderung} & Benutzerschnittstelle via Konsole (CLI) \\ \hline
+            \textbf{ID}           & NFR-002                                                              \\ \hline
+            \textbf{Anforderung}  & Benutzerschnittstelle via Konsole (CLI)                              \\ \hline
             \textbf{Beschreibung} & Mit dem laufenden deamon soll via Konsole interagiert werden können. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -195,8 +201,8 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & NFR-003 \\ \hline
-            \textbf{Anforderung} & Systemunabhängigkeit \\ \hline
+            \textbf{ID}           & NFR-003                                                                 \\ \hline
+            \textbf{Anforderung}  & Systemunabhängigkeit                                                    \\ \hline
             \textbf{Beschreibung} & Lauffähigkeit mit vollem Funktionsumfang auf gängigen Betriebssystemen. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -213,9 +219,9 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID} & NFR-004 \\ \hline
-            \textbf{Anforderung} & Codequalität \& erweiterbare Architektur \\ \hline
-            \textbf{Beschreibung} & Minimaler, modularer und selbserklärender Code  \\ \hline
+            \textbf{ID}           & NFR-004                                        \\ \hline
+            \textbf{Anforderung}  & Codequalität \& erweiterbare Architektur       \\ \hline
+            \textbf{Beschreibung} & Minimaler, modularer und selbserklärender Code \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
                 \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B. GUI)
@@ -306,6 +312,12 @@
 
 
     \newpage
+
+
+    \section{Usability}
+
+    \subsection{Personas}
+
     \subsection{Storyboard}
 
     \subsection{UX-Prototyping}
@@ -320,57 +332,67 @@
     In diesem Abschnitt soll erläutert werden, was wir uns für Gedanken bezüglich der Architektur gemacht haben
     und für was wir uns schlussendlich aus welchen Gründen entschieden haben.
 
+            {\large\bfseries Daemon}
+
     Als erstes war uns aus den Anforderungen klar, dass wir einen Daemon brauchen, also ein Programm, welches immer im
     Hintergrund (seit Start des Computers) laufen soll.
     Also muss das bereits in eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
+
+            {\large\bfseries Database}
 
     Als nächstes gibt es die Anforderung, dass Pfad-Analysen zu einem späteren Zeitpunkt verglichen werden können sollen.
     So war für uns auch klar, dass wir eine Datenbank (RDBMS) brauchen.
     Dazu haben wir verschiedene Varianten:
 
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.4cm}
-        \begin{tabular}{|l|p{8cm}|p{3cm}|p{3cm}|}
-            \hline
-            \textbf{Variante} & \textbf{Erläuterung} & \textbf{Vorteile} & \textbf{Nachteile} \\
-            \hline
-            In-Memory & In diesem Fall würde die Datenbank mit dem Start des Programms mitinitialisiert und beim Beenden des Programms auch wieder gelöscht.
-            Das bedeutet die Datenbank lebt nur während der Laufzeit des Programms und braucht auch den Speicher des Programms mit.
-            & - & - \\
-            \hline
-            Embedded & Hier wird die Datenbank in Form von Files innerhalb des Programms (Programm-Ressourcen) mitgeliefert und bleibt
-            somit persistent solange es nicht gelöscht wird im Verzeichnis des Programms.
-            &
-            \begin{itemize}
-                \item Braucht keine externe Infrastruktur
-                \item Offline-Verfügbarkeit
-                \item Performance
-            \end{itemize} &
-            \begin{itemize}
-                \item Datenverlust bei einem Problem des Anwender-Systems
-            \end{itemize} \\
-            \hline
-            Remote & Hier läuft die Datenbank auf einem externen System und ist über das Netzwerk für unser Programm erreichbar.
-            Somit persistent solange auf dem externen System nichts gelöscht wird oder das System nicht beschädigt wird.
-            & Datensicherheit, Kapazität & Nicht erreichbar ohne Netzwerkverbindung, braucht externe Infrastruktur (Kosten, Aufwand) \\
-            \hline
-        \end{tabular}
-        \caption{Tabelle der DB-Varianten}
-        \label{tab:varianten}
-    \end{table}
+    \textbf{1. In-Memory}
+    In diesem Fall würde die Datenbank mit dem Start des Programms mitinitialisiert und beim Beenden des Programms auch wieder gelöscht.
+    Das bedeutet die Datenbank lebt nur während der Laufzeit des Programms und braucht auch den Speicher des Programms mit.
 
-    \textbf{Begründung zur Variante In-Memory}: Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons persistieren möchten.
+    \textbf{Begründung zur Variante In-Memory} Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons persistieren möchten.
     Damit der Anwender auch nach einem Neustart zum Beispiel immer noch Zugriff auf seine Datei-Analysen hat.
 
-    \textbf{Begründung zur Variante Embedded}: Diese Variante passt für unseren Use-Case am Besten, da wir nur ein kleines System entwickeln.
+    \textbf{2. Embedded}
+    Hier wird die Datenbank in Form von Files innerhalb des Programms (Programm-Ressourcen) mitgeliefert und bleibt
+    somit persistent solange es nicht gelöscht wird im Verzeichnis des Programms.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Braucht keine externe Infrastruktur
+        \item Offline-Verfügbarkeit
+        \item Performance
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Datenverlust bei einem Problem des Anwender-Systems
+    \end{itemize}
+
+    \textbf{Begründung zur Variante Embedded} Diese Variante passt für unseren Use-Case am Besten, da wir nur ein kleines System entwickeln.
     Dadurch brauchen wir keine grosse Kapazität an Speicher.
     Es ist auch etwas einfacher für uns um es einzurichten, da wir in diesem Modul nicht viel Kapazität haben um in Infrastruktur zu investieren.
     Ausserdem müssen wir auch keine Verantwortung für die Datensicherheit des Anwenders übernehmen in diesem Projekt.
     Dazu streben wir an unser System vorallem offline zu betreiben.
 
-    \textbf{Begründung zur Variante Remote}: Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
+    \textbf{3. Remote}
+    Hier läuft die Datenbank auf einem externen System und ist über das Netzwerk für unser Programm erreichbar.
+    Somit persistent solange auf dem externen System nichts gelöscht wird oder das System nicht beschädigt wird.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Datensicherheit
+        \item Kapazität
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Nicht erreichbar ohne Netzwerkverbindung
+        \item Braucht externe Infrastruktur (Kosten, Aufwand)
+    \end{itemize}
+
+    \textbf{Begründung zur Variante Remote} Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
     Es wäre eher nur Mehraufwand, der sich nicht lohnt und für uns Richtung overkill für unser Projekt geht.
+
+            {\large\bfseries TaskScheduler}
 
     Für die Anforderung, dass periodisch Dateipfade analysiert werden sollen, war für uns klar dass wir dafür so etwas wie einen
     Task-Scheduler brauchen.
@@ -378,41 +400,122 @@
     So ist es auch für die Kommunikation einfacher, da die Resultate der Analyse-Tasks direkt wieder zum Daemon zurückkommuniziert werden können
     und so auch einfach weiterverarbeitet werden können, was vor allem das Speichern in die Datenbank betrifft.
 
-    Als Letztes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
+            {\large\bfseries Anwender-Schnittstelle}
+
+    Als Nächstes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
     aufrufen kann.
     Dafür gibt es wieder mehrere Möglichkeiten, die folgend beschrieben werden.
-    
-    \textbf{\large{CLI}}
 
-    CLI Erläuterung...
+    \textbf{1. CLI}
+    Diese Variante bietet dem Anwender an, über das Kommandozeilen-Interface das System anzuwenden und somit über
+    Text-Input auch wieder Text-Output als Resultat zu erhalten.
 
     \textbf{Vorteile}
-
     \begin{itemize}
-        \item
+        \item Simpel/Schlicht
     \end{itemize}
 
     \textbf{Nachteile}
-
     \begin{itemize}
-        \item
+        \item Schwierigere Anwendung für Anfänger
     \end{itemize}
-    
-    \textbf{\large{GUI}}
 
-    GUI Erläuterung...
+    \textbf{Begründung CLI} Auch hier haben wir für uns entschieden das Projekt mit der simpleren Variante bzw.
+    Variante mit weniger Aufwand (also CLI) zu starten.
+    Es geht in erster Linie auch um die Funktionalität, welche wir auch problemlos mit der CLI-Variante nutzen können.
+    Das Ziel ist es auch (noch) nicht das System schon maximal benutzerfreundlich zu entwickeln und für einen möglichst grossen Markt anzubieten.
+
+    \textbf{2. GUI}
+    Bei der GUI-Variante würde es ein neues Fenster geben z.B. über den Browser oder als Desktop-Applikation,
+    worüber der Anwender das System benutzen könnte.
+    So wäre es zu Beginn sicherlich etwas einfacher das System zu verstehen und zu verwenden.
+    Ausserdem hat man auch eine bessere Übersicht über die Funktionalitäten und kann diese so auch einfacher aufrufen.
+    Auch die Resultate könnten übersichtlicher dargestellt werden.
 
     \textbf{Vorteile}
-
     \begin{itemize}
-        \item
+        \item Benutzerfreundlichkeit
     \end{itemize}
 
     \textbf{Nachteile}
-
     \begin{itemize}
-        \item
+        \item Aufwand
     \end{itemize}
+
+    \textbf{Begründung GUI} Die Variante GUI können wir uns für dieses Projekt auch sehr gut vorstellen.
+    Allerdings wäre der Aufwand direkt damit zu starten für uns zu gross, da wir den Fokus erstmal auf die Funktionalitäten legen wollen.
+    Aber als Future Work könnte man definitiv noch ein GUI dazubauen.
+
+            {\large\bfseries Schnittstelle CLI $\leftrightarrow$ Daemon}
+
+    Zuletzt braucht es noch eine Schnittstelle zwischen der CLI und dem Daemon,
+    um die Anweisungen des Anwenders von der CLI auf den Daemon zu kommunizieren.
+    Auch hier machen wir uns Gedanken zu den folgenden Varianten:
+
+    \textbf{1. Rest-Schnittstelle}
+    Die Rest-Schnittstelle tauscht über Request/Response zwischen Client und Server Ressourcen aus.
+    Dieser Austausch erfolgt mit definierten Formaten (Content-Types) über das HTTP-Protokoll und das Netzwerk.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Standardisiert
+        \item Robust
+        \item CLI und Daemon können auf getrennten Systemen laufen
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Begründung Rest} Diese Variante passt für uns am Besten, da wir dadurch bereits eine klar strukturierte technische
+    Kommunikation haben, die wir relativ einfach nach unserem individuellen Projekt implementieren können.
+    Ausserdem ist es eine stabile Schnittstelle, die uns kaum Probleme bereiten sollte, was für uns in diesem Projekt auch wichtig ist.
+    Zusätzlich ist die Schnittstelle flexibel und erweiterbar, was es ermöglicht die CLI und den Daemon auch Systemgetrennt zu betreiben.
+
+    \textbf{2. IPC (Inter-process communication)}
+    Bei dieser Variante ist das Ziel, zwischen zwei Prozessen (z.B. CLI und Daemon) zu kommunizieren.
+    Ein einfacher Weg dafür wäre es sich z.B. ein Directory zu teilen und die CLI könnte dort immer wieder neue Files hineinschreiben,
+    welche der Daemon dann nacheinander lesen und verarbeiten würde.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Eigenes Format muss für Files definiert werden (muss auch geparst werden)
+        \item Daemon und CLI müssen sich immer auf dem selben Computer befinden
+        \item Es muss sichergestellt werden, dass die Files in der richtigen Reihenfolge gelesen werden und sich
+        Schreiber/Leser von den Files nicht überschneiden.
+    \end{itemize}
+
+    \textbf{Begründung IPC} Kommt für uns nicht in Frage, da es unflexibel und auch nicht wirklich erweiterbar ist,
+    falls die CLI einmal über das Netzwerk mit dem Daemon kommunizieren können sollte.
+    Ausserdem ist es aus unserer Sicht auch keine saubere Kommunikation, da es kein standardisiertes Protokoll,
+    sowie Format gibt und auch nicht sehr robust ist, was man den Nachteilen entnehmen kann.
+
+    \textbf{3. Sockets}
+    Das sind einfache Netzwerk-Sockets, auf die binäre Daten geschrieben oder von ihnen auch gelesen werden kann.
+    Wie gesagt sind diese über das Netzwerk erreichbar und laufen auf entsprechenden Ports des Hosts.
+    Welche Bytes an Daten hier geschrieben wird ist völlig offen.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Einfache Verwendung und Steuerung
+        \item CLI und Daemon können auf getrennten Systemen laufen (Netzwerk)
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Nachrichten-Format muss selbst definiert und geparst werden
+    \end{itemize}
+
+    \textbf{Begründung Sockets} Da für uns die Variante Rest noch etwas einfacher erscheint und wir uns auch schon besser
+    damit auskennen haben wir uns gegen Sockets entschieden.
+    Dadurch haben wir auch weniger Aufwand mit der Definition und dem Parsen von irgendwelchen Formaten.
+    Ausserdem basiert Rest sowieso auch auf Sockets, was somit fast auf das Gleiche herauskommt.
 
     \subsection{Technologieentscheid}
 
