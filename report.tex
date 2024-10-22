@@ -6,7 +6,7 @@
 \usepackage{titlesec}  % For customizing titles
 \usepackage[ngerman]{babel}
 \usepackage{wasysym}
-\usepackage{parskip} % Include this in the preamble
+\usepackage{parskip}
 
 
 \usepackage{geometry}
@@ -175,7 +175,7 @@
             \end{itemize}
             \\ \hline
         \end{tabular}
-        \caption{Nichtfunktionale Anforderung NFR-001}\label{tab:table}
+        \caption{Nichtfunktionale Anforderung NFR-001}\label{tab:nfr-1}
     \end{table}
 
     \begin{table}[h!]
@@ -518,6 +518,55 @@
     Ausserdem basiert Rest sowieso auch auf Sockets, was somit fast auf das Gleiche herauskommt.
 
     \subsection{Technologieentscheid}
+    In diesem Abschnitt wird erläutert, was wir uns für Gedanken bezüglich Technologien für die verschiedenen Komponenten
+    des Systems gemacht haben und wie wir uns entschieden haben.
+
+            {\large\bfseries Datenbank}
+
+    Bezüglich der Komponente Datenbank gibt es einige Varianten, die wir abwägen und eine geeignete für unser Projekt finden müssen.
+    Die erste Frage ist \textbf{NoSQL} oder \textbf{SQL}.
+
+    \textbf{1. NoSQL}
+    Beschreibung...
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Begründung NoSQL} ...
+
+    \textbf{2. SQL}
+    Beschreibung...
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item ...
+    \end{itemize}
+
+    \textbf{Begründung SQL} ...
+
+    Nun wissen wir, dass wir eine Embedded-Datenbank mit SQL wollen.
+    Also müssen wir uns noch für eine der folgenden Optionen entscheiden:
+
+    \textbf{H2,SQLite} ...
+
+            {\large\bfseries CLI/Daemon}
+
+    Dann gibt es noch die Komponenten CLI und Daemon, wofür wir gerne eine einheitliche Technologie hätten,
+    um es simpel zu halten und auch einfacher gewisse Teile zwischen den beiden Komponenten teilen zu können.
+
+    \textbf{Java/Python} ...
 
 
     \section{Prozesse}
