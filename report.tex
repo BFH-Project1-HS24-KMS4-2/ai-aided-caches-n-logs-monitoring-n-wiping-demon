@@ -336,20 +336,20 @@
 
     Als erstes war uns aus den Anforderungen klar, dass wir einen Daemon brauchen, also ein Programm, welches immer im
     Hintergrund (seit Start des Computers) laufen soll.
-    Also muss das bereits in eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
+    Also muss das bereits ein eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
 
             {\large\bfseries Database}
 
     Als nächstes gibt es die Anforderung, dass Pfad-Analysen zu einem späteren Zeitpunkt verglichen werden können sollen.
-    So war für uns auch klar, dass wir eine Datenbank (RDBMS) brauchen.
+    So war für uns auch klar, dass wir eine Datenbank (DBMS) brauchen.
     Dazu haben wir verschiedene Varianten:
 
     \textbf{1. In-Memory}
     In diesem Fall würde die Datenbank mit dem Start des Programms mitinitialisiert und beim Beenden des Programms auch wieder gelöscht.
     Das bedeutet die Datenbank lebt nur während der Laufzeit des Programms und braucht auch den Speicher des Programms mit.
 
-    \textbf{Begründung zur Variante In-Memory} Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons persistieren möchten.
-    Damit der Anwender auch nach einem Neustart zum Beispiel immer noch Zugriff auf seine Datei-Analysen hat.
+    \textbf{Begründung zur Variante In-Memory} Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons hinaus persistieren möchten.
+    Damit der Anwender beispielsweise auch nach einem Neustart noch Zugriff auf seine früheren Datei-Analysen hat.
 
     \textbf{2. Embedded}
     Hier wird die Datenbank in Form von Files innerhalb des Programms (Programm-Ressourcen) mitgeliefert und bleibt
@@ -369,9 +369,9 @@
 
     \textbf{Begründung zur Variante Embedded} Diese Variante passt für unseren Use-Case am Besten, da wir nur ein kleines System entwickeln.
     Dadurch brauchen wir keine grosse Kapazität an Speicher.
-    Es ist auch etwas einfacher für uns um es einzurichten, da wir in diesem Modul nicht viel Kapazität haben um in Infrastruktur zu investieren.
-    Ausserdem müssen wir auch keine Verantwortung für die Datensicherheit des Anwenders übernehmen in diesem Projekt.
-    Dazu streben wir an unser System vorallem offline zu betreiben.
+    Die Datenbank ist ebenso einfach und schnell eingerichtet und benötigt keine weitere Infrastruktur.
+    Die Verantwortung der Datenbank liegt somit nicht bei uns, sondern beim Anwender.
+    Dazu streben wir an, unser System vorallem offline zu betreiben.
 
     \textbf{3. Remote}
     Hier läuft die Datenbank auf einem externen System und ist über das Netzwerk für unser Programm erreichbar.
@@ -390,7 +390,7 @@
     \end{itemize}
 
     \textbf{Begründung zur Variante Remote} Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
-    Es wäre eher nur Mehraufwand, der sich nicht lohnt und für uns Richtung overkill für unser Projekt geht.
+    Es wäre eher nur Mehraufwand, der sich aktuell nicht lohnt.
 
             {\large\bfseries TaskScheduler}
 
@@ -404,7 +404,7 @@
 
     Als Nächstes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
     aufrufen kann.
-    Dafür gibt es wieder mehrere Möglichkeiten, die folgend beschrieben werden.
+    Dafür gibt es folgende Möglichkeiten:
 
     \textbf{1. CLI}
     Diese Variante bietet dem Anwender an, über das Kommandozeilen-Interface das System anzuwenden und somit über
@@ -420,17 +420,16 @@
         \item Schwierigere Anwendung für Anfänger
     \end{itemize}
 
-    \textbf{Begründung CLI} Auch hier haben wir für uns entschieden das Projekt mit der simpleren Variante bzw.
-    Variante mit weniger Aufwand (also CLI) zu starten.
-    Es geht in erster Linie auch um die Funktionalität, welche wir auch problemlos mit der CLI-Variante nutzen können.
-    Das Ziel ist es auch (noch) nicht das System schon maximal benutzerfreundlich zu entwickeln und für einen möglichst grossen Markt anzubieten.
+    \textbf{Begründung CLI} Auch hier haben wir entschieden eine möglichst simple Variante mit geringem initialen Aufwand zu wählen.
+    In erster Linie geht es um die Funktionalität, welche auch problemlos mit der CLI-Variante umgesetzt werden kann.
+    In der Zukunft können immernoch weitere Schnittstellen hinzugefügt werden, um das System benutzerfreundlicher zu gestalten.
 
     \textbf{2. GUI}
     Bei der GUI-Variante würde es ein neues Fenster geben z.B. über den Browser oder als Desktop-Applikation,
     worüber der Anwender das System benutzen könnte.
     So wäre es zu Beginn sicherlich etwas einfacher das System zu verstehen und zu verwenden.
     Ausserdem hat man auch eine bessere Übersicht über die Funktionalitäten und kann diese so auch einfacher aufrufen.
-    Auch die Resultate könnten übersichtlicher dargestellt werden.
+    Ebenso können die Resultate übersichtlicher dargestellt werden.
 
     \textbf{Vorteile}
     \begin{itemize}
@@ -465,7 +464,7 @@
 
     \textbf{Nachteile}
     \begin{itemize}
-        \item ...
+        \item Es muss ein Webservice implementiert werden.
     \end{itemize}
 
     \textbf{Begründung Rest} Diese Variante passt für uns am Besten, da wir dadurch bereits eine klar strukturierte technische
@@ -478,17 +477,13 @@
     Ein einfacher Weg dafür wäre es sich z.B. ein Directory zu teilen und die CLI könnte dort immer wieder neue Files hineinschreiben,
     welche der Daemon dann nacheinander lesen und verarbeiten würde.
 
-    \textbf{Vorteile}
-    \begin{itemize}
-        \item ...
-    \end{itemize}
-
     \textbf{Nachteile}
     \begin{itemize}
-        \item Eigenes Format muss für Files definiert werden (muss auch geparst werden)
+        \item Eigenes Format muss für Files definiert werden.
+        (muss auch geparst werden)
         \item Daemon und CLI müssen sich immer auf dem selben Computer befinden
         \item Es muss sichergestellt werden, dass die Files in der richtigen Reihenfolge gelesen werden und sich
-        Schreiber/Leser von den Files nicht überschneiden.
+        Schreiber/Leser von den Files nicht überschneiden
     \end{itemize}
 
     \textbf{Begründung IPC} Kommt für uns nicht in Frage, da es unflexibel und auch nicht wirklich erweiterbar ist,
@@ -497,7 +492,7 @@
     sowie Format gibt und auch nicht sehr robust ist, was man den Nachteilen entnehmen kann.
 
     \textbf{3. Sockets}
-    Das sind einfache Netzwerk-Sockets, auf die binäre Daten geschrieben oder von ihnen auch gelesen werden kann.
+    Das sind einfache Netzwerk-Sockets, auf welchen binäre Daten geschrieben bzw. gelesen werden.
     Wie gesagt sind diese über das Netzwerk erreichbar und laufen auf entsprechenden Ports des Hosts.
     Welche Bytes an Daten hier geschrieben wird ist völlig offen.
 
@@ -505,6 +500,7 @@
     \begin{itemize}
         \item Einfache Verwendung und Steuerung
         \item CLI und Daemon können auf getrennten Systemen laufen (Netzwerk)
+        \item Out-of-the-Box in java.net package verfügbar
     \end{itemize}
 
     \textbf{Nachteile}
@@ -513,9 +509,8 @@
     \end{itemize}
 
     \textbf{Begründung Sockets} Da für uns die Variante Rest noch etwas einfacher erscheint und wir uns auch schon besser
-    damit auskennen haben wir uns gegen Sockets entschieden.
-    Dadurch haben wir auch weniger Aufwand mit der Definition und dem Parsen von irgendwelchen Formaten.
-    Ausserdem basiert Rest sowieso auch auf Sockets, was somit fast auf das Gleiche herauskommt.
+    damit auskennen, haben wir uns gegen Sockets entschieden.
+    Dadurch haben wir auch weniger Aufwand mit der Definition und dem Parsen der Kommunikation.
 
     \subsection{Technologieentscheid}
     In diesem Abschnitt wird erläutert, was wir uns für Gedanken bezüglich Technologien für die verschiedenen Komponenten
