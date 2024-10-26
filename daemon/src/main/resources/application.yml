@@ -3,3 +3,5 @@ spring:
     name: daemon
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+server:
+  port: 8087
