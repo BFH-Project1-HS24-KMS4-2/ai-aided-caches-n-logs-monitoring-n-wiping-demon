@@ -217,7 +217,7 @@
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
                 \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B. GUI)
-                \item Unit-Tests decken mindestens 80\% des Codes ab.
+                \item Tests gemäss Testkonzept.
                 \item Statische Analysen zeigen keine schwerwiegenden verstösse gegen Linting-Regeln.
                 \item Anwendungen von gängigen Design-Prinzipen vie SOLID, DRY, KISS etc.
                 \item Für jede Codeerweiterung wird eine Codereview durch einen zweiten Entwickler vorgenommen.
@@ -228,12 +228,44 @@
     \end{table}
 
     \clearpage
+    \subsection{Testkonzept}
+    \subsubsection{Ziel des Testkonzepts}
+    \begin{itemize}
+        \item Sicherstellen, dass das gesamte System stabil läuft und seine Hauptfunktionen zuverlässig verfügbar sind.
+        \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z. B. kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
+        \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
+        \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
+    \end{itemize}
+
+    \subsubsection{Testarten und Testabdeckung}
+    \begin{itemize}
+        \item \textbf{Unit-Tests}: Nur für kritische, isolierbare Logiken wie:
+        \begin{itemize}
+            \item \textbf{Hash-Algorithmen}: Test der Konsistenz und Korrektheit, insbesondere, wenn Hashes fürs  Verzeichnis Monitoring verwendet werden.
+            \item \textbf{File-Suche}: Suchalgorithemen für Log- oder Cache-Dateien.
+        \end{itemize}
+        \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
+        \begin{itemize}
+            \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
+            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren. (Happy- sowie Exception-Paths)
+        \end{itemize}
+        \item \textbf{End-to-End Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
+    \end{itemize}
+
+    \subsubsection{Test-Setup und -Konfiguration}
+    \begin{itemize}
+        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe in den Unit-Tests, um sie isoliert zu halten.
+        \item \textbf{Testumgebung}: Erstellen einer dedizierten Test-DB und eines Testverzeichnisses.
+        \item \textbf{Automatisierte Testausführung}: Integration der Tests in die CI/CD-Pipeline, um sicherzustellen, dass das System stabil bleibt.
+    \end{itemize}
+
+    \clearpage
     \section{Usability}\label{sec:usability}
 
     \subsection{Personas}\label{subsec:personas}
 
     \subsubsection{Thomas}
-    
+
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.6\textwidth]{assets/persona1}
@@ -242,14 +274,14 @@
     \end{figure}
 
 
-        Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
-        Für seine Schüler unterrichtet er unter anderem auch
-        Systemadministration und IT-Sicherheit.
-        Thomas ist sehr interessiert an neuen Technologien und probiert gerne neue Software aus.
-        Daher stellt er sich die Frage, warum so viele Log- und Cache-Dateien auf seinem Rechner sind, ob diese alle
-        ihre Daseinsberechtigung haben und auch ob das Lesen und Schreiben dieser Dateien nicht ein Sicherheitsrisiko
-        darstellt.
-        Thomas ist ein sehr erfahrener Benutzer und hat keine Probleme mit der Kommandozeile.
+    Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
+    Für seine Schüler unterrichtet er unter anderem auch
+    Systemadministration und IT-Sicherheit.
+    Thomas ist sehr interessiert an neuen Technologien und probiert gerne neue Software aus.
+    Daher stellt er sich die Frage, warum so viele Log- und Cache-Dateien auf seinem Rechner sind, ob diese alle
+    ihre Daseinsberechtigung haben und auch ob das Lesen und Schreiben dieser Dateien nicht ein Sicherheitsrisiko
+    darstellt.
+    Thomas ist ein sehr erfahrener Benutzer und hat keine Probleme mit der Kommandozeile.
 
     \begin{table}[h!]
         \centering
