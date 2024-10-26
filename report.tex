@@ -231,7 +231,7 @@
     \subsection{Testkonzept}
     \subsubsection{Ziel des Testkonzepts}
     \begin{itemize}
-        \item Sicherstellen, dass der Daemon stabil läuft und seine Hauptfunktionen zuverlässig ausführt.
+        \item Sicherstellen, dass das gesamte System stabil läuft und seine Hauptfunktionen zuverlässig verfügbar sind.
         \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z. B. kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
         \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
         \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
@@ -247,9 +247,9 @@
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
         \begin{itemize}
             \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
-            \item \textbf{REST-HTTP-Anfragen}: Testen, ob die CLI-Befehle Anfragen korrekt an den Daemon senden und er antwortet.
+            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren. (Happy- sowie Exception-Paths)
         \end{itemize}
-        \item \textbf{Funktionale Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
+        \item \textbf{End-to-End Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
     \end{itemize}
 
     \subsubsection{Test-Setup und -Konfiguration}
@@ -265,7 +265,7 @@
     \subsection{Personas}\label{subsec:personas}
 
     \subsubsection{Thomas}
-    
+
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.6\textwidth]{assets/persona1}
@@ -274,14 +274,14 @@
     \end{figure}
 
 
-        Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
-        Für seine Schüler unterrichtet er unter anderem auch
-        Systemadministration und IT-Sicherheit.
-        Thomas ist sehr interessiert an neuen Technologien und probiert gerne neue Software aus.
-        Daher stellt er sich die Frage, warum so viele Log- und Cache-Dateien auf seinem Rechner sind, ob diese alle
-        ihre Daseinsberechtigung haben und auch ob das Lesen und Schreiben dieser Dateien nicht ein Sicherheitsrisiko
-        darstellt.
-        Thomas ist ein sehr erfahrener Benutzer und hat keine Probleme mit der Kommandozeile.
+    Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
+    Für seine Schüler unterrichtet er unter anderem auch
+    Systemadministration und IT-Sicherheit.
+    Thomas ist sehr interessiert an neuen Technologien und probiert gerne neue Software aus.
+    Daher stellt er sich die Frage, warum so viele Log- und Cache-Dateien auf seinem Rechner sind, ob diese alle
+    ihre Daseinsberechtigung haben und auch ob das Lesen und Schreiben dieser Dateien nicht ein Sicherheitsrisiko
+    darstellt.
+    Thomas ist ein sehr erfahrener Benutzer und hat keine Probleme mit der Kommandozeile.
 
     \begin{table}[h!]
         \centering
