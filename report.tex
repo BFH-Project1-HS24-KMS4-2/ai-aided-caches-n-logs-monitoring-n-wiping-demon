@@ -228,6 +228,38 @@
     \end{table}
 
     \clearpage
+    \subsection{Testkonzept}
+    \subsubsection{Ziel des Testkonzepts}
+    \begin{itemize}
+        \item Sicherstellen, dass der Daemon stabil läuft und seine Hauptfunktionen zuverlässig ausführt.
+        \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z. B. kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
+        \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
+        \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
+    \end{itemize}
+
+    \subsubsection{Testarten und Testabdeckung}
+    \begin{itemize}
+        \item \textbf{Unit-Tests}: Nur für kritische, isolierbare Logiken wie:
+        \begin{itemize}
+            \item \textbf{Hash-Algorithmen}: Test der Konsistenz und Korrektheit, insbesondere, wenn Hashes fürs  Verzeichnis Monitoring verwendet werden.
+            \item \textbf{File-Suche}: Suchalgorithemen für Log- oder Cache-Dateien.
+        \end{itemize}
+        \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
+        \begin{itemize}
+            \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
+            \item \textbf{REST-HTTP-Anfragen}: Testen, ob die CLI-Befehle Anfragen korrekt an den Daemon senden und er antwortet.
+        \end{itemize}
+        \item \textbf{Funktionale Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
+    \end{itemize}
+
+    \subsubsection{Test-Setup und -Konfiguration}
+    \begin{itemize}
+        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe in den Unit-Tests, um sie isoliert zu halten.
+        \item \textbf{Testumgebung}: Erstellen einer dedizierten Test-DB und eines Testverzeichnisses.
+        \item \textbf{Automatisierte Testausführung}: Integration der Tests in die CI/CD-Pipeline, um sicherzustellen, dass das System stabil bleibt.
+    \end{itemize}
+
+    \clearpage
     \section{Usability}\label{sec:usability}
 
     \subsection{Personas}\label{subsec:personas}
