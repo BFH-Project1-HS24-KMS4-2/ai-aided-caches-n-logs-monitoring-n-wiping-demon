@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 @ShellComponent
 public class CliCommands {
 	private final DaemonAdapter daemonAdapter;
+	private final static int DAEMON_PORT = 8087;
 
 	@Autowired
     public CliCommands(DaemonAdapter daemonAdapter) {
@@ -26,6 +27,7 @@ public class CliCommands {
 		} else {
 			System.out.println("daemon is not running");
 		}
+		System.exit(0); // TODO check if theres a better solution
 	}
 
 	@ShellMethod(key = "kill")
@@ -41,19 +43,22 @@ public class CliCommands {
 				System.err.println("error killing daemon");
 			}
 		}
+		System.exit(0);
 	}
 
     @ShellMethod(key = "run")
 	public void run(@ShellOption String path) {
 		var running = daemonAdapter.checkStatus();
 
-		if (isPortInUse(8087) && !running) {
+		if (isPortInUse(DAEMON_PORT) && !running) {
 			System.err.println("daemon is not running but port is in use");
+			System.exit(0);
 			return;
 		}
 
 		if (running) {
 			System.out.println("daemon is already running");
+			System.exit(0);
 			return;
 		}
 
@@ -62,9 +67,11 @@ public class CliCommands {
 		try {
 			Process process = processBuilder.start();
 			process.onExit().thenAccept(p -> System.exit(0));
+			System.out.println("daemon started");
 		} catch (Exception e) {
 			System.err.println("error starting daemon");
 		}
+		System.exit(0);
 	}
 
 	public static boolean isPortInUse(int port) {
