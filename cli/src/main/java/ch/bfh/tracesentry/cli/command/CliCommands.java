@@ -8,6 +8,7 @@ import org.springframework.shell.standard.ShellOption;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.regex.Pattern;
 
 @ShellComponent
 public class CliCommands {
@@ -83,11 +84,12 @@ public class CliCommands {
 			return;
 		}
 
-		var result = daemonAdapter.search(path);
-		if (result == null) {
+		var searchResponse = daemonAdapter.search(path);
+		if (searchResponse == null) {
 			System.err.println("error searching");
 		} else {
-			System.out.println(result);
+			System.out.println("Listing " + searchResponse.numberOfFiles() + " files in " + path);
+			searchResponse.files().forEach(f -> System.out.println(f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f));
 		}
 		System.exit(0);
 	}
