@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.regex.Pattern;
@@ -28,7 +29,6 @@ public class CliCommands {
 		} else {
 			System.out.println("daemon is not running");
 		}
-		System.exit(0); // TODO check if theres a better solution
 	}
 
 	@ShellMethod(key = "kill")
@@ -44,7 +44,6 @@ public class CliCommands {
 				System.err.println("error killing daemon");
 			}
 		}
-		System.exit(0);
 	}
 
     @ShellMethod(key = "run")
@@ -53,26 +52,33 @@ public class CliCommands {
 
 		if (isPortInUse(DAEMON_PORT) && !running) {
 			System.err.println("daemon is not running but port is in use");
-			System.exit(0);
 			return;
 		}
 
 		if (running) {
 			System.out.println("daemon is already running");
-			System.exit(0);
 			return;
 		}
 
-		ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", path);
+		File daemonJar = new File(path);
+		if (!daemonJar.exists()) {
+			System.err.println("File does not exist");
+			return;
+		}
+
+		if (!daemonJar.getName().endsWith(".jar")) {
+			System.err.println("Not a jar file");
+			return;
+		}
+
+		ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", daemonJar.getPath());
 
 		try {
 			Process process = processBuilder.start();
-			process.onExit().thenAccept(p -> System.exit(0));
-			System.out.println("daemon started");
+			System.out.println("daemon started with pid: " + process.pid());
 		} catch (Exception e) {
 			System.err.println("error starting daemon");
 		}
-		System.exit(0);
 	}
 
 	@ShellMethod(key = "search")
