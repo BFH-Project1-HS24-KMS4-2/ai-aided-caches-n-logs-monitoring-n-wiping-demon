@@ -74,6 +74,24 @@ public class CliCommands {
 		System.exit(0);
 	}
 
+	@ShellMethod(key = "search")
+	public void search(@ShellOption String path) {
+		var running = daemonAdapter.checkStatus();
+		if (!running) {
+			System.err.println("daemon is not running");
+			System.exit(0);
+			return;
+		}
+
+		var result = daemonAdapter.search(path);
+		if (result == null) {
+			System.err.println("error searching");
+		} else {
+			System.out.println(result);
+		}
+		System.exit(0);
+	}
+
 	public static boolean isPortInUse(int port) {
 		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			serverSocket.setReuseAddress(true);

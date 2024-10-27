@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import java.nio.file.Paths;
 
 @Service
 public class DaemonAdapter {
@@ -45,6 +46,19 @@ public class DaemonAdapter {
             return !this.checkStatus();
         } catch (Exception e) {
             return !this.checkStatus();
+        }
+    }
+
+    /**
+     * @param path relative or absolute path to the directory to search
+     * @return TODO
+     */
+    public String search(String path) {
+        try {
+            var absolutePath = Paths.get(path).toAbsolutePath().toString();
+            return restTemplate.getForObject(BASE_URL + "search?path=" + absolutePath, String.class);
+        } catch (Exception e) {
+            return null;
         }
     }
 }
