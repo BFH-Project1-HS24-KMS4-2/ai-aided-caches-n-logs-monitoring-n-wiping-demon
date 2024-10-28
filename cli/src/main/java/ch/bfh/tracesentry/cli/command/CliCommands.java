@@ -6,80 +6,103 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
+import java.util.regex.Pattern;
 
 @ShellComponent
 public class CliCommands {
-	private final DaemonAdapter daemonAdapter;
-	private final static int DAEMON_PORT = 8087;
+    private final DaemonAdapter daemonAdapter;
+    private final static int DAEMON_PORT = 8087;
 
-	@Autowired
+    @Autowired
     public CliCommands(DaemonAdapter daemonAdapter) {
         this.daemonAdapter = daemonAdapter;
-	}
+    }
 
-	@ShellMethod(key = "status")
-	public void status() {
-		var running = daemonAdapter.checkStatus();
-		if (running) {
-			System.out.println("daemon is running");
-		} else {
-			System.out.println("daemon is not running");
-		}
-		System.exit(0); // TODO check if theres a better solution
-	}
+    @ShellMethod(key = "status")
+    public void status() {
+        if (daeamonRunning(System.out)) {
+            System.out.println("daemon is running");
+        }
+    }
 
-	@ShellMethod(key = "kill")
-	public void kill() {
-		var running = daemonAdapter.checkStatus();
-		if (!running) {
-			System.out.println("daemon is not running");
-		} else {
-			var killed = daemonAdapter.kill();
-			if (killed) {
-				System.out.println("daemon killed");
-			} else {
-				System.err.println("error killing daemon");
-			}
-		}
-		System.exit(0);
-	}
+    @ShellMethod(key = "kill")
+    public void kill() {
+        if (!daeamonRunning(System.err)) return;
+        var killed = daemonAdapter.kill();
+        if (killed) {
+            System.out.println("daemon killed");
+        } else {
+            System.err.println("error killing daemon");
+        }
+    }
 
     @ShellMethod(key = "run")
-	public void run(@ShellOption String path) {
-		var running = daemonAdapter.checkStatus();
+    public void run(@ShellOption String path) {
+        var running = daemonAdapter.checkStatus();
 
-		if (isPortInUse(DAEMON_PORT) && !running) {
-			System.err.println("daemon is not running but port is in use");
-			System.exit(0);
-			return;
-		}
+        if (isPortInUse() && !running) {
+            System.err.println("daemon is not running but port is in use");
+            return;
+        }
 
-		if (running) {
-			System.out.println("daemon is already running");
-			System.exit(0);
-			return;
-		}
+        if (running) {
+            System.out.println("daemon is already running");
+            return;
+        }
 
-		ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", path);
+        File daemonJar = new File(path);
+        if (!daemonJar.exists()) {
+            System.err.println("File does not exist");
+            return;
+        }
 
-		try {
-			Process process = processBuilder.start();
-			process.onExit().thenAccept(p -> System.exit(0));
-			System.out.println("daemon started");
-		} catch (Exception e) {
-			System.err.println("error starting daemon");
-		}
-		System.exit(0);
-	}
+        if (!daemonJar.getName().endsWith(".jar")) {
+            System.err.println("Not a jar file");
+            return;
+        }
 
-	public static boolean isPortInUse(int port) {
-		try (ServerSocket serverSocket = new ServerSocket(port)) {
-			serverSocket.setReuseAddress(true);
-			return false;
-		} catch (IOException e) {
-			return true;
-		}
-	}
+        ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", daemonJar.getPath());
+
+        try {
+            Process process = processBuilder.start();
+            System.out.println("daemon started with pid: " + process.pid());
+        } catch (Exception e) {
+            System.err.println("error starting daemon");
+        }
+    }
+
+    @ShellMethod(key = "search")
+    public void search(@ShellOption String path) {
+        if (!daeamonRunning(System.err)) return;
+
+        try {
+            var searchResponse = daemonAdapter.search(path);
+            System.out.println("Listing " + searchResponse.numberOfFiles() + " files in " + path);
+            searchResponse.files().forEach(f -> System.out.println(f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private boolean daeamonRunning(PrintStream printStream) {
+        var running = daemonAdapter.checkStatus();
+        if (!running) {
+            printStream.println("daemon is not running");
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isPortInUse() {
+        try (ServerSocket serverSocket = new ServerSocket(CliCommands.DAEMON_PORT)) {
+            serverSocket.setReuseAddress(true);
+            return false;
+        } catch (IOException e) {
+            return true;
+        }
+    }
 }

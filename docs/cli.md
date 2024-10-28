@@ -14,11 +14,12 @@ tbd run <path>
 ```
 
 #### Parameters:
-- **`path`**: The full path to the daemon JAR file.
+- **`path`**: The full path to the daemon JAR file.  Either the relative path from the current directory or the absolute path can be used.
 
 #### Example:
 ```bash
-tbd run /path/to/daemon.jar
+tbd run ./path/to/daemon.jar # relative path unix 
+tbd run C:\\Path\\To\\Daemon.jar # absolute path windows
 ```
 Success message:
 ```
@@ -43,7 +44,7 @@ tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-su
 ```
 
 #### Parameters:
-- **`path`**: The full path to the directory you want to search.
+- **`path`**: The full path to the directory you want to search. Either the relative path from the current directory or the absolute path can be used.
 - **`--mode`**: Defines the search mode:
   - `log`: Search for log files.
   - `cache`: Search for cache files.
@@ -55,7 +56,8 @@ tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-su
 #### Example:
 - Search a directory in full mode (default):
   ```bash
-  tbd search /path/to/directory
+  tbd search /etc/path/to/directory # absolute path unix
+  tbd search Path\\To\\Directory # relative path windows
   ```
 - Search only for log files without scanning subdirectories:
   ```bash
@@ -67,7 +69,7 @@ tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-su
   ```
 Successful search:
 ```
-Listing files in /path/to/directory...
+Listing 2 files in /path/to/directory...
 relative/path/from/search/directory/file1.log
 relative/path/from/search/directory/file2.log
 ```

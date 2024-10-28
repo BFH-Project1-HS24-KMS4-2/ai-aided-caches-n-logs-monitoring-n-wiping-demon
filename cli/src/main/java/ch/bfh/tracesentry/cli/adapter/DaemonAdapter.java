@@ -1,9 +1,12 @@
 package ch.bfh.tracesentry.cli.adapter;
 
+import ch.bfh.tracesentry.cli.model.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.file.Paths;
 
 @Service
 public class DaemonAdapter {
@@ -46,5 +49,14 @@ public class DaemonAdapter {
         } catch (Exception e) {
             return !this.checkStatus();
         }
+    }
+
+    /**
+     * @param path relative or absolute path to the directory to search
+     * @return SearchResponse object
+     */
+    public SearchResponse search(String path) {
+        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+        return restTemplate.getForObject(BASE_URL + "search?path=" + absolutePath, SearchResponse.class);
     }
 }
