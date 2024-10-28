@@ -86,7 +86,7 @@
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=1\textwidth]{assets/comp-diag-aclom}
+        \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v2}
         \caption{UML Komponentendiagramm}
         \label{fig:comp-diag}
     \end{figure}
@@ -104,13 +104,15 @@
             \hline
             \textbf& \textbf{Zweck} & \textbf{Technologien (primär)} \\
             \hline
-            \textbf{CLI} & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell) \\
+            \textbf{Shell} & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell) \\
             \hline
-            \textbf{Controller} & Implementiert die Endpunkte der REST-Schnittstelle & Java, Spring (Data) \\
+            \textbf{Rest Adapter} & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung} & Java, Spring (Web) \\
+            \hline
+            \textbf{Rest Controller} & Implementiert die Endpunkte der REST-Schnittstelle & Java, Spring (Web) \\
             \hline
             \textbf{Domain Service} & Applikationslogik & Java, Spring \\
             \hline
-            \textbf{Task Scheduler} & Führt Funktionen periodisch aus & Java, Spring \\
+            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus & Java, Spring \\
             \hline
             \textbf{Repository} & Stellt den Zugang zu den persisiterten Daten zur Verfüfung & Java, Spring (Data) \\
             \hline
