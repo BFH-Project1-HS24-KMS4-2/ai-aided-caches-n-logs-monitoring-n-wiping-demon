@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
 import java.nio.file.Paths;
 
 @Service
@@ -55,11 +56,7 @@ public class DaemonAdapter {
      * @return SearchResponse object
      */
     public SearchResponse search(String path) {
-        try {
-            var absolutePath = Paths.get(path).toAbsolutePath().toString();
-            return restTemplate.getForObject(BASE_URL + "search?path=" + absolutePath, SearchResponse.class);
-        } catch (Exception e) {
-            return null;
-        }
+        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+        return restTemplate.getForObject(BASE_URL + "search?path=" + absolutePath, SearchResponse.class);
     }
 }
