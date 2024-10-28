@@ -1,0 +1,23 @@
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: cli
+  shell:
+    interactive:
+      enabled: false
+logging:
+  level:
+    root: off
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  shell:
+    interactive:
+      enabled: true
+logging:
+  level:
+    root: info

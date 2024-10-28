@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ch.bfh.tracesentry</groupId>
-    <artifactId>daemon</artifactId>
+    <artifactId>cli</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>daemon</name>
-    <description>daemon</description>
+    <name>cli</name>
+    <description>cli</description>
     <url/>
     <licenses>
         <license/>
@@ -28,19 +28,16 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <spring-shell.version>3.3.3</spring-shell.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <dependency>
@@ -48,7 +45,23 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.shell</groupId>
+                <artifactId>spring-shell-dependencies</artifactId>
+                <version>${spring-shell.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
