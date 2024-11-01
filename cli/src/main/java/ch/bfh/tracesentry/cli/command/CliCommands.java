@@ -8,8 +8,8 @@ import org.springframework.shell.standard.ShellOption;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.ServerSocket;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @ShellComponent
@@ -23,78 +23,68 @@ public class CliCommands {
     }
 
     @ShellMethod(key = "status")
-    public void status() {
-        if (daeamonRunning(System.out)) {
-            System.out.println("daemon is running");
-        }
+    public String status() {
+        return daemonAdapter.checkStatus() ? "daemon is running" : "daemon is not running";
     }
 
     @ShellMethod(key = "kill")
-    public void kill() {
-        if (!daeamonRunning(System.err)) return;
+    public String kill() {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
         var killed = daemonAdapter.kill();
         if (killed) {
-            System.out.println("daemon killed");
+            return "daemon killed";
         } else {
-            System.err.println("error killing daemon");
+            return "error killing daemon";
         }
     }
 
     @ShellMethod(key = "run")
-    public void run(@ShellOption String path) {
+    public String run(@ShellOption String path) {
         var running = daemonAdapter.checkStatus();
 
         if (isPortInUse() && !running) {
-            System.err.println("daemon is not running but port is in use");
-            return;
+            return "daemon is not running but port is in use";
         }
 
         if (running) {
-            System.out.println("daemon is already running");
-            return;
+            return "daemon is already running";
         }
 
         File daemonJar = new File(path);
         if (!daemonJar.exists()) {
-            System.err.println("File does not exist");
-            return;
+            return "File does not exist";
         }
 
         if (!daemonJar.getName().endsWith(".jar")) {
-            System.err.println("Not a jar file");
-            return;
+            return "Not a jar file";
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", daemonJar.getPath());
 
         try {
             Process process = processBuilder.start();
-            System.out.println("daemon started with pid: " + process.pid());
+            return "daemon started with pid: " + process.pid();
         } catch (Exception e) {
-            System.err.println("error starting daemon");
+            return "error starting daemon";
         }
     }
 
     @ShellMethod(key = "search")
-    public void search(@ShellOption String path) {
-        if (!daeamonRunning(System.err)) return;
+    public String search(@ShellOption String path) {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
 
         try {
             var searchResponse = daemonAdapter.search(path);
-            System.out.println("Listing " + searchResponse.numberOfFiles() + " files in " + path);
-            searchResponse.files().forEach(f -> System.out.println(f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f));
+            List<String> files = searchResponse
+                    .files()
+                    .stream()
+                    .map(f -> f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f)
+                    .toList();
+            String joined = String.join("\n", files);
+            return "Listing " + searchResponse.numberOfFiles() + " files in " + path + ":\n" + joined;
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            return "error searching";
         }
-    }
-
-    private boolean daeamonRunning(PrintStream printStream) {
-        var running = daemonAdapter.checkStatus();
-        if (!running) {
-            printStream.println("daemon is not running");
-            return false;
-        }
-        return true;
     }
 
     private static boolean isPortInUse() {
