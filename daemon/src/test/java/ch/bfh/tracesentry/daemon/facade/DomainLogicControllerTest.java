@@ -52,4 +52,16 @@ class DomainLogicControllerTest {
                         ));
     }
 
+    @Test
+    void shouldDisplayStatus() {
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:8087/")
+                .build()
+                .get()
+                .uri("/status")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class).isEqualTo("tracesentry");
+    }
 }
