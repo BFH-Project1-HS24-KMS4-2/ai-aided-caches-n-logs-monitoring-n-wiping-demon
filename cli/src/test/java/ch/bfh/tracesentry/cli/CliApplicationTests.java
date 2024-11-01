@@ -9,6 +9,7 @@ import org.springframework.shell.test.ShellAssertions;
 import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,20 +24,21 @@ public class CliApplicationTests {
     private ShellTestClient client;
 
     @MockBean
-    private DaemonAdapter daemonAdapter;
+    private RestTemplate restTemplate;
+
 
     @Test
-    void test() {
-        //when(daemonAdapter.checkStatus()).thenReturn(true);
-//
-        //ShellTestClient.NonInteractiveShellSession session = client
-        //        .nonInterative("status")
-        //        .run();
-//
-        //await().atMost(101, TimeUnit.MILLISECONDS).untilAsserted(() -> {
-        //    ShellAssertions.assertThat(session.screen())
-        //            .containsText("daemon is running");
-        //});
-    }
+    void testStatus() {
+        when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
+                .thenReturn("tracesentry");
 
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("status")
+                .run();
+
+        await().atMost(101, TimeUnit.MILLISECONDS).untilAsserted(() -> {
+            ShellAssertions.assertThat(session.screen())
+                    .containsText("daemon is running");
+        });
+    }
 }

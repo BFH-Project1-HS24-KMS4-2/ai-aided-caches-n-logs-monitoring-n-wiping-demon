@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -26,18 +26,36 @@ public class DomainLogicController {
     }
 
     @GetMapping("search")
-    public SearchDTO search(@RequestParam("path") String startDirPath) throws IOException {
-        File dir = new File(startDirPath);
-        if (!dir.isDirectory()) {
-            throw new BadRequestException("Path to search is not a directory or does not exist");
+    public SearchDTO search(@RequestParam("path") String startDirPath) {
+        File dirToSearch = new File(startDirPath);
+        if (!dirToSearch.isDirectory()) {
+            throw new BadRequestException("Path to search is not a directory or does not exist.");
         }
 
-        try (Stream<Path> paths = Files.find(dir.toPath(), Integer.MAX_VALUE, (path, attributes) ->
-                attributes.isRegularFile() && (containsString(path, "log") || containsString(path, "cache"))
-        )) {
-            List<String> files = paths.map(Path::toString).toList();
-            return new SearchDTO(files.size(), files);
+        List<String> files = new ArrayList<>();
+
+        try {
+            Files.walkFileTree(dirToSearch.toPath(), new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) {
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                    if (containsString(path, "cache") || containsString(path, "log")) {
+                        files.add(path.toString());
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException e) {
+                    return FileVisitResult.SKIP_SUBTREE;
+                }
+            });
+        } catch (IOException e) {
+            throw new InternalError("Error while searching for files.");
         }
+        return new SearchDTO(files.size(), files);
     }
 
     private static boolean containsString(Path path, String value) {
