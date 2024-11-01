@@ -2,42 +2,41 @@ package ch.bfh.tracesentry.cli;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.test.ShellAssertions;
 import org.springframework.shell.test.ShellTestClient;
-import org.springframework.shell.test.autoconfigure.ShellTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
+import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.when;
 
-@ShellTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class CliApplicationTests {
-
+@SpringBootTest
+@AutoConfigureShell
+@AutoConfigureShellTestClient
+public class CliApplicationTests {
     @Autowired
-    ShellTestClient client;
+    private ShellTestClient client;
 
     @MockBean
-    DaemonAdapter daemonAdapter;
+    private RestTemplate restTemplate;
+
 
     @Test
-    void test() {
-        Mockito.when(daemonAdapter.checkStatus()).thenReturn(true);
+    void testStatus() {
+        when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
+                .thenReturn("tracesentry");
 
-        ShellTestClient.InteractiveShellSession session = client
-                .interactive()
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("status")
                 .run();
 
-        await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
-            ShellAssertions.assertThat(session.screen())
-                    .containsText("shell");
-        });
-
-        session.write(session.writeSequence().text("status").carriageReturn().build());
-        await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(101, TimeUnit.MILLISECONDS).untilAsserted(() -> {
             ShellAssertions.assertThat(session.screen())
                     .containsText("daemon is running");
         });
