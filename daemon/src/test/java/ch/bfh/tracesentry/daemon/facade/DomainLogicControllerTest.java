@@ -23,8 +23,15 @@ class DomainLogicControllerTest {
                 .expectStatus().isBadRequest();
     }
 
+    private static String getPathByOS(String path) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            return path.replace("/", "\\");
+        }
+        return path;
+    }
+
     @Test
-    void shouldReturnFoundLogAndCacheFiles(){
+    void shouldReturnFoundLogAndCacheFiles() {
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/")
@@ -35,11 +42,14 @@ class DomainLogicControllerTest {
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("numberOfFiles").isEqualTo(4)
-                .jsonPath("files").value(files -> assertThat((List<String>) files).containsExactlyInAnyOrder(
-                        "src/test/resources/home/test.log",
-                        "src/test/resources/home/test-LOG.txt",
-                        "src/test/resources/home/Cache/Cache-info.txt",
-                        "src/test/resources/home/Cache/test.cache"));
+                .jsonPath("files")
+                        .value(files -> assertThat((List<String>) files)
+                        .containsExactlyInAnyOrder(
+                                getPathByOS("src/test/resources/home/test.log"),
+                                getPathByOS("src/test/resources/home/test-LOG.txt"),
+                                getPathByOS("src/test/resources/home/Cache/Cache-info.txt"),
+                                getPathByOS("src/test/resources/home/Cache/test.cache")
+                        ));
     }
 
 }
