@@ -1,25 +1,34 @@
 
 # CLI Documentation
 
+```ts``` shorthand for TraceSentry
+
 ## Commands
 1. [run](#1-run)
-2. [search](#2-search)
+2. [status](#2-status)
+3. [kill](#3-kill)
+4. [search](#4-search)
+5. [monitor add](#5-monitor-add)
+6. [monitor list](#6-monitor-list)
+7. [monitor remove](#7-monitor-remove)
+
+---
 
 ### 1. `run`
 This command starts the daemon process by specifying the path to the JAR file if it is not already running. If the daemon is already running, it will not be restarted.
 
 #### Usage:
 ```bash
-tbd run <path>
+ts run <path>
 ```
 
 #### Parameters:
 - **`path`**: The full path to the daemon JAR file.  Either the relative path from the current directory or the absolute path can be used.
 
-#### Example:
+#### Examples:
 ```bash
-tbd run ./path/to/daemon.jar # relative path unix 
-tbd run C:\\Path\\To\\Daemon.jar # absolute path windows
+ts run ./path/to/daemon.jar # relative path unix 
+ts run C:\\Path\\To\\Daemon.jar # absolute path windows
 ```
 Success message:
 ```
@@ -35,12 +44,63 @@ Failed to start daemon.
 ```
 ---
 
-### 2. `search`
+### 2. `status`
+This command checks the status of the daemon process. 
+
+#### Usage:
+```bash
+ts status
+```
+
+#### Example:
+```bash
+ts status
+```
+Output:
+```
+daemon is running
+```
+If the daemon is not running:
+```
+daemon is not running
+```
+
+---
+
+### 3. `kill`
+This command stops the daemon process if it is running.
+
+#### Usage:
+```bash
+ts kill
+```
+
+#### Example:
+```bash
+ts kill
+```
+Success message:
+```
+daemon killed
+```
+If the daemon is not running:
+```
+daemon is not running
+```
+Other errors:
+```
+error killing daemon
+```
+
+---
+
+
+### 4. `search`
 This command initiates a search operation in the specified directory. The search mode can be customized, and subdirectory scanning is enabled by default unless the `--no-subdirs` flag is set. Additionally, a regex pattern can be used to filter files when the `pattern` mode is selected.
 
 #### Usage:
 ```bash
-tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
+ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
 ```
 
 #### Parameters:
@@ -53,19 +113,19 @@ tbd search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-su
 - **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
 - **`--no-subdirs`**: If this flag is present, the search will not include subdirectories (default is to search subdirectories).
 
-#### Example:
+#### Examples:
 - Search a directory in full mode (default):
   ```bash
-  tbd search /etc/path/to/directory # absolute path unix
-  tbd search Path\\To\\Directory # relative path windows
+  ts search /etc/path/to/directory # absolute path unix
+  ts search Path\\To\\Directory # relative path windows
   ```
 - Search only for log files without scanning subdirectories:
   ```bash
-  tbd search /path/to/directory --mode log --no-subdirs
+  ts search /path/to/directory --mode log --no-subdirs
   ```
 - Search using a custom regex pattern:
   ```bash
-  tbd search /path/to/directory --mode pattern --pattern ".*\.log$"
+  ts search /path/to/directory --mode pattern --pattern ".*\.log$"
   ```
 Successful search:
 ```
@@ -77,9 +137,95 @@ Error message:
 ```
 Failed to search directory.
 ```
----
-
-## Notes:
+#### Notes:
 - Ensure that the path you provide is absolute or relative to the current working directory.
 - If no mode is specified, the search defaults to `full` mode.
 - The `pattern` mode requires the `--pattern` parameter to define the regex for matching files.
+
+---
+
+### 5. `monitor add`
+This command adds a specified path for monitoring. Paths added will be tracked for changes or new log/cache files.
+
+#### Usage:
+```bash
+ts monitor add --path <path/to/monitor>
+```
+
+#### Parameters:
+- **`--path`**: The full path you want to add for monitoring. This can be a relative path from the current directory or an absolute path.
+It might be a directory or a specific file.
+
+#### Example:
+- Add an absolute path to the monitoring database:
+  ```bash
+  ts monitor add --path /etc/path/to/monitor # Unix
+  ```
+- Add a relative path to the monitoring database:
+  ```bash
+  ts monitor add --path File\\To\\Monitor\\cache.log # Windows
+  ```
+Successful addition:
+  ```
+  Successfully added /path/to/monitor to the monitoring database.
+  ```
+Exact path already monitored:
+  ```
+  Error: /path/to/monitor is already being monitored.
+  ```
+
+---
+
+### 6. `monitor list`
+This command retrieves and displays all paths currently being monitored. Each entry shows the ID, path, and date of addition.
+
+#### Usage:
+```bash
+ts monitor list
+```
+
+#### Examples:
+- List all monitored paths:
+  ```bash
+  ts monitor list
+  ```
+Example output:
+  ```
+  ID   | Path                    | Date Added
+  ------------------------------------------------
+  3210  | /etc/path/to/monitor    | 2024-11-01
+  3221  | Path\\To\\Monitor       | 2024-11-01
+  ```
+If no paths are being monitored:
+  ```
+  No paths are currently being monitored.
+  ```
+
+---
+
+### 7. `monitor remove`
+This command removes a specified path from monitoring by its unique ID. The specified path is removed from the monitoring database.
+
+#### Usage:
+```bash
+ts monitor remove --id <ID>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the path to remove from monitoring. This ID can be obtained from the `monitor list` command.
+
+#### Example:
+- Remove a monitored path by ID:
+  ```bash
+  ts monitor remove --id 3210
+  ```
+Successful removal:
+  ```
+  Successfully removed path with ID 3210 from the monitoring database.
+  ```
+Error message if the ID does not exist:
+  ```
+  Error: No monitored path found with ID 3210.
+  ```
+
+---
