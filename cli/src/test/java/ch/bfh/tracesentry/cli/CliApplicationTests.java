@@ -9,6 +9,7 @@ import org.springframework.shell.test.ShellAssertions;
 import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -28,7 +29,7 @@ public class CliApplicationTests {
 
 
     @Test
-    void testStatus() {
+    void testStatusIfRunning() {
         when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
                 .thenReturn("tracesentry");
 
@@ -39,6 +40,21 @@ public class CliApplicationTests {
         await().atMost(101, TimeUnit.MILLISECONDS).untilAsserted(() -> {
             ShellAssertions.assertThat(session.screen())
                     .containsText("daemon is running");
+        });
+    }
+
+    @Test
+    void testStatusIfNotRunning() {
+        when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
+                .thenThrow(new RestClientException("daemon is not running"));
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("status")
+                .run();
+
+        await().atMost(101, TimeUnit.MILLISECONDS).untilAsserted(() -> {
+            ShellAssertions.assertThat(session.screen())
+                    .containsText("daemon is not running");
         });
     }
 }
