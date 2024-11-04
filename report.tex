@@ -105,21 +105,21 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|p{2.5cm}|p{5.5cm}|p{3cm}|}
             \hline
-            \textbf                    & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
+            \textbf                       & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
             \hline
-            \textbf{Shell}               & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
+            \textbf{Shell}                & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
             \hline
-            \textbf{Rest Adapter} & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung} & Java, Spring (Web) \\
+            \textbf{Rest Adapter}         & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung}          & Java, Spring (Web)             \\
             \hline
-            \textbf{Rest Controller}        & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)            \\
+            \textbf{Rest Controller}      & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)             \\
             \hline
-            \textbf{Domain Service}    & Applikationslogik                                                 & Java, Spring                   \\
+            \textbf{Domain Service}       & Applikationslogik                                                 & Java, Spring                   \\
             \hline
-            \textbf{Monitoring Scheduler}    & Führt Monitoring-Funktionen periodisch aus                                   & Java, Spring                   \\
+            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus                        & Java, Spring                   \\
             \hline
-            \textbf{Repository}        & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
+            \textbf{Repository}           & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
             \hline
-            \textbf{Embedded Database} & Speichert Applikationsdaten                                       & SQLite                         \\
+            \textbf{Embedded Database}    & Speichert Applikationsdaten                                       & SQLite                         \\
             \hline
         \end{tabular}
         \caption{Beschreibung der Komponenten}\label{tab:table3}
@@ -236,7 +236,9 @@
     \end{table}
 
     \clearpage
+
     \subsection{Testkonzept}
+
     \subsubsection{Ziel des Testkonzepts}
     \begin{itemize}
         \item Sicherstellen, dass das gesamte System stabil läuft und seine Hauptfunktionen zuverlässig verfügbar sind.
@@ -249,7 +251,7 @@
     \begin{itemize}
         \item \textbf{Unit-Tests}: Nur für kritische, isolierbare Logiken wie:
         \begin{itemize}
-            \item \textbf{Hash-Algorithmen}: Test der Konsistenz und Korrektheit, insbesondere, wenn Hashes fürs  Verzeichnis Monitoring verwendet werden.
+            \item \textbf{Hash-Algorithmen}: Test der Konsistenz und Korrektheit, insbesondere, wenn Hashes fürs Verzeichnis Monitoring verwendet werden.
             \item \textbf{File-Suche}: Suchalgorithemen für Log- oder Cache-Dateien.
         \end{itemize}
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
@@ -268,6 +270,8 @@
     \end{itemize}
 
     \clearpage
+
+
     \section{Usability}\label{sec:usability}
 
     \subsection{Personas}\label{subsec:personas}
@@ -296,11 +300,11 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|p{2.5cm}|p{7cm}|}
             \hline
-            \textbf Aufgaben & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten) \\
+            \textbf Aufgaben    & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten)                      \\
             \hline
-            \textbf Ziele & Veränderungen beobachten können und diese überprüfen lassen \\
+            \textbf Ziele       & Veränderungen beobachten können und diese überprüfen lassen               \\
             \hline
-            \textbf Wünsche & Intuitive Benutzerschnittstelle \\
+            \textbf Wünsche     & Intuitive Benutzerschnittstelle                                           \\
             \hline
             \textbf Hindernisse & Trotz Erfahrung in der Informatik, sind teilweise Wissenslücken vorhanden \\
             \hline
@@ -579,14 +583,15 @@
     \end{figure}
 
     Das ganze System befindet sich während der Laufzeit auf dem Host-Gerät des Anwenders.
-    Dazu werden zwei separate jar-Dateien ausgeliefert.
-    Das Erste sollte bereits beim Start des Geräts ausgeführt werden und die JVM für den Daemon starten.
+    Dazu werden zwei separate Jar-Dateien ausgeliefert.
+    Die Erste sollte bereits beim Start des Geräts ausgeführt werden und die JVM für den Daemon starten.
     Dieser startet einen Webservice, der REST-Schnittstellen für die Steuerung des Daemons anbietet.
     Dieser REST-Service kommuniziert ausserdem über JDBC mit einem RDBMS, welches in Form von einer einzigen Datei (SQLite)
-    im Daemon embedded ist.
+    in der Daemon-Applikation embedded ist.
 
-    Das zweite jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
-    Dieses jar startet wiederum eine zweite jvm, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
+    Das zweite Jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
+    Dieses Jar startet wiederum eine zweite JVM, % todo: prüfen
+    welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
     Diese CLI sendet dann über HTTP die entsprechenden Anfragen an den Daemon, die zur Erfüllung der Anweisungen des Anwenders führen.
 
 
