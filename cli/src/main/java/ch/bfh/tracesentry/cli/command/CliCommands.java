@@ -78,12 +78,12 @@ public class CliCommands {
             var searchResponse = daemonAdapter.search(path);
             var body = Objects.requireNonNull(searchResponse.getBody());
             List<String> files = body
-                    .files()
+                    .getFiles()
                     .stream()
                     .map(f -> f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f)
                     .toList();
             String joined = String.join("\n", files);
-            return "Listing " + body.numberOfFiles() + " files in " + path + ":\n" + joined;
+            return "Listing " + body.getNumberOfFiles() + " files in " + path + ":\n" + joined;
         } catch (Exception e) {
             return "error searching";
         }

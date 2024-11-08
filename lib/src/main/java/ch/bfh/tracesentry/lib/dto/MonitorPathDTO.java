@@ -40,4 +40,19 @@ public class MonitorPathDTO {
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
+
+    public MonitorPathDTO id(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public MonitorPathDTO createdAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public MonitorPathDTO path(String path) {
+        this.path = path;
+        return this;
+    }
 }
