@@ -44,4 +44,14 @@ public class MonitoredPath {
     public LocalDate getCreatedAt() {
         return createdAt;
     }
+
+    public MonitoredPath path(String path) {
+        this.path = path;
+        return this;
+    }
+
+    public MonitoredPath createdAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
 }

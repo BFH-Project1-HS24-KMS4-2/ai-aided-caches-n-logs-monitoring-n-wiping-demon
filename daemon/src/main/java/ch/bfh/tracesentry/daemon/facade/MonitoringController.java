@@ -3,6 +3,7 @@ package ch.bfh.tracesentry.daemon.facade;
 import ch.bfh.tracesentry.daemon.domain.MonitoringDomainService;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class MonitoringController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void createMonitoring(@RequestBody String path) {
         monitoringDomainService.createMonitoring(path);
     }
