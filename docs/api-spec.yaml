@@ -99,9 +99,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/MonitorPath'
-        '204':
-          description: No monitored paths found.
-
   /monitored-path/{id}:
     delete:
       summary: Removes a path from the monitoring database.
