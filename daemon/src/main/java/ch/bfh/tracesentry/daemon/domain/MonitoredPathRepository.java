@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MonitoredPathRepository extends JpaRepository<MonitoredPath, Integer> {
+    boolean existsByPath(String path);
 }

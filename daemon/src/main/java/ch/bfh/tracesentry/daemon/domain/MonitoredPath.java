@@ -8,6 +8,15 @@ import java.time.LocalDate;
 @Table(name = "monitored_path")
 public class MonitoredPath {
 
+    public MonitoredPath() {
+        this.createdAt = LocalDate.now(); // could also bes set automatically by jpa auditing or db
+    }
+
+    public MonitoredPath(String path) {
+        this.path = path;
+        this.createdAt = LocalDate.now();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,10 +39,6 @@ public class MonitoredPath {
 
     public String getPath() {
         return path;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
     }
 
     public LocalDate getCreatedAt() {

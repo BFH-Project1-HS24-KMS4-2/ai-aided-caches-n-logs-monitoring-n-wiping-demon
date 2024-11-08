@@ -4,6 +4,9 @@ info:
   version: 1.0.0
   description: A command-line tool for monitoring and wiping cache and log files.
 
+servers:
+  - url: http://localhost:8087
+
 paths:
   /search:
     get:
@@ -66,3 +69,64 @@ paths:
           description: Directory not found
         '500':
           description: Internal server error
+  /monitored-path:
+    post:
+      summary: Adds a path to the monitoring database.
+      parameters:
+        - name: path
+          in: query
+          required: true
+          description: The absolute path to the directory you want to monitor.
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Path successfully added to the monitoring database.
+        '422':
+          description: Invalid or non-existent path.
+        '409':
+            description: Path already exists in the monitoring database.
+        '500':
+          description: Internal server error.
+    get:
+      summary: Returns all monitored paths.
+      responses:
+        '200':
+          description: Returns all monitored paths.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MonitorPath'
+  /monitored-path/{id}:
+    delete:
+      summary: Removes a path from the monitoring database.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the path you want to remove.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Path successfully removed from the monitoring database.
+        '404':
+          description: No monitored path with the specified ID found.
+
+components:
+  schemas:
+    MonitorPath:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3210
+        path:
+          type: string
+          example: "/etc/path/to/monitor"
+        createdAt:
+          type: string
+          format: date
+          example: "2024-11-01"
