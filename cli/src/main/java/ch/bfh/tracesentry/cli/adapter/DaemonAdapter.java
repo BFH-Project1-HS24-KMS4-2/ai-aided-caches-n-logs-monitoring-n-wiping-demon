@@ -71,7 +71,7 @@ public class DaemonAdapter {
      */
     public ResponseEntity<Void> monitorAdd(String path) {
         var absolutePath = Paths.get(path).toAbsolutePath().toString();
-        return restTemplate.postForEntity(BASE_URL + "monitor", absolutePath, Void.class);
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", absolutePath, Void.class);
     }
 
     /**
@@ -79,7 +79,8 @@ public class DaemonAdapter {
      */
     public ResponseEntity<List<MonitorPathDTO>> monitorList() {
         ParameterizedTypeReference<List<MonitorPathDTO>> responseType =
-                new ParameterizedTypeReference<List<MonitorPathDTO>>() {};
-        return restTemplate.exchange(BASE_URL + "monitor", HttpMethod.GET, null, responseType);
+                new ParameterizedTypeReference<>() {
+                };
+        return restTemplate.exchange(BASE_URL + "monitored-path", HttpMethod.GET, null, responseType);
     }
 }

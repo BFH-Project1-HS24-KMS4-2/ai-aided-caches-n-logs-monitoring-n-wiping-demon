@@ -119,7 +119,7 @@ ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-sub
   ts search /etc/path/to/directory # absolute path unix
   ts search Path\\To\\Directory # relative path windows
   ```
-- Search only for log files without scanning subdirectories:
+- Search only for log files withou[api-spec.yaml](api-spec.yaml)t scanning subdirectories:
   ```bash
   ts search /path/to/directory --mode log --no-subdirs
   ```
@@ -191,10 +191,10 @@ ts monitor list
   ```
 Example output:
   ```
-  ID   | Path                    | Date Added
+  ID    | Added      | Date Added
   ------------------------------------------------
-  3210  | /etc/path/to/monitor    | 2024-11-01
-  3221  | Path\\To\\Monitor       | 2024-11-01
+  3210  | 2024-11-01 | /etc/path/to/monitor   
+  3221  | 2024-11-01 | Path\\To\\Monitor      
   ```
 If no paths are being monitored:
   ```
