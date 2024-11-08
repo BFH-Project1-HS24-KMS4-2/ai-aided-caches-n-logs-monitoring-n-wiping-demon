@@ -1,6 +1,7 @@
 package ch.bfh.tracesentry.cli;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.lib.entity.SearchResponse;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,16 +22,20 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureShell
 @AutoConfigureShellTestClient
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CliApplicationTests {
+
     @Autowired
     private ShellTestClient client;
 
@@ -160,5 +165,41 @@ public class CliApplicationTests {
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
                 .containsText("No paths are currently being monitored."));
+    }
+
+    @Test
+    void shouldOutputFoundFiles() {
+        final Path relSearchPath = Paths.get("test", "dir");
+        when(restTemplate.getForObject(
+                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath(),
+                SearchResponse.class)
+        )
+                .thenReturn(new SearchResponse(2, List.of(
+                                Paths.get("test", "dir", "log.txt").toAbsolutePath().toString(),
+                                Paths.get("test", "dir", "cache", "cache.txt").toAbsolutePath().toString()
+                        ))
+                );
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("search", relSearchPath.toString())
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            List<String> lines = session.screen().lines().stream().map(s -> {
+                int lengthBefore = s.length();
+                String trimmed = s.trim();
+                if (lengthBefore != trimmed.length()) {
+                    trimmed += "\n";
+                }
+                return trimmed;
+            }).toList();
+
+            String joinedLines = String.join("", lines);
+            assertThat(joinedLines).startsWith(
+                    "Listing 2 files in " + relSearchPath.toAbsolutePath() + ":\n"
+                            + "log.txt\n"
+                            + Paths.get("cache", "cache.txt")
+            );
+        });
     }
 }

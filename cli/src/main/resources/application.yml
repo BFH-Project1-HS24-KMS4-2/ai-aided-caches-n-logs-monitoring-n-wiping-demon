@@ -7,6 +7,8 @@ spring:
   shell:
     interactive:
       enabled: false
+    history:
+      enabled: false
 logging:
   level:
     root: off
