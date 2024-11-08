@@ -1,7 +1,7 @@
 package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.daemon.exception.BadRequestException;
-import ch.bfh.tracesentry.lib.entity.SearchResponse;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class DomainLogicController {
     }
 
     @GetMapping("search")
-    public SearchResponse search(@RequestParam("path") String startDirPath) {
+    public SearchResponseDTO search(@RequestParam("path") String startDirPath) {
         File dirToSearch = new File(startDirPath);
         if (!dirToSearch.isDirectory()) {
             throw new BadRequestException("Path to search is not a directory or does not exist.");
@@ -55,7 +55,7 @@ public class DomainLogicController {
         } catch (IOException e) {
             throw new InternalError("Error while searching for files.");
         }
-        return new SearchResponse(files.size(), files);
+        return new SearchResponseDTO(files.size(), files);
     }
 
     private static boolean containsString(Path path, String value) {

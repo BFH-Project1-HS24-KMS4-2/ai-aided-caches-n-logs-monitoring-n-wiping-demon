@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @ShellComponent
@@ -75,15 +76,28 @@ public class CliCommands {
 
         try {
             var searchResponse = daemonAdapter.search(path);
-            List<String> files = searchResponse
+            var body = Objects.requireNonNull(searchResponse.getBody());
+            List<String> files = body
                     .files()
                     .stream()
                     .map(f -> f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f)
                     .toList();
             String joined = String.join("\n", files);
-            return "Listing " + searchResponse.numberOfFiles() + " files in " + path + ":\n" + joined;
+            return "Listing " + body.numberOfFiles() + " files in " + path + ":\n" + joined;
         } catch (Exception e) {
             return "error searching";
+        }
+    }
+
+    @ShellMethod(key = "monitor add")
+    public String monitorAdd(@ShellOption String path) {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
+
+        try {
+            var monitorResponse = daemonAdapter.monitorAdd(path);
+            return "";//monitorResponse.message();
+        } catch (Exception e) {
+            return "error adding monitor";
         }
     }
 

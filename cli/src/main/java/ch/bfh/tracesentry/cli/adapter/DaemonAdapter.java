@@ -1,12 +1,17 @@
 package ch.bfh.tracesentry.cli.adapter;
 
-import ch.bfh.tracesentry.lib.entity.SearchResponse;
+import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class DaemonAdapter {
@@ -55,8 +60,26 @@ public class DaemonAdapter {
      * @param path relative or absolute path to the directory to search
      * @return SearchResponse object
      */
-    public SearchResponse search(String path) {
+    public ResponseEntity<SearchResponseDTO> search(String path) {
         var absolutePath = Paths.get(path).toAbsolutePath().toString();
-        return restTemplate.getForObject(BASE_URL + "search?path=" + absolutePath, SearchResponse.class);
+        return restTemplate.getForEntity(BASE_URL + "search?path=" + absolutePath, SearchResponseDTO.class);
+    }
+
+    /**
+     * @param path relative or absolute path to the directory to monitor
+     * @return void
+     */
+    public ResponseEntity<Void> monitorAdd(String path) {
+        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+        return restTemplate.postForEntity(BASE_URL + "monitor", absolutePath, Void.class);
+    }
+
+    /**
+     * @return List of MonitorPathDTO objects
+     */
+    public ResponseEntity<List<MonitorPathDTO>> monitorList() {
+        ParameterizedTypeReference<List<MonitorPathDTO>> responseType =
+                new ParameterizedTypeReference<List<MonitorPathDTO>>() {};
+        return restTemplate.exchange(BASE_URL + "monitor", HttpMethod.GET, null, responseType);
     }
 }
