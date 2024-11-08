@@ -1,4 +1,4 @@
-package ch.bfh.tracesentry.cli.model;
+package ch.bfh.tracesentry.lib.entity;
 
 import java.util.List;
 
