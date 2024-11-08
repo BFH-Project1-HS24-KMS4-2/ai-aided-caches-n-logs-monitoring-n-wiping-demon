@@ -1,7 +1,16 @@
 spring:
   application:
     name: daemon
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    username:
+    password:
+    url: jdbc:sqlite:tracesentry.db
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
 server:
   port: 8087
