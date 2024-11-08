@@ -52,7 +52,7 @@ public class MonitoringIT {
 
     @Test
     public void testCreateMonitoring() {
-        var path = "C:\\"; //this path is required to exist
+        var path = "/";
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
@@ -72,7 +72,7 @@ public class MonitoringIT {
 
     @Test
     public void testUniquePath() {
-        var path = "C:\\"; //this path is required to exist
+        var path = "/";
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
@@ -93,7 +93,7 @@ public class MonitoringIT {
 
     @Test
     public void testNonExistingPath() {
-        var path = "F:\\"; //this path is required not to exist
+        var path = "C:\\Ordner\\CON";
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
