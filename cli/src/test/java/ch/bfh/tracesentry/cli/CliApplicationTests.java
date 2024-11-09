@@ -1,8 +1,8 @@
 package ch.bfh.tracesentry.cli;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
-import ch.bfh.tracesentry.lib.entity.SearchResponse;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,14 +170,15 @@ public class CliApplicationTests {
     @Test
     void shouldOutputFoundFiles() {
         final Path relSearchPath = Paths.get("test", "dir");
-        when(restTemplate.getForObject(
+        when(restTemplate.getForEntity(
                 DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath(),
-                SearchResponse.class)
+                SearchResponseDTO.class)
         )
-                .thenReturn(new SearchResponse(2, List.of(
-                                Paths.get("test", "dir", "log.txt").toAbsolutePath().toString(),
-                                Paths.get("test", "dir", "cache", "cache.txt").toAbsolutePath().toString()
-                        ))
+                .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
+                                        Paths.get("test", "dir", "log.txt").toAbsolutePath().toString(),
+                                        Paths.get("test", "dir", "cache", "cache.txt").toAbsolutePath().toString()
+                                ))
+                        )
                 );
 
         ShellTestClient.NonInteractiveShellSession session = client

@@ -1,8 +1,9 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
-import ch.bfh.tracesentry.lib.entity.SearchResponse;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -83,7 +84,7 @@ public class CliCommands {
 
         try {
             Path absolutePath = Paths.get(path).toAbsolutePath();
-            SearchResponse searchResponse = daemonAdapter.search(absolutePath);
+            ResponseEntity<SearchResponseDTO> searchResponse = daemonAdapter.search(absolutePath);
             var body = Objects.requireNonNull(searchResponse.getBody());
             List<String> foundRelativePaths = body
                     .getFiles()

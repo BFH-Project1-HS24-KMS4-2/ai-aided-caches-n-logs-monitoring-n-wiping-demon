@@ -22,7 +22,7 @@ class SearchControllerTest {
                 .baseUrl("http://localhost:8087/")
                 .build()
                 .get()
-                .uri("/search?path=src/test/resources/home/test.txt")
+                .uri("/search?path=" + Paths.get("src", "test", "resources", "home", "test.txt"))
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -46,7 +46,7 @@ class SearchControllerTest {
                 .baseUrl("http://localhost:8087/")
                 .build()
                 .get()
-                .uri("/search?path=src/test/resources/notexisting/test")
+                .uri("/search?path=" + Paths.get("src", "test", "resources", "notexisting", "test"))
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -58,18 +58,18 @@ class SearchControllerTest {
                 .baseUrl("http://localhost:8087/")
                 .build()
                 .get()
-                .uri("/search?path=src/test/resources/home")
+                .uri("/search?path=" + Paths.get("src", "test", "resources", "home"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("numberOfFiles").isEqualTo(4)
                 .jsonPath("files")
-                        .value(files -> assertThat((List<String>) files)
+                .value(files -> assertThat((List<String>) files)
                         .containsExactlyInAnyOrder(
-                                Paths.get("src/test/resources/home/test.log").toString(),
-                                Paths.get("src/test/resources/home/test-LOG.txt").toString(),
-                                Paths.get("src/test/resources/home/Cache/Cache-info.txt").toString(),
-                                Paths.get("src/test/resources/home/Cache/test.cache").toString()
+                                Paths.get("src", "test", "resources", "home", "test.log").toString(),
+                                Paths.get("src", "test", "resources", "home", "test-LOG.txt").toString(),
+                                Paths.get("src", "test", "resources", "home", "Cache", "Cache-info.txt").toString(),
+                                Paths.get("src", "test", "resources", "home", "Cache", "test.cache").toString()
                         ));
     }
 
