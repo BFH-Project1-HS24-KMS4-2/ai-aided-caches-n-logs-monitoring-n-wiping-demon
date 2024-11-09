@@ -2,6 +2,7 @@ package ch.bfh.tracesentry.daemon.facade;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SearchControllerTest {
 
     @Test
-    void shouldReturnBadRequestWhenSearchPathNotDirectory() {
+    void shouldReturnUnprocessableWhenSearchPathNotDirectory() {
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/")
@@ -23,12 +24,11 @@ class SearchControllerTest {
                 .get()
                 .uri("/search?path=src/test/resources/home/test.txt")
                 .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody(String.class).isEqualTo("Search Path is not a directory.");
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    void shouldReturnNotFoundWhenSearchPathIsEmpty() {
+    void shouldReturnUnprocessableWhenSearchPathIsEmpty() {
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/")
@@ -36,12 +36,11 @@ class SearchControllerTest {
                 .get()
                 .uri("/search?path=")
                 .exchange()
-                .expectStatus().isNotFound()
-                .expectBody(String.class).isEqualTo("Search Path does not exist.");
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Test
-    void shouldReturnNotFoundWhenSearchPathDoesNotExist() {
+    void shouldReturnUnprocessableWhenSearchPathDoesNotExist() {
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/")
@@ -49,8 +48,7 @@ class SearchControllerTest {
                 .get()
                 .uri("/search?path=src/test/resources/notexisting/test")
                 .exchange()
-                .expectStatus().isNotFound()
-                .expectBody(String.class).isEqualTo("Search Path does not exist.");
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Test

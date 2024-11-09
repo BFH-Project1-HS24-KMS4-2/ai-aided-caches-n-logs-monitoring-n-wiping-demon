@@ -1,12 +1,9 @@
 package ch.bfh.tracesentry.daemon.facade;
 
-import ch.bfh.tracesentry.daemon.exception.BadRequestException;
-import ch.bfh.tracesentry.daemon.exception.NotFoundException;
+import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -19,31 +16,15 @@ import java.util.List;
 
 @RestController
 public class SearchController {
+
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
-
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(BadRequestException e) {
-        LOG.error(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
-        LOG.error(e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
 
     @GetMapping("search")
     public SearchResponseDTO search(@RequestParam("path") String startDirPath) {
         File dirToSearch = new File(startDirPath);
 
-        if (!dirToSearch.exists()) {
-            throw new NotFoundException("Search Path does not exist.");
-        }
-
-        if (!dirToSearch.isDirectory()) {
-            throw new BadRequestException("Search Path is not a directory.");
-        }
+        if (!dirToSearch.exists()) unprocessableException("Search Path does not exist.");
+        if (!dirToSearch.isDirectory()) unprocessableException("Search Path is not a directory.");
 
         List<String> files = new ArrayList<>();
 
@@ -53,6 +34,7 @@ public class SearchController {
                 public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) {
                     return FileVisitResult.CONTINUE;
                 }
+
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
                     if (containsString(path, "cache") || containsString(path, "log")) {
@@ -60,6 +42,7 @@ public class SearchController {
                     }
                     return FileVisitResult.CONTINUE;
                 }
+
                 @Override
                 public FileVisitResult visitFileFailed(Path file, IOException e) {
                     return FileVisitResult.SKIP_SUBTREE;
@@ -69,6 +52,11 @@ public class SearchController {
             throw new InternalError("Error while searching for files.");
         }
         return new SearchResponseDTO(files.size(), files);
+    }
+
+    private static void unprocessableException(String message) {
+        LOG.error(message);
+        throw new UnprocessableException(message);
     }
 
     private static boolean containsString(Path path, String value) {
