@@ -33,7 +33,7 @@ public class MonitoringControllerIT {
     @Test
     public void testGetMonitoredPaths() {
         var path = "C:\\Users\\test\\Desktop";
-        var createdAt = LocalDate.of(2024, 11, 1);;
+        var createdAt = LocalDate.of(2024, 11, 1);
         monitoredPathRepository.save(
                 new MonitoredPath()
                 .path(path)
@@ -102,5 +102,42 @@ public class MonitoringControllerIT {
                 .bodyValue(path)
                 .exchange()
                 .expectStatus().value(status -> Assertions.assertEquals(status, HttpStatus.UNPROCESSABLE_ENTITY.value()));
+    }
+
+    @Test void testDeleteNotFoundMonitoringPath() {
+        var path = "demo";
+        var saved = monitoredPathRepository.save(
+                new MonitoredPath()
+                        .path(path)
+                        .createdAt(LocalDate.now()));
+
+        monitoredPathRepository.deleteById(saved.getId());
+
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:8087/monitored-path")
+                .build()
+                .delete()
+                .uri("/1")
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test void testDeleteMonitoringPath() {
+        var path = "demo";
+        var saved = monitoredPathRepository.save(
+                new MonitoredPath()
+                .path(path)
+                .createdAt(LocalDate.now()));
+
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:8087/monitored-path")
+                .build()
+                .delete()
+                .uri("/" + saved.getId())
+                .exchange()
+                .expectStatus().isNoContent();
+        Assertions.assertFalse(monitoredPathRepository.existsById(saved.getId()));
     }
 }
