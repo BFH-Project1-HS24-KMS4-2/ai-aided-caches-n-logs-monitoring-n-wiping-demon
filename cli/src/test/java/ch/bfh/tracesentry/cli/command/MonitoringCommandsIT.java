@@ -174,6 +174,6 @@ public class MonitoringCommandsIT {
                 .run();
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Error:  No monitored path found with ID " + id + "."));
+                .containsText("Error: No monitored path found with ID " + id + "."));
     }
 }
