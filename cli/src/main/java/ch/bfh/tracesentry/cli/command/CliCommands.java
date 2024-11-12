@@ -128,7 +128,7 @@ public class CliCommands {
             if (body.isEmpty()) {
                 return "No paths are currently being monitored.";
             }
-            return  "ID   | Added      | Path\n" +
+            return "ID   | Added      | Path\n" +
                     "-----|------------|------------------------------------------\n" +
                     body.stream()
                             .map(m -> String.format("%04d | %s | %-24s", m.getId(), m.getCreatedAt(), m.getPath()))
@@ -145,6 +145,21 @@ public class CliCommands {
             return false;
         } catch (IOException e) {
             return true;
+        }
+    }
+
+    @ShellMethod(key = "monitor remove")
+    public String monitorRemove(@ShellOption int id) {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
+        try {
+            var response = daemonAdapter.monitorRemove(id);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return "Successfully removed path with ID " + id + " from the monitoring database.";
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            return "Error: No monitored path found with ID " + id + ".";
         }
     }
 }
