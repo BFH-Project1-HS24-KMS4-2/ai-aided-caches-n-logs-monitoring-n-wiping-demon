@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-class SearchControllerTest {
+class SearchControllerIT {
 
     @Test
     void shouldReturnUnprocessableWhenSearchPathNotDirectory() {
