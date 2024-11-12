@@ -83,4 +83,12 @@ public class DaemonAdapter {
                 };
         return restTemplate.exchange(BASE_URL + "monitored-path", HttpMethod.GET, null, responseType);
     }
+
+    /**
+     * @param id id of the monitored path to remove
+     * @return void
+     */
+    public ResponseEntity<Void> monitorRemove(Integer id) {
+        return restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id, HttpMethod.DELETE, null, Void.class);
+    }
 }
