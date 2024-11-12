@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -57,11 +58,10 @@ public class DaemonAdapter {
     }
 
     /**
-     * @param path relative or absolute path to the directory to search
+     * @param absolutePath absolute path to the directory to search
      * @return SearchResponse object
      */
-    public ResponseEntity<SearchResponseDTO> search(String path) {
-        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+    public ResponseEntity<SearchResponseDTO> search(Path absolutePath) {
         return restTemplate.getForEntity(BASE_URL + "search?path=" + absolutePath, SearchResponseDTO.class);
     }
 
