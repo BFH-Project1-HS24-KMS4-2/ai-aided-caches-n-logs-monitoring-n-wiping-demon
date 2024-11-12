@@ -1,4 +1,4 @@
-package ch.bfh.tracesentry.cli;
+package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
@@ -16,14 +16,13 @@ import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +33,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureShell
 @AutoConfigureShellTestClient
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class CliApplicationTests {
+public class MonitoringCommandsIT {
 
     @Autowired
     private ShellTestClient client;
@@ -46,29 +45,6 @@ public class CliApplicationTests {
     void setUp() {
         when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
                 .thenReturn("tracesentry");
-    }
-
-    @Test
-    void testStatusIfRunning() {
-        ShellTestClient.NonInteractiveShellSession session = client
-                .nonInterative("status")
-                .run();
-
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("daemon is running"));
-    }
-
-    @Test
-    void testStatusIfNotRunning() {
-        when(restTemplate.getForObject(DaemonAdapter.BASE_URL + "status", String.class))
-                .thenThrow(new RestClientException("daemon is not running"));
-
-        ShellTestClient.NonInteractiveShellSession session = client
-                .nonInterative("status")
-                .run();
-
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("daemon is not running"));
     }
 
     @Test

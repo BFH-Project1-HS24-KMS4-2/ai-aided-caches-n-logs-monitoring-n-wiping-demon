@@ -1,4 +1,4 @@
-package ch.bfh.tracesentry.daemon;
+package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.daemon.domain.MonitoredPath;
 import ch.bfh.tracesentry.daemon.domain.MonitoredPathRepository;
@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter;
         "    created_at date not null" +
         ");")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class MonitoringIT {
+public class MonitoringControllerIT {
 
     @Autowired
     private MonitoredPathRepository monitoredPathRepository;
