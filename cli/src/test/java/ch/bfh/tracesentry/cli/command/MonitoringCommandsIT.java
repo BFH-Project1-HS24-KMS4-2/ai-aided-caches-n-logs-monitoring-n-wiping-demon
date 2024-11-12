@@ -144,39 +144,36 @@ public class MonitoringCommandsIT {
     }
 
     @Test
-    void shouldOutputFoundFiles() {
-        final Path relSearchPath = Paths.get("test", "dir");
-        when(restTemplate.getForEntity(
-                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath(),
-                SearchResponseDTO.class)
-        )
-                .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
-                                        Paths.get("test", "dir", "log.txt").toAbsolutePath().toString(),
-                                        Paths.get("test", "dir", "cache", "cache.txt").toAbsolutePath().toString()
-                                ))
-                        )
-                );
+    void testMonitorRemove() {
+        int id = 3112;
+
+        ResponseEntity<Void> responseEntity = ResponseEntity.status(204).build();
+
+        when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id, HttpMethod.DELETE, null, Void.class))
+                .thenReturn(responseEntity);
 
         ShellTestClient.NonInteractiveShellSession session = client
-                .nonInterative("search", relSearchPath.toString())
+                .nonInterative("monitor", "remove", String.valueOf(id))
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-            List<String> lines = session.screen().lines().stream().map(s -> {
-                int lengthBefore = s.length();
-                String trimmed = s.trim();
-                if (lengthBefore != trimmed.length()) {
-                    trimmed += "\n";
-                }
-                return trimmed;
-            }).toList();
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
+                .containsText("Successfully removed path with ID " + id + " from the monitoring database."));
+    }
 
-            String joinedLines = String.join("", lines);
-            assertThat(joinedLines).startsWith(
-                    "Listing 2 files in " + relSearchPath.toAbsolutePath() + ":\n"
-                            + "log.txt\n"
-                            + Paths.get("cache", "cache.txt")
-            );
-        });
+    @Test
+    void testMonitorRemove404() {
+        int id = 9999;
+
+        ResponseEntity<Void> responseEntity = ResponseEntity.status(404).build();
+
+        when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id, HttpMethod.DELETE, null, Void.class))
+                .thenReturn(responseEntity);
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("monitor", "remove", String.valueOf(id))
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
+                .containsText("Error:  No monitored path found with ID " + id + "."));
     }
 }
