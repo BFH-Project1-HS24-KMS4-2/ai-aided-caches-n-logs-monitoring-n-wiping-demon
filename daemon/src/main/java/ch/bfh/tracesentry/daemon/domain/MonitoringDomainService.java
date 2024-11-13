@@ -1,6 +1,7 @@
 package ch.bfh.tracesentry.daemon.domain;
 
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
+import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import org.modelmapper.ModelMapper;
@@ -50,5 +51,12 @@ public class MonitoringDomainService {
                 .stream()
                 .map(path -> modelMapper.map(path, MonitorPathDTO.class))
                 .toList();
+    }
+
+    public void deleteMonitoring(Integer id) {
+        if (!monitoredPathRepository.existsById(id)) {
+            throw new NotFoundException("Path does not exist");
+        }
+        monitoredPathRepository.deleteById(id);
     }
 }

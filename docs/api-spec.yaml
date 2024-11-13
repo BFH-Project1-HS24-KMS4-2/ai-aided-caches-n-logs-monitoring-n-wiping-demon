@@ -63,10 +63,8 @@ paths:
                         - /var/log/auth.log
                         - C:\Windows\Temp\log.txt
                         - C:\Windows\Temp\log2.txt
-        '400':
-          description: Invalid input
-        '404':
-          description: Directory not found
+        '422':
+          description: Not processable input
         '500':
           description: Internal server error
   /monitored-path:

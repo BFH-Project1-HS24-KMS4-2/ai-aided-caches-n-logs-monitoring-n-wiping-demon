@@ -1,7 +1,9 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -10,14 +12,19 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 @ShellComponent
 public class CliCommands {
-    private final DaemonAdapter daemonAdapter;
+
     private final static int DAEMON_PORT = 8087;
+
+    private final DaemonAdapter daemonAdapter;
 
     @Autowired
     public CliCommands(DaemonAdapter daemonAdapter) {
@@ -76,15 +83,16 @@ public class CliCommands {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
 
         try {
-            var searchResponse = daemonAdapter.search(path);
+            Path absolutePath = Paths.get(path).toAbsolutePath();
+            ResponseEntity<SearchResponseDTO> searchResponse = daemonAdapter.search(absolutePath);
             var body = Objects.requireNonNull(searchResponse.getBody());
-            List<String> files = body
+            List<String> foundRelativePaths = body
                     .getFiles()
                     .stream()
-                    .map(f -> f.startsWith(path) ? f.replaceFirst(Pattern.quote(path), "") : f)
+                    .map(absoluteFilePath -> absoluteFilePath.replaceFirst(Pattern.quote(absolutePath + FileSystems.getDefault().getSeparator()), ""))
                     .toList();
-            String joined = String.join("\n", files);
-            return "Listing " + body.getNumberOfFiles() + " files in " + path + ":\n" + joined;
+            String outputPaths = String.join("\n", foundRelativePaths);
+            return "Listing " + body.getNumberOfFiles() + " files in " + absolutePath + ":\n" + outputPaths;
         } catch (Exception e) {
             return "error searching";
         }
@@ -120,7 +128,7 @@ public class CliCommands {
             if (body.isEmpty()) {
                 return "No paths are currently being monitored.";
             }
-            return  "ID   | Added      | Path\n" +
+            return "ID   | Added      | Path\n" +
                     "-----|------------|------------------------------------------\n" +
                     body.stream()
                             .map(m -> String.format("%04d | %s | %-24s", m.getId(), m.getCreatedAt(), m.getPath()))
@@ -137,6 +145,21 @@ public class CliCommands {
             return false;
         } catch (IOException e) {
             return true;
+        }
+    }
+
+    @ShellMethod(key = "monitor remove")
+    public String monitorRemove(@ShellOption int id) {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
+        try {
+            var response = daemonAdapter.monitorRemove(id);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return "Successfully removed path with ID " + id + " from the monitoring database.";
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            return "Error: No monitored path found with ID " + id + ".";
         }
     }
 }

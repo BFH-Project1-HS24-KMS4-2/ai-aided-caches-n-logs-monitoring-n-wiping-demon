@@ -29,4 +29,10 @@ public class MonitoringController {
     public List<MonitorPathDTO> getMonitoredPaths() {
         return monitoringDomainService.getMonitoredPaths();
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMonitoring(@PathVariable Integer id) {
+        monitoringDomainService.deleteMonitoring(id);
+    }
 }
