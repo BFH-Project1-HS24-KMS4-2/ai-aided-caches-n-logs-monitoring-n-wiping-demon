@@ -1,5 +1,22 @@
-create table if not exists monitored_path (
-    id integer primary key autoincrement,
-    path text not null unique,
-    created_at date not null
+CREATE TABLE monitored_path (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                path TEXT NOT NULL UNIQUE,
+                                created_at DATE NOT NULL
+);
+
+CREATE TABLE snapshot (
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          monitored_path_id INTEGER NOT NULL,
+                          timestamp TIMESTAMP NOT NULL,
+                          FOREIGN KEY (monitored_path_id) REFERENCES monitored_path (id)
+);
+
+CREATE TABLE snapshot_node (
+                               id INTEGER PRIMARY KEY AUTOINCREMENT,
+                               snapshot_id INTEGER NOT NULL,
+                               parent_id INTEGER,
+                               hash TEXT,
+                               path TEXT NOT NULL,
+                               FOREIGN KEY (snapshot_id) REFERENCES snapshot (id),
+                               FOREIGN KEY (parent_id) REFERENCES snapshot_node(id)
 );

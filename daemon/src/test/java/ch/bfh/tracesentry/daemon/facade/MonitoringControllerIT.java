@@ -1,7 +1,7 @@
 package ch.bfh.tracesentry.daemon.facade;
 
-import ch.bfh.tracesentry.daemon.domain.MonitoredPath;
-import ch.bfh.tracesentry.daemon.domain.MonitoredPathRepository;
+import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
+import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package ch.bfh.tracesentry.daemon.domain;
+package ch.bfh.tracesentry.daemon.domain.repo;
 
+import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
