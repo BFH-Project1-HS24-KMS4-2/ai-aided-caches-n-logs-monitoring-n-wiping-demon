@@ -1,5 +1,7 @@
-package ch.bfh.tracesentry.daemon.domain;
+package ch.bfh.tracesentry.daemon.domain.service;
 
+import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
+import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;

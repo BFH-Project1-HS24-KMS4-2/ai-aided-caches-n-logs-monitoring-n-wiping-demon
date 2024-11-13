@@ -1,4 +1,4 @@
-package ch.bfh.tracesentry.daemon.domain;
+package ch.bfh.tracesentry.daemon.domain.model;
 
 import jakarta.persistence.*;
 
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class MonitoredPath {
 
     public MonitoredPath() {
-        this.createdAt = LocalDate.now(); // could also bes set automatically by jpa auditing or db
+        this.createdAt = LocalDate.now(); // could also be set automatically by jpa auditing or db
     }
 
     public MonitoredPath(String path) {
