@@ -18,15 +18,15 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 @Component
-public class ScheduledTasks {
-    private static final Logger LOG = LoggerFactory.getLogger(ScheduledTasks.class);
+public class MonitoringScheduler {
+    private static final Logger LOG = LoggerFactory.getLogger(MonitoringScheduler.class);
 
     private final MonitoredPathRepository monitoredPathRepository;
     private final NodeRepository nodeRepository;
     private final SnapshotRepository snapshotRepository;
 
     @Autowired
-    public ScheduledTasks(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository) {
+    public MonitoringScheduler(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.nodeRepository = nodeRepository;
         this.snapshotRepository = snapshotRepository;
@@ -38,13 +38,17 @@ public class ScheduledTasks {
     }
 
     @Transactional
-    protected void createSnapshot(MonitoredPath monitoredPath){
+    protected void createSnapshot(MonitoredPath monitoredPath) {
         Snapshot snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
-        final var nodes = MerkleTree.create(monitoredPath.getPath(), snapshot);
+        final var tree = MerkleTree.create(monitoredPath.getPath(), snapshot);
         snapshot = snapshotRepository.save(snapshot);
-        nodeRepository.saveAll(nodes);
-        LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\"", monitoredPath.getPath(), snapshot.getId(), snapshot.getTimestamp());
+        nodeRepository.saveAll(tree.getLinearizedNodes());
+        LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes",
+                monitoredPath.getPath(),
+                snapshot.getId(),
+                snapshot.getTimestamp(),
+                tree.getLinearizedNodes().size());
     }
 }

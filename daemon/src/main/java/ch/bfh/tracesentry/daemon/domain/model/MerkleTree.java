@@ -88,6 +88,10 @@ public class MerkleTree {
         return sb.toString();
     }
 
+    public List<Node> getLinearizedNodes() {
+        return linearizedNodes;
+    }
+
     private static String hash(String val) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(val.getBytes(StandardCharsets.UTF_8));
@@ -101,7 +105,7 @@ public class MerkleTree {
         return hexString.toString();
     }
 
-    public static List<Node> create(String path, Snapshot snapshot) {
-        return new MerkleTree(path, snapshot).linearizedNodes;
+    public static MerkleTree create(String path, Snapshot snapshot) {
+        return new MerkleTree(path, snapshot);
     }
 }
