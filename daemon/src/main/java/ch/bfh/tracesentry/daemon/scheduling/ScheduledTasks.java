@@ -43,7 +43,8 @@ public class ScheduledTasks {
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
         final var nodes = MerkleTree.create(monitoredPath.getPath(), snapshot);
-        snapshotRepository.save(snapshot);
+        snapshot = snapshotRepository.save(snapshot);
         nodeRepository.saveAll(nodes);
+        LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\"", monitoredPath.getPath(), snapshot.getId(), snapshot.getTimestamp());
     }
 }
