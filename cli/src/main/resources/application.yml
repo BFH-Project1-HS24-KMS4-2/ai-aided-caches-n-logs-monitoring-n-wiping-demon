@@ -1,10 +1,13 @@
 spring:
   main:
     banner-mode: off
+    web-application-type: none
   application:
     name: cli
   shell:
     interactive:
+      enabled: false
+    history:
       enabled: false
 logging:
   level:

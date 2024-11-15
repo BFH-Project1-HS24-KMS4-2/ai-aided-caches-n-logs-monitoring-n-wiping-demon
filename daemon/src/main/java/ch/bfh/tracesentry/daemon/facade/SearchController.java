@@ -1,10 +1,9 @@
 package ch.bfh.tracesentry.daemon.facade;
 
-import ch.bfh.tracesentry.daemon.dto.SearchDTO;
-import ch.bfh.tracesentry.daemon.exception.BadRequestException;
+import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
+import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -16,21 +15,16 @@ import java.util.List;
 
 
 @RestController
-public class DomainLogicController {
-    private static final Logger LOG = LoggerFactory.getLogger(DomainLogicController.class);
+public class SearchController {
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(BadRequestException e) {
-        LOG.error(e.getMessage());
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
 
     @GetMapping("search")
-    public SearchDTO search(@RequestParam("path") String startDirPath) {
+    public SearchResponseDTO search(@RequestParam("path") String startDirPath) {
         File dirToSearch = new File(startDirPath);
-        if (!dirToSearch.isDirectory()) {
-            throw new BadRequestException("Path to search is not a directory or does not exist.");
-        }
+
+        if (!dirToSearch.exists()) unprocessableException("Search Path does not exist.");
+        if (!dirToSearch.isDirectory()) unprocessableException("Search Path is not a directory.");
 
         List<String> files = new ArrayList<>();
 
@@ -40,6 +34,7 @@ public class DomainLogicController {
                 public FileVisitResult preVisitDirectory(Path path, BasicFileAttributes attrs) {
                     return FileVisitResult.CONTINUE;
                 }
+
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
                     if (containsString(path, "cache") || containsString(path, "log")) {
@@ -47,6 +42,7 @@ public class DomainLogicController {
                     }
                     return FileVisitResult.CONTINUE;
                 }
+
                 @Override
                 public FileVisitResult visitFileFailed(Path file, IOException e) {
                     return FileVisitResult.SKIP_SUBTREE;
@@ -55,16 +51,15 @@ public class DomainLogicController {
         } catch (IOException e) {
             throw new InternalError("Error while searching for files.");
         }
-        return new SearchDTO(files.size(), files);
+        return new SearchResponseDTO(files.size(), files);
+    }
+
+    private static void unprocessableException(String message) {
+        LOG.error(message);
+        throw new UnprocessableException(message);
     }
 
     private static boolean containsString(Path path, String value) {
         return path.getFileName().toString().toLowerCase().contains(value);
-    }
-
-    @PostMapping("/monitor")
-    @ResponseStatus()
-    public ResponseEntity<String> status() {
-        return new ResponseEntity<>(null, null, 201);
     }
 }
