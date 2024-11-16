@@ -4,6 +4,7 @@ import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @ShellComponent
+@ShellCommandGroup("Search Commands")
 public class SearchCommands {
 
     private final DaemonAdapter daemonAdapter;
@@ -26,7 +28,7 @@ public class SearchCommands {
     }
 
 
-    @ShellMethod(key = "search")
+    @ShellMethod(key = "search", value = "Search for files in a given path.")
     @SuppressWarnings("unused")
     public String search(@ShellOption String path) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";

@@ -2,6 +2,7 @@ package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 @ShellComponent
+@ShellCommandGroup("Admin Commands")
 public class AdminCommands {
 
     private final static int DAEMON_PORT = 8087;
@@ -22,13 +24,13 @@ public class AdminCommands {
         this.daemonAdapter = daemonAdapter;
     }
 
-    @ShellMethod(key = "status")
+    @ShellMethod(key = "status", value = "Check if the daemon is running.")
     @SuppressWarnings("unused")
     public String status() {
         return daemonAdapter.checkStatus() ? "daemon is running" : "daemon is not running";
     }
 
-    @ShellMethod(key = "kill")
+    @ShellMethod(key = "kill", value = "Kill the daemon.")
     @SuppressWarnings("unused")
 
     public String kill() {
@@ -41,7 +43,7 @@ public class AdminCommands {
         }
     }
 
-    @ShellMethod(key = "run")
+    @ShellMethod(key = "run", value = "Run the daemon.")
     @SuppressWarnings("unused")
 
     public String run(@ShellOption String path) {

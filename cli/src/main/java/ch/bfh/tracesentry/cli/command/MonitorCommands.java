@@ -2,6 +2,7 @@ package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -10,6 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.Objects;
 
 @ShellComponent
+@ShellCommandGroup("Monitor Commands")
 public class MonitorCommands {
     private final DaemonAdapter daemonAdapter;
 
@@ -18,7 +20,7 @@ public class MonitorCommands {
         this.daemonAdapter = daemonAdapter;
     }
 
-    @ShellMethod(key = "monitor add")
+    @ShellMethod(key = "monitor add", value = "Add a path to the monitoring database.")
     @SuppressWarnings("unused")
     public String monitorAdd(@ShellOption String path) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
@@ -40,7 +42,7 @@ public class MonitorCommands {
         }
     }
 
-    @ShellMethod(key = "monitor list")
+    @ShellMethod(key = "monitor list", value = "List all paths currently being monitored.")
     @SuppressWarnings("unused")
     public String monitorList() {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
@@ -61,7 +63,7 @@ public class MonitorCommands {
         }
     }
 
-    @ShellMethod(key = "monitor remove")
+    @ShellMethod(key = "monitor remove", value = "Remove a path from the monitoring database.")
     @SuppressWarnings("unused")
     public String monitorRemove(@ShellOption int id) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
