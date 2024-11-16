@@ -1,6 +1,6 @@
 package ch.bfh.tracesentry.daemon.facade;
 
-import ch.bfh.tracesentry.daemon.domain.MonitoringDomainService;
+import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
