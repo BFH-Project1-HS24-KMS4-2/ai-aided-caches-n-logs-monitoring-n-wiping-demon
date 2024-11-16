@@ -19,6 +19,7 @@ public class MonitorCommands {
     }
 
     @ShellMethod(key = "monitor add")
+    @SuppressWarnings("unused")
     public String monitorAdd(@ShellOption String path) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         var errorMessage = "Error: " + path + " could not be added to the monitoring database.";
@@ -40,6 +41,7 @@ public class MonitorCommands {
     }
 
     @ShellMethod(key = "monitor list")
+    @SuppressWarnings("unused")
     public String monitorList() {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
@@ -60,6 +62,7 @@ public class MonitorCommands {
     }
 
     @ShellMethod(key = "monitor remove")
+    @SuppressWarnings("unused")
     public String monitorRemove(@ShellOption int id) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
