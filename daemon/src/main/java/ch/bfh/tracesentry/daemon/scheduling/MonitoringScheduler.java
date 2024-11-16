@@ -33,13 +33,13 @@ public class MonitoringScheduler {
     }
 
     @Scheduled(fixedRate = 50000)
-    public void createSnapshot() {
+    public void createSnapshots() {
         monitoredPathRepository.findAll().forEach(this::createSnapshot);
     }
 
     @Transactional
     protected void createSnapshot(MonitoredPath monitoredPath) {
-        Snapshot snapshot = new Snapshot();
+        var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
         final var tree = MerkleTree.create(monitoredPath.getPath(), snapshot);
