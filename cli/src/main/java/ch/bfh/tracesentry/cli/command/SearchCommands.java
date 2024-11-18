@@ -1,7 +1,9 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.cli.command.validation.SearchModeProvider;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.shell.standard.ShellCommandGroup;
@@ -40,12 +42,12 @@ public class SearchCommands {
             List<String> foundRelativePaths = body
                     .getFiles()
                     .stream()
-                    .map(absoluteFilePath -> absoluteFilePath.replaceFirst(Pattern.quote(absolutePath + FileSystems.getDefault().getSeparator()), ""))
+                    .map(absoluteFilePath -> absolutePath.relativize(Paths.get(absoluteFilePath)).toString())
                     .toList();
             String outputPaths = String.join("\n", foundRelativePaths);
             return "Listing " + body.getNumberOfFiles() + " files in " + absolutePath + ":\n" + outputPaths;
-        } catch (Exception e) {
-            return "error searching";
+        } catch (Exception ignored) {
+            return "An error occurred while searching for files";
         }
     }
 }
