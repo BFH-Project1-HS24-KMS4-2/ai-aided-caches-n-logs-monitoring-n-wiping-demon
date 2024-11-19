@@ -10,6 +10,11 @@ import org.springframework.shell.command.CommandHandlingResult;
 
 @Configuration
 public class ShellValidationConfig {
+
+    /**
+     * Custom exception resolver for parameter validation exceptions.
+     * This resolver pretty-prints the constraint violations.
+     */
     static class CustomExceptionResolver implements CommandExceptionResolver {
 
         @Override
