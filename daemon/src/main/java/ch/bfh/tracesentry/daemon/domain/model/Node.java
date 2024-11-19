@@ -2,6 +2,9 @@ package ch.bfh.tracesentry.daemon.domain.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "snapshot_node")
 public class Node {
@@ -12,15 +15,22 @@ public class Node {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    Node parent;
+    private Node parent;
 
     @ManyToOne
     @JoinColumn(name = "snapshot_id")
-    Snapshot snapshot;
+    private Snapshot snapshot;
 
-    String path;
+    private String path;
 
-    String hash;
+    private String hash;
+
+    private boolean hasChanged;
+
+    private boolean deletedInNextSnapshot;
+
+    @Transient
+    private List<Node> children = new ArrayList<>();
 
     public Node() {
 
@@ -67,5 +77,30 @@ public class Node {
 
     public void setSnapshot(Snapshot snapshot) {
         this.snapshot = snapshot;
+    }
+
+
+    public boolean isHasChanged() {
+        return hasChanged;
+    }
+
+    public void setHasChanged(boolean hasChanged) {
+        this.hasChanged = hasChanged;
+    }
+
+    public List<Node> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Node> children) {
+        this.children = children;
+    }
+
+    public boolean isDeletedInNextSnapshot() {
+        return deletedInNextSnapshot;
+    }
+
+    public void setDeletedInNextSnapshot(boolean deletedInNextSnapshot) {
+        this.deletedInNextSnapshot = deletedInNextSnapshot;
     }
 }

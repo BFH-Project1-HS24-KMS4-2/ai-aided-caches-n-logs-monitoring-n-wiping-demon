@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS snapshot_node (
                                parent_id INTEGER,
                                hash TEXT,
                                path TEXT NOT NULL,
+                               has_changed BOOLEAN NOT NULL,
+                               deleted_in_next_snapshot BOOLEAN NOT NULL,
                                FOREIGN KEY (snapshot_id) REFERENCES snapshot (id),
                                FOREIGN KEY (parent_id) REFERENCES snapshot_node(id)
 );
+
+CREATE INDEX IF NOT EXISTS idx_snapshot_id ON snapshot_node(snapshot_id);
