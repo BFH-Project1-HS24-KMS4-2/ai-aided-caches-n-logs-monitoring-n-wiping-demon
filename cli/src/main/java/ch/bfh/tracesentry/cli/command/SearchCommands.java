@@ -1,6 +1,7 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidRegex;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
 import ch.bfh.tracesentry.cli.command.parameters.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
@@ -15,6 +16,7 @@ import org.springframework.shell.standard.ShellOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @ShellComponent
 @ShellCommandGroup("Search Commands")
@@ -31,22 +33,39 @@ public class SearchCommands {
     @SuppressWarnings("unused")
     public String search(
             @ShellOption(help = "The path to search for files in. Can be relative or absolute.")
-            @NotBlank String path,
+            @NotBlank
+            String path,
             @ShellOption(help = "The search mode to use. Can be: LOG, CACHE, FULL, PATTERN.", defaultValue = "full")
-            @ValidSearchMode String mode
+            @ValidSearchMode
+            String mode,
+            @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.")
+            @ValidRegex
+            String pattern
     ) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
             StringBuilder output = new StringBuilder();
-            SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
-            Path absolutePath = Paths.get(path).toAbsolutePath();
 
-            var searchResponse = daemonAdapter.search(absolutePath);
+            Path absolutePath = Paths.get(path).toAbsolutePath();
+            SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
+
+            ResponseEntity<SearchResponseDTO> searchResponse;
+            if (searchMode == SearchMode.PATTERN) {
+                if (pattern == null) {
+                    throw new IllegalArgumentException("Option '--pattern' is required for mode 'pattern'.");
+                }
+                searchResponse = daemonAdapter.search(absolutePath, searchMode, Pattern.compile(pattern));
+            } else {
+                if (pattern != null) {
+                    throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + mode + "'.");
+                }
+                searchResponse = daemonAdapter.search(absolutePath, searchMode);
+            }
+
             var body = Objects.requireNonNull(searchResponse.getBody());
             var parsed = parseFoundPaths(body, absolutePath);
 
             output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(absolutePath).append(":\n").append(parsed);
-
             return output.toString();
         } catch (IllegalArgumentException e) {
             return e.getMessage();

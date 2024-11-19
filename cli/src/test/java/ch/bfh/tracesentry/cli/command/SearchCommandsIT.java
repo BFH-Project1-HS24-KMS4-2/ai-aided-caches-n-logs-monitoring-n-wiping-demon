@@ -46,14 +46,14 @@ public class SearchCommandsIT {
 
     @Test
     void shouldOutputFoundFiles() {
-        final Path relSearchPath = Paths.get("test", "dir");
+        final Path relSearchPath = Paths.get("test");
         when(restTemplate.getForEntity(
-                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath(),
+                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=full",
                 SearchResponseDTO.class)
         )
                 .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
-                                        Paths.get("test", "dir", "log.txt").toAbsolutePath().toString(),
-                                        Paths.get("test", "dir", "cache", "cache.txt").toAbsolutePath().toString()
+                                        Paths.get("test", "log.txt").toAbsolutePath().toString(),
+                                        Paths.get("test", "cache", "cache.txt").toAbsolutePath().toString()
                                 ))
                         )
                 );
@@ -75,7 +75,7 @@ public class SearchCommandsIT {
     @ParameterizedTest
     @ValueSource(strings = {"log", "cache", "full", "pattern"})
     void shouldAcceptValidSearchModes(String mode) {
-        final Path relSearchPath = Paths.get("test", "dir");
+        final Path relSearchPath = Paths.get("test");
         when(restTemplate.getForEntity(
                 DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=" + mode,
                 SearchResponseDTO.class)
@@ -117,20 +117,20 @@ public class SearchCommandsIT {
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
             String joinedLines = ShellLines.join(session.screen().lines());
-            assertThat(joinedLines).contains("Option '--pattern' is required for mode 'pattern'");
+            assertThat(joinedLines).contains("Option '--pattern' is required for mode 'pattern'.");
         });
     }
 
     @Test
     void shouldAcceptValidPattern() {
-        final Path relSearchPath = Paths.get("test", "dir");
+        final Path relSearchPath = Paths.get("test");
         when(restTemplate.getForEntity(
                 DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=pattern&pattern=.*\\.cookie",
                 SearchResponseDTO.class)
         )
                 .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
-                                        Paths.get("test", "dir", "cookie1.cookie").toAbsolutePath().toString(),
-                                        Paths.get("test", "dir", "cookie2.cookie").toAbsolutePath().toString()
+                                        Paths.get("test", "cookie1.cookie").toAbsolutePath().toString(),
+                                        Paths.get("test", "cookie2.cookie").toAbsolutePath().toString()
                                 ))
                         )
                 );
@@ -159,7 +159,7 @@ public class SearchCommandsIT {
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
             String joinedLines = ShellLines.join(session.screen().lines());
-            assertThat(joinedLines).contains("Invalid value for option '--pattern'");
+            assertThat(joinedLines).contains("Invalid value for option '--pattern'.");
         });
     }
 
@@ -173,7 +173,7 @@ public class SearchCommandsIT {
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
             String joinedLines = ShellLines.join(session.screen().lines());
-            assertThat(joinedLines).contains("Option '--pattern' must not be set for mode '" + mode + "'");
+            assertThat(joinedLines).contains("Option '--pattern' must not be set for mode '" + mode + "'.");
         });
     }
 }

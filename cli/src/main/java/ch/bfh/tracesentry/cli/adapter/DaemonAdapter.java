@@ -1,5 +1,6 @@
 package ch.bfh.tracesentry.cli.adapter;
 
+import ch.bfh.tracesentry.cli.command.parameters.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class DaemonAdapter {
@@ -59,10 +65,33 @@ public class DaemonAdapter {
 
     /**
      * @param absolutePath absolute path to the directory to search
+     * @param mode        search mode
      * @return SearchResponse object
      */
-    public ResponseEntity<SearchResponseDTO> search(Path absolutePath) {
-        return restTemplate.getForEntity(BASE_URL + "search?path=" + absolutePath, SearchResponseDTO.class);
+    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode);
+        return restTemplate.getForEntity(urlBuilder.toString(), SearchResponseDTO.class);
+    }
+
+    /**
+     * @param absolutePath absolute path to the directory to search
+     * @param mode         search mode
+     * @param pattern      pattern to search for, may be null
+     * @return SearchResponse object
+     */
+    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode, Pattern pattern) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode);
+        urlBuilder.append(URLEncoder.encode(pattern.pattern(), StandardCharsets.UTF_8));
+        String url = urlBuilder.toString();
+        return restTemplate.getForEntity(url, SearchResponseDTO.class);
+    }
+
+    private StringBuilder buildSearchBaseUrl(Path absolutePath, SearchMode mode) {
+        return new StringBuilder(BASE_URL)
+                .append("search?path=")
+                .append(URLEncoder.encode(absolutePath.toString(), StandardCharsets.UTF_8))
+                .append("&mode=")
+                .append(URLEncoder.encode(mode.toString(), StandardCharsets.UTF_8));
     }
 
     /**
