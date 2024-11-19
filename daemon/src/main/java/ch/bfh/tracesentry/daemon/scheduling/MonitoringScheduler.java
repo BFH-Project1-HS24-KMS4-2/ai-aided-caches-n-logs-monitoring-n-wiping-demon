@@ -12,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientCodecCustomizer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -29,14 +28,12 @@ public class MonitoringScheduler {
     private final MonitoredPathRepository monitoredPathRepository;
     private final NodeRepository nodeRepository;
     private final SnapshotRepository snapshotRepository;
-    private final WebClientCodecCustomizer exchangeStrategiesCustomizer;
 
     @Autowired
-    public MonitoringScheduler(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository, WebClientCodecCustomizer exchangeStrategiesCustomizer) {
+    public MonitoringScheduler(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.nodeRepository = nodeRepository;
         this.snapshotRepository = snapshotRepository;
-        this.exchangeStrategiesCustomizer = exchangeStrategiesCustomizer;
     }
 
     @Scheduled(fixedRate = 50000)
