@@ -21,6 +21,9 @@ public class Node {
     @JoinColumn(name = "snapshot_id")
     private Snapshot snapshot;
 
+    @Transient
+    private List<Node> children = new ArrayList<>();
+
     private String path;
 
     private String hash;
@@ -28,9 +31,6 @@ public class Node {
     private boolean hasChanged;
 
     private boolean deletedInNextSnapshot;
-
-    @Transient
-    private List<Node> children = new ArrayList<>();
 
     public Node() {
 

@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientCodecCustomizer;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,12 +29,14 @@ public class MonitoringScheduler {
     private final MonitoredPathRepository monitoredPathRepository;
     private final NodeRepository nodeRepository;
     private final SnapshotRepository snapshotRepository;
+    private final WebClientCodecCustomizer exchangeStrategiesCustomizer;
 
     @Autowired
-    public MonitoringScheduler(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository) {
+    public MonitoringScheduler(MonitoredPathRepository monitoredPathRepository, NodeRepository nodeRepository, SnapshotRepository snapshotRepository, WebClientCodecCustomizer exchangeStrategiesCustomizer) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.nodeRepository = nodeRepository;
         this.snapshotRepository = snapshotRepository;
+        this.exchangeStrategiesCustomizer = exchangeStrategiesCustomizer;
     }
 
     @Scheduled(fixedRate = 50000)
@@ -43,6 +46,7 @@ public class MonitoringScheduler {
 
     @Transactional
     protected void createSnapshot(MonitoredPath monitoredPath) {
+        var start = System.currentTimeMillis();
         var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
@@ -50,11 +54,13 @@ public class MonitoringScheduler {
         var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
         snapshot = snapshotRepository.save(snapshot);
         compareWithOldSnapshot(tree, lastSnapshot);
-        LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes",
+        var end = System.currentTimeMillis();
+        LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes in \"{}\"ms",
                 monitoredPath.getPath(),
                 snapshot.getId(),
                 snapshot.getTimestamp(),
-                tree.getLinearizedNodes().size());
+                tree.getLinearizedNodes().size(),
+                end - start);
     }
 
     private void compareWithOldSnapshot(MerkleTree tree, final Optional<Snapshot> lastSnapshot) {
