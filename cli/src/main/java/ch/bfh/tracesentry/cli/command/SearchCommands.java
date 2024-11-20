@@ -3,7 +3,7 @@ package ch.bfh.tracesentry.cli.command;
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidRegex;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
-import ch.bfh.tracesentry.cli.command.parameters.model.SearchMode;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;

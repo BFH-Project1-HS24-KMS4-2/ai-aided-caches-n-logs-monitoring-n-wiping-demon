@@ -1,6 +1,6 @@
 package ch.bfh.tracesentry.cli.adapter;
 
-import ch.bfh.tracesentry.cli.command.parameters.model.SearchMode;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package ch.bfh.tracesentry.cli.command.parameters.validators;
 
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
-import ch.bfh.tracesentry.cli.command.parameters.model.SearchMode;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
