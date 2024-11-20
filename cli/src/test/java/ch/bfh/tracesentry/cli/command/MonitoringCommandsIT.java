@@ -1,8 +1,7 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
-import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
+import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,16 +100,16 @@ public class MonitoringCommandsIT {
 
     @Test
     void testMonitorList() {
-        List<MonitorPathDTO> monitorPathDTOList = new ArrayList<>();
-        monitorPathDTOList.add(new MonitorPathDTO(3112, "C:\\Users\\CoolDude", LocalDate.of(2023, 11, 8)));
-        monitorPathDTOList.add(new MonitorPathDTO(202, "C:\\Users", LocalDate.of(2024, 12, 8)));
+        List<MonitoredPathDTO> monitoredPathDTOList = new ArrayList<>();
+        monitoredPathDTOList.add(new MonitoredPathDTO(3112, "C:\\Users\\CoolDude", LocalDate.of(2023, 11, 8)));
+        monitoredPathDTOList.add(new MonitoredPathDTO(202, "C:\\Users", LocalDate.of(2024, 12, 8)));
 
-        ParameterizedTypeReference<List<MonitorPathDTO>> responseType =
+        ParameterizedTypeReference<List<MonitoredPathDTO>> responseType =
                 new ParameterizedTypeReference<>() {
                 };
 
         when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path", HttpMethod.GET, null, responseType))
-                .thenReturn(ResponseEntity.ok().body(monitorPathDTOList));
+                .thenReturn(ResponseEntity.ok().body(monitoredPathDTOList));
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "list")
@@ -126,14 +123,14 @@ public class MonitoringCommandsIT {
 
     @Test
     void testMonitorListEmpty() {
-        List<MonitorPathDTO> monitorPathDTOList = new ArrayList<>();
+        List<MonitoredPathDTO> monitoredPathDTOList = new ArrayList<>();
 
-        ParameterizedTypeReference<List<MonitorPathDTO>> responseType =
+        ParameterizedTypeReference<List<MonitoredPathDTO>> responseType =
                 new ParameterizedTypeReference<>() {
                 };
 
         when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path", HttpMethod.GET, null, responseType))
-                .thenReturn(ResponseEntity.ok().body(monitorPathDTOList));
+                .thenReturn(ResponseEntity.ok().body(monitoredPathDTOList));
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "list")

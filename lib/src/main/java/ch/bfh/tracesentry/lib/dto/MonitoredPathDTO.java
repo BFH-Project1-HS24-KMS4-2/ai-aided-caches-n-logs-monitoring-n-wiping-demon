@@ -2,16 +2,16 @@ package ch.bfh.tracesentry.lib.dto;
 
 import java.time.LocalDate;
 
-public class MonitorPathDTO {
+public class MonitoredPathDTO {
 
     private Integer id;
     private String path;
     private LocalDate createdAt;
 
-    public MonitorPathDTO() {
+    public MonitoredPathDTO() {
     }
 
-    public MonitorPathDTO(Integer id, String path, LocalDate createdAt) {
+    public MonitoredPathDTO(Integer id, String path, LocalDate createdAt) {
         this.id = id;
         this.path = path;
         this.createdAt = createdAt;
@@ -41,17 +41,17 @@ public class MonitorPathDTO {
         this.createdAt = createdAt;
     }
 
-    public MonitorPathDTO id(Integer id) {
+    public MonitoredPathDTO id(Integer id) {
         this.id = id;
         return this;
     }
 
-    public MonitorPathDTO createdAt(LocalDate createdAt) {
+    public MonitoredPathDTO createdAt(LocalDate createdAt) {
         this.createdAt = createdAt;
         return this;
     }
 
-    public MonitorPathDTO path(String path) {
+    public MonitoredPathDTO path(String path) {
         this.path = path;
         return this;
     }

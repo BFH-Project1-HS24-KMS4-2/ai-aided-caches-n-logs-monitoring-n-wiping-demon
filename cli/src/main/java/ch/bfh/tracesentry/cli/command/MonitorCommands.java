@@ -1,6 +1,7 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
@@ -76,6 +77,22 @@ public class MonitorCommands {
             }
         } catch (Exception e) {
             return "Error: No monitored path found with ID " + id + ".";
+        }
+    }
+
+    @ShellMethod(key = "monitor compare", value = "Compare snapshots of a monitored path")
+    public String monitorCompare(@ShellOption int id) {
+        if (!daemonAdapter.checkStatus()) return "daemon is not running";
+        try {
+            MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id).getBody());
+            return "Listing comparison of snapshot from " + monitoredChanges.getPreviousSnapshot()
+                    + " to snapshot from " + monitoredChanges.getSubsequentSnapshot() + ":\n"
+                    + "Changed files:\n"
+                    + String.join("\n", monitoredChanges.getChangedPaths()) + "\n\n"
+                    + "Deleted files:\n"
+                    + String.join("\n", monitoredChanges.getDeletedPaths());
+        } catch (Exception e){
+            return "Error: Can't compare paths.";
         }
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -48,7 +49,7 @@ public class SearchCommands {
         try {
             StringBuilder output = new StringBuilder();
 
-            Path absolutePath = Paths.get(path).toAbsolutePath();
+            final String canonicalPath = new File(path).getCanonicalPath();
             SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
 
             ResponseEntity<SearchResponseDTO> searchResponse;
@@ -56,18 +57,18 @@ public class SearchCommands {
                 if (pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' is required for mode 'pattern'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs, Pattern.compile(pattern));
+                searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs, Pattern.compile(pattern));
             } else {
                 if (!pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + mode + "'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs);
+                searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs);
             }
 
             var body = Objects.requireNonNull(searchResponse.getBody());
-            var parsed = parseFoundPaths(body, absolutePath);
+            var parsed = parseFoundPaths(body, canonicalPath);
 
-            output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(absolutePath).append(":\n").append(parsed);
+            output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(canonicalPath).append(":\n").append(parsed);
             return output.toString();
         } catch (IllegalArgumentException e) {
             return e.getMessage();
@@ -76,10 +77,10 @@ public class SearchCommands {
         }
     }
 
-    private String parseFoundPaths(SearchResponseDTO searchResponse, Path absolutePath) throws NullPointerException {
+    private String parseFoundPaths(SearchResponseDTO searchResponse, String canonicalPath) throws NullPointerException {
         var relativizedPaths = searchResponse.
                 getFiles().stream().
-                map(absoluteFilePath -> absolutePath.relativize(Paths.get(absoluteFilePath)).toString()).toList();
+                map(absoluteFilePath -> Path.of(canonicalPath).relativize(Paths.get(absoluteFilePath)).toString()).toList();
         return String.join("\n", relativizedPaths);
     }
 }
