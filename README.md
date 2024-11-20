@@ -13,7 +13,7 @@ The Cache-n-Log Wiper is a platform-independent tool designed to monitor and man
 _TBD_ ❗
 
 ## Usage
-_TBD_ ❗
+[CLI Usage](./docs/cli.md)
 
 ## Technologies Used
 - AI APIs _TBD_ ❗
