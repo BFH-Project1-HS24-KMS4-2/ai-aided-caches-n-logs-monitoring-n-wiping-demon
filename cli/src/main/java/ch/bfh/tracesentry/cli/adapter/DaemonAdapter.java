@@ -64,21 +64,23 @@ public class DaemonAdapter {
     /**
      * @param absolutePath absolute path to the directory to search
      * @param mode        search mode
+     * @param noSubdirs   do not search in subdirectories
      * @return SearchResponse object
      */
-    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode) {
-        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode);
+    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode, boolean noSubdirs) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode, noSubdirs);
         return restTemplate.getForEntity(urlBuilder.toString(), SearchResponseDTO.class);
     }
 
     /**
      * @param absolutePath absolute path to the directory to search
      * @param mode         search mode
+     * @param noSubdirs    do not search in subdirectories
      * @param pattern      pattern to search for, may be null
      * @return SearchResponse object
      */
-    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode, Pattern pattern) {
-        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode);
+    public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode, boolean noSubdirs, Pattern pattern) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode, noSubdirs);
         urlBuilder.append("&pattern=");
         urlBuilder.append(URLEncoder.encode(pattern.pattern(), StandardCharsets.UTF_8));
         String url = urlBuilder.toString();
@@ -86,12 +88,17 @@ public class DaemonAdapter {
 
     }
 
-    private StringBuilder buildSearchBaseUrl(Path absolutePath, SearchMode mode) {
-        return new StringBuilder(BASE_URL)
+    private StringBuilder buildSearchBaseUrl(Path absolutePath, SearchMode mode, boolean noSubdirs) {
+        var sb = new StringBuilder(BASE_URL)
                 .append("search?path=")
                 .append(absolutePath)
                 .append("&mode=")
                 .append(mode.toString().toLowerCase());
+
+        if (noSubdirs) {
+            sb.append("&no-subdirs=true");
+        }
+        return sb;
     }
 
     /**

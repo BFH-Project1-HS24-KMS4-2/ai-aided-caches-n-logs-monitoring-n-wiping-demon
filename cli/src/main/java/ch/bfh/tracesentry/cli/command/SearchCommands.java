@@ -38,9 +38,11 @@ public class SearchCommands {
             @ShellOption(help = "The search mode to use. Can be: LOG, CACHE, FULL, PATTERN.", defaultValue = "full")
             @ValidSearchMode
             String mode,
-            @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.")
+            @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.", defaultValue = "")
             @ValidRegex
-            String pattern
+            String pattern,
+            @ShellOption(help = "Do not search in subdirectories.",  value = {"--no-subdirs"}, defaultValue = "false")
+            boolean noSubdirs
     ) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
@@ -51,15 +53,15 @@ public class SearchCommands {
 
             ResponseEntity<SearchResponseDTO> searchResponse;
             if (searchMode == SearchMode.PATTERN) {
-                if (pattern == null) {
+                if (pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' is required for mode 'pattern'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode, Pattern.compile(pattern));
+                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs, Pattern.compile(pattern));
             } else {
-                if (pattern != null) {
+                if (!pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + mode + "'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode);
+                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs);
             }
 
             var body = Objects.requireNonNull(searchResponse.getBody());

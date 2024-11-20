@@ -176,4 +176,32 @@ public class SearchCommandsIT {
             assertThat(joinedLines).contains("Option '--pattern' must not be set for mode '" + mode + "'.");
         });
     }
+
+    @Test
+    void shouldAcceptNoSubdirsFlag() {
+        final Path relSearchPath = Paths.get("test");
+        when(restTemplate.getForEntity(
+                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=full&no-subdirs=true",
+                SearchResponseDTO.class)
+        )
+                .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
+                                        Paths.get("test", "log.txt").toAbsolutePath().toString(),
+                                        Paths.get("test", "cache", "cache.txt").toAbsolutePath().toString()
+                                ))
+                        )
+                );
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("search", relSearchPath.toString(), "--no-subdirs")
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith(
+                    "Listing 2 files in " + relSearchPath.toAbsolutePath() + ":\n"
+                            + "log.txt\n"
+                            + Paths.get("cache", "cache.txt")
+            );
+        });
+    }
 }
