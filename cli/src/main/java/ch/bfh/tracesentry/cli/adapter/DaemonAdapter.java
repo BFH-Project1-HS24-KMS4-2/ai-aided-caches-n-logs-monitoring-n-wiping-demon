@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -81,17 +79,19 @@ public class DaemonAdapter {
      */
     public ResponseEntity<SearchResponseDTO> search(Path absolutePath, SearchMode mode, Pattern pattern) {
         StringBuilder urlBuilder = buildSearchBaseUrl(absolutePath, mode);
+        urlBuilder.append("&pattern=");
         urlBuilder.append(URLEncoder.encode(pattern.pattern(), StandardCharsets.UTF_8));
         String url = urlBuilder.toString();
         return restTemplate.getForEntity(url, SearchResponseDTO.class);
+
     }
 
     private StringBuilder buildSearchBaseUrl(Path absolutePath, SearchMode mode) {
         return new StringBuilder(BASE_URL)
                 .append("search?path=")
-                .append(URLEncoder.encode(absolutePath.toString(), StandardCharsets.UTF_8))
+                .append(absolutePath)
                 .append("&mode=")
-                .append(URLEncoder.encode(mode.toString(), StandardCharsets.UTF_8));
+                .append(mode.toString().toLowerCase());
     }
 
     /**

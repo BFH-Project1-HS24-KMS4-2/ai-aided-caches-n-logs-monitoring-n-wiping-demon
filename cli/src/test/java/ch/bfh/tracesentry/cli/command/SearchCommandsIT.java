@@ -17,6 +17,8 @@ import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -73,13 +75,12 @@ public class SearchCommandsIT {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"log", "cache", "full", "pattern"})
+    @ValueSource(strings = {"log", "cache", "full"}) // pattern is tested separately
     void shouldAcceptValidSearchModes(String mode) {
         final Path relSearchPath = Paths.get("test");
-        when(restTemplate.getForEntity(
-                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=" + mode,
-                SearchResponseDTO.class)
-        )
+        String url = DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=" + mode;
+
+        when(restTemplate.getForEntity(url, SearchResponseDTO.class))
                 .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(0, List.of()))
                 );
 
@@ -91,6 +92,34 @@ public class SearchCommandsIT {
             String joinedLines = ShellLines.join(session.screen().lines());
             assertThat(joinedLines).startsWith(
                     "Listing 0 files in " + relSearchPath.toAbsolutePath() + ":\n"
+            );
+        });
+    }
+
+    @Test
+    void shouldAcceptValidPattern() {
+        final Path relSearchPath = Paths.get("test");
+        when(restTemplate.getForEntity(
+                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=pattern&pattern=" + URLEncoder.encode(".*\\.cookie", StandardCharsets.UTF_8),
+                SearchResponseDTO.class)
+        )
+                .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
+                                        Paths.get("test", "cookie1.cookie").toAbsolutePath().toString(),
+                                        Paths.get("test", "cookie2.cookie").toAbsolutePath().toString()
+                                ))
+                        )
+                );
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("search", relSearchPath.toString(), "--mode", "pattern", "--pattern", ".*\\\\.cookie")
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith(
+                    "Listing 2 files in " + relSearchPath.toAbsolutePath() + ":\n"
+                            + "cookie1.cookie\n"
+                            + "cookie2.cookie"
             );
         });
     }
@@ -119,35 +148,6 @@ public class SearchCommandsIT {
             String joinedLines = ShellLines.join(session.screen().lines());
             assertThat(joinedLines).contains("Option '--pattern' is required for mode 'pattern'.");
         });
-    }
-
-    @Test
-    void shouldAcceptValidPattern() {
-        final Path relSearchPath = Paths.get("test");
-        when(restTemplate.getForEntity(
-                DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=pattern&pattern=.*\\.cookie",
-                SearchResponseDTO.class)
-        )
-                .thenReturn(ResponseEntity.ok().body(new SearchResponseDTO(2, List.of(
-                                        Paths.get("test", "cookie1.cookie").toAbsolutePath().toString(),
-                                        Paths.get("test", "cookie2.cookie").toAbsolutePath().toString()
-                                ))
-                        )
-                );
-
-        ShellTestClient.NonInteractiveShellSession session = client
-                .nonInterative("search", relSearchPath.toString(), "--mode", "pattern", "--pattern", ".*\\.cookie")
-                .run();
-
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-            String joinedLines = ShellLines.join(session.screen().lines());
-            assertThat(joinedLines).startsWith(
-                    "Listing 2 files in " + relSearchPath.toAbsolutePath() + ":\n"
-                            + "cookie1.cookie\n"
-                            + "cookie2.cookie"
-            );
-        });
-
     }
 
     @Test
