@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.when;
 
@@ -119,10 +118,12 @@ public class MonitorCommandsIT {
                 .nonInterative("monitor", "list")
                 .run();
 
+        // TODO make output test pass
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("ID   | Added      | Path")
-                .containsText("3112 | 2023-11-08 | C:\\Users\\CoolDude")
-                .containsText("0202 | 2024-12-08 | C:\\Users"));
+                .containsText("ID   | Added      | Mode    | | Path")
+                .containsText("3112 | 2023-11-08 | full    | | C:\\Users\\CoolDude")
+                .containsText("3112 | 2023-11-08 | pattern | | C:\\Users\\CoolDude")
+                .containsText("0202 | 2024-12-08 | log     | C:\\Users"));
     }
 
     @Test

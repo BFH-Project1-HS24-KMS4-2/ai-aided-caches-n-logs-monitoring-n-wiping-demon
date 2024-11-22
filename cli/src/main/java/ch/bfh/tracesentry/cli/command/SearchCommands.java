@@ -1,8 +1,9 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
-import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidRegex;
+import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidPattern;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
+import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
 import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
@@ -39,7 +40,7 @@ public class SearchCommands {
             @ValidSearchMode
             String mode,
             @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.", defaultValue = "")
-            @ValidRegex
+            @ValidPattern
             String pattern,
             @ShellOption(help = "Do not search in subdirectories.", value = {"--no-subdirs"}, defaultValue = "false")
             boolean noSubdirs
@@ -52,15 +53,9 @@ public class SearchCommands {
             SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
 
             ResponseEntity<SearchResponseDTO> searchResponse;
-            if (searchMode == SearchMode.PATTERN) {
-                if (pattern.isEmpty()) {
-                    throw new IllegalArgumentException("Option '--pattern' is required for mode 'pattern'.");
-                }
+            if (PatternValidator.isValidPatternOccurrence(pattern, searchMode)) {
                 searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs, Pattern.compile(pattern));
             } else {
-                if (!pattern.isEmpty()) {
-                    throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + mode + "'.");
-                }
                 searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs);
             }
 

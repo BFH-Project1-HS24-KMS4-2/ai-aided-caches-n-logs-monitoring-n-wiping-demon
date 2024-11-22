@@ -28,12 +28,34 @@ public class MonitorCommands {
 
     @ShellMethod(key = "monitor add", value = "Add a path to the monitoring database.")
     @SuppressWarnings("unused")
-    public String monitorAdd(@ShellOption String path) {
+    public String monitorAdd(
+            @ShellOption(help = "The path to monitor for files in. Can be relative or absolute.")
+            @NotBlank
+            String path,
+            @ShellOption(help = "The monitoring mode to use. Can be: LOG, CACHE, FULL, PATTERN.", defaultValue = "full")
+            @ValidSearchMode
+            String mode,
+            @ShellOption(help = "The pattern which the file must match. Only used in PATTERN mode.", defaultValue = "")
+            @ValidPattern
+            String pattern,
+            @ShellOption(help = "Do not monitor  subdirectories.",  value = {"--no-subdirs"}, defaultValue = "false")
+            boolean noSubdirs
+
+    ) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         var errorMessage = "Error: " + path + " could not be added to the monitoring database.";
         try {
-            var response = daemonAdapter.monitorAdd(path);
-            if (response.getStatusCode().is2xxSuccessful()) {
+            SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
+
+            ResponseEntity<Void> monitorResponse;
+            if (PatternValidator.isValidPatternOccurrence(pattern, searchMode)) {
+                monitorResponse = daemonAdapter.monitorAdd(path);
+            } else {
+
+                monitorResponse = daemonAdapter.monitorAdd(path);
+            }
+
+            if (monitorResponse.getStatusCode().is2xxSuccessful()) {
                 return "Successfully added " + path + " to the monitoring database.";
             } else {
                 return errorMessage;
