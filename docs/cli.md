@@ -150,12 +150,20 @@ This command adds a specified path for monitoring. Paths added will be tracked f
 
 #### Usage:
 ```bash
-ts monitor add --path <path/to/monitor>
+ts monitor add --path <path/to/monitor> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
 ```
 
 #### Parameters:
 - **`--path`**: The full path you want to add for monitoring. This can be a relative path from the current directory or an absolute path.
 It might be a directory or a specific file.
+- **`--mode`**: Defines the monitoring mode:
+  - `log`: Monitor log files.
+  - `cache`: Monitor cache files.
+  - `full`: Monitor both log and cache files (default).
+  - `pattern`: Monitor files that match a custom regex pattern (requires `--pattern` parameter).
+- **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
+- **`--no-subdirs`**: If this flag is present, the monitoring will not include subdirectories (default is to monitor subdirectories).
+
 
 #### Example:
 - Add an absolute path to the monitoring database:
