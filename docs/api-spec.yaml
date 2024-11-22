@@ -59,10 +59,12 @@ paths:
                     items:
                       type: string
                     example:
-                        - /var/log/syslog
-                        - /var/log/auth.log
-                        - C:\Windows\Temp\log.txt
-                        - C:\Windows\Temp\log2.txt
+                      - /var/log/syslog
+                      - /var/log/auth.log
+                      - C:\Windows\Temp\log.txt
+                      - C:\Windows\Temp\log2.txt
+        '400':
+          description: Invalid input
         '422':
           description: Not processable input
         '500':
@@ -83,7 +85,7 @@ paths:
         '422':
           description: Invalid or non-existent path.
         '409':
-            description: Path already exists in the monitoring database.
+          description: Path already exists in the monitoring database.
         '500':
           description: Internal server error.
     get:

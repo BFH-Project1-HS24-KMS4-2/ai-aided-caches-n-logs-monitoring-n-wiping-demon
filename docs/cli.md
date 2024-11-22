@@ -119,7 +119,7 @@ ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-sub
   ts search /etc/path/to/directory # absolute path unix
   ts search Path\\To\\Directory # relative path windows
   ```
-- Search only for log files withou[api-spec.yaml](api-spec.yaml)t scanning subdirectories:
+- Search only for log files without scanning subdirectories:
   ```bash
   ts search /path/to/directory --mode log --no-subdirs
   ```
