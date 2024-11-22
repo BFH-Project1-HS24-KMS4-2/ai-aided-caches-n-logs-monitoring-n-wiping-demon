@@ -79,9 +79,36 @@ paths:
           description: The absolute path to the directory you want to monitor.
           schema:
             type: string
+        - name: mode
+          in: query
+          description: Specifies the monitoring mode (log, cache, full, pattern). Default is full.
+          required: false
+          schema:
+            type: string
+            enum:
+              - log
+              - cache
+              - full
+              - pattern
+            default: full
+        - name: pattern
+          in: query
+          description: Specifies the regex pattern to match files (required if mode is pattern).
+          required: false
+          schema:
+            type: string
+        - name: no-subdirs
+          in: query
+          description: Prevents monitoring subdirectories (default is false).
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '201':
           description: Path successfully added to the monitoring database.
+        '400':
+          description: Invalid input.
         '422':
           description: Invalid or non-existent path.
         '409':
