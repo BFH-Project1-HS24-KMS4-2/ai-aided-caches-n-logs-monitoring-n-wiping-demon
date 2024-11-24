@@ -8,8 +8,12 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Objects;
+
+import static ch.bfh.tracesentry.cli.util.Output.formatFilePaths;
+import static ch.bfh.tracesentry.cli.util.Output.formatTimestamp;
 
 @ShellComponent
 @ShellCommandGroup("Monitor Commands")
@@ -85,14 +89,16 @@ public class MonitorCommands {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
             MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id).getBody());
-            return "Listing comparison of snapshot from " + monitoredChanges.getPreviousSnapshot()
-                    + " to snapshot from " + monitoredChanges.getSubsequentSnapshot() + ":\n"
+            return "Listing comparison of " + monitoredChanges.getMonitoredPath() + " from "
+                    + formatTimestamp(monitoredChanges.getPreviousSnapshotCreation())
+                    + " to " + formatTimestamp(monitoredChanges.getSubsequentSnapshotCreation()) + "...\n"
                     + "Changed files:\n"
-                    + String.join("\n", monitoredChanges.getChangedPaths()) + "\n\n"
+                    + (monitoredChanges.getChangedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getChangedPaths(), monitoredChanges.getMonitoredPath())) + "\n\n"
                     + "Deleted files:\n"
-                    + String.join("\n", monitoredChanges.getDeletedPaths());
-        } catch (Exception e){
-            return "Error: Can't compare paths.";
+                    + (monitoredChanges.getDeletedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getDeletedPaths(), monitoredChanges.getMonitoredPath()));
+        } catch (RestClientException e) {
+            return "Error: " + e.getMessage();
         }
     }
+
 }

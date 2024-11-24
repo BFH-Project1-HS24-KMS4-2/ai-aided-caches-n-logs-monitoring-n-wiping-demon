@@ -3,6 +3,7 @@ package ch.bfh.tracesentry.cli.command;
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidRegex;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
+import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import jakarta.validation.constraints.NotBlank;
@@ -14,8 +15,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -42,7 +41,7 @@ public class SearchCommands {
             @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.", defaultValue = "")
             @ValidRegex
             String pattern,
-            @ShellOption(help = "Do not search in subdirectories.",  value = {"--no-subdirs"}, defaultValue = "false")
+            @ShellOption(help = "Do not search in subdirectories.", value = {"--no-subdirs"}, defaultValue = "false")
             boolean noSubdirs
     ) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
@@ -66,7 +65,7 @@ public class SearchCommands {
             }
 
             var body = Objects.requireNonNull(searchResponse.getBody());
-            var parsed = parseFoundPaths(body, canonicalPath);
+            var parsed = Output.formatFilePaths(body.getFiles(), canonicalPath);
 
             output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(canonicalPath).append(":\n").append(parsed);
             return output.toString();
@@ -77,10 +76,4 @@ public class SearchCommands {
         }
     }
 
-    private String parseFoundPaths(SearchResponseDTO searchResponse, String canonicalPath) throws NullPointerException {
-        var relativizedPaths = searchResponse.
-                getFiles().stream().
-                map(absoluteFilePath -> Path.of(canonicalPath).relativize(Paths.get(absoluteFilePath)).toString()).toList();
-        return String.join("\n", relativizedPaths);
-    }
 }

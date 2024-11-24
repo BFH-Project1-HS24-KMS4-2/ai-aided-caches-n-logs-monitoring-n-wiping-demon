@@ -3,12 +3,16 @@ package ch.bfh.tracesentry.daemon.facade;
 import ch.bfh.tracesentry.daemon.domain.model.Node;
 import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
 import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
+import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,7 +28,7 @@ public class MonitoringController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createMonitoring(@RequestBody String path) {
+    public void createMonitoring(@RequestBody String path) throws IOException {
         monitoringDomainService.createMonitoring(path);
     }
 
@@ -40,10 +44,10 @@ public class MonitoringController {
     }
 
     @GetMapping("{id}/changes")
-    public MonitoredChangesDTO getMonitoring(@PathVariable Integer id) {
+    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id) {
         List<Snapshot> snapshots = monitoringDomainService.getAllSnapshotsOfMonitoredPathOrdered(id);
         if (snapshots.size() < 2) {
-            throw new RuntimeException("Not found 2 snapshots for path " + id);
+            throw new UnprocessableException("Not found two snapshots to compare");
         }
 
         final Snapshot previousSnapshot = snapshots.get(1);
@@ -53,10 +57,15 @@ public class MonitoringController {
         final List<Node> deletions = monitoringDomainService.getDeletionsOfSnapshotComparedToPredecessor(previousSnapshot.getId());
 
         return new MonitoredChangesDTO(
-                previousSnapshot.getTimestamp(),
-                subsequentSnapshot.getTimestamp(),
+                previousSnapshot.getMonitoredPath().getPath(),
+                dateFromTimestamp(previousSnapshot.getTimestamp()),
+                dateFromTimestamp(subsequentSnapshot.getTimestamp()),
                 changes.stream().map(Node::getPath).toList(),
                 deletions.stream().map(Node::getPath).toList()
         );
+    }
+
+    private static LocalDateTime dateFromTimestamp(Timestamp timestamp) {
+        return timestamp.toLocalDateTime();
     }
 }

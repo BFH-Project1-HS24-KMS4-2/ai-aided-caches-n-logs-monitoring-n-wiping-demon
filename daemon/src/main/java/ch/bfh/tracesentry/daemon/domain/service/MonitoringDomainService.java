@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -35,20 +36,20 @@ public class MonitoringDomainService {
         this.nodeRepository = nodeRepository;
     }
 
-    public void createMonitoring(String path) {
-        var monitoredPath = new MonitoredPath(path);
-        File dirToSearch = new File(path);
+    public void createMonitoring(String path) throws IOException {
+        final File dirToSearch = new File(path);
+        final String canonicalPath = dirToSearch.getCanonicalPath();
 
         if (!dirToSearch.isDirectory()) {
             LOG.info("Path to search is not a directory or does not exist.");
             throw new UnprocessableException("Path to search is not a directory or does not exist.");
         }
-        if (monitoredPathRepository.existsByPath(path)) {
+        if (monitoredPathRepository.existsByPath(canonicalPath)) {
             LOG.info("Path already exists");
             throw new ConflictException("Path already exists");
         }
         try {
-            monitoredPathRepository.save(monitoredPath);
+            monitoredPathRepository.save(new MonitoredPath(canonicalPath));
         } catch (Exception e) {
             LOG.error("Error while saving monitored path", e);
         }

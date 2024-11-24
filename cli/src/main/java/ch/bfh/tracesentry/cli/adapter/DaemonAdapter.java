@@ -14,8 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -107,8 +105,7 @@ public class DaemonAdapter {
      * @return void
      */
     public ResponseEntity<Void> monitorAdd(String path) {
-        var absolutePath = Paths.get(path).toAbsolutePath().toString();
-        return restTemplate.postForEntity(BASE_URL + "monitored-path", absolutePath, Void.class);
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", path, Void.class);
     }
 
     /**

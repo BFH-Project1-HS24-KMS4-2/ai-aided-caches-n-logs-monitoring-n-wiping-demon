@@ -1,38 +1,53 @@
 package ch.bfh.tracesentry.lib.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MonitoredChangesDTO {
 
-    private Timestamp previousSnapshot;
-    private Timestamp subsequentSnapshot;
+    private String monitoredPath;
+    private LocalDateTime previousSnapshotCreation;
+    private LocalDateTime subsequentSnapshotCreation;
     private List<String> changedPaths;
     private List<String> deletedPaths;
 
-    public MonitoredChangesDTO(Timestamp previousSnapshot, Timestamp subsequentSnapshot, List<String> changedPaths, List<String> deletedPaths) {
-        this.previousSnapshot = previousSnapshot;
-        this.subsequentSnapshot = subsequentSnapshot;
+    public MonitoredChangesDTO(String monitoredPath,
+                               LocalDateTime previousSnapshotCreation,
+                               LocalDateTime subsequentSnapshotCreation,
+                               List<String> changedPaths,
+                               List<String> deletedPaths) {
+        this.monitoredPath = monitoredPath;
+        this.previousSnapshotCreation = previousSnapshotCreation;
+        this.subsequentSnapshotCreation = subsequentSnapshotCreation;
         this.changedPaths = changedPaths;
         this.deletedPaths = deletedPaths;
     }
 
-    public MonitoredChangesDTO() {}
-
-    public Timestamp getPreviousSnapshot() {
-        return previousSnapshot;
+    public MonitoredChangesDTO() {
     }
 
-    public void setPreviousSnapshot(Timestamp previousSnapshot) {
-        this.previousSnapshot = previousSnapshot;
+    public String getMonitoredPath() {
+        return monitoredPath;
     }
 
-    public Timestamp getSubsequentSnapshot() {
-        return subsequentSnapshot;
+    public void setMonitoredPath(String monitoredPath) {
+        this.monitoredPath = monitoredPath;
     }
 
-    public void setSubsequentSnapshot(Timestamp subsequentSnapshot) {
-        this.subsequentSnapshot = subsequentSnapshot;
+    public LocalDateTime getPreviousSnapshotCreation() {
+        return previousSnapshotCreation;
+    }
+
+    public void setPreviousSnapshotCreation(LocalDateTime previousSnapshotCreation) {
+        this.previousSnapshotCreation = previousSnapshotCreation;
+    }
+
+    public LocalDateTime getSubsequentSnapshotCreation() {
+        return subsequentSnapshotCreation;
+    }
+
+    public void setSubsequentSnapshotCreation(LocalDateTime subsequentSnapshotCreation) {
+        this.subsequentSnapshotCreation = subsequentSnapshotCreation;
     }
 
     public List<String> getChangedPaths() {
