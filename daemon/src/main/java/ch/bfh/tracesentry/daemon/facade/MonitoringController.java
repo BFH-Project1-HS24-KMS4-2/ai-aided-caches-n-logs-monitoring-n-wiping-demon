@@ -6,6 +6,8 @@ import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +30,8 @@ public class MonitoringController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createMonitoring(@RequestBody String path) throws IOException {
-        monitoringDomainService.createMonitoring(path);
+    public void createMonitoring(@RequestBody CreateMonitorPathDTO dto) throws IOException {
+        monitoringDomainService.createMonitoring(dto.getPath(), dto.getMode(), dto.getPattern(), dto.isNoSubdirs());
     }
 
     @GetMapping

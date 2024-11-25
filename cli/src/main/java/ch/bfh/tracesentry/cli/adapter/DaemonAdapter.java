@@ -1,5 +1,6 @@
 package ch.bfh.tracesentry.cli.adapter;
 
+import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
@@ -101,11 +102,26 @@ public class DaemonAdapter {
     }
 
     /**
-     * @param path relative or absolute path to the directory to monitor
+     * @param path absolute path to the directory to monitor
+     * @param mode search mode
+     * @param noSubdirs do not monitor subdirectories
      * @return void
      */
-    public ResponseEntity<Void> monitorAdd(String path) {
-        return restTemplate.postForEntity(BASE_URL + "monitored-path", path, Void.class);
+    public ResponseEntity<Void> monitorAdd(String path, SearchMode mode, boolean noSubdirs) {
+        var createMonitorPathDTO = new CreateMonitorPathDTO(path, mode, noSubdirs);
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", createMonitorPathDTO, Void.class);
+    }
+
+    /**
+     * @param path absolute path to the directory to monitor
+     * @param mode search mode
+     * @param noSubdirs do not monitor subdirectories
+     * @param pattern pattern to search for, may be null
+     * @return void
+     */
+    public ResponseEntity<Void> monitorAdd(String path, SearchMode mode, boolean noSubdirs, Pattern pattern) {
+        var createMonitorPathDTO = new CreateMonitorPathDTO(path, mode, noSubdirs, pattern.pattern());
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", createMonitorPathDTO, Void.class);
     }
 
     /**

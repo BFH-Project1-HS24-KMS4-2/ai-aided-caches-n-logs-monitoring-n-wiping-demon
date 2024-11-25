@@ -9,6 +9,7 @@ import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -36,7 +37,9 @@ public class MonitoringDomainService {
         this.nodeRepository = nodeRepository;
     }
 
-    public void createMonitoring(String path) throws IOException {
+
+    public void createMonitoring(String path, SearchMode mode, String pattern, boolean noSubdirs) throws IOException {
+        var monitoredPath = new MonitoredPath(path, mode, pattern, noSubdirs);
         final File dirToSearch = new File(path);
         final String canonicalPath = dirToSearch.getCanonicalPath();
 
@@ -59,7 +62,7 @@ public class MonitoringDomainService {
         return monitoredPathRepository
                 .findAll()
                 .stream()
-                .map(path -> modelMapper.map(path, MonitoredPathDTO.class))
+                .map(monitoredPath -> modelMapper.map(monitoredPath, MonitoredPathDTO.class))
                 .toList();
     }
 

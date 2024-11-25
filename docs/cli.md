@@ -184,7 +184,7 @@ Exact path already monitored:
   ```
 
 ---
-
+// TODO: fix list
 ### 6. `monitor list`
 This command retrieves and displays all paths currently being monitored. Each entry shows the ID, path, and date of addition.
 

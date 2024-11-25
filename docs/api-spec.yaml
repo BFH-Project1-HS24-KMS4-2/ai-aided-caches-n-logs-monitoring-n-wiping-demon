@@ -72,38 +72,34 @@ paths:
   /monitored-path:
     post:
       summary: Adds a path to the monitoring database.
-      parameters:
-        - name: path
-          in: query
-          required: true
-          description: The absolute path to the directory you want to monitor.
-          schema:
-            type: string
-        - name: mode
-          in: query
-          description: Specifies the monitoring mode (log, cache, full, pattern). Default is full.
-          required: false
-          schema:
-            type: string
-            enum:
-              - log
-              - cache
-              - full
-              - pattern
-            default: full
-        - name: pattern
-          in: query
-          description: Specifies the regex pattern to match files (required if mode is pattern).
-          required: false
-          schema:
-            type: string
-        - name: no-subdirs
-          in: query
-          description: Prevents monitoring subdirectories (default is false).
-          required: false
-          schema:
-            type: boolean
-            default: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The absolute path to the directory you want to monitor.
+                mode:
+                  type: string
+                  description: Specifies the monitoring mode (log, cache, full, pattern). Default is full.
+                  enum:
+                    - log
+                    - cache
+                    - full
+                    - pattern
+                  default: full
+                pattern:
+                  type: string
+                  description: Specifies the regex pattern to match files (required if mode is pattern).
+                noSubdirs:
+                  type: boolean
+                  description: Prevents monitoring subdirectories (default is false).
+                  default: false
+              required:
+                - path
       responses:
         '201':
           description: Path successfully added to the monitoring database.

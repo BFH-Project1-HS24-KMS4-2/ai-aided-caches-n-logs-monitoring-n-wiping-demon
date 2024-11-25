@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.shell.test.ShellAssertions;
 import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
@@ -126,9 +125,9 @@ public class MonitorCommandsIT {
     @Test
     void testMonitorList() {
         List<MonitoredPathDTO> monitoredPathDTOList = new ArrayList<>();
-        monitoredPathDTOList.add(new MonitoredPathDTO(3112, "C:\\Users\\CoolDude", LocalDate.of(2023, 11, 8)));
-        monitoredPathDTOList.add(new MonitoredPathDTO(202, "C:\\Users", LocalDate.of(2024, 12, 8)));
-
+        monitoredPathDTOList.add(new MonitoredPathDTO(3112, "C:\\Users\\CoolDude", SearchMode.FULL, null, false, LocalDate.of(2023, 11, 8)));
+        monitorPathDTOList.add(new MonitorPathDTO(3112, "C:\\Users\\CoolDude", SearchMode.PATTERN, "*.txt", false, LocalDate.of(2023, 11, 8)));
+        monitoredPathDTOList.add(new MonitoredPathDTO(202, "C:\\Users", SearchMode.LOG, null, true, LocalDate.of(2024, 12, 8)));
         ParameterizedTypeReference<List<MonitoredPathDTO>> responseType =
                 new ParameterizedTypeReference<>() {
                 };
@@ -140,12 +139,12 @@ public class MonitorCommandsIT {
                 .nonInterative("monitor", "list")
                 .run();
 
-        // TODO make output test pass
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("ID   | Added      | Mode    | | Path")
-                .containsText("3112 | 2023-11-08 | full    | | C:\\Users\\CoolDude")
-                .containsText("3112 | 2023-11-08 | pattern | | C:\\Users\\CoolDude")
-                .containsText("0202 | 2024-12-08 | log     | C:\\Users"));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).contains("3112", "C:\\Users\\CoolDude", "FULL", "2023-11-08");
+            assertThat(joinedLines).contains("3112", "C:\\Users\\CoolDude", "PATTERN", "*.txt", "2023-11-08");
+            assertThat(joinedLines).contains("202", "C:\\Users", "LOG", "true", "2024-12-08");
+        });
     }
 
     @Test
