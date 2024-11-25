@@ -34,7 +34,7 @@ public class PatternValidator implements ConstraintValidator<ValidPattern, Strin
             return true;
         } else {
             if (!pattern.isEmpty()) {
-                throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + searchMode + "'.");
+                throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + searchMode.toString().toLowerCase() + "'.");
             }
             return false;
         }
