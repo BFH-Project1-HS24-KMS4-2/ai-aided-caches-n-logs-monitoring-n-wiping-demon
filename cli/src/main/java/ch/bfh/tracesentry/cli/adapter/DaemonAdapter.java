@@ -126,6 +126,10 @@ public class DaemonAdapter {
         return restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id, HttpMethod.DELETE, null, Void.class);
     }
 
+    /**
+     * @param id of the monitored path to get changes from
+     * @return MonitoredChangesDTO
+     */
     public ResponseEntity<MonitoredChangesDTO> getMonitoredChanges(Integer id) {
         return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/changes", MonitoredChangesDTO.class);
     }

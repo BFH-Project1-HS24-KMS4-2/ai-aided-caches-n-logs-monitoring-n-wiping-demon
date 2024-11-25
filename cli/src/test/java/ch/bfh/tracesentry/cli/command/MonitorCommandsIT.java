@@ -1,6 +1,8 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.cli.util.ShellLines;
+import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +34,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureShell
 @AutoConfigureShellTestClient
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class MonitoringCommandsIT {
+public class MonitorCommandsIT {
 
     @Autowired
     private ShellTestClient client;
@@ -172,5 +176,34 @@ public class MonitoringCommandsIT {
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
                 .containsText("Error: No monitored path found with ID " + id + "."));
+    }
+
+    @Test
+    void shouldOutputMonitoredChanges() {
+        final int id = 5;
+        when(restTemplate.getForEntity(DaemonAdapter.BASE_URL + "monitored-path/" + id + "/changes", MonitoredChangesDTO.class))
+                .thenReturn(ResponseEntity.of(Optional.of(new MonitoredChangesDTO(
+                        "/test",
+                        LocalDateTime.of(2024, 12, 1, 15, 30),
+                        LocalDateTime.of(2024, 12, 1, 17, 30),
+                        List.of("/test/changed.txt"),
+                        List.of("/test/deleted.txt")
+                ))));
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("monitor", "compare", String.valueOf(id))
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            final String output = ShellLines.join(session.screen().lines());
+            assertThat(output).startsWith("""
+                    Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
+                    Changed files:
+                    changed.txt
+                    
+                    Deleted files:
+                    deleted.txt
+                    """);
+        });
     }
 }

@@ -114,9 +114,52 @@ paths:
           description: Path successfully removed from the monitoring database.
         '404':
           description: No monitored path with the specified ID found.
+  /monitored-path/{id}/changes:
+    get:
+      summary: Returns a comparison of the monitored path.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the monitored path you want the comparison from.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns the comparison.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoredChangesDTO'
+        422:
+          description: Not found two snapshots to compare.
 
 components:
   schemas:
+    MonitoredChangesDTO:
+      type: object
+      properties:
+        monitoredPath:
+          type: string
+          example: /test
+        previousSnapshotCreation:
+          type: string
+          example: 2024-11-25T13:21:52.063
+        subsequentSnapshotCreation:
+          type: string
+          example: 2024-11-25T13:21:52.063
+        changedPaths:
+          type: array
+          items:
+            type: string
+          example:
+            - /test/changed.txt
+        deletedPaths:
+          type: array
+          items:
+            type: string
+          example:
+            - /test/deleted.txt
     MonitorPath:
       type: object
       properties:

@@ -2,18 +2,19 @@ package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
+import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.util.Objects;
 
+import static ch.bfh.tracesentry.cli.util.Output.formatDateTime;
 import static ch.bfh.tracesentry.cli.util.Output.formatFilePaths;
-import static ch.bfh.tracesentry.cli.util.Output.formatTimestamp;
 
 @ShellComponent
 @ShellCommandGroup("Monitor Commands")
@@ -90,14 +91,15 @@ public class MonitorCommands {
         try {
             MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id).getBody());
             return "Listing comparison of " + monitoredChanges.getMonitoredPath() + " from "
-                    + formatTimestamp(monitoredChanges.getPreviousSnapshotCreation())
-                    + " to " + formatTimestamp(monitoredChanges.getSubsequentSnapshotCreation()) + "...\n"
+                    + formatDateTime(monitoredChanges.getPreviousSnapshotCreation())
+                    + " to " + formatDateTime(monitoredChanges.getSubsequentSnapshotCreation()) + "...\n"
                     + "Changed files:\n"
                     + (monitoredChanges.getChangedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getChangedPaths(), monitoredChanges.getMonitoredPath())) + "\n\n"
                     + "Deleted files:\n"
                     + (monitoredChanges.getDeletedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getDeletedPaths(), monitoredChanges.getMonitoredPath()));
-        } catch (RestClientException e) {
-            return "Error: " + e.getMessage();
+        } catch (RestClientResponseException e) {
+            final ErrorResponse errorResponse = Objects.requireNonNull(e.getResponseBodyAs(ErrorResponse.class));
+            return "Error: " + errorResponse.getMessage();
         }
     }
 
