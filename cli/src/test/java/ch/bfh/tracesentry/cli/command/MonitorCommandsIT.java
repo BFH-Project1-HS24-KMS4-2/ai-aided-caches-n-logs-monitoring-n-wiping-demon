@@ -2,6 +2,10 @@ package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.util.ShellLines;
+import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
+import ch.bfh.tracesentry.lib.model.SearchMode;
+import ch.bfh.tracesentry.cli.util.ShellLines;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +30,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -54,15 +61,20 @@ public class MonitorCommandsIT {
 
         ResponseEntity<Void> responseEntity = ResponseEntity.status(201).build();
 
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "monitored-path", absolutePath, Void.class))
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "monitored-path"),
+                any(CreateMonitorPathDTO.class),
+                eq(Void.class)))
                 .thenReturn(responseEntity);
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "add", shellParam)
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Successfully added " + absolutePath + " to the monitoring database."));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("Successfully added " + absolutePath + " to the monitoring database.");
+        });
     }
 
     @Test
@@ -72,15 +84,20 @@ public class MonitorCommandsIT {
 
         ResponseEntity<Void> responseEntity = ResponseEntity.status(422).build();
 
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "monitored-path", absolutePath, Void.class))
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "monitored-path"),
+                any(CreateMonitorPathDTO.class),
+                eq(Void.class)))
                 .thenReturn(responseEntity);
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "add", shellParam)
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Error: " + absolutePath));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("Error: " + absolutePath + " could not be added to the monitoring database.");
+        });
     }
 
     @Test
@@ -90,15 +107,20 @@ public class MonitorCommandsIT {
 
         ResponseEntity<Void> responseEntity = ResponseEntity.status(409).build();
 
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "monitored-path", absolutePath, Void.class))
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "monitored-path"),
+                any(CreateMonitorPathDTO.class),
+                eq(Void.class)))
                 .thenReturn(responseEntity);
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "add", shellParam)
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Error: " + absolutePath));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("Error: " + absolutePath + " is already being monitored.");
+        });
     }
 
     @Test
@@ -141,8 +163,10 @@ public class MonitorCommandsIT {
                 .nonInterative("monitor", "list")
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("No paths are currently being monitored."));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("No paths are currently being monitored.");
+        });
     }
 
     @Test
@@ -158,8 +182,10 @@ public class MonitorCommandsIT {
                 .nonInterative("monitor", "remove", String.valueOf(id))
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Successfully removed path with ID " + id + " from the monitoring database."));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("Successfully removed path with ID " + id + " from the monitoring database.");
+        });
     }
 
     @Test
@@ -175,8 +201,10 @@ public class MonitorCommandsIT {
                 .nonInterative("monitor", "remove", String.valueOf(id))
                 .run();
 
-        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> ShellAssertions.assertThat(session.screen())
-                .containsText("Error: No monitored path found with ID " + id + "."));
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            String joinedLines = ShellLines.join(session.screen().lines());
+            assertThat(joinedLines).startsWith("Error: No monitored path found with ID " + id + ".");
+        });
     }
 
     @Test
