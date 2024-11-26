@@ -17,13 +17,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import static ch.bfh.tracesentry.daemon.common.Constants.CACHE_SEARCH_STRING;
+import static ch.bfh.tracesentry.daemon.common.Constants.LOG_SEARCH_STRING;
+
 
 @RestController
 public class SearchController {
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
-    private static final String CACHE_SEARCH_STRING = "cache";
-    private static final String LOG_SEARCH_STRING = "log";
 
     @GetMapping("search")
     public SearchResponseDTO search(
