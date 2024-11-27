@@ -6,6 +6,7 @@
 \usepackage{titlesec}  % For customizing titles
 \usepackage[ngerman]{babel}
 \usepackage{wasysym}
+\usepackage{bm}
 
 
 \usepackage{geometry}
@@ -313,6 +314,36 @@
 
     \chapter{Implementierung}
 
+    \subsection{Performanz und Optimierung}
+    \subsubsection{Komplexität}
+
+    Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
+    Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
+    Daher ist eine Analyse der Komplexität der verschiedenen Operationen angebracht.
+    \\
+    Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
+    Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
+    Dateien sind stets Blätter.\newline
+    Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
+
+    \paragraph{Bau}
+    Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
+    was einer Komplexität von $O(n)$ für das Traversieren und somit auch für den Bau entspricht.
+    Das Hashen eines Ordners mit k Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
+    Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
+    \\\\
+    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
+    Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
+
+    \paragraph{Linearisierung}
+    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
+    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
+
+
+
+    \subsubsection{Caching}
+
+    \subsubsection{Indexing}
 
     \section{Architektur}
 
