@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -35,6 +34,9 @@ public class MerkleTree {
             throw new IllegalArgumentException("The provided path is not a valid directory.");
         }
 
+
+
+
         Node root = createNodeForDirectory(rootDir, snapshot);
         this.root = root;
         buildTreeRecursively(rootDir, root, snapshot);
@@ -55,6 +57,9 @@ public class MerkleTree {
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             Node childNode;
             if (file.isDirectory()) {
+                if (monitoredPath.isNoSubdirs()){
+                    continue;
+                }
                 childNode = createNodeForDirectory(file, snapshot);
                 buildTreeRecursively(file, childNode, snapshot);
             } else {
