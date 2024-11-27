@@ -1,7 +1,10 @@
 package ch.bfh.tracesentry.daemon.domain.service;
 
 import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
+import ch.bfh.tracesentry.daemon.domain.model.Node;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
+import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
+import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,11 +24,15 @@ public class MonitoringDomainService {
     private static final Logger LOG = LoggerFactory.getLogger(MonitoringDomainService.class);
     private final MonitoredPathRepository monitoredPathRepository;
     private final ModelMapper modelMapper;
+    private final SnapshotRepository snapshotRepository;
+    private final NodeRepository nodeRepository;
 
     @Autowired
-    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository, ModelMapper modelMapper) {
+    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository, ModelMapper modelMapper, SnapshotRepository snapshotRepository, NodeRepository nodeRepository) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.modelMapper = modelMapper;
+        this.snapshotRepository = snapshotRepository;
+        this.nodeRepository = nodeRepository;
     }
 
 
@@ -60,5 +68,15 @@ public class MonitoringDomainService {
             throw new NotFoundException("Path does not exist");
         }
         monitoredPathRepository.deleteById(id);
+    }
+
+    public List<Node> getChanges(MonitoredPath monitoredPath) {
+        var snapshots = snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        return nodeRepository.findAllBySnapshotIdAndHasChangedTrue(snapshots.getFirst().getId());
+    }
+
+    public List<Node> getDeletions(MonitoredPath monitoredPath) {
+        var snapshots = snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        return nodeRepository.findAllBySnapshotIdAndDeletedInNextSnapshotTrue(snapshots.getFirst().getId());
     }
 }

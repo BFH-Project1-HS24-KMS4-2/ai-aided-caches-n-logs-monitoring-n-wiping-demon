@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MerkleTree {
+    private Node root;
     private final List<Node> linearizedNodes = new ArrayList<>();
 
     private MerkleTree(String path, Snapshot snapshot) {
@@ -30,6 +31,7 @@ public class MerkleTree {
         }
 
         Node root = createNodeForDirectory(rootDir, snapshot);
+        this.root = root;
         buildTreeRecursively(rootDir, root, snapshot);
     }
 
@@ -60,6 +62,7 @@ public class MerkleTree {
 
         String combinedHash = combineHashes(children);
         parent.setHash(hash(combinedHash));
+        parent.setChildren(children);
     }
 
     private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException {
@@ -107,5 +110,9 @@ public class MerkleTree {
 
     public static MerkleTree create(String path, Snapshot snapshot) {
         return new MerkleTree(path, snapshot);
+    }
+
+    public Node getRoot() {
+        return root;
     }
 }
