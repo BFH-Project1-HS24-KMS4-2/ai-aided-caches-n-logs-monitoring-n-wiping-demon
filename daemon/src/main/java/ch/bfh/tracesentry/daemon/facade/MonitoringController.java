@@ -8,6 +8,7 @@ import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
 import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.io.File;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static ch.bfh.tracesentry.daemon.utils.ControllerUtils.*;
 
 @RestController
 @RequestMapping("/monitored-path")
@@ -31,7 +36,11 @@ public class MonitoringController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createMonitoring(@RequestBody CreateMonitorPathDTO dto) throws IOException {
-        monitoringDomainService.createMonitoring(dto.getPath(), dto.getMode(), dto.getPattern(), dto.isNoSubdirs());
+        File dirToSearch = parseDirectory(dto.getPath());
+        SearchMode searchMode = dto.getMode();
+        Pattern patternToMatch = parsePattern(dto.getPattern(), searchMode);
+
+        monitoringDomainService.createMonitoring(dirToSearch.getAbsolutePath(), searchMode, patternToMatch.pattern(), dto.isNoSubdirs());
     }
 
     @GetMapping

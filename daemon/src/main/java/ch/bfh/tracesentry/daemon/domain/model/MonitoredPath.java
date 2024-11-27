@@ -5,6 +5,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "monitored_path")
@@ -65,8 +66,12 @@ public class MonitoredPath {
         this.pattern = pattern;
     }
 
-    public String getPattern() {
-        return pattern;
+    public Pattern getPattern() {
+        try {
+            return pattern == null ? null : Pattern.compile(pattern);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void setNoSubdirs(boolean noSubdirs) {
