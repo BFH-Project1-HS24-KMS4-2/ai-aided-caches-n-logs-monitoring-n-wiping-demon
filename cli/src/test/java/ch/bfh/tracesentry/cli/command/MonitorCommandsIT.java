@@ -3,11 +3,9 @@ package ch.bfh.tracesentry.cli.command;
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.util.ShellLines;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
-import ch.bfh.tracesentry.lib.model.SearchMode;
-import ch.bfh.tracesentry.cli.util.ShellLines;
-import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.model.SearchMode;
+import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +124,7 @@ public class MonitorCommandsIT {
     void testMonitorList() {
         List<MonitoredPathDTO> monitoredPathDTOList = new ArrayList<>();
         monitoredPathDTOList.add(new MonitoredPathDTO(3112, "C:\\Users\\CoolDude", SearchMode.FULL, null, false, LocalDate.of(2023, 11, 8)));
-        monitorPathDTOList.add(new MonitorPathDTO(3112, "C:\\Users\\CoolDude", SearchMode.PATTERN, "*.txt", false, LocalDate.of(2023, 11, 8)));
+        monitoredPathDTOList.add(new MonitoredPathDTO(3112, "C:\\Users\\CoolDude", SearchMode.PATTERN, "*.txt", false, LocalDate.of(2023, 11, 8)));
         monitoredPathDTOList.add(new MonitoredPathDTO(202, "C:\\Users", SearchMode.LOG, null, true, LocalDate.of(2024, 12, 8)));
         ParameterizedTypeReference<List<MonitoredPathDTO>> responseType =
                 new ParameterizedTypeReference<>() {

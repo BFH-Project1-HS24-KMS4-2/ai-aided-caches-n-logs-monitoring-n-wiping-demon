@@ -1,6 +1,6 @@
 package ch.bfh.tracesentry.daemon.utils;
 
-import ch.bfh.tracesentry.daemon.exception.BadRequest;
+import ch.bfh.tracesentry.daemon.exception.BadRequestException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 
@@ -30,23 +30,23 @@ public final class ControllerUtils {
             if (mode.isEmpty()) return SearchMode.FULL;
             return SearchMode.valueOf(mode.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new BadRequest("Invalid search mode.");
+            throw new BadRequestException("Invalid search mode.");
         }
     }
 
     public static Pattern parsePattern(String pattern, SearchMode searchMode) {
         if (searchMode == SearchMode.PATTERN) {
             if (pattern.isEmpty()) {
-                throw new BadRequest("Pattern mode requires a pattern.");
+                throw new BadRequestException("Pattern mode requires a pattern.");
             }
             try {
                 return Pattern.compile(pattern);
             } catch (Exception e) {
-                throw new BadRequest("Invalid pattern.");
+                throw new BadRequestException("Invalid pattern.");
             }
         } else {
-            if (!pattern.isEmpty()) {
-                throw new BadRequest("Pattern is only allowed in pattern mode.");
+            if (pattern != null && !pattern.isEmpty()) {
+                throw new BadRequestException("Pattern is only allowed in pattern mode.");
             }
             return Pattern.compile(".*");
         }

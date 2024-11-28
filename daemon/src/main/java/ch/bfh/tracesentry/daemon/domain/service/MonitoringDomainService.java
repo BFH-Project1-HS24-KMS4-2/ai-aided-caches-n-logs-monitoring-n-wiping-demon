@@ -39,9 +39,9 @@ public class MonitoringDomainService {
 
 
     public void createMonitoring(String path, SearchMode mode, String pattern, boolean noSubdirs) throws IOException {
-        var monitoredPath = new MonitoredPath(path, mode, pattern, noSubdirs);
         final File dirToSearch = new File(path);
         final String canonicalPath = dirToSearch.getCanonicalPath();
+        var monitoredPath = new MonitoredPath(canonicalPath, mode, pattern, noSubdirs);
 
         if (!dirToSearch.isDirectory()) {
             LOG.info("Path to search is not a directory or does not exist.");
@@ -52,7 +52,7 @@ public class MonitoringDomainService {
             throw new ConflictException("Path already exists");
         }
         try {
-            monitoredPathRepository.save(new MonitoredPath(canonicalPath));
+            monitoredPathRepository.save(monitoredPath);
         } catch (Exception e) {
             LOG.error("Error while saving monitored path", e);
         }

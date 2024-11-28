@@ -2,14 +2,15 @@ package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
+import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidPattern;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
 import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -120,7 +121,7 @@ public class MonitorCommands {
         }
     }
 
-    private String[][] buildTableData(List<MonitorPathDTO> body) {
+    private String[][] buildTableData(List<MonitoredPathDTO> body) {
         String[][] data = new String[body.size() + 1][6];
         data[0] = new String[]{"ID", "path", "mode", "pattern", "no-subdirs", "created at"};
         String[][] content = body.stream()

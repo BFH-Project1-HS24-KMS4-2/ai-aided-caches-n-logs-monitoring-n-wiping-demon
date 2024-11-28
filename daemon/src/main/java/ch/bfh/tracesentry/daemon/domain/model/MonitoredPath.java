@@ -66,7 +66,11 @@ public class MonitoredPath {
         this.pattern = pattern;
     }
 
-    public Pattern getPattern() {
+    public String getPattern() {
+        return pattern;
+    }
+
+    public Pattern compilePattern() {
         try {
             return pattern == null ? null : Pattern.compile(pattern);
         } catch (Exception e) {

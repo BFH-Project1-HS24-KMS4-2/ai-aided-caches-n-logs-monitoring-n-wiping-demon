@@ -7,7 +7,6 @@ import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +38,6 @@ public class MonitoringController {
         File dirToSearch = parseDirectory(dto.getPath());
         SearchMode searchMode = dto.getMode();
         Pattern patternToMatch = parsePattern(dto.getPattern(), searchMode);
-
         monitoringDomainService.createMonitoring(dirToSearch.getAbsolutePath(), searchMode, patternToMatch.pattern(), dto.isNoSubdirs());
     }
 

@@ -18,10 +18,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -104,15 +106,16 @@ public class MonitoringControllerIT {
                 .bodyValue(dto)
                 .exchange()
                 .expectStatus().isCreated();
-        var monitoredPath = monitoredPathRepository.findByPath(path);
+        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+        var monitoredPath = monitoredPathRepository.findByPath(absolutePath);
         Assertions.assertNotNull(monitoredPath);
         Assertions.assertTrue(monitoredPath.isPresent());
         var monitorPathDTO = monitoredPath.get();
         Assertions.assertEquals(1, monitorPathDTO.getId());
-        Assertions.assertEquals(path, monitorPathDTO.getPath());
+        Assertions.assertEquals(absolutePath, monitorPathDTO.getPath());
         Assertions.assertEquals(SearchMode.FULL, monitorPathDTO.getMode());
         Assertions.assertFalse(monitorPathDTO.isNoSubdirs());
-        Assertions.assertNull(monitorPathDTO.getPattern());
+        Assertions.assertEquals(Pattern.compile(".*").toString(), monitorPathDTO.compilePattern().toString());
         Assertions.assertEquals(LocalDate.now(), monitorPathDTO.getCreatedAt());
     }
 
@@ -206,7 +209,7 @@ public class MonitoringControllerIT {
     @Test
     void shouldReturnComparison() {
         // when
-        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test"));
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
 
         final LocalDateTime previousSnapshotCreation = LocalDateTime.of(2024, 12, 1, 15, 30);
         final Snapshot previousSnapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(previousSnapshotCreation), monitoredPath));

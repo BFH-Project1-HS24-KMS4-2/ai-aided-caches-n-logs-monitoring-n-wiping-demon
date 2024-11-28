@@ -63,7 +63,7 @@ public class MerkleTree {
                 childNode = createNodeForDirectory(file, snapshot);
                 buildTreeRecursively(file, childNode, snapshot);
             } else {
-                if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.getPattern()).matches(file.toPath())) {
+                if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
                     childNode = createNodeForFile(file, snapshot);
                 } else {
                     continue;
