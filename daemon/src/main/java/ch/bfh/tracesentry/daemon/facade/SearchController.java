@@ -1,11 +1,10 @@
 package ch.bfh.tracesentry.daemon.facade;
 
+import ch.bfh.tracesentry.daemon.search.SearchStrategyFactory;
 import ch.bfh.tracesentry.daemon.exception.BadRequestException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -17,13 +16,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import static ch.bfh.tracesentry.daemon.utils.ControllerUtils.*;
+
 
 @RestController
 public class SearchController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
-    private static final String CACHE_SEARCH_STRING = "cache";
-    private static final String LOG_SEARCH_STRING = "log";
 
     @GetMapping("search")
     public SearchResponseDTO search(
@@ -32,13 +29,9 @@ public class SearchController {
             @RequestParam(value = "pattern", defaultValue = "") String pattern,
             @RequestParam(value = "no-subdirs", defaultValue = "false") boolean noSubdirs
     ) {
-        File dirToSearch = new File(startDirPath);
-
-        if (!dirToSearch.exists()) unprocessableException("Search Path does not exist.");
-        if (!dirToSearch.isDirectory()) unprocessableException("Search Path is not a directory.");
-
-        SearchMode searchMode = getSearchMode(mode);
-        Pattern patternToMatch = getPattern(pattern, searchMode);
+        File dirToSearch = parseDirectory(startDirPath);
+        SearchMode searchMode = parseSearchMode(mode);
+        Pattern patternToMatch = parsePattern(pattern, searchMode);
 
         List<String> files = new ArrayList<>();
 
@@ -54,11 +47,7 @@ public class SearchController {
 
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
-                    if ((searchMode == SearchMode.FULL && (containsString(path, CACHE_SEARCH_STRING) || containsString(path, LOG_SEARCH_STRING))) ||
-                            (searchMode == SearchMode.CACHE && (containsString(path, CACHE_SEARCH_STRING))) ||
-                            (searchMode == SearchMode.LOG && (containsString(path, LOG_SEARCH_STRING))) ||
-                            (searchMode == SearchMode.PATTERN && patternToMatch.matcher(path.getFileName().toString()).find())) {
-
+                    if (SearchStrategyFactory.create(searchMode, patternToMatch).matches(path)) {
                         files.add(path.toString());
                     }
                     return FileVisitResult.CONTINUE;
@@ -73,41 +62,5 @@ public class SearchController {
             throw new InternalError("Error while searching for files.");
         }
         return new SearchResponseDTO(files.size(), files);
-    }
-
-    private static void unprocessableException(String message) {
-        LOG.error(message);
-        throw new UnprocessableException(message);
-    }
-
-    private static boolean containsString(Path path, String value) {
-        return path.getFileName().toString().toLowerCase().contains(value);
-    }
-
-    private static SearchMode getSearchMode(String mode) {
-        try {
-            if (mode.isEmpty()) return SearchMode.FULL;
-            return SearchMode.valueOf(mode.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Invalid search mode.");
-        }
-    }
-
-    private static Pattern getPattern(String pattern, SearchMode searchMode) {
-        if (searchMode == SearchMode.PATTERN) {
-            if (pattern.isEmpty()) {
-                throw new BadRequestException("Pattern mode requires a pattern.");
-            }
-            try {
-                return Pattern.compile(pattern);
-            } catch (Exception e) {
-                throw new BadRequestException("Invalid pattern.");
-            }
-        } else {
-            if (!pattern.isEmpty()) {
-                throw new BadRequestException("Pattern is only allowed in pattern mode.");
-            }
-            return Pattern.compile(".*");
-        }
     }
 }

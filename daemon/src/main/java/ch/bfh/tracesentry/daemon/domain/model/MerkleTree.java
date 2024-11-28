@@ -1,5 +1,7 @@
 package ch.bfh.tracesentry.daemon.domain.model;
 
+import ch.bfh.tracesentry.daemon.search.SearchStrategyFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,10 +14,12 @@ import java.util.Objects;
 
 public class MerkleTree {
     private Node root;
+    private final MonitoredPath monitoredPath;
     private final List<Node> linearizedNodes = new ArrayList<>();
 
-    private MerkleTree(String path, Snapshot snapshot) {
+    private MerkleTree(MonitoredPath path, Snapshot snapshot) {
         try {
+            this.monitoredPath = path;
             this.buildMerkleTree(path, snapshot);
         } catch (IOException | NoSuchAlgorithmException e) {
             // we're just throwing an unchecked exception here,
@@ -24,11 +28,14 @@ public class MerkleTree {
         }
     }
 
-    private void buildMerkleTree(String path, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
-        File rootDir = new File(path);
+    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
+        File rootDir = new File(monitoredPath.getPath());
         if (!rootDir.exists() || !rootDir.isDirectory()) {
             throw new IllegalArgumentException("The provided path is not a valid directory.");
         }
+
+
+
 
         Node root = createNodeForDirectory(rootDir, snapshot);
         this.root = root;
@@ -50,12 +57,18 @@ public class MerkleTree {
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             Node childNode;
             if (file.isDirectory()) {
+                if (monitoredPath.isNoSubdirs()){
+                    continue;
+                }
                 childNode = createNodeForDirectory(file, snapshot);
                 buildTreeRecursively(file, childNode, snapshot);
             } else {
-                childNode = createNodeForFile(file, snapshot);
+                if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
+                    childNode = createNodeForFile(file, snapshot);
+                } else {
+                    continue;
+                }
             }
-
             childNode.setParent(parent);
             children.add(childNode);
         }
@@ -108,8 +121,8 @@ public class MerkleTree {
         return hexString.toString();
     }
 
-    public static MerkleTree create(String path, Snapshot snapshot) {
-        return new MerkleTree(path, snapshot);
+    public static MerkleTree create(MonitoredPath monitoredPath, Snapshot snapshot) {
+        return new MerkleTree(monitoredPath, snapshot);
     }
 
     public Node getRoot() {

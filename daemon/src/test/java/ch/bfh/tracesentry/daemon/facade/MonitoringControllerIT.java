@@ -6,6 +6,8 @@ import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
+import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,45 +15,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-//language=h2
-@Sql(statements = """
-        CREATE TABLE IF NOT EXISTS monitored_path (
-                                        id INTEGER PRIMARY KEY auto_increment,
-                                        path TEXT NOT NULL UNIQUE,
-                                        created_at DATE NOT NULL
-        );
-        
-        CREATE TABLE IF NOT EXISTS snapshot (
-                                  id INTEGER PRIMARY KEY auto_increment,
-                                  monitored_path_id INTEGER NOT NULL,
-                                  timestamp TIMESTAMP NOT NULL,
-                                  FOREIGN KEY (monitored_path_id) REFERENCES monitored_path (id)
-        );
-        
-        CREATE TABLE IF NOT EXISTS snapshot_node (
-                                       id INTEGER PRIMARY KEY auto_increment,
-                                       snapshot_id INTEGER NOT NULL,
-                                       parent_id INTEGER,
-                                       hash TEXT,
-                                       path TEXT NOT NULL,
-                                       has_changed BOOLEAN NOT NULL,
-                                       deleted_in_next_snapshot BOOLEAN NOT NULL,
-                                       FOREIGN KEY (snapshot_id) REFERENCES snapshot (id),
-                                       FOREIGN KEY (parent_id) REFERENCES snapshot_node(id)
-        );
-        
-        CREATE INDEX IF NOT EXISTS idx_snapshot_id ON snapshot_node(snapshot_id);
-        """)
+
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MonitoringControllerIT {
 
@@ -71,6 +46,9 @@ public class MonitoringControllerIT {
         monitoredPathRepository.save(
                 new MonitoredPath()
                         .path(path)
+                        .mode(SearchMode.PATTERN)
+                        .noSubdirs(false)
+                        .pattern("*.txt")
                         .createdAt(createdAt));
         WebTestClient
                 .bindToServer()
@@ -81,38 +59,47 @@ public class MonitoringControllerIT {
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$[0].path").isEqualTo(path)
+                .jsonPath("$[0].mode").isEqualTo(SearchMode.PATTERN.toString())
+                .jsonPath("$[0].noSubdirs").isEqualTo(false)
+                .jsonPath("$[0].pattern").isEqualTo("*.txt")
                 .jsonPath("$[0].createdAt").isEqualTo(createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
     @Test
     public void testCreateMonitoring() {
         var path = "/";
+        var dto = new CreateMonitorPathDTO(path, SearchMode.FULL, false);
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
                 .build()
                 .post()
-                .bodyValue(path)
+                .bodyValue(dto)
                 .exchange()
                 .expectStatus().isCreated();
-        var monitoredPath = monitoredPathRepository.findByPath(path);
+        var absolutePath = Paths.get(path).toAbsolutePath().toString();
+        var monitoredPath = monitoredPathRepository.findByPath(absolutePath);
         Assertions.assertNotNull(monitoredPath);
         Assertions.assertTrue(monitoredPath.isPresent());
         var monitorPathDTO = monitoredPath.get();
         Assertions.assertEquals(1, monitorPathDTO.getId());
-        Assertions.assertEquals(path, monitorPathDTO.getPath());
+        Assertions.assertEquals(absolutePath, monitorPathDTO.getPath());
+        Assertions.assertEquals(SearchMode.FULL, monitorPathDTO.getMode());
+        Assertions.assertFalse(monitorPathDTO.isNoSubdirs());
+        Assertions.assertEquals(Pattern.compile(".*").toString(), monitorPathDTO.compilePattern().toString());
         Assertions.assertEquals(LocalDate.now(), monitorPathDTO.getCreatedAt());
     }
 
     @Test
     public void testUniquePath() {
         var path = "/";
+        var dto = new CreateMonitorPathDTO(path, SearchMode.FULL, false);
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
                 .build()
                 .post()
-                .bodyValue(path)
+                .bodyValue(dto)
                 .exchange()
                 .expectStatus().isCreated();
         WebTestClient
@@ -120,7 +107,7 @@ public class MonitoringControllerIT {
                 .baseUrl("http://localhost:8087/monitored-path")
                 .build()
                 .post()
-                .bodyValue(path)
+                .bodyValue(dto)
                 .exchange()
                 .expectStatus().value(status -> Assertions.assertEquals(status, HttpStatus.CONFLICT.value()));
     }
@@ -128,12 +115,13 @@ public class MonitoringControllerIT {
     @Test
     public void testNonExistingPath() {
         var path = "C:\\Ordner\\CON";
+        var dto = new CreateMonitorPathDTO(path, SearchMode.FULL, false);
         WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:8087/monitored-path")
                 .build()
                 .post()
-                .bodyValue(path)
+                .bodyValue(dto)
                 .exchange()
                 .expectStatus().value(status -> Assertions.assertEquals(status, HttpStatus.UNPROCESSABLE_ENTITY.value()));
     }
@@ -192,7 +180,7 @@ public class MonitoringControllerIT {
     @Test
     void shouldReturnComparison() {
         // when
-        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test"));
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
 
         final LocalDateTime previousSnapshotCreation = LocalDateTime.of(2024, 12, 1, 15, 30);
         final Snapshot previousSnapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(previousSnapshotCreation), monitoredPath));

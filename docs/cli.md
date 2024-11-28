@@ -150,12 +150,20 @@ This command adds a specified path for monitoring. Paths added will be tracked f
 
 #### Usage:
 ```bash
-ts monitor add --path <path/to/monitor>
+ts monitor add --path <path/to/monitor> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
 ```
 
 #### Parameters:
 - **`--path`**: The full path you want to add for monitoring. This can be a relative path from the current directory or an absolute path.
 It might be a directory or a specific file.
+- **`--mode`**: Defines the monitoring mode:
+  - `log`: Monitor log files.
+  - `cache`: Monitor cache files.
+  - `full`: Monitor both log and cache files (default).
+  - `pattern`: Monitor files that match a custom regex pattern (requires `--pattern` parameter).
+- **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
+- **`--no-subdirs`**: If this flag is present, the monitoring will not include subdirectories (default is to monitor subdirectories).
+
 
 #### Example:
 - Add an absolute path to the monitoring database:
@@ -176,7 +184,7 @@ Exact path already monitored:
   ```
 
 ---
-
+// TODO: fix list
 ### 6. `monitor list`
 This command retrieves and displays all paths currently being monitored. Each entry shows the ID, path, and date of addition.
 
@@ -192,10 +200,15 @@ ts monitor list
   ```
 Example output:
   ```
-  ID    | Added      | Date Added
-  ------------------------------------------------
-  3210  | 2024-11-01 | /etc/path/to/monitor   
-  3221  | 2024-11-01 | Path\\To\\Monitor      
++----+------------------------------------+-------+----------+----------+----------+
+|ID  |path                                |mode   |pattern   |no-subdirs|created at|
++----+------------------------------------+-------+----------+----------+----------+
+|0001|C:\Users                            |FULL   |          |false     |2024-11-26|
++----+------------------------------------+-------+----------+----------+----------+
+|0002|C:\Users\CoolDude                   |PATTERN|.*\.cookie|true      |2024-11-26|
++----+------------------------------------+-------+----------+----------+----------+
+|0003|C:\Users\CooolDude\IdeaProjects\_bfh|PATTERN|env       |false     |2024-11-27|
++----+------------------------------------+-------+----------+----------+----------+ 
   ```
 If no paths are being monitored:
   ```

@@ -9,6 +9,7 @@ import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -36,9 +37,11 @@ public class MonitoringDomainService {
         this.nodeRepository = nodeRepository;
     }
 
-    public void createMonitoring(String path) throws IOException {
+
+    public void createMonitoring(String path, SearchMode mode, String pattern, boolean noSubdirs) throws IOException {
         final File dirToSearch = new File(path);
         final String canonicalPath = dirToSearch.getCanonicalPath();
+        var monitoredPath = new MonitoredPath(canonicalPath, mode, pattern, noSubdirs);
 
         if (!dirToSearch.isDirectory()) {
             LOG.info("Path to search is not a directory or does not exist.");
@@ -49,7 +52,7 @@ public class MonitoringDomainService {
             throw new ConflictException("Path already exists");
         }
         try {
-            monitoredPathRepository.save(new MonitoredPath(canonicalPath));
+            monitoredPathRepository.save(monitoredPath);
         } catch (Exception e) {
             LOG.error("Error while saving monitored path", e);
         }
@@ -59,7 +62,7 @@ public class MonitoringDomainService {
         return monitoredPathRepository
                 .findAll()
                 .stream()
-                .map(path -> modelMapper.map(path, MonitoredPathDTO.class))
+                .map(monitoredPath -> modelMapper.map(monitoredPath, MonitoredPathDTO.class))
                 .toList();
     }
 
