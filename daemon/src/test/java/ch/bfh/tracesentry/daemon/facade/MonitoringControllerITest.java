@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 @ActiveProfiles("test")
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class MonitoringControllerIT {
+public class MonitoringControllerITest {
 
     @Autowired
     private MonitoredPathRepository monitoredPathRepository;

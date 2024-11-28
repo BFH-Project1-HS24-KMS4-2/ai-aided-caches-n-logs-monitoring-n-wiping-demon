@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureShell
 @AutoConfigureShellTestClient
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class MonitorCommandsIT {
+public class MonitorCommandsITest {
 
     @Autowired
     private ShellTestClient client;
