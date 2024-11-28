@@ -2,13 +2,14 @@ package ch.bfh.tracesentry.daemon.domain.service;
 
 import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
 import ch.bfh.tracesentry.daemon.domain.model.Node;
+import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -35,31 +36,30 @@ public class MonitoringDomainService {
         this.nodeRepository = nodeRepository;
     }
 
-
-    public void createMonitoring(String path) {
-        var monitoredPath = new MonitoredPath(path);
-        File dirToSearch = new File(path);
+    public void createMonitoring(String path) throws IOException {
+        final File dirToSearch = new File(path);
+        final String canonicalPath = dirToSearch.getCanonicalPath();
 
         if (!dirToSearch.isDirectory()) {
             LOG.info("Path to search is not a directory or does not exist.");
             throw new UnprocessableException("Path to search is not a directory or does not exist.");
         }
-        if (monitoredPathRepository.existsByPath(path)) {
+        if (monitoredPathRepository.existsByPath(canonicalPath)) {
             LOG.info("Path already exists");
             throw new ConflictException("Path already exists");
         }
         try {
-            monitoredPathRepository.save(monitoredPath);
+            monitoredPathRepository.save(new MonitoredPath(canonicalPath));
         } catch (Exception e) {
             LOG.error("Error while saving monitored path", e);
         }
     }
 
-    public List<MonitorPathDTO> getMonitoredPaths() {
+    public List<MonitoredPathDTO> getMonitoredPaths() {
         return monitoredPathRepository
                 .findAll()
                 .stream()
-                .map(path -> modelMapper.map(path, MonitorPathDTO.class))
+                .map(path -> modelMapper.map(path, MonitoredPathDTO.class))
                 .toList();
     }
 
@@ -70,13 +70,16 @@ public class MonitoringDomainService {
         monitoredPathRepository.deleteById(id);
     }
 
-    public List<Node> getChanges(MonitoredPath monitoredPath) {
-        var snapshots = snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
-        return nodeRepository.findAllBySnapshotIdAndHasChangedTrue(snapshots.getFirst().getId());
+    public List<Snapshot> getAllSnapshotsOfMonitoredPathOrdered(Integer monitoredPathId) {
+        return snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPathId);
     }
 
-    public List<Node> getDeletions(MonitoredPath monitoredPath) {
-        var snapshots = snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
-        return nodeRepository.findAllBySnapshotIdAndDeletedInNextSnapshotTrue(snapshots.getFirst().getId());
+    public List<Node> getChangesOfSnapshotComparedToPredecessor(Integer snapshotId) {
+        return nodeRepository.findAllBySnapshotIdAndHasChangedTrue(snapshotId);
+    }
+
+    // Snapshot Id needs to be the preceder snapshot of the comparison
+    public List<Node> getDeletionsOfSnapshotComparedToPredecessor(Integer snapshotId) {
+        return nodeRepository.findAllBySnapshotIdAndDeletedInNextSnapshotTrue(snapshotId);
     }
 }

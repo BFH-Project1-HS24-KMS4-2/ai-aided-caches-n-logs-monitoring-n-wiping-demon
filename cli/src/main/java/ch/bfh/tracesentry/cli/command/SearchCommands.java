@@ -3,6 +3,7 @@ package ch.bfh.tracesentry.cli.command;
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidRegex;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
+import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import jakarta.validation.constraints.NotBlank;
@@ -13,8 +14,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -41,14 +41,14 @@ public class SearchCommands {
             @ShellOption(help = "The pattern to search for. Only used in PATTERN mode.", defaultValue = "")
             @ValidRegex
             String pattern,
-            @ShellOption(help = "Do not search in subdirectories.",  value = {"--no-subdirs"}, defaultValue = "false")
+            @ShellOption(help = "Do not search in subdirectories.", value = {"--no-subdirs"}, defaultValue = "false")
             boolean noSubdirs
     ) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
             StringBuilder output = new StringBuilder();
 
-            Path absolutePath = Paths.get(path).toAbsolutePath();
+            final String canonicalPath = new File(path).getCanonicalPath();
             SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
 
             ResponseEntity<SearchResponseDTO> searchResponse;
@@ -56,18 +56,18 @@ public class SearchCommands {
                 if (pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' is required for mode 'pattern'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs, Pattern.compile(pattern));
+                searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs, Pattern.compile(pattern));
             } else {
                 if (!pattern.isEmpty()) {
                     throw new IllegalArgumentException("Option '--pattern' must not be set for mode '" + mode + "'.");
                 }
-                searchResponse = daemonAdapter.search(absolutePath, searchMode, noSubdirs);
+                searchResponse = daemonAdapter.search(canonicalPath, searchMode, noSubdirs);
             }
 
             var body = Objects.requireNonNull(searchResponse.getBody());
-            var parsed = parseFoundPaths(body, absolutePath);
+            var parsed = Output.formatFilePaths(body.getFiles(), canonicalPath);
 
-            output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(absolutePath).append(":\n").append(parsed);
+            output.append("Listing ").append(body.getNumberOfFiles()).append(" files in ").append(canonicalPath).append(":\n").append(parsed);
             return output.toString();
         } catch (IllegalArgumentException e) {
             return e.getMessage();
@@ -76,10 +76,4 @@ public class SearchCommands {
         }
     }
 
-    private String parseFoundPaths(SearchResponseDTO searchResponse, Path absolutePath) throws NullPointerException {
-        var relativizedPaths = searchResponse.
-                getFiles().stream().
-                map(absoluteFilePath -> absolutePath.relativize(Paths.get(absoluteFilePath)).toString()).toList();
-        return String.join("\n", relativizedPaths);
-    }
 }

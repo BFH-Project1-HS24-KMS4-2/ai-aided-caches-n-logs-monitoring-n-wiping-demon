@@ -11,6 +11,7 @@
 5. [monitor add](#5-monitor-add)
 6. [monitor list](#6-monitor-list)
 7. [monitor remove](#7-monitor-remove)
+8. [monitor compare](#8-monitor-compare)
 
 ---
 
@@ -228,4 +229,35 @@ Error message if the ID does not exist:
   Error: No monitored path found with ID 3210.
   ```
 
+---
+
+### 8. `monitor compare`
+This command outputs the comparison of the latest two snapshots taken from a given monitored path.
+
+#### Usage:
+```bash
+  ts monitor compare --id <ID>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the monitored path to get the comparison from.
+
+#### Example:
+- Get the comparison of a monitored path by ID:
+  ```bash
+  ts monitor compare --id 1
+  ```
+Example output of successful execution:
+```
+Listing comparison of /home/Desktop/project1 from 25.11.2024 13:23:58 to 25.11.2024 13:35:51...
+Changed files:
+-
+
+Deleted files:
+deleted.txt
+```
+Example output of unsuccessful execution:
+```
+Error: Not found two snapshots to compare
+```
 ---
