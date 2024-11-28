@@ -21,14 +21,12 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static ch.bfh.tracesentry.cli.util.Output.formatDateTime;
 import static ch.bfh.tracesentry.cli.util.Output.formatFilePaths;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 @ShellComponent
 @ShellCommandGroup("Monitor Commands")
