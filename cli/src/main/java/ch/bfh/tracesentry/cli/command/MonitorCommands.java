@@ -6,6 +6,7 @@ import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidPattern;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
 import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
+import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,14 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static ch.bfh.tracesentry.cli.util.Output.formatDateTime;
 import static ch.bfh.tracesentry.cli.util.Output.formatFilePaths;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @ShellComponent
 @ShellCommandGroup("Monitor Commands")
@@ -91,20 +96,11 @@ public class MonitorCommands {
             if (body.isEmpty()) {
                 return "No paths are currently being monitored.";
             }
-            TableModel model = new ArrayTableModel(body.stream()
-                    .map(m ->
-                            new String[]{
-                                    String.format("%04d", m.getId()),
-                                    m.getPath(),
-                                    m.getMode().toString(),
-                                    m.getPattern(),
-                                    String.valueOf(m.isNoSubdirs()),
-                                    m.getCreatedAt().toString()
-                            }
-                    ).toArray(String[][]::new));
+            String[][] data =  buildTableData(body);
+            TableModel model = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(model);
             tableBuilder.addFullBorder(BorderStyle.oldschool);
-            return tableBuilder.build().render(80);
+            return tableBuilder.build().render(120);
         } catch (Exception e) {
             return "Error: could not list monitored paths.";
         }
@@ -124,6 +120,24 @@ public class MonitorCommands {
         } catch (Exception e) {
             return "Error: No monitored path found with ID " + id + ".";
         }
+    }
+
+    private String[][] buildTableData(List<MonitorPathDTO> body) {
+        String[][] data = new String[body.size() + 1][6];
+        data[0] = new String[]{"ID", "path", "mode", "pattern", "no-subdirs", "created at"};
+        String[][] content = body.stream()
+                .map(m ->
+                        new String[]{
+                                String.format("%04d", m.getId()),
+                                m.getPath(),
+                                m.getMode().toString(),
+                                m.getPattern(),
+                                String.valueOf(m.isNoSubdirs()),
+                                m.getCreatedAt().toString()
+                        }
+                ).toArray(String[][]::new);
+        System.arraycopy(content, 0, data, 1, content.length);
+        return data;
     }
 
     @ShellMethod(key = "monitor compare", value = "Compare snapshots of a monitored path")
