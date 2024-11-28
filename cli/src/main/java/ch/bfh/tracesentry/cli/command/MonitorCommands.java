@@ -100,6 +100,8 @@ public class MonitorCommands {
         } catch (RestClientResponseException e) {
             final ErrorResponse errorResponse = Objects.requireNonNull(e.getResponseBodyAs(ErrorResponse.class));
             return "Error: " + errorResponse.getMessage();
+        } catch (Exception e) {
+            return "Error: could not compare snapshots.";
         }
     }
 
