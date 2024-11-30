@@ -176,7 +176,7 @@ public class MonitorCommands {
                     .map(s ->
                             new String[]{
                                     String.format("%04d", s.getId()),
-                                    formatDateTime(s.getTimestamp().toLocalDateTime())
+                                    formatDateTime(s.getTimestamp())
                             }
                     ).toArray(String[][]::new);
             System.arraycopy(model, 0, data, 1, model.length);

@@ -1,17 +1,16 @@
 package ch.bfh.tracesentry.lib.dto;
 
-
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class SnapshotDTO {
 
     private Integer id;
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     public SnapshotDTO() {
     }
 
-    public SnapshotDTO(Integer id, Timestamp timestamp) {
+    public SnapshotDTO(Integer id, LocalDateTime timestamp) {
         this.id = id;
         this.timestamp = timestamp;
     }
@@ -24,11 +23,11 @@ public class SnapshotDTO {
         this.id = id;
     }
 
-    public Timestamp getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

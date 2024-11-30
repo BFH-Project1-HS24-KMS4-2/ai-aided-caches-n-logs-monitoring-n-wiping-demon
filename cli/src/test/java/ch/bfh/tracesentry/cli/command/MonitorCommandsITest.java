@@ -245,8 +245,8 @@ public class MonitorCommandsITest {
 
         when(restTemplate.getForEntity(DaemonAdapter.BASE_URL + "monitored-path/" + id + " /snapshots", List.class))
                 .thenReturn(ResponseEntity.of(Optional.of(List.of(
-                        new SnapshotDTO(1, Timestamp.from(timestamp1.toInstant(ZoneOffset.UTC))),
-                        new SnapshotDTO(2, Timestamp.from(timestamp2.toInstant(ZoneOffset.UTC)))))));
+                        new SnapshotDTO(1, timestamp1),
+                        new SnapshotDTO(2, timestamp2)))));
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "snapshots", String.valueOf(id))
