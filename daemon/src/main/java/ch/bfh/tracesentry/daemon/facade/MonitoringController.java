@@ -7,6 +7,7 @@ import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,11 @@ public class MonitoringController {
                 changes.stream().map(Node::getPath).toList(),
                 deletions.stream().map(Node::getPath).toList()
         );
+    }
+
+    @GetMapping("/{monitoredPathId}/snapshots")
+    public List<SnapshotDTO> getSnapshots(@PathVariable Integer monitoredPathId) {
+        return monitoringDomainService.getSnapshotsOf(monitoredPathId);
     }
 
     private static LocalDateTime dateFromTimestamp(Timestamp timestamp) {

@@ -98,7 +98,7 @@ public class MonitorCommands {
             String[][] data =  buildTableData(body);
             TableModel model = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(model);
-            tableBuilder.addFullBorder(BorderStyle.oldschool);
+            tableBuilder.addFullBorder(BorderStyle.fancy_light);
             return tableBuilder.build().render(120);
         } catch (Exception e) {
             return "Error: could not list monitored paths.";
@@ -159,4 +159,33 @@ public class MonitorCommands {
         }
     }
 
+    @ShellMethod(key = "monitor snapshots", value = "List all snapshots of a monitored path")
+    public String monitorSnapshots(@ShellOption int id) {
+        if (!daemonAdapter.checkStatus()) {
+            return "daemon is not running";
+        }
+        try {
+            var response = daemonAdapter.getSnapshotsOf(id);
+            var body = Objects.requireNonNull(response.getBody());
+            if (body.isEmpty()) {
+                return "No snapshots found for monitored path with ID " + id + ".";
+            }
+            String[][] data = new String[body.size() + 1][3];
+            data[0] = new String[]{"ID", "Timestamp"};
+            String[][] model = body.stream()
+                    .map(s ->
+                            new String[]{
+                                    String.format("%04d", s.getId()),
+                                    formatDateTime(s.getTimestamp().toLocalDateTime())
+                            }
+                    ).toArray(String[][]::new);
+            System.arraycopy(model, 0, data, 1, model.length);
+            TableModel tableModel = new ArrayTableModel(data);
+            TableBuilder tableBuilder = new TableBuilder(tableModel);
+            tableBuilder.addFullBorder(BorderStyle.fancy_light);
+            return tableBuilder.build().render(120);
+        } catch (Exception e) {
+            return "Error: could not list snapshots.";
+        }
+    }
 }
