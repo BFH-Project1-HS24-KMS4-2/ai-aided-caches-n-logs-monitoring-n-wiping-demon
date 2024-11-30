@@ -22,9 +22,9 @@ public class Snapshot {
 
     }
 
-    public Snapshot(Integer id, Timestamp timestamp) {
-        this.id = id;
+    public Snapshot(Timestamp timestamp, MonitoredPath monitoredPath) {
         this.timestamp = timestamp;
+        this.monitoredPath = monitoredPath;
     }
 
     public void setId(Integer id) {

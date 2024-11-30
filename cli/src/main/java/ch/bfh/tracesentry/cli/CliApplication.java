@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CliApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CliApplication.class, args);
+        try {
+            SpringApplication.run(CliApplication.class, args);
+        } catch (Exception ignored) {
+            // this try catch block is necessary to prevent printing the stack trace in non-interactive mode
+            System.exit(1);
+        }
     }
 
 }

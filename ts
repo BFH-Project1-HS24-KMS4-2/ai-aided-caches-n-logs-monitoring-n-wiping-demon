@@ -1,6 +1,10 @@
 #!/bin/bash
-if ! netstat -tuln | grep -q ":8087"; then
-    echo "Daemon not running starting..."
-    java -jar daemon/target/daemon-0.0.1-SNAPSHOT.jar > /dev/null &
+
+cd "$(dirname "$0")" || exit 1
+
+# check if the first argument is empty
+if [ $# -eq 0 ]; then
+    java -Dlogging.level.root=OFF -Dspring.profiles.active=dev -jar "cli/target/cli-0.0.1-SNAPSHOT.jar"
+else
+    java -Dlogging.level.root=OFF -jar "cli/target/cli-0.0.1-SNAPSHOT.jar" "$@"
 fi
-java -jar "cli/target/cli-0.0.1-SNAPSHOT.jar" "$@"

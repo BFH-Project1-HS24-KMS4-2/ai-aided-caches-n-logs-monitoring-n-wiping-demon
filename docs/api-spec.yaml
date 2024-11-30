@@ -72,16 +72,39 @@ paths:
   /monitored-path:
     post:
       summary: Adds a path to the monitoring database.
-      parameters:
-        - name: path
-          in: query
-          required: true
-          description: The absolute path to the directory you want to monitor.
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The absolute path to the directory you want to monitor.
+                mode:
+                  type: string
+                  description: Specifies the monitoring mode (log, cache, full, pattern). Default is full.
+                  enum:
+                    - log
+                    - cache
+                    - full
+                    - pattern
+                  default: full
+                pattern:
+                  type: string
+                  description: Specifies the regex pattern to match files (required if mode is pattern).
+                noSubdirs:
+                  type: boolean
+                  description: Prevents monitoring subdirectories (default is false).
+                  default: false
+              required:
+                - path
       responses:
         '201':
           description: Path successfully added to the monitoring database.
+        '400':
+          description: Invalid input.
         '422':
           description: Invalid or non-existent path.
         '409':
@@ -114,9 +137,52 @@ paths:
           description: Path successfully removed from the monitoring database.
         '404':
           description: No monitored path with the specified ID found.
+  /monitored-path/{id}/changes:
+    get:
+      summary: Returns a comparison of the monitored path.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the monitored path you want the comparison from.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns the comparison.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoredChangesDTO'
+        422:
+          description: Not found two snapshots to compare.
 
 components:
   schemas:
+    MonitoredChangesDTO:
+      type: object
+      properties:
+        monitoredPath:
+          type: string
+          example: /test
+        previousSnapshotCreation:
+          type: string
+          example: 2024-11-25T13:21:52.063
+        subsequentSnapshotCreation:
+          type: string
+          example: 2024-11-25T13:21:52.063
+        changedPaths:
+          type: array
+          items:
+            type: string
+          example:
+            - /test/changed.txt
+        deletedPaths:
+          type: array
+          items:
+            type: string
+          example:
+            - /test/deleted.txt
     MonitorPath:
       type: object
       properties:

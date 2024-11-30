@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
-class SearchControllerIT {
+class SearchControllerITest {
 
     @ParameterizedTest
     @ValueSource(strings = {"explicit", "implicit"})
