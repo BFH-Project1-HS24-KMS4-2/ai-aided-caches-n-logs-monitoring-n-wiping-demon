@@ -356,10 +356,49 @@
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
 
 
-
     \subsubsection{Caching}
+    Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
+    haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
+
+    \begin{enumerate}
+        \item Pro MonitoredPath könnte man immer den letzten gebauten MerkleTree cachen, um beim nächsten Snapshot
+        direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
+        \begin{itemize}
+            \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
+            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und das Query
+            eine tiefe Komplexität hat.
+        \end{itemize}
+        \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
+        direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
+        \begin{itemize}
+            \item Auch hier wird keine sich lohnende Performance-Steigerung erwartet, denn auch wenn die Daten schon in Memory wären
+            braucht es für die zusammengefasste Response der abgefragten Vergleiche trotzdem noch Logik,
+            welche auch mit einem Query auf die lokale DB implementiert werden kann und so kein grosser Gewinn daraus resultiert.
+        \end{itemize}
+    \end{enumerate}
 
     \subsubsection{Indexing}
+    Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
+
+    Index sinnvoll:
+    \begin{itemize}
+        \item Attribut hat viele verschiedene Werte
+        \item Attribut hat wenige/keine null-Werte
+        \item Attribut wird oft in einer SQL WHERE oder JOIN Abfrage genutzt
+    \end{itemize}
+
+    Index nicht sinnvoll:
+    \begin{itemize}
+        \item kleine Tabelle
+        \item Attribut wird oft manipuliert
+    \end{itemize}
+
+    So wurde entschieden die folgenden Attribute zu indexieren:
+    \begin{itemize}
+        \item \verb|snapshot_node.snapshot_id|
+        \item \verb|snapshot_node.has_changed|
+        \item \verb|snapshot_node.deleted_in_next_snapshot|
+    \end{itemize}
 
     \section{Architektur}
 
@@ -621,8 +660,7 @@
     in der Daemon-Applikation embedded ist.
 
     Das zweite Jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
-    Dieses Jar startet wiederum eine zweite JVM, % todo: prüfen
-    welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
+    Dieses Jar startet wiederum eine zweite JVM, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
     Diese CLI sendet dann über HTTP die entsprechenden Anfragen an den Daemon, die zur Erfüllung der Anweisungen des Anwenders führen.
 
 
