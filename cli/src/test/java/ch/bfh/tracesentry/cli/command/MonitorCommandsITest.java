@@ -1,9 +1,11 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.cli.util.ShellLines;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +22,10 @@ import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -231,5 +235,32 @@ public class MonitorCommandsITest {
                     deleted.txt
                     """);
         });
+    }
+
+    @Test
+    void shoudlOutputSnapshots(){
+        final int id = 5;
+        LocalDateTime timestamp1 = LocalDateTime.now();
+        LocalDateTime timestamp2 = timestamp1.plusHours(1);
+
+        when(restTemplate.getForEntity(DaemonAdapter.BASE_URL + "monitored-path/" + id + " /snapshots", List.class))
+                .thenReturn(ResponseEntity.of(Optional.of(List.of(
+                        new SnapshotDTO(1, Timestamp.from(timestamp1.toInstant(ZoneOffset.UTC))),
+                        new SnapshotDTO(2, Timestamp.from(timestamp2.toInstant(ZoneOffset.UTC)))))));
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("monitor", "snapshots", String.valueOf(id))
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            var lines = session.screen().lines();
+            lines.stream().filter(l -> l.contains("ID"))
+                    .forEach(l -> assertThat(l).contains("ID", "Timestamp"));
+            lines.stream().filter(l -> l.contains("0001"))
+                    .forEach(l -> assertThat(l).contains("0001", Output.formatDateTime(timestamp1)));
+            lines.stream().filter(l -> l.contains("0002"))
+                    .forEach(l -> assertThat(l).contains("0002", Output.formatDateTime(timestamp2)));
+        });
+
     }
 }
