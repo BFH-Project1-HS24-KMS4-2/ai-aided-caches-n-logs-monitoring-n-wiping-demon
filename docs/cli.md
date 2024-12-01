@@ -274,3 +274,39 @@ Example output of unsuccessful execution:
 Error: Not found two snapshots to compare
 ```
 ---
+
+### 8. `monitor snapshots`
+This command lists all snapshots taken for a monitored path.
+
+#### Usage:
+```bash
+  ts monitor snapshots --id <ID>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the monitored path to get the snapshots from.
+
+#### Example:
+- Get the snapshots of a monitored path by ID:
+  ```bash
+  ts monitor snapshots --id 1
+  ```
+Example output of successful execution:
+```
+┌────┬───────────────────┐
+│ID  │Timestamp          │
+├────┼───────────────────┤
+│0001│01.12.2024 20:25:21│
+├────┼───────────────────┤
+│0002│01.12.2024 21:25:21│
+└────┴───────────────────┘
+```
+Example output of unsuccessful execution:
+```
+Error: could not list snapshots.
+```
+If no snapshots are available:
+```
+No snapshots found for monitored path with ID [id].
+```
+---
