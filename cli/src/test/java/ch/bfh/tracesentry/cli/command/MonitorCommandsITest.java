@@ -240,10 +240,10 @@ public class MonitorCommandsITest {
     @Test
     void shoudlOutputSnapshots(){
         final int id = 5;
-        LocalDateTime timestamp1 = LocalDateTime.now();
+        LocalDateTime timestamp1 = LocalDateTime.of(2024, 12, 1, 20, 25, 00);
         LocalDateTime timestamp2 = timestamp1.plusHours(1);
 
-        when(restTemplate.getForEntity(DaemonAdapter.BASE_URL + "monitored-path/" + id + " /snapshots", List.class))
+        when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id + "/snapshots", HttpMethod.GET, null, new ParameterizedTypeReference<List<SnapshotDTO>>(){}))
                 .thenReturn(ResponseEntity.of(Optional.of(List.of(
                         new SnapshotDTO(1, timestamp1),
                         new SnapshotDTO(2, timestamp2)))));
@@ -253,14 +253,15 @@ public class MonitorCommandsITest {
                 .run();
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-            var lines = session.screen().lines();
-            lines.stream().filter(l -> l.contains("ID"))
-                    .forEach(l -> assertThat(l).contains("ID", "Timestamp"));
-            lines.stream().filter(l -> l.contains("0001"))
-                    .forEach(l -> assertThat(l).contains("0001", Output.formatDateTime(timestamp1)));
-            lines.stream().filter(l -> l.contains("0002"))
-                    .forEach(l -> assertThat(l).contains("0002", Output.formatDateTime(timestamp2)));
+            var output = ShellLines.join(session.screen().lines());
+            assertThat(output.trim()).contains("""
+                    ┌────┬───────────────────┐
+                    │ID  │Timestamp          │
+                    ├────┼───────────────────┤
+                    │0001│01.12.2024 20:25:00│
+                    ├────┼───────────────────┤
+                    │0002│01.12.2024 21:25:00│
+                    └────┴───────────────────┘""");
         });
-
     }
 }
