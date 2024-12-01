@@ -156,6 +156,25 @@ paths:
                 $ref: '#/components/schemas/MonitoredChangesDTO'
         422:
           description: Not found two snapshots to compare.
+  /monitored-path/{id}/snapshots:
+    get:
+      summary: Returns all snapshots of the monitored path.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the monitored path you want the snapshots from.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns all snapshots.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SnapshotDTO'
 
 components:
   schemas:
@@ -196,3 +215,13 @@ components:
           type: string
           format: date
           example: "2024-11-01"
+    SnapshotDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-11-25T13:21:52.063"
