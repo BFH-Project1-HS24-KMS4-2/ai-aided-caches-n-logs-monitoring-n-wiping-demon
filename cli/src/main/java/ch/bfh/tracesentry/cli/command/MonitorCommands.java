@@ -10,6 +10,7 @@ import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellComponent;
@@ -106,7 +107,6 @@ public class MonitorCommands {
     }
 
     @ShellMethod(key = "monitor remove", value = "Remove a path from the monitoring database.")
-    @SuppressWarnings("unused")
     public String monitorRemove(@ShellOption int id) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
@@ -114,7 +114,7 @@ public class MonitorCommands {
             if (response.getStatusCode().is2xxSuccessful()) {
                 return "Successfully removed path with ID " + id + " from the monitoring database.";
             } else {
-                throw new Exception();
+                throw new RuntimeException();
             }
         } catch (Exception e) {
             return "Error: No monitored path found with ID " + id + ".";
@@ -184,6 +184,12 @@ public class MonitorCommands {
             TableBuilder tableBuilder = new TableBuilder(tableModel);
             tableBuilder.addFullBorder(BorderStyle.fancy_light);
             return tableBuilder.build().render(120);
+        } catch (RestClientResponseException e) {
+            if (e.getStatusCode() == HttpStatusCode.valueOf(404)) {
+                return "No monitored path found with ID " + id + ".";
+            } else {
+                return "Error: could not list snapshots.";
+            }
         } catch (Exception e) {
             return "Error: could not list snapshots.";
         }

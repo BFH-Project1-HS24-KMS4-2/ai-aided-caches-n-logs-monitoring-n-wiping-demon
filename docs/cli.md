@@ -305,6 +305,10 @@ Example output of unsuccessful execution:
 ```
 Error: could not list snapshots.
 ```
+If the path is not monitored:
+```
+No monitored path found with ID [id].
+```
 If no snapshots are available:
 ```
 No snapshots found for monitored path with ID [id].

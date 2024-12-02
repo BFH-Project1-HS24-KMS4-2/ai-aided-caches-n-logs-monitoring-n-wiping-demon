@@ -88,6 +88,9 @@ public class MonitoringDomainService {
     }
 
     public List<SnapshotDTO> getSnapshotsOf(Integer monitoredPathId) {
+        if (!monitoredPathRepository.existsById(monitoredPathId)) {
+            throw new NotFoundException("Path does not exist");
+        }
         return snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPathId)
                 .stream()
                 .map(snapshot -> modelMapper.map(snapshot, SnapshotDTO.class))

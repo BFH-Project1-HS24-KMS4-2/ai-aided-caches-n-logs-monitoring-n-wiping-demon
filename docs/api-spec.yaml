@@ -175,6 +175,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SnapshotDTO'
+        404:
+          description: The path with the specified ID is not being monitored.
 
 components:
   schemas:
