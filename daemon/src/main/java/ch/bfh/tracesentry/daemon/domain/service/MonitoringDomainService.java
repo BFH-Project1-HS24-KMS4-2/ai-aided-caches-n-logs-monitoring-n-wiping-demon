@@ -3,8 +3,10 @@ package ch.bfh.tracesentry.daemon.domain.service;
 import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
 import ch.bfh.tracesentry.daemon.domain.model.Node;
 import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
+import ch.bfh.tracesentry.daemon.domain.model.SnapshotComparison;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
+import ch.bfh.tracesentry.daemon.domain.repo.SnapshotComparisonRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
@@ -29,13 +31,19 @@ public class MonitoringDomainService {
     private final ModelMapper modelMapper;
     private final SnapshotRepository snapshotRepository;
     private final NodeRepository nodeRepository;
+    private final SnapshotComparisonRepository snapshotComparisonRepository;
 
     @Autowired
-    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository, ModelMapper modelMapper, SnapshotRepository snapshotRepository, NodeRepository nodeRepository) {
+    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository,
+                                   ModelMapper modelMapper,
+                                   SnapshotRepository snapshotRepository,
+                                   NodeRepository nodeRepository,
+                                   SnapshotComparisonRepository snapshotComparisonRepository) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.modelMapper = modelMapper;
         this.snapshotRepository = snapshotRepository;
         this.nodeRepository = nodeRepository;
+        this.snapshotComparisonRepository = snapshotComparisonRepository;
     }
 
 
@@ -95,5 +103,9 @@ public class MonitoringDomainService {
                 .stream()
                 .map(snapshot -> modelMapper.map(snapshot, SnapshotDTO.class))
                 .toList();
+    }
+
+    public List<SnapshotComparison> getSnapshotComparison(Integer mpId, Integer startIdx, Integer endIdx) {
+        return snapshotComparisonRepository.getSnapshotComparisons(mpId, startIdx, endIdx);
     }
 }

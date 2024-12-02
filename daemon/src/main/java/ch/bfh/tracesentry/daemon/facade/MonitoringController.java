@@ -2,6 +2,7 @@ package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.daemon.domain.model.Node;
 import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
+import ch.bfh.tracesentry.daemon.domain.model.SnapshotComparison;
 import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
@@ -54,7 +55,13 @@ public class MonitoringController {
     }
 
     @GetMapping("{id}/changes")
-    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id) {
+    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id, @RequestParam(defaultValue = "0") Integer startIdx, @RequestParam(defaultValue = "1") Integer endIdx) {
+        if (startIdx >= endIdx) {
+            throw new RuntimeException("Start index needs to be smaller than end index"); // todo
+        }
+
+        List<SnapshotComparison> snapshotComparison = monitoringDomainService.getSnapshotComparison(id, startIdx, endIdx);
+
         List<Snapshot> snapshots = monitoringDomainService.getAllSnapshotsOfMonitoredPathOrdered(id);
         if (snapshots.size() < 2) {
             throw new UnprocessableException("Not found two snapshots to compare");
