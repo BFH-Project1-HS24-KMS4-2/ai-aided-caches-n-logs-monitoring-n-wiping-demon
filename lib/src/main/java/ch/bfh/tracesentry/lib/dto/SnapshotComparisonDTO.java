@@ -1,16 +1,16 @@
-package ch.bfh.tracesentry.daemon.domain.model;
+package ch.bfh.tracesentry.lib.dto;
 
 import java.util.List;
 
-public class SnapshotComparison {
+public class SnapshotComparisonDTO {
 
     private List<Integer> snapshotIds;
     private String path;
     private List<String> comparison;
 
-    public SnapshotComparison(){}
+    public SnapshotComparisonDTO(){}
 
-    public SnapshotComparison(List<Integer> snapshotIds, String path, List<String> comparison) {
+    public SnapshotComparisonDTO(List<Integer> snapshotIds, String path, List<String> comparison) {
         this.snapshotIds = snapshotIds;
         this.path = path;
         this.comparison = comparison;

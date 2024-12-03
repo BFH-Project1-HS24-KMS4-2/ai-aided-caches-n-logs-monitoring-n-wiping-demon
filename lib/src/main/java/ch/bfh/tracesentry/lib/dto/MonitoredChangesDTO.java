@@ -6,21 +6,18 @@ import java.util.List;
 public class MonitoredChangesDTO {
 
     private String monitoredPath;
-    private LocalDateTime previousSnapshotCreation;
-    private LocalDateTime subsequentSnapshotCreation;
-    private List<String> changedPaths;
-    private List<String> deletedPaths;
+    private LocalDateTime startSnapshotCreation;
+    private LocalDateTime endSnapshotCreation;
+    private List<SnapshotComparisonDTO> comparison;
 
     public MonitoredChangesDTO(String monitoredPath,
-                               LocalDateTime previousSnapshotCreation,
-                               LocalDateTime subsequentSnapshotCreation,
-                               List<String> changedPaths,
-                               List<String> deletedPaths) {
+                               LocalDateTime startSnapshotCreation,
+                               LocalDateTime endSnapshotCreation,
+                               List<SnapshotComparisonDTO> comparison) {
         this.monitoredPath = monitoredPath;
-        this.previousSnapshotCreation = previousSnapshotCreation;
-        this.subsequentSnapshotCreation = subsequentSnapshotCreation;
-        this.changedPaths = changedPaths;
-        this.deletedPaths = deletedPaths;
+        this.startSnapshotCreation = startSnapshotCreation;
+        this.endSnapshotCreation = endSnapshotCreation;
+        this.comparison = comparison;
     }
 
     public MonitoredChangesDTO() {
@@ -34,35 +31,28 @@ public class MonitoredChangesDTO {
         this.monitoredPath = monitoredPath;
     }
 
-    public LocalDateTime getPreviousSnapshotCreation() {
-        return previousSnapshotCreation;
+    public LocalDateTime getStartSnapshotCreation() {
+        return startSnapshotCreation;
     }
 
-    public void setPreviousSnapshotCreation(LocalDateTime previousSnapshotCreation) {
-        this.previousSnapshotCreation = previousSnapshotCreation;
+    public void setStartSnapshotCreation(LocalDateTime startSnapshotCreation) {
+        this.startSnapshotCreation = startSnapshotCreation;
     }
 
-    public LocalDateTime getSubsequentSnapshotCreation() {
-        return subsequentSnapshotCreation;
+    public LocalDateTime getEndSnapshotCreation() {
+        return endSnapshotCreation;
     }
 
-    public void setSubsequentSnapshotCreation(LocalDateTime subsequentSnapshotCreation) {
-        this.subsequentSnapshotCreation = subsequentSnapshotCreation;
+    public void setEndSnapshotCreation(LocalDateTime endSnapshotCreation) {
+        this.endSnapshotCreation = endSnapshotCreation;
     }
 
-    public List<String> getChangedPaths() {
-        return changedPaths;
+    public List<SnapshotComparisonDTO> getComparison() {
+        return comparison;
     }
 
-    public void setChangedPaths(List<String> changedPaths) {
-        this.changedPaths = changedPaths;
+    public void setComparison(List<SnapshotComparisonDTO> comparison) {
+        this.comparison = comparison;
     }
 
-    public List<String> getDeletedPaths() {
-        return deletedPaths;
-    }
-
-    public void setDeletedPaths(List<String> deletedPaths) {
-        this.deletedPaths = deletedPaths;
-    }
 }
