@@ -1,9 +1,11 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
+import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.cli.util.ShellLines;
 import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.shell.test.ShellTestClient;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShell;
 import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -231,5 +235,55 @@ public class MonitorCommandsITest {
                     deleted.txt
                     """);
         });
+    }
+
+    @Test
+    void shoudlOutputSnapshots(){
+        final int id = 5;
+        LocalDateTime timestamp1 = LocalDateTime.of(2024, 12, 1, 20, 25, 00);
+        LocalDateTime timestamp2 = timestamp1.plusHours(1);
+
+        when(restTemplate.exchange(
+                DaemonAdapter.BASE_URL + "monitored-path/" + id + "/snapshots",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<SnapshotDTO>>(){}))
+                .thenReturn(ResponseEntity.of(Optional.of(List.of(
+                        new SnapshotDTO(1, timestamp1),
+                        new SnapshotDTO(2, timestamp2)))));
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("monitor", "snapshots", String.valueOf(id))
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
+            var output = ShellLines.join(session.screen().lines());
+            assertThat(output.trim()).contains("""
+                    ┌────┬───────────────────┐
+                    │ID  │Timestamp          │
+                    ├────┼───────────────────┤
+                    │0001│01.12.2024 20:25:00│
+                    ├────┼───────────────────┤
+                    │0002│01.12.2024 21:25:00│
+                    └────┴───────────────────┘""");
+        });
+    }
+
+    @Test
+    void shoudlOutputWarningOnNoMonitoredPath(){
+        final int id = 5;
+        when(restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id + "/snapshots",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<SnapshotDTO>>(){}))
+                .thenThrow(new RestClientResponseException("", HttpStatus.NOT_FOUND.value(), "Not found", null, null, null));
+
+        ShellTestClient.NonInteractiveShellSession session = client
+                .nonInterative("monitor", "snapshots", String.valueOf(id))
+                .run();
+
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() ->
+                assertThat(ShellLines.join(session.screen().lines()).trim())
+                        .contains("No monitored path found with ID " + id + "."));
     }
 }

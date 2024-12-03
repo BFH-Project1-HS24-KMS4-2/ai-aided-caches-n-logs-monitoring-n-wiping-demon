@@ -216,4 +216,26 @@ public class MonitoringControllerITest {
                 .jsonPath("$.changedPaths[0]").isEqualTo("/test/added.txt")
                 .jsonPath("$.deletedPaths[0]").isEqualTo("/test/deleted.txt");
     }
+
+    @Test
+    void shouldReturnSnapshots() {
+        // when
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
+
+        final LocalDateTime localDateTime = LocalDateTime.of(2024, 12, 1, 15, 30);
+        final Snapshot snapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(localDateTime), monitoredPath));
+
+        // then
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:8087/monitored-path/")
+                .build()
+                .get()
+                .uri(monitoredPath.getId() + "/snapshots")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].id").isEqualTo(snapshot.getId())
+                .jsonPath("$[0].timestamp").<String>value(s -> LocalDateTime.parse(s).isEqual(localDateTime));
+    }
 }
