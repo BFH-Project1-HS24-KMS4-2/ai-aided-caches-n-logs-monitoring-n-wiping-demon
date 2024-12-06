@@ -1,6 +1,7 @@
 package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
+import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.*;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,12 @@ public class MonitoringController {
         final int endIdx = endSnapshotNbr - 1;
 
         if (startIdx >= endIdx || startIdx < 0) {
-            throw new RuntimeException("Start index needs to be smaller than end index and positive"); // todo
+            throw new UnprocessableException("Start index needs to be smaller than the end index and not negative");
         }
 
         final List<SnapshotDTO> snapshots = monitoringDomainService.getSnapshotsOf(id);
         if (startIdx > snapshots.size() - 2 || endIdx > snapshots.size() - 1) {
-            throw new RuntimeException("Not enough snapshots for this range"); // todo
+            throw new UnprocessableException("Not enough snapshots existing at the moment for this range");
         }
 
         final List<SnapshotComparisonDTO> snapshotComparison = monitoringDomainService.getSnapshotComparison(id, startIdx, endIdx);

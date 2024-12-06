@@ -22,7 +22,7 @@ public class SnapshotComparisonRepository {
                 from
                     (select id from snapshot
                                where monitored_path_id = :mp_id
-                               order by timestamp
+                               order by timestamp desc
                                limit :limit offset :offset
                     ) as snapshot
                 join

@@ -4,9 +4,9 @@ import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidPattern;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
 import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
+import ch.bfh.tracesentry.cli.util.Output;
 import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
-import ch.bfh.tracesentry.lib.dto.SnapshotComparisonDTO;
 import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +26,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static ch.bfh.tracesentry.cli.util.Output.formatDateTime;
@@ -147,17 +148,12 @@ public class MonitorCommands {
         try {
             final MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id, start, end).getBody());
 
-            int dataTableLines = 0;
-            for (SnapshotComparisonDTO snapshotComparison : monitoredChanges.getComparison()) {
-                dataTableLines += snapshotComparison.getSnapshotIds().size();
-            }
-
-            String[][] data = new String[dataTableLines + 1][3];
+            String[][] data = new String[monitoredChanges.getComparison().size() + 1][3];
             data[0] = new String[]{"Path", "Snapshot IDs", "Comparison"};
             String[][] model = monitoredChanges.getComparison().stream()
                     .map(sc ->
                             new String[]{
-                                    sc.getPath(),
+                                    Output.formatFilePath(sc.getPath(), monitoredChanges.getMonitoredPath()),
                                     String.join("\n", sc.getSnapshotIds().stream().map(Object::toString).toList()),
                                     String.join("\n", sc.getComparison())
                             }
@@ -194,12 +190,21 @@ public class MonitorCommands {
             }
             String[][] data = new String[body.size() + 1][3];
             data[0] = new String[]{"ID", "Timestamp"};
+
+            final Supplier<Integer> snapshotCounter = new Supplier<>() {
+                private int count = 1;
+
+                @Override
+                public Integer get() {
+                    return count++;
+                }
+            };
+
             String[][] model = body.stream()
-                    .map(s ->
-                            new String[]{
-                                    String.format("%04d", s.getId()),
-                                    formatDateTime(s.getTimestamp())
-                            }
+                    .map(s -> new String[]{
+                            String.valueOf(snapshotCounter.get()),
+                            formatDateTime(s.getTimestamp())
+                    }
                     ).toArray(String[][]::new);
             System.arraycopy(model, 0, data, 1, model.length);
             TableModel tableModel = new ArrayTableModel(data);
