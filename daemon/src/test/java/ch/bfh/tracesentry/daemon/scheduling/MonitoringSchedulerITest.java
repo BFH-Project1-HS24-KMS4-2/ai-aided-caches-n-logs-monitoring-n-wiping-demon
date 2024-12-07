@@ -21,7 +21,8 @@ import java.util.List;
 
 /**
  * Test class for {@link MonitoringScheduler}.
- * This covers the entire execution flow of the scheduler. Therefore, the tree creation is also tested here.
+ * This covers the entire execution flow of the scheduler
+ * (including the creation of snapshots and the creation of the tree).
  */
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -124,15 +125,12 @@ public class MonitoringSchedulerITest {
 
         var snapshots = snapshotRepository.findAll();
         var currentSnapshotOptional = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
-        if (currentSnapshotOptional.isEmpty()) {
-            throw new IllegalStateException("Snapshot not found");
-        }
-        var currentSnapshot = currentSnapshotOptional.get();
-        var nodes = nodeRepository.findAllBySnapshotId(currentSnapshot.getId());
+        var currentSnapshot = currentSnapshotOptional.orElseThrow();
+        var newNodes = nodeRepository.findAllBySnapshotId(currentSnapshot.getId());
 
-        var rootDirNode = nodes.stream().filter(node -> node.getParent() == null).findFirst().orElseThrow();
-        var cacheFileNode = nodes.stream().filter(node -> node.getPath().equals(tempDirStructure.cacheFile.toString())).findFirst().orElseThrow();
-        var logsDirNode = nodes.stream().filter(node -> node.getPath().equals(tempDirStructure.logsDir.toString())).findFirst().orElseThrow();
+        var rootDirNode = newNodes.stream().filter(node -> node.getParent() == null).findFirst().orElseThrow();
+        var cacheFileNode = newNodes.stream().filter(node -> node.getPath().equals(tempDirStructure.cacheFile.toString())).findFirst().orElseThrow();
+        var logsDirNode = newNodes.stream().filter(node -> node.getPath().equals(tempDirStructure.logsDir.toString())).findFirst().orElseThrow();
 
         // then
 
@@ -145,7 +143,7 @@ public class MonitoringSchedulerITest {
         Assertions.assertEquals(createdAt, currentSnapshot.getMonitoredPath().getCreatedAt());
 
         // tree creation
-        Assertions.assertEquals(3, nodes.size());
+        Assertions.assertEquals(3, newNodes.size());
 
         Assertions.assertNull(rootDirNode.getParent());
         Assertions.assertEquals(rootDirNode.getSnapshot(), currentSnapshot);
@@ -166,6 +164,79 @@ public class MonitoringSchedulerITest {
         Assertions.assertEquals(logsDirNode.getChildren(), List.of());
         Assertions.assertEquals(logsDirNode.getPath(), tempDirStructure.logsDir.toString());
         Assertions.assertFalse(logsDirNode.isHasChanged()); // logs dir has not changed
+        Assertions.assertFalse(logsDirNode.isDeletedInNextSnapshot());
+    }
+
+    @Test
+    public void testDeletionDetection(@TempDir Path rootDir) throws IOException {
+        // given
+        var tempDirStructure = createTempDirStructure(rootDir);
+
+        var createdAt = LocalDate.of(2024, 11, 1);
+        var monitoredPath = monitoredPathRepository.save(
+                new MonitoredPath()
+                        .path(rootDir.toString())
+                        .mode(SearchMode.CACHE)
+                        .noSubdirs(false)
+                        .createdAt(createdAt));
+
+        // when
+        monitoringScheduler.createSnapshots();
+
+        // deletion
+        Files.delete(tempDirStructure.cacheFile);
+        monitoringScheduler.createSnapshots();
+
+        var snapshots = snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        var oldSnapshotOptional = snapshots.stream().skip(1).findFirst();
+        var currentSnapshotOptional = snapshots.stream().findFirst();
+
+        var oldSnapshot = oldSnapshotOptional.orElseThrow();
+        var currentSnapshot = currentSnapshotOptional.orElseThrow();
+
+        var oldNodes = nodeRepository.findAllBySnapshotId(oldSnapshot.getId());
+        var newNodes = nodeRepository.findAllBySnapshotId(currentSnapshot.getId());
+
+        var oldRootDirNode = nodeRepository.findAll().stream().filter(node -> node.getParent() == null).findFirst().orElseThrow();
+
+        var rootDirNode = newNodes.stream().filter(node -> node.getParent() == null).findFirst().orElseThrow();
+        var logsDirNode = newNodes.stream().filter(node -> node.getPath().equals(tempDirStructure.logsDir.toString())).findFirst().orElseThrow();
+        var oldCacheFileNode = nodeRepository.findAll().stream().filter(node -> node.getPath().equals(tempDirStructure.cacheFile.toString())).findFirst().orElseThrow();
+
+        // then
+
+        // monitored path creation
+        Assertions.assertEquals(1, monitoredPathRepository.findAll().size());
+
+        // snapshot creation
+        Assertions.assertEquals(2, snapshots.size());
+        Assertions.assertEquals(rootDir.toString(), currentSnapshot.getMonitoredPath().getPath());
+        Assertions.assertEquals(createdAt, currentSnapshot.getMonitoredPath().getCreatedAt());
+
+        // tree creation
+        Assertions.assertEquals(3, oldNodes.size());
+        Assertions.assertEquals(2, newNodes.size());
+
+        Assertions.assertNull(rootDirNode.getParent());
+        Assertions.assertEquals(rootDirNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(rootDirNode.getChildren(), List.of(logsDirNode));
+        Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
+        Assertions.assertTrue(rootDirNode.isHasChanged());
+        Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
+
+        Assertions.assertEquals(oldCacheFileNode.getParent(), oldRootDirNode);
+        Assertions.assertEquals(oldCacheFileNode.getSnapshot(), oldSnapshot);
+        Assertions.assertEquals(oldCacheFileNode.getChildren(), List.of());
+        Assertions.assertEquals(oldCacheFileNode.getPath(), tempDirStructure.cacheFile.toString());
+        Assertions.assertTrue(oldCacheFileNode.isHasChanged());
+        // cache file has been deleted (marked as deleted in previous snapshot)
+        Assertions.assertTrue(oldCacheFileNode.isDeletedInNextSnapshot());
+
+        Assertions.assertEquals(logsDirNode.getParent(), rootDirNode);
+        Assertions.assertEquals(logsDirNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(logsDirNode.getChildren(), List.of());
+        Assertions.assertEquals(logsDirNode.getPath(), tempDirStructure.logsDir.toString());
+        Assertions.assertFalse(logsDirNode.isHasChanged());
         Assertions.assertFalse(logsDirNode.isDeletedInNextSnapshot());
     }
 
