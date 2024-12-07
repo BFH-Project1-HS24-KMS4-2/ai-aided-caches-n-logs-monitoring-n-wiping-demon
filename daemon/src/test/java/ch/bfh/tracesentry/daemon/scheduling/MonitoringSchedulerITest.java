@@ -104,6 +104,78 @@ public class MonitoringSchedulerITest {
     }
 
     @Test
+    public void testCreationDetection(@TempDir Path rootDir) throws IOException {
+        // given
+        var tempDirStructure = createTempDirStructure(rootDir);
+
+        var createdAt = LocalDate.of(2024, 11, 1);
+        var monitoredPath = monitoredPathRepository.save(
+                new MonitoredPath()
+                        .path(rootDir.toString())
+                        .mode(SearchMode.CACHE)
+                        .noSubdirs(false)
+                        .createdAt(createdAt));
+
+        // when
+        monitoringScheduler.createSnapshots();
+
+        // creation
+        Files.createFile(rootDir.resolve("newCache.txt"));
+        monitoringScheduler.createSnapshots();
+
+        var snapshots = snapshotRepository.findAll();
+        var currentSnapshotOptional = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        var currentSnapshot = currentSnapshotOptional.orElseThrow();
+        var newNodes = nodeRepository.findAllBySnapshotId(currentSnapshot.getId());
+
+        var rootDirNode = newNodes.stream().filter(node -> node.getParent() == null).findFirst().orElseThrow();
+        var cacheFileNode = newNodes.stream().filter(node -> node.getPath().equals(tempDirStructure.cacheFile.toString())).findFirst().orElseThrow();
+        var logsDirNode = newNodes.stream().filter(node -> node.getPath().equals(tempDirStructure.logsDir.toString())).findFirst().orElseThrow();
+        var newCacheFileNode = newNodes.stream().filter(node -> node.getPath().equals(rootDir.resolve("newCache.txt").toString())).findFirst().orElseThrow();
+
+        // then
+
+        // monitored path creation
+        Assertions.assertEquals(1, monitoredPathRepository.findAll().size());
+
+        // snapshot creation
+        Assertions.assertEquals(2, snapshots.size());
+        Assertions.assertEquals(rootDir.toString(), currentSnapshot.getMonitoredPath().getPath());
+        Assertions.assertEquals(createdAt, currentSnapshot.getMonitoredPath().getCreatedAt());
+
+        // tree creation
+        Assertions.assertEquals(4, newNodes.size());
+
+        Assertions.assertNull(rootDirNode.getParent());
+        Assertions.assertEquals(rootDirNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(rootDirNode.getChildren(), List.of(cacheFileNode, logsDirNode, newCacheFileNode));
+        Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
+        Assertions.assertTrue(rootDirNode.isHasChanged());
+        Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
+
+        Assertions.assertEquals(cacheFileNode.getParent(), rootDirNode);
+        Assertions.assertEquals(cacheFileNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(cacheFileNode.getChildren(), List.of());
+        Assertions.assertEquals(cacheFileNode.getPath(), tempDirStructure.cacheFile.toString());
+        Assertions.assertFalse(cacheFileNode.isHasChanged());
+        Assertions.assertFalse(cacheFileNode.isDeletedInNextSnapshot());
+
+        Assertions.assertEquals(logsDirNode.getParent(), rootDirNode);
+        Assertions.assertEquals(logsDirNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(logsDirNode.getChildren(), List.of());
+        Assertions.assertEquals(logsDirNode.getPath(), tempDirStructure.logsDir.toString());
+        Assertions.assertFalse(logsDirNode.isHasChanged());
+        Assertions.assertFalse(logsDirNode.isDeletedInNextSnapshot());
+
+        Assertions.assertEquals(newCacheFileNode.getParent(), rootDirNode);
+        Assertions.assertEquals(newCacheFileNode.getSnapshot(), currentSnapshot);
+        Assertions.assertEquals(newCacheFileNode.getChildren(), List.of());
+        Assertions.assertEquals(newCacheFileNode.getPath(), rootDir.resolve("newCache.txt").toString());
+        Assertions.assertTrue(newCacheFileNode.isHasChanged());
+        Assertions.assertFalse(newCacheFileNode.isDeletedInNextSnapshot());
+    }
+
+    @Test
     public void testChangeDetection(@TempDir Path rootDir) throws IOException {
         // given
         var tempDirStructure = createTempDirStructure(rootDir);
