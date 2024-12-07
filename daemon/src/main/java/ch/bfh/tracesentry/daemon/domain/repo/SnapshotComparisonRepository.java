@@ -16,25 +16,28 @@ public class SnapshotComparisonRepository {
 
     public List<SnapshotComparisonDTO> getSnapshotComparisons(Integer monitoredPathId, Integer startIdx, Integer endIdx) {
         final String query = """
-                select group_concat(snapshot_id) as snapshot_ids,
-                       path,
-                       group_concat(comparison) as comparison
-                from
-                    (select id from snapshot
-                               where monitored_path_id = :mp_id
-                               order by timestamp desc
-                               limit :limit offset :offset
-                    ) as snapshot
+                select group_concat(result.snapshot_id),
+                       result.path,
+                       group_concat(result.comparison)
+                from (select sn.snapshot_id, sn.path, sn.comparison from
+                            (select s.id from snapshot as s
+                                       where s.monitored_path_id = :mp_id
+                                       order by s.timestamp desc
+                                       limit :limit offset :offset
+                            ) as s
                 join
-                        (select snapshot_id, path, case
-                            when has_changed then 'CHANGED'
-                            when deleted_in_next_snapshot then 'DELETED'
-                            else 'NOTHING' end comparison
-                         from snapshot_node
-                         where comparison != 'NOTHING'
-                        ) as snapshot_node
-                on snapshot_node.snapshot_id = snapshot.id
-                group by path;
+                        (select sn.snapshot_id, sn.path, case
+                            when sn.has_changed then 'CHANGED'
+                            when sn.deleted_in_next_snapshot then 'LAST TRACK'
+                            else 'NOTHING' end as comparison
+                         from snapshot_node sn
+                         where sn.has_changed = true or
+                               sn.deleted_in_next_snapshot = true
+                        ) as sn
+                on sn.snapshot_id = s.id
+                order by sn.path, sn.snapshot_id
+                ) as result
+                group by result.path;
                 """;
 
         List<Object[]> results = entityManager.createNativeQuery(query)

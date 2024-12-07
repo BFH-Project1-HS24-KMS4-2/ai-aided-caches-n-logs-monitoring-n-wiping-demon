@@ -8,7 +8,8 @@ public class SnapshotComparisonDTO {
     private String path;
     private List<String> comparison;
 
-    public SnapshotComparisonDTO(){}
+    public SnapshotComparisonDTO() {
+    }
 
     public SnapshotComparisonDTO(List<Integer> snapshotIds, String path, List<String> comparison) {
         this.snapshotIds = snapshotIds;

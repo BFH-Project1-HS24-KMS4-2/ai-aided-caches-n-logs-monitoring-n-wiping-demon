@@ -21,7 +21,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -163,21 +166,28 @@ public class MonitoringControllerITest {
     }
 
     @Test
-    void shouldReturnUnprocessableResponseWhenNotEnoughSnapshots(){
+    void shouldReturnUnprocessableResponseWhenNotEnoughSnapshots() {
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL, null, false));
+
         WebTestClient
                 .bindToServer()
-                .baseUrl("http://localhost:8087/monitored-path")
+                .baseUrl("http://localhost:8087/monitored-path/")
                 .build()
                 .get()
-                .uri("/5/changes")
+                .uri(monitoredPath.getId() + "/changes")
                 .exchange()
-                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+                .expectBody()
+                .jsonPath("$.status").isEqualTo(422)
+                .jsonPath("$.message").isEqualTo("Not enough snapshots existing at the moment for this range");
     }
+
+    // todo: insert snapshot ids to snapshot list in cli
 
     @Test
     void shouldReturnComparison() {
         // when
-        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL, null, false));
 
         final LocalDateTime previousSnapshotCreation = LocalDateTime.of(2024, 12, 1, 15, 30);
         final Snapshot previousSnapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(previousSnapshotCreation), monitoredPath));
@@ -185,39 +195,37 @@ public class MonitoringControllerITest {
         final LocalDateTime subsequentSnapshotCreation = LocalDateTime.of(2024, 12, 1, 17, 30);
         final Snapshot subsequentSnapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(subsequentSnapshotCreation), monitoredPath));
 
-        final Node deletedNode = new Node();
-        deletedNode.setSnapshot(previousSnapshot);
-        deletedNode.setPath("/test/deleted.txt");
-        deletedNode.setDeletedInNextSnapshot(true);
-        nodeRepository.save(deletedNode);
+        nodeRepository.save(new Node(previousSnapshot, "/test/cache.txt", true, false));
+        nodeRepository.save(new Node(previousSnapshot, "/test/log/logs.txt", true, false));
 
-        final Node addedNode = new Node();
-        addedNode.setSnapshot(subsequentSnapshot);
-        addedNode.setPath("/test/added.txt");
-        addedNode.setHasChanged(true);
-        nodeRepository.save(addedNode);
+        nodeRepository.save(new Node(subsequentSnapshot, "/test/cache.txt", false, true));
+        nodeRepository.save(new Node(subsequentSnapshot, "/test/log/logs.txt", false, true));
 
         // then
         WebTestClient
                 .bindToServer()
-                .baseUrl("http://localhost:8087/monitored-path")
+                .baseUrl("http://localhost:8087/monitored-path/")
                 .build()
                 .get()
-                .uri("/1/changes")
+                .uri(monitoredPath.getId() + "/changes")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$.monitoredPath").isEqualTo("/test")
-                .jsonPath("$.previousSnapshotCreation").<String>value(s -> LocalDateTime.parse(s).isEqual(previousSnapshotCreation))
-                .jsonPath("$.subsequentSnapshotCreation").<String>value(s -> LocalDateTime.parse(s).isEqual(subsequentSnapshotCreation))
-                .jsonPath("$.changedPaths[0]").isEqualTo("/test/added.txt")
-                .jsonPath("$.deletedPaths[0]").isEqualTo("/test/deleted.txt");
+                .jsonPath("$.startSnapshotCreation").<String>value(s -> LocalDateTime.parse(s).isEqual(subsequentSnapshotCreation))
+                .jsonPath("$.endSnapshotCreation").<String>value(s -> LocalDateTime.parse(s).isEqual(previousSnapshotCreation))
+                .jsonPath("$.comparison[0].path").isEqualTo("/test/cache.txt")
+                .jsonPath("$.comparison[0].snapshotIds").<List<Integer>>value(l -> assertThat(l).containsExactly(previousSnapshot.getId(), subsequentSnapshot.getId()))
+                .jsonPath("$.comparison[0].comparison").<List<String>>value(l -> assertThat(l).containsExactly("CHANGED", "LAST TRACK"))
+                .jsonPath("$.comparison[1].path").isEqualTo("/test/log/logs.txt")
+                .jsonPath("$.comparison[1].snapshotIds").<List<Integer>>value(l -> assertThat(l).containsExactly(previousSnapshot.getId(), subsequentSnapshot.getId()))
+                .jsonPath("$.comparison[1].comparison").<List<String>>value(l -> assertThat(l).containsExactly("CHANGED", "LAST TRACK"));
     }
 
     @Test
     void shouldReturnSnapshots() {
         // when
-        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL, null, false));
 
         final LocalDateTime localDateTime = LocalDateTime.of(2024, 12, 1, 15, 30);
         final Snapshot snapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(localDateTime), monitoredPath));

@@ -36,6 +36,13 @@ public class Node {
     public Node() {
     }
 
+    public Node(Snapshot snapshot, String path, boolean hasChanged, boolean deletedInNextSnapshot) {
+        this.snapshot = snapshot;
+        this.path = path;
+        this.hasChanged = hasChanged;
+        this.deletedInNextSnapshot = deletedInNextSnapshot;
+    }
+
     public boolean isParent() {
         return parent == null;
     }
