@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.nio.file.Paths;
@@ -25,8 +24,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ActiveProfiles("test")
-
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MonitoringControllerITest {
 
@@ -215,5 +212,27 @@ public class MonitoringControllerITest {
                 .jsonPath("$.subsequentSnapshotCreation").<String>value(s -> LocalDateTime.parse(s).isEqual(subsequentSnapshotCreation))
                 .jsonPath("$.changedPaths[0]").isEqualTo("/test/added.txt")
                 .jsonPath("$.deletedPaths[0]").isEqualTo("/test/deleted.txt");
+    }
+
+    @Test
+    void shouldReturnSnapshots() {
+        // when
+        final MonitoredPath monitoredPath = monitoredPathRepository.save(new MonitoredPath("/test", SearchMode.FULL,  null, false));
+
+        final LocalDateTime localDateTime = LocalDateTime.of(2024, 12, 1, 15, 30);
+        final Snapshot snapshot = snapshotRepository.save(new Snapshot(Timestamp.valueOf(localDateTime), monitoredPath));
+
+        // then
+        WebTestClient
+                .bindToServer()
+                .baseUrl("http://localhost:8087/monitored-path/")
+                .build()
+                .get()
+                .uri(monitoredPath.getId() + "/snapshots")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].id").isEqualTo(snapshot.getId())
+                .jsonPath("$[0].timestamp").<String>value(s -> LocalDateTime.parse(s).isEqual(localDateTime));
     }
 }
