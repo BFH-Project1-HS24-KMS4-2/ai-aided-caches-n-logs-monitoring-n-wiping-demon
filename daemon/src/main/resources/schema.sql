@@ -27,3 +27,5 @@ CREATE TABLE IF NOT EXISTS snapshot_node (
 );
 
 CREATE INDEX IF NOT EXISTS idx_snapshot_id ON snapshot_node(snapshot_id);
+CREATE INDEX IF NOT EXISTS idx_has_changed ON snapshot_node(has_changed);
+CREATE INDEX IF NOT EXISTS idx_deleted_in_next_snapshot ON snapshot_node(deleted_in_next_snapshot);

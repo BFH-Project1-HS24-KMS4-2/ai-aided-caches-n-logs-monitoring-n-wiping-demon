@@ -1,17 +1,16 @@
 package ch.bfh.tracesentry.daemon.domain.service;
 
 import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
-import ch.bfh.tracesentry.daemon.domain.model.Node;
-import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
-import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
+import ch.bfh.tracesentry.daemon.domain.repo.SnapshotComparisonRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
+import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.dto.SnapshotComparisonDTO;
 import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
-import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +23,23 @@ import java.util.List;
 
 @Service
 public class MonitoringDomainService {
+
     private static final Logger LOG = LoggerFactory.getLogger(MonitoringDomainService.class);
+
     private final MonitoredPathRepository monitoredPathRepository;
     private final ModelMapper modelMapper;
     private final SnapshotRepository snapshotRepository;
-    private final NodeRepository nodeRepository;
+    private final SnapshotComparisonRepository snapshotComparisonRepository;
 
     @Autowired
-    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository, ModelMapper modelMapper, SnapshotRepository snapshotRepository, NodeRepository nodeRepository) {
+    public MonitoringDomainService(MonitoredPathRepository monitoredPathRepository,
+                                   ModelMapper modelMapper,
+                                   SnapshotRepository snapshotRepository,
+                                   SnapshotComparisonRepository snapshotComparisonRepository) {
         this.monitoredPathRepository = monitoredPathRepository;
         this.modelMapper = modelMapper;
         this.snapshotRepository = snapshotRepository;
-        this.nodeRepository = nodeRepository;
+        this.snapshotComparisonRepository = snapshotComparisonRepository;
     }
 
 
@@ -69,31 +73,28 @@ public class MonitoringDomainService {
 
     public void deleteMonitoring(Integer id) {
         if (!monitoredPathRepository.existsById(id)) {
-            throw new NotFoundException("Path does not exist");
+            throw new NotFoundException("MonitoredPath does not exist");
         }
         monitoredPathRepository.deleteById(id);
     }
 
-    public List<Snapshot> getAllSnapshotsOfMonitoredPathOrdered(Integer monitoredPathId) {
-        return snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPathId);
-    }
-
-    public List<Node> getChangesOfSnapshotComparedToPredecessor(Integer snapshotId) {
-        return nodeRepository.findAllBySnapshotIdAndHasChangedTrue(snapshotId);
-    }
-
-    // Snapshot Id needs to be the preceder snapshot of the comparison
-    public List<Node> getDeletionsOfSnapshotComparedToPredecessor(Integer snapshotId) {
-        return nodeRepository.findAllBySnapshotIdAndDeletedInNextSnapshotTrue(snapshotId);
-    }
-
     public List<SnapshotDTO> getSnapshotsOf(Integer monitoredPathId) {
         if (!monitoredPathRepository.existsById(monitoredPathId)) {
-            throw new NotFoundException("Path does not exist");
+            throw new NotFoundException("MonitoredPath does not exist");
         }
         return snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPathId)
                 .stream()
                 .map(snapshot -> modelMapper.map(snapshot, SnapshotDTO.class))
                 .toList();
+    }
+
+    public List<SnapshotComparisonDTO> getSnapshotComparison(Integer mpId, Integer startIdx, Integer endIdx) {
+        return snapshotComparisonRepository.getSnapshotComparisons(mpId, startIdx, endIdx);
+    }
+
+    public MonitoredPath getMonitoredPath(Integer id) {
+        return monitoredPathRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("MonitoredPath does not exist")
+        );
     }
 }

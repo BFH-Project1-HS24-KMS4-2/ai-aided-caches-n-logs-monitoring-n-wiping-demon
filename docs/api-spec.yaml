@@ -147,6 +147,20 @@ paths:
           description: The ID of the monitored path you want the comparison from.
           schema:
             type: integer
+        - name: start
+          in: query
+          required: false
+          description: The start index for the comparison range.
+          schema:
+            type: integer
+            default: 1
+        - name: end
+          in: query
+          required: false
+          description: The end index for the comparison range.
+          schema:
+            type: integer
+            default: 2
       responses:
         200:
           description: Returns the comparison.
@@ -155,7 +169,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MonitoredChangesDTO'
         422:
-          description: Not found two snapshots to compare.
+          description: Not a valid index range or not found enough snapshots in the given index range.
   /monitored-path/{id}/snapshots:
     get:
       summary: Returns all snapshots of the monitored path.
@@ -186,24 +200,36 @@ components:
         monitoredPath:
           type: string
           example: /test
-        previousSnapshotCreation:
+        startSnapshotCreation:
+          type: string
+          example: 2024-11-25T15:21:52.063
+        endSnapshotCreation:
           type: string
           example: 2024-11-25T13:21:52.063
-        subsequentSnapshotCreation:
+        comparison:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotComparisonDTO'
+    SnapshotComparisonDTO:
+      type: object
+      properties:
+        snapshotIds:
+          type: array
+          items:
+            type: integer
+          example:
+            - 1
+            - 2
+        path:
           type: string
-          example: 2024-11-25T13:21:52.063
-        changedPaths:
+          example: /test/cache.txt
+        comparison:
           type: array
           items:
             type: string
           example:
-            - /test/changed.txt
-        deletedPaths:
-          type: array
-          items:
-            type: string
-          example:
-            - /test/deleted.txt
+            - CHANGED
+            - LAST TRACK
     MonitorPath:
       type: object
       properties:

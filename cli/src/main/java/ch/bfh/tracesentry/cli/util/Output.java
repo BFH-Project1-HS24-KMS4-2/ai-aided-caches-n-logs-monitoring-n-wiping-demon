@@ -15,8 +15,13 @@ public final class Output {
     public static String formatFilePaths(List<String> filePaths, String dirPath) {
         return filePaths
                 .stream()
-                .map(filePath -> Path.of(dirPath).relativize(Paths.get(filePath)).toString())
+                .map(filePath -> formatFilePath(filePath, dirPath))
                 .collect(Collectors.joining("\n"));
+    }
+
+    public static String formatFilePath(String filePath, String dirPath) {
+        final String relativized = Path.of(dirPath).relativize(Paths.get(filePath)).toString();
+        return relativized.isEmpty() ? "." : relativized;
     }
 
     public static String formatDateTime(LocalDateTime dateTime) {

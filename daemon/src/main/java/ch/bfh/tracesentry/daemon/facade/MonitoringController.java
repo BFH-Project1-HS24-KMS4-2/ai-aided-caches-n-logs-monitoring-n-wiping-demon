@@ -1,26 +1,20 @@
 package ch.bfh.tracesentry.daemon.facade;
 
-import ch.bfh.tracesentry.daemon.domain.model.Node;
-import ch.bfh.tracesentry.daemon.domain.model.Snapshot;
 import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
-import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
-import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
-import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
-import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
+import ch.bfh.tracesentry.lib.dto.*;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static ch.bfh.tracesentry.daemon.utils.ControllerUtils.*;
+import static ch.bfh.tracesentry.daemon.utils.ControllerUtils.parseDirectory;
+import static ch.bfh.tracesentry.daemon.utils.ControllerUtils.parsePattern;
 
 @RestController
 @RequestMapping("/monitored-path")
@@ -54,24 +48,28 @@ public class MonitoringController {
     }
 
     @GetMapping("{id}/changes")
-    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id) {
-        List<Snapshot> snapshots = monitoringDomainService.getAllSnapshotsOfMonitoredPathOrdered(id);
-        if (snapshots.size() < 2) {
-            throw new UnprocessableException("Not found two snapshots to compare");
+    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id,
+                                                   @RequestParam(name = "start", defaultValue = "1") Integer startSnapshotNbr,
+                                                   @RequestParam(name = "end", defaultValue = "2") Integer endSnapshotNbr) {
+        final int startIdx = startSnapshotNbr - 1;
+        final int endIdx = endSnapshotNbr - 1;
+
+        if (startIdx >= endIdx || startIdx < 0) {
+            throw new UnprocessableException("Start index needs to be smaller than the end index and not negative.");
         }
 
-        final Snapshot previousSnapshot = snapshots.get(1);
-        final Snapshot subsequentSnapshot = snapshots.get(0);
+        final List<SnapshotDTO> snapshots = monitoringDomainService.getSnapshotsOf(id);
+        if (startIdx > snapshots.size() - 2 || endIdx > snapshots.size() - 1) {
+            throw new UnprocessableException("Not enough snapshots existing at the moment for this range.");
+        }
 
-        final List<Node> changes = monitoringDomainService.getChangesOfSnapshotComparedToPredecessor(subsequentSnapshot.getId());
-        final List<Node> deletions = monitoringDomainService.getDeletionsOfSnapshotComparedToPredecessor(previousSnapshot.getId());
+        final List<SnapshotComparisonDTO> snapshotComparison = monitoringDomainService.getSnapshotComparison(id, startIdx, endIdx);
 
         return new MonitoredChangesDTO(
-                previousSnapshot.getMonitoredPath().getPath(),
-                dateFromTimestamp(previousSnapshot.getTimestamp()),
-                dateFromTimestamp(subsequentSnapshot.getTimestamp()),
-                changes.stream().map(Node::getPath).toList(),
-                deletions.stream().map(Node::getPath).toList()
+                monitoringDomainService.getMonitoredPath(id).getPath(),
+                snapshots.get(startIdx).getTimestamp(),
+                snapshots.get(endIdx).getTimestamp(),
+                snapshotComparison
         );
     }
 
@@ -80,7 +78,4 @@ public class MonitoringController {
         return monitoringDomainService.getSnapshotsOf(monitoredPathId);
     }
 
-    private static LocalDateTime dateFromTimestamp(Timestamp timestamp) {
-        return timestamp.toLocalDateTime();
-    }
 }
