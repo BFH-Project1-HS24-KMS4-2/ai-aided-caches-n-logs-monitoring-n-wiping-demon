@@ -1,6 +1,9 @@
 CREATE TABLE IF NOT EXISTS monitored_path (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 path TEXT NOT NULL UNIQUE,
+                                mode TINYINT NOT NULL,
+                                pattern TEXT NOT NULL,
+                                no_subdirs BOOLEAN NOT NULL,
                                 created_at DATE NOT NULL
 );
 

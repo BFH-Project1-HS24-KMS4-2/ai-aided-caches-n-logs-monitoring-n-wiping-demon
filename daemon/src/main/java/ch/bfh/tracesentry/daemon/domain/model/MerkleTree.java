@@ -1,5 +1,7 @@
 package ch.bfh.tracesentry.daemon.domain.model;
 
+import ch.bfh.tracesentry.daemon.search.SearchStrategyFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -8,14 +10,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MerkleTree {
     private Node root;
+    private final MonitoredPath monitoredPath;
     private final List<Node> linearizedNodes = new ArrayList<>();
 
-    private MerkleTree(String path, Snapshot snapshot) {
+    private MerkleTree(MonitoredPath path, Snapshot snapshot) {
         try {
+            this.monitoredPath = path;
             this.buildMerkleTree(path, snapshot);
         } catch (IOException | NoSuchAlgorithmException e) {
             // we're just throwing an unchecked exception here,
@@ -24,38 +27,47 @@ public class MerkleTree {
         }
     }
 
-    private void buildMerkleTree(String path, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
-        File rootDir = new File(path);
-        if (!rootDir.exists() || !rootDir.isDirectory()) {
-            throw new IllegalArgumentException("The provided path is not a valid directory.");
+    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
+        File rootDir = new File(monitoredPath.getPath());
+        File[] rootFiles = rootDir.listFiles();
+
+        if (!rootDir.exists() || !rootDir.isDirectory() || rootFiles == null) {
+            throw new IllegalArgumentException("The provided path is not a valid readable directory.");
         }
 
-        Node root = createNodeForDirectory(rootDir, snapshot);
+        Node root = createNodeForDirectory(rootDir, snapshot, rootFiles);
         this.root = root;
-        buildTreeRecursively(rootDir, root, snapshot);
+        buildTreeRecursively(root, snapshot, rootFiles);
     }
 
-    private Node createNodeForDirectory(File dir, Snapshot snapshot) throws NoSuchAlgorithmException {
+    private Node createNodeForDirectory(File dir, Snapshot snapshot, File[] files) throws NoSuchAlgorithmException {
         Node node = new Node();
         node.setPath(dir.getAbsolutePath());
         node.setSnapshot(snapshot);
-        node.setHash(hash(getDirectoryHashString(dir)));
+        node.setHash(hash(getDirectoryHashString(files)));
         this.linearizedNodes.add(node);
 
         return node;
     }
 
-    private void buildTreeRecursively(File dir, Node parent, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
+    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws IOException, NoSuchAlgorithmException, NullPointerException {
         List<Node> children = new ArrayList<>();
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
+        for (File file : files) {
             Node childNode;
             if (file.isDirectory()) {
-                childNode = createNodeForDirectory(file, snapshot);
-                buildTreeRecursively(file, childNode, snapshot);
+                File[] childFiles = file.listFiles();
+                if (monitoredPath.isNoSubdirs() || !file.canRead() || childFiles == null) {
+                    continue;
+                }
+                childNode = createNodeForDirectory(file, snapshot, childFiles);
+                buildTreeRecursively(childNode, snapshot, childFiles);
             } else {
-                childNode = createNodeForFile(file, snapshot);
+                if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
+                    childNode = createNodeForFile(file, snapshot);
+                } else {
+                    continue;
+                }
             }
-
             childNode.setParent(parent);
             children.add(childNode);
         }
@@ -83,9 +95,9 @@ public class MerkleTree {
         return combinedHash.toString();
     }
 
-    private String getDirectoryHashString(File dir) {
+    private String getDirectoryHashString(File[] contents) {
         StringBuilder sb = new StringBuilder();
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
+        for (File file : contents) {
             sb.append(file.getName()).append(file.lastModified()).append(file.length());
         }
         return sb.toString();
@@ -108,8 +120,8 @@ public class MerkleTree {
         return hexString.toString();
     }
 
-    public static MerkleTree create(String path, Snapshot snapshot) {
-        return new MerkleTree(path, snapshot);
+    public static MerkleTree create(MonitoredPath monitoredPath, Snapshot snapshot) {
+        return new MerkleTree(monitoredPath, snapshot);
     }
 
     public Node getRoot() {
