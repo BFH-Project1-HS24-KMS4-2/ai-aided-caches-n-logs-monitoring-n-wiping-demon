@@ -182,8 +182,6 @@ public class MonitoringControllerITest {
                 .jsonPath("$.message").isEqualTo("Not enough snapshots existing at the moment for this range");
     }
 
-    // todo: insert snapshot ids to snapshot list in cli
-
     @Test
     void shouldReturnComparison() {
         // when

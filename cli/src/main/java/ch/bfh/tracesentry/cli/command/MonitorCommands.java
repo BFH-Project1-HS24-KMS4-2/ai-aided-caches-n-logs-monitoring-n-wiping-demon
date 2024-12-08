@@ -189,7 +189,7 @@ public class MonitorCommands {
                 return "No snapshots found for monitored path with ID " + id + ".";
             }
             String[][] data = new String[body.size() + 1][3];
-            data[0] = new String[]{"ID", "Timestamp"};
+            data[0] = new String[]{"Number", "Timestamp", "ID"};
 
             final Supplier<Integer> snapshotCounter = new Supplier<>() {
                 private int count = 1;
@@ -203,7 +203,8 @@ public class MonitorCommands {
             String[][] model = body.stream()
                     .map(s -> new String[]{
                             String.valueOf(snapshotCounter.get()),
-                            formatDateTime(s.getTimestamp())
+                            formatDateTime(s.getTimestamp()),
+                            String.valueOf(s.getId())
                     }
                     ).toArray(String[][]::new);
             System.arraycopy(model, 0, data, 1, model.length);

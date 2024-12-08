@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -253,24 +252,25 @@ public class MonitorCommandsITest {
                 null,
                 new ParameterizedTypeReference<List<SnapshotDTO>>() {
                 }))
-                .thenReturn(ResponseEntity.of(Optional.of(List.of(
-                        new SnapshotDTO(1, timestamp1),
-                        new SnapshotDTO(2, timestamp2)))));
+                .thenReturn(ResponseEntity.ok(List.of(
+                        new SnapshotDTO(2, timestamp2),
+                        new SnapshotDTO(1, timestamp1)
+                        )));
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("monitor", "snapshots", String.valueOf(id))
                 .run();
 
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
-            var output = ShellLines.join(session.screen().lines());
+            final String output = ShellLines.join(session.screen().lines());
             assertThat(output).startsWith("""
-                    ┌──┬───────────────────┐
-                    │ID│Timestamp          │
-                    ├──┼───────────────────┤
-                    │1 │01.12.2024 20:25:00│
-                    ├──┼───────────────────┤
-                    │2 │01.12.2024 21:25:00│
-                    └──┴───────────────────┘
+                    ┌──────┬───────────────────┬──┐
+                    │Number│Timestamp          │ID│
+                    ├──────┼───────────────────┼──┤
+                    │1     │01.12.2024 21:25:00│2 │
+                    ├──────┼───────────────────┼──┤
+                    │2     │01.12.2024 20:25:00│1 │
+                    └──────┴───────────────────┴──┘
                     """);
         });
     }

@@ -55,12 +55,12 @@ public class MonitoringController {
         final int endIdx = endSnapshotNbr - 1;
 
         if (startIdx >= endIdx || startIdx < 0) {
-            throw new UnprocessableException("Start index needs to be smaller than the end index and not negative");
+            throw new UnprocessableException("Start index needs to be smaller than the end index and not negative.");
         }
 
         final List<SnapshotDTO> snapshots = monitoringDomainService.getSnapshotsOf(id);
         if (startIdx > snapshots.size() - 2 || endIdx > snapshots.size() - 1) {
-            throw new UnprocessableException("Not enough snapshots existing at the moment for this range");
+            throw new UnprocessableException("Not enough snapshots existing at the moment for this range.");
         }
 
         final List<SnapshotComparisonDTO> snapshotComparison = monitoringDomainService.getSnapshotComparison(id, startIdx, endIdx);
