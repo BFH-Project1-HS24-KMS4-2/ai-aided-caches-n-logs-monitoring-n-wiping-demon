@@ -179,7 +179,7 @@ public class MonitoringControllerITest {
                 .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
                 .expectBody()
                 .jsonPath("$.status").isEqualTo(422)
-                .jsonPath("$.message").isEqualTo("Not enough snapshots existing at the moment for this range");
+                .jsonPath("$.message").isEqualTo("Not enough snapshots existing at the moment for this range.");
     }
 
     @Test

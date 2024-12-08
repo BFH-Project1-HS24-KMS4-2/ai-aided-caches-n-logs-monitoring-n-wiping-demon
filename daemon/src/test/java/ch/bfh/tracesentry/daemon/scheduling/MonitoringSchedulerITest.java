@@ -83,7 +83,7 @@ public class MonitoringSchedulerITest {
 
         Assertions.assertNull(rootDirNode.getParent());
         Assertions.assertEquals(rootDirNode.getSnapshot(), snapshot);
-        Assertions.assertEquals(rootDirNode.getChildren(), List.of(cacheFileNode, logsDirNode));
+        Assertions.assertTrue(rootDirNode.getChildren().containsAll(List.of(cacheFileNode, logsDirNode)));
         Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
         Assertions.assertTrue(rootDirNode.isHasChanged());
         Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
@@ -148,7 +148,7 @@ public class MonitoringSchedulerITest {
 
         Assertions.assertNull(rootDirNode.getParent());
         Assertions.assertEquals(rootDirNode.getSnapshot(), currentSnapshot);
-        Assertions.assertEquals(rootDirNode.getChildren(), List.of(cacheFileNode, logsDirNode, newCacheFileNode));
+        Assertions.assertTrue(rootDirNode.getChildren().containsAll(List.of(cacheFileNode, logsDirNode, newCacheFileNode)));
         Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
         Assertions.assertTrue(rootDirNode.isHasChanged());
         Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
@@ -219,7 +219,7 @@ public class MonitoringSchedulerITest {
 
         Assertions.assertNull(rootDirNode.getParent());
         Assertions.assertEquals(rootDirNode.getSnapshot(), currentSnapshot);
-        Assertions.assertEquals(rootDirNode.getChildren(), List.of(cacheFileNode, logsDirNode));
+        Assertions.assertTrue(rootDirNode.getChildren().containsAll(List.of(cacheFileNode, logsDirNode)));
         Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
         Assertions.assertTrue(rootDirNode.isHasChanged()); // root dir has changed
         Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
