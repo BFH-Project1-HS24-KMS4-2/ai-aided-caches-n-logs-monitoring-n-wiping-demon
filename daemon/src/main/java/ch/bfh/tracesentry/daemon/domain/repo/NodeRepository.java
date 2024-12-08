@@ -9,6 +9,4 @@ import java.util.List;
 @Repository
 public interface NodeRepository extends JpaRepository<Node, Integer> {
     List<Node> findAllBySnapshotId(Integer snapshotId);
-    List<Node> findAllBySnapshotIdAndHasChangedTrue(Integer snapshotId);
-    List<Node> findAllBySnapshotIdAndDeletedInNextSnapshotTrue(Integer snapshotId);
 }

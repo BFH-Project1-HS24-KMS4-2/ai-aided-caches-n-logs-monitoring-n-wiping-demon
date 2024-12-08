@@ -1,1 +1,1 @@
-GET localhost:8087/monitored-path/2/changes
+GET localhost:8087/monitored-path/1/changes

@@ -7,6 +7,7 @@
 \usepackage[ngerman]{babel}
 \usepackage{wasysym}
 \usepackage{parskip}
+\usepackage{bm}
 
 
 \usepackage{geometry}
@@ -329,6 +330,76 @@
 
     \chapter{Implementierung}
 
+    \subsection{Performanz und Optimierung}
+    \subsubsection{Komplexität}
+
+    Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
+    Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
+    Daher ist eine Analyse der Komplexität der verschiedenen Operationen angebracht.
+    \\
+    Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
+    Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
+    Dateien sind stets Blätter.\newline
+    Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
+
+    \paragraph{Bau}
+    Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
+    was einer Komplexität von $O(n)$ für das Traversieren entspricht.
+    Das Hashen eines Ordners mit $k$ Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
+    Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
+    \\\\
+    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
+    Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
+
+    \paragraph{Linearisierung}
+    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
+    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
+
+
+    \subsubsection{Caching}
+    Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
+    haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
+
+    \begin{enumerate}
+        \item Pro MonitoredPath könnte man immer den letzten gebauten MerkleTree cachen, um beim nächsten Snapshot
+        direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
+        \begin{itemize}
+            \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
+            Da aber der MerkleTree vom letzten Snapshot nur einmal wiederverwendet wird (beim Vergleichen mit dem Neuen), macht dies hier keinen Sinn.
+            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und die Query
+            eine tiefe Komplexität hat, kann bereits effizient auf die Daten zugegriffen werden.
+        \end{itemize}
+        \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
+        direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
+        \begin{itemize}
+            \item Auch hier wird keine sich lohnende Performance-Steigerung erwartet, denn auch wenn die Daten schon in Memory wären
+            braucht es für die zusammengefasste Response der abgefragten Vergleiche trotzdem noch Logik,
+            welche auch mit einem Query auf die lokale DB implementiert werden kann und so kein grosser Gewinn daraus resultiert.
+        \end{itemize}
+    \end{enumerate}
+
+    \subsubsection{Indexing}
+    Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
+
+    Index sinnvoll:
+    \begin{itemize}
+        \item Attribut hat viele verschiedene Werte
+        \item Attribut hat wenige/keine null-Werte
+        \item Attribut wird oft in einer SQL WHERE oder JOIN Abfrage genutzt
+    \end{itemize}
+
+    Index nicht sinnvoll:
+    \begin{itemize}
+        \item kleine Tabelle
+        \item Attribut wird oft manipuliert
+    \end{itemize}
+
+    So wurde entschieden die folgenden Attribute zu indexieren:
+    \begin{itemize}
+        \item \verb|snapshot_node.snapshot_id|
+        \item \verb|snapshot_node.has_changed|
+        \item \verb|snapshot_node.deleted_in_next_snapshot|
+    \end{itemize}
 
     \section{Architektur}
 
@@ -590,8 +661,7 @@
     in der Daemon-Applikation embedded ist.
 
     Das zweite Jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
-    Dieses Jar startet wiederum eine zweite JVM, % todo: prüfen
-    welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
+    Dieses Jar startet wiederum eine zweite JVM, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
     Diese CLI sendet dann über HTTP die entsprechenden Anfragen an den Daemon, die zur Erfüllung der Anweisungen des Anwenders führen.
 
 

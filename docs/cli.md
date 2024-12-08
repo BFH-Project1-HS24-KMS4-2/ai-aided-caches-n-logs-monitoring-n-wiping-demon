@@ -12,6 +12,7 @@
 6. [monitor list](#6-monitor-list)
 7. [monitor remove](#7-monitor-remove)
 8. [monitor compare](#8-monitor-compare)
+9. [monitor snapshots](#9-monitor-snapshots)
 
 ---
 
@@ -245,37 +246,53 @@ Error message if the ID does not exist:
 ---
 
 ### 8. `monitor compare`
-This command outputs the comparison of the latest two snapshots taken from a given monitored path.
+This command outputs the comparison of a user-defined range of snapshots taken from a given monitored path.
 
 #### Usage:
 ```bash
-  ts monitor compare --id <ID>
+  ts monitor compare --id <ID> --start <startNumber> --end <endNumber>
 ```
 
 #### Parameters:
 - **`--id`**: The unique identifier for the monitored path to get the comparison from.
+- **`--start`**: Snapshot-number (begin at 1 and snapshots are ordered from latest to oldest) to start the comparison from. (Optional: default value is 1)
+- **`--end`**: Snapshot-number (begin at 2 and snapshots are ordered from latest to oldest) to end the comparison at. (Optional: default value is 2)
 
 #### Example:
-- Get the comparison of a monitored path by ID:
+- Get the comparison of a monitored path by ID and of the last 5 taken snapshots:
   ```bash
-  ts monitor compare --id 1
+  ts monitor compare --id 1 --start 1 --end 5
   ```
 Example output of successful execution:
 ```
-Listing comparison of /home/Desktop/project1 from 25.11.2024 13:23:58 to 25.11.2024 13:35:51...
-Changed files:
--
-
-Deleted files:
-deleted.txt
+Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
+┌───────────┬────────────┬──────────┐
+│Path       │Snapshot IDs│Comparison│
+├───────────┼────────────┼──────────┤
+│cache.txt  │4           │CHANGED   │
+│           │6           │LAST TRACK│
+├───────────┼────────────┼──────────┤
+│log/log.txt│2           │CHANGED   │
+│           │8           │CHANGED   │
+└───────────┴────────────┴──────────┘
 ```
 Example output of unsuccessful execution:
+
+If the range is too big for the existing snapshots:
 ```
-Error: Not found two snapshots to compare
+Error: Not enough snapshots existing at the moment for this range.
+```
+If the index range is not valid:
+```
+Error: Start index needs to be smaller than the end index and not negative.
+```
+If it is an unexpected error:
+```
+Error: could not compare snapshots.
 ```
 ---
 
-### 8. `monitor snapshots`
+### 9. `monitor snapshots`
 This command lists all snapshots taken for a monitored path.
 
 #### Usage:
@@ -293,13 +310,13 @@ This command lists all snapshots taken for a monitored path.
   ```
 Example output of successful execution:
 ```
-┌────┬───────────────────┐
-│ID  │Timestamp          │
-├────┼───────────────────┤
-│0001│01.12.2024 20:25:21│
-├────┼───────────────────┤
-│0002│01.12.2024 21:25:21│
-└────┴───────────────────┘
+┌──────┬───────────────────┬──┐
+│Number│Timestamp          │ID│
+├──────┼───────────────────┼──┤
+│1     │01.12.2024 21:25:00│2 │
+├──────┼───────────────────┼──┤
+│2     │01.12.2024 20:25:00│1 │
+└──────┴───────────────────┴──┘
 ```
 Example output of unsuccessful execution:
 ```

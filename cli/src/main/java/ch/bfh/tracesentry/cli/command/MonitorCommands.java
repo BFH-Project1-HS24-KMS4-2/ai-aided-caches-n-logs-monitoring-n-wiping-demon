@@ -1,12 +1,13 @@
 package ch.bfh.tracesentry.cli.command;
 
 import ch.bfh.tracesentry.cli.adapter.DaemonAdapter;
-import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
-import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
-import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidPattern;
 import ch.bfh.tracesentry.cli.command.parameters.annotations.ValidSearchMode;
 import ch.bfh.tracesentry.cli.command.parameters.validators.PatternValidator;
+import ch.bfh.tracesentry.cli.util.Output;
+import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
+import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
+import ch.bfh.tracesentry.lib.exception.ErrorResponse;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,18 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.table.ArrayTableModel;
+import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
-import org.springframework.shell.table.BorderStyle;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import static ch.bfh.tracesentry.cli.util.Output.formatDateTime;
-import static ch.bfh.tracesentry.cli.util.Output.formatFilePaths;
-import java.util.regex.Pattern;
 
 @ShellComponent
 @ShellCommandGroup("Monitor Commands")
@@ -96,7 +97,7 @@ public class MonitorCommands {
             if (body.isEmpty()) {
                 return "No paths are currently being monitored.";
             }
-            String[][] data =  buildTableData(body);
+            String[][] data = buildTableData(body);
             TableModel model = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(model);
             tableBuilder.addFullBorder(BorderStyle.fancy_light);
@@ -140,17 +141,34 @@ public class MonitorCommands {
     }
 
     @ShellMethod(key = "monitor compare", value = "Compare snapshots of a monitored path")
-    public String monitorCompare(@ShellOption int id) {
+    public String monitorCompare(@ShellOption(help = "The id of the monitored path, from where the snapshots get compared") int id,
+                                 @ShellOption(help = "The index of the newer snapshot to begin the comparison from", defaultValue = "1") int start,
+                                 @ShellOption(help = "The index of the older snapshot to end the comparison on", defaultValue = "2") int end) {
         if (!daemonAdapter.checkStatus()) return "daemon is not running";
         try {
-            MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id).getBody());
+            final MonitoredChangesDTO monitoredChanges = Objects.requireNonNull(daemonAdapter.getMonitoredChanges(id, start, end).getBody());
+
+            String[][] data = new String[monitoredChanges.getComparison().size() + 1][3];
+            data[0] = new String[]{"Path", "Snapshot IDs", "Comparison"};
+            String[][] model = monitoredChanges.getComparison().stream()
+                    .map(sc ->
+                            new String[]{
+                                    Output.formatFilePath(sc.getPath(), monitoredChanges.getMonitoredPath()),
+                                    String.join("\n", sc.getSnapshotIds().stream().map(Object::toString).toList()),
+                                    String.join("\n", sc.getComparison())
+                            }
+                    ).toArray(String[][]::new);
+            System.arraycopy(model, 0, data, 1, model.length);
+            TableModel tableModel = new ArrayTableModel(data);
+            TableBuilder tableBuilder = new TableBuilder(tableModel);
+            tableBuilder.addFullBorder(BorderStyle.fancy_light);
+
+            final String table = tableBuilder.build().render(120);
+
             return "Listing comparison of " + monitoredChanges.getMonitoredPath() + " from "
-                    + formatDateTime(monitoredChanges.getPreviousSnapshotCreation())
-                    + " to " + formatDateTime(monitoredChanges.getSubsequentSnapshotCreation()) + "...\n"
-                    + "Changed files:\n"
-                    + (monitoredChanges.getChangedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getChangedPaths(), monitoredChanges.getMonitoredPath())) + "\n\n"
-                    + "Deleted files:\n"
-                    + (monitoredChanges.getDeletedPaths().isEmpty() ? "-" : formatFilePaths(monitoredChanges.getDeletedPaths(), monitoredChanges.getMonitoredPath()));
+                    + formatDateTime(monitoredChanges.getEndSnapshotCreation())
+                    + " to " + formatDateTime(monitoredChanges.getStartSnapshotCreation()) + "...\n"
+                    + table;
         } catch (RestClientResponseException e) {
             final ErrorResponse errorResponse = Objects.requireNonNull(e.getResponseBodyAs(ErrorResponse.class));
             return "Error: " + errorResponse.getMessage();
@@ -171,13 +189,23 @@ public class MonitorCommands {
                 return "No snapshots found for monitored path with ID " + id + ".";
             }
             String[][] data = new String[body.size() + 1][3];
-            data[0] = new String[]{"ID", "Timestamp"};
+            data[0] = new String[]{"Number", "Timestamp", "ID"};
+
+            final Supplier<Integer> snapshotCounter = new Supplier<>() {
+                private int count = 1;
+
+                @Override
+                public Integer get() {
+                    return count++;
+                }
+            };
+
             String[][] model = body.stream()
-                    .map(s ->
-                            new String[]{
-                                    String.format("%04d", s.getId()),
-                                    formatDateTime(s.getTimestamp())
-                            }
+                    .map(s -> new String[]{
+                            String.valueOf(snapshotCounter.get()),
+                            formatDateTime(s.getTimestamp()),
+                            String.valueOf(s.getId())
+                    }
                     ).toArray(String[][]::new);
             System.arraycopy(model, 0, data, 1, model.length);
             TableModel tableModel = new ArrayTableModel(data);
