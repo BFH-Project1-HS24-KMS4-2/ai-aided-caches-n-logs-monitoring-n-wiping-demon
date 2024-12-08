@@ -365,8 +365,9 @@
         direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
         \begin{itemize}
             \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
-            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und das Query
-            eine tiefe Komplexität hat.
+            Da aber der MerkleTree vom letzten Snapshot nur einmal wiederverwendet wird (beim Vergleichen mit dem Neuen), macht dies hier keinen Sinn.
+            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und die Query
+            eine tiefe Komplexität hat, kann bereits effizient auf die Daten zugegriffen werden.
         \end{itemize}
         \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
         direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
