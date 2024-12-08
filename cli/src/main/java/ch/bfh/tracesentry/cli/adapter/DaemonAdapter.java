@@ -1,10 +1,7 @@
 package ch.bfh.tracesentry.cli.adapter;
 
-import ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO;
+import ch.bfh.tracesentry.lib.dto.*;
 import ch.bfh.tracesentry.lib.model.SearchMode;
-import ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO;
-import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
-import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -148,5 +145,10 @@ public class DaemonAdapter {
      */
     public ResponseEntity<MonitoredChangesDTO> getMonitoredChanges(Integer id) {
         return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/changes", MonitoredChangesDTO.class);
+    }
+
+    public ResponseEntity<List<SnapshotDTO>> getSnapshotsOf(Integer monitoredPathId) {
+        ParameterizedTypeReference<List<SnapshotDTO>> responseType = new ParameterizedTypeReference<>() {};
+        return restTemplate.exchange(BASE_URL + "monitored-path/" + monitoredPathId + "/snapshots", HttpMethod.GET, null, responseType);
     }
 }

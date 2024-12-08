@@ -28,12 +28,12 @@ public class Node {
 
     private String hash;
 
+    // Not semantically tied to the snapshot, as its value may change during the creation of the next snapshot
     private boolean hasChanged;
-
+    // Same as for hasChanged
     private boolean deletedInNextSnapshot;
 
     public Node() {
-
     }
 
     public boolean isParent() {

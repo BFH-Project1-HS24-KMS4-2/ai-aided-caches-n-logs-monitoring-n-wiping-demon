@@ -9,6 +9,7 @@ import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.exception.ConflictException;
 import ch.bfh.tracesentry.daemon.exception.NotFoundException;
 import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
+import ch.bfh.tracesentry.lib.dto.SnapshotDTO;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import ch.bfh.tracesentry.lib.dto.MonitoredPathDTO;
 import org.modelmapper.ModelMapper;
@@ -84,5 +85,15 @@ public class MonitoringDomainService {
     // Snapshot Id needs to be the preceder snapshot of the comparison
     public List<Node> getDeletionsOfSnapshotComparedToPredecessor(Integer snapshotId) {
         return nodeRepository.findAllBySnapshotIdAndDeletedInNextSnapshotTrue(snapshotId);
+    }
+
+    public List<SnapshotDTO> getSnapshotsOf(Integer monitoredPathId) {
+        if (!monitoredPathRepository.existsById(monitoredPathId)) {
+            throw new NotFoundException("Path does not exist");
+        }
+        return snapshotRepository.findAllByMonitoredPathIdOrderByTimestampDesc(monitoredPathId)
+                .stream()
+                .map(snapshot -> modelMapper.map(snapshot, SnapshotDTO.class))
+                .toList();
     }
 }

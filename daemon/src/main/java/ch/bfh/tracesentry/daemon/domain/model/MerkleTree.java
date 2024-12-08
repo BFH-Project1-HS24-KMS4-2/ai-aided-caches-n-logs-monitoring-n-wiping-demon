@@ -16,7 +16,7 @@ public class MerkleTree {
     private final MonitoredPath monitoredPath;
     private final List<Node> linearizedNodes = new ArrayList<>();
 
-    private MerkleTree(MonitoredPath path, Snapshot snapshot) {
+    public MerkleTree(MonitoredPath path, Snapshot snapshot) {
         try {
             this.monitoredPath = path;
             this.buildMerkleTree(path, snapshot);
@@ -118,10 +118,6 @@ public class MerkleTree {
             hexString.append(hex);
         }
         return hexString.toString();
-    }
-
-    public static MerkleTree create(MonitoredPath monitoredPath, Snapshot snapshot) {
-        return new MerkleTree(monitoredPath, snapshot);
     }
 
     public Node getRoot() {
