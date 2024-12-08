@@ -72,11 +72,18 @@ public class MonitoringScheduler {
     }
 
     private void compareNode(Node parent, final List<Node> old) {
-        var oldNodeOp = old.stream().filter(n -> n.getPath().equals(parent.getPath())).findFirst();
-        if (oldNodeOp.isEmpty()) {
+        final String parentPath = parent.getPath();
+        Node oldNode = null;
+        final int oldSize = old.size();
+        for (int i = 0; i < oldSize; i++) {
+            if (parentPath.equals(old.get(i).getPath())) {
+                oldNode = old.remove(i);
+                break;
+            }
+        }
+        if (oldNode == null) {
             parent.setHasChanged(true);
         } else {
-            var oldNode = oldNodeOp.get();
             parent.setHasChanged(!oldNode.getHash().equals(parent.getHash()));
             parent.getChildren().forEach(c -> compareNode(c, old));
         }
