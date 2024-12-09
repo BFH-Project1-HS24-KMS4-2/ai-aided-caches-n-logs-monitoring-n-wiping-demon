@@ -20,7 +20,9 @@ public class EvaluationServiceTempTest {
         var files = List.of(
                 //"C:\\Users\\Luca\\.azure\\logs\\telemetry.log",
                 //"C:\\Users\\Luca\\AppData\\Local\\Discord\\Discord_updater_r00003.log",
-                "C:\\Users\\Luca\\Ubiquiti UniFi\\logs\\server.log"
+                //"C:\\Users\\Luca\\Ubiquiti UniFi\\logs\\server.log",
+                //"C:\\Users\\Luca\\testlog.txt",
+                "C:\\Users\\Luca\\testlog2.txt"
         );
         files.forEach(file -> {
             System.out.println(evaluationDomainService.evaluate(file));
