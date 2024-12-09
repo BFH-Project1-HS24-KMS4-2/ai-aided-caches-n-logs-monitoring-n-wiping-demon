@@ -18,8 +18,8 @@ public class EvaluationServiceTempTest {
     @Test
     void requestTest() {
         var files = List.of(
-                "C:\\Users\\Luca\\.azure\\logs\\telemetry.log",
-                "C:\\Users\\Luca\\AppData\\Local\\Discord\\Discord_updater_r00003.log",
+                //"C:\\Users\\Luca\\.azure\\logs\\telemetry.log",
+                //"C:\\Users\\Luca\\AppData\\Local\\Discord\\Discord_updater_r00003.log",
                 "C:\\Users\\Luca\\Ubiquiti UniFi\\logs\\server.log"
         );
         files.forEach(file -> {

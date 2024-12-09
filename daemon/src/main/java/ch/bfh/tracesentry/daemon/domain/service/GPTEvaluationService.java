@@ -32,7 +32,7 @@ public class GPTEvaluationService implements EvaluationService {
         try {
             String fileContent = Files.readString(Path.of(filePath), Charset.defaultCharset());
 
-            String requestBody = getPrompt(fileContent);
+            String requestBody = getPrompt(filePath, fileContent);
 
 
             org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
@@ -53,11 +53,28 @@ public class GPTEvaluationService implements EvaluationService {
         }
     }
 
-    private String getPrompt(String fileContent) {
+    private String getPrompt(String path, String fileContent) {
 
-        final var SYSTEM_PROMPT = "You receive entire file contents including their file name and path. Especially log or cache files. You will check these for harmful or problematic features.";
+        final var SYSTEM_PROMPT = """
+                You receive the entire file content including file name and path. Especially log or cache files. You check these for harmful or problematic features.
+                
+                You answer in a maximum of 5 sentences the intended use and your assessment (harmful, potentially harmful, harmless)
+                
+                Example:
+                
+                Intended use:
+                [Intended use of the file in a maximum of 5 sentences]
+                
+                Assessment:
+                [Harmful / potentially harmful / harmless]""";
 
-        var request = new GPTRequest(SYSTEM_PROMPT, fileContent);
+        var userPrompt = """
+                file path: %s
+                file content:
+                %s""".formatted(path, fileContent);
+
+
+        var request = new GPTRequest(SYSTEM_PROMPT, userPrompt);
         try {
             return objectMapper.writeValueAsString(request);
         } catch (Exception e) {
