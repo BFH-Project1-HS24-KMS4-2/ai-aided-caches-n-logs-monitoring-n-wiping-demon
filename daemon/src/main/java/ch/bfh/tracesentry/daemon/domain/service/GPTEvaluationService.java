@@ -57,7 +57,7 @@ public class GPTEvaluationService implements EvaluationService {
 
         final var SYSTEM_PROMPT = "You receive entire file contents including their file name and path. Especially log or cache files. You will check these for harmful or problematic features.";
 
-        var request = new GPTRequest(SYSTEM_PROMPT, fileContent, "o1-mini");
+        var request = new GPTRequest(SYSTEM_PROMPT, fileContent);
         try {
             return objectMapper.writeValueAsString(request);
         } catch (Exception e) {

@@ -17,7 +17,7 @@ public class GPTRequest {
     }
 
     public GPTRequest(String systemPrompt, String userPrompt, String model) {
-        //messages.add(new GPTMessage("system", systemPrompt));
+        messages.add(new GPTMessage("system", systemPrompt));
         messages.add(new GPTMessage("user", systemPrompt + "\n" + userPrompt));
         this.model = model;
     }
