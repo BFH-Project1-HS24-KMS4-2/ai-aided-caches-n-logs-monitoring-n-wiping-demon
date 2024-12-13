@@ -5,6 +5,7 @@ import ch.bfh.tracesentry.daemon.exception.InternalServerErrorException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -21,7 +22,8 @@ import static ch.bfh.tracesentry.daemon.common.Constants.SYSTEM_PROMPT;
 @Service
 public class GPTInspectionService implements InspectionService {
 
-    private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    @Value("${ai.openai_endpoint}")
+    private String OPENAI_API_URL;
 
     private final RestTemplate restTemplate;
 
