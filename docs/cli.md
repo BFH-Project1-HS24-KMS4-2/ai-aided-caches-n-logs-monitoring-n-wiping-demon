@@ -13,6 +13,7 @@
 7. [monitor remove](#7-monitor-remove)
 8. [monitor compare](#8-monitor-compare)
 9. [monitor snapshots](#9-monitor-snapshots)
+10. [inspect](#10-inspect)
 
 ---
 
@@ -359,11 +360,6 @@ Assessment:
 Harmless
 ```
 
-No API key set:
-```
-Error: No OpenAI API key found. Please set the OPENAI_API_KEY environment variable.
-```
-
 File not found:
 ```
 Error: File not found.
@@ -371,5 +367,5 @@ Error: File not found.
 
 Error message:
 ``` 
-Error: Failed to inspect file. Make sure the file is accessible and the connection to the internet is working. 
+Error: Failed to inspect file. Make sure the file is accessible, the connection to the internet is working and the environment variable OPENAI_API_KEY is set.
 ```
