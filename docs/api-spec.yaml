@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: My CLI API
+  title: AI-Aided Caches n Logs Monitoring n Wiping Daemon API
   version: 1.0.0
   description: A command-line tool for monitoring and wiping cache and log files.
 
@@ -191,6 +191,35 @@ paths:
                   $ref: '#/components/schemas/SnapshotDTO'
         404:
           description: The path with the specified ID is not being monitored.
+  /inspect:
+    get:
+      summary: Inspects a given file by querying a GPT service.
+      parameters:
+        - name: path
+          in: query
+          description: The full path to the file you want to inspect.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inspection completed successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "
+                Intended use:
+                This log file seems to be associated with.
+
+                Assessment:  
+                Harmless"
+        '400':
+          description: Invalid input
+        '422':
+          description: Not processable input
+        '500':
+          description: Internal server error
 
 components:
   schemas:

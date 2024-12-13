@@ -13,6 +13,7 @@
 7. [monitor remove](#7-monitor-remove)
 8. [monitor compare](#8-monitor-compare)
 9. [monitor snapshots](#9-monitor-snapshots)
+10. [inspect](#10-inspect)
 
 ---
 
@@ -331,3 +332,40 @@ If no snapshots are available:
 No snapshots found for monitored path with ID [id].
 ```
 ---
+
+### 10. `inspect`
+This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key
+is required so that this can be queried.
+
+#### Usage:
+```bash
+ts inspect <path>
+```
+
+#### Parameters:
+- **`path`**: The full path to the file you want to inspect. Either the relative path from the current directory or the absolute path can be used.
+
+#### Examples:
+- Inspect a file:
+  ```bash
+  ts inspect /path/to/unifi-controller.log
+  ```
+  
+Successful inspection:
+```
+Intended use:  
+This log file seems to be associated with the UniFi Controller [...]
+
+Assessment:  
+Harmless
+```
+
+File not found:
+```
+Error: File not found.
+```
+
+Error message:
+``` 
+Error: Failed to inspect file. Make sure the file is accessible, the connection to the internet is working and the environment variable OPENAI_API_KEY is set.
+```
