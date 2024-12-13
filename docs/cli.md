@@ -331,3 +331,45 @@ If no snapshots are available:
 No snapshots found for monitored path with ID [id].
 ```
 ---
+
+### 10. `inspect`
+This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key
+is required so that this can be queried.
+
+#### Usage:
+```bash
+ts inspect <path>
+```
+
+#### Parameters:
+- **`path`**: The full path to the file you want to inspect. Either the relative path from the current directory or the absolute path can be used.
+
+#### Examples:
+- Inspect a file:
+  ```bash
+  ts inspect /path/to/unifi-controller.log
+  ```
+  
+Successful inspection:
+```
+Intended use:  
+This log file seems to be associated with the UniFi Controller [...]
+
+Assessment:  
+Harmless
+```
+
+No API key set:
+```
+Error: No OpenAI API key found. Please set the OPENAI_API_KEY environment variable.
+```
+
+File not found:
+```
+Error: File not found.
+```
+
+Error message:
+``` 
+Error: Failed to inspect file. Make sure the file is accessible and the connection to the internet is working. 
+```
