@@ -12,9 +12,6 @@ build-job:
   script:
     - mvn package
   artifacts:
-    - name: windows
-      paths:
-        - deployment/windows
-    - name: unix
-      paths:
-        - deployment/unix
+    paths:
+      - target/windows.zip
+      - target/unix.zip
