@@ -8,6 +8,18 @@
 \usepackage{wasysym}
 \usepackage{parskip}
 \usepackage{bm}
+\usepackage{xcolor}
+
+\lstset{
+    backgroundcolor=\color{black}, % Black background
+    basicstyle=\ttfamily\small\color{white}, % Monospace font, white text
+    frame=single, % Box around the code
+    rulecolor=\color{gray}, % Border color
+    breaklines=true, % Allow breaking long lines
+    showstringspaces=false, % Don't show spaces as symbols
+    xleftmargin=5pt, % Margin for padding
+    xrightmargin=5pt
+}
 
 
 \usepackage{geometry}
@@ -331,6 +343,7 @@
     \chapter{Implementierung}
 
     \section{Performanz und Optimierung}
+
     \subsection{Komplexität}
 
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
@@ -354,7 +367,6 @@
     \paragraph{Linearisierung}
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
-
 
     \subsection{Caching}
     Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
@@ -401,19 +413,20 @@
         \item \verb|snapshot_node.deleted_in_next_snapshot|
     \end{itemize}
 
+
     \section{Architektur}
 
     \subsection{Architekturentscheid}
     In diesem Abschnitt soll erläutert werden, was wir uns für Gedanken bezüglich der Architektur gemacht haben
     und für was wir uns schlussendlich aus welchen Gründen entschieden haben.
 
-            {\large\bfseries Daemon}
+        {\large\bfseries Daemon}
 
     Als erstes war uns aus den Anforderungen klar, dass wir einen Daemon brauchen, also ein Programm, welches immer im
     Hintergrund (seit Start des Computers) laufen soll.
     Also muss das bereits ein eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
 
-            {\large\bfseries Database}
+        {\large\bfseries Database}
 
     Als nächstes gibt es die Anforderung, dass Pfad-Analysen zu einem späteren Zeitpunkt verglichen werden können sollen.
     So war für uns auch klar, dass wir eine Datenbank (DBMS) brauchen.
@@ -467,7 +480,7 @@
     \textbf{Begründung zur Variante Remote} Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
     Es wäre eher nur Mehraufwand, der sich aktuell nicht lohnt.
 
-            {\large\bfseries TaskScheduler}
+        {\large\bfseries TaskScheduler}
 
     Für die Anforderung, dass periodisch Dateipfade analysiert werden sollen, war für uns klar dass wir dafür so etwas wie einen
     Task-Scheduler brauchen.
@@ -475,7 +488,7 @@
     So ist es auch für die Kommunikation einfacher, da die Resultate der Analyse-Tasks direkt wieder zum Daemon zurückkommuniziert werden können
     und so auch einfach weiterverarbeitet werden können, was vor allem das Speichern in die Datenbank betrifft.
 
-            {\large\bfseries Anwender-Schnittstelle}
+        {\large\bfseries Anwender-Schnittstelle}
 
     Als Nächstes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
     aufrufen kann.
@@ -520,7 +533,7 @@
     Allerdings wäre der Aufwand direkt damit zu starten für uns zu gross, da wir den Fokus erstmal auf die Funktionalitäten legen wollen.
     Aber als Future Work könnte man definitiv noch ein GUI dazubauen.
 
-            {\large\bfseries Schnittstelle CLI $\leftrightarrow$ Daemon}
+        {\large\bfseries Schnittstelle CLI $\leftrightarrow$ Daemon}
 
     Zuletzt braucht es noch eine Schnittstelle zwischen der CLI und dem Daemon,
     um die Anweisungen des Anwenders von der CLI auf den Daemon zu kommunizieren.
@@ -591,7 +604,7 @@
     In diesem Abschnitt wird erläutert, was wir uns für Gedanken bezüglich Technologien für die verschiedenen Komponenten
     des Systems gemacht haben und wie wir uns entschieden haben.
 
-            {\large\bfseries Datenbank}
+        {\large\bfseries Datenbank}
 
     Bezüglich der Komponente Datenbank gibt es einige Varianten, die wir abwägen und eine geeignete für unser Projekt finden müssen.
     Die erste Frage ist \textbf{NoSQL} oder \textbf{SQL}.
@@ -631,7 +644,7 @@
 
     \textbf{H2,SQLite} ...
 
-            {\large\bfseries CLI/Daemon}
+        {\large\bfseries CLI/Daemon}
 
     Dann gibt es noch die Komponenten CLI und Daemon, wofür wir gerne eine einheitliche Technologie hätten,
     um es simpel zu halten und auch einfacher gewisse Teile zwischen den beiden Komponenten teilen zu können.
@@ -669,6 +682,59 @@
 
 
     \section{Installationshandbuch \& Skript}
+    In diesem Kapitel sind die Installationsanleitungen für alle unterstützten Plattformen beschrieben, um es
+    den Benutzern einfach zu machen unser System auf ihren Geräten zu verwenden.
+
+    Als Vorbedingung muss eine Java Laufzeitumgebung bereits auf dem entsprechenden Gerät installiert sein.
+
+    \subsection{Unix}
+    \begin{enumerate}
+        \item Download the latest .zip artifact from this repository.
+        \item Unpack the archive to your desired installation directory for the TraceSentry.
+        \item Open a terminal and set the following environment variables:
+        \begin{lstlisting}[label={lst:lstlisting-unix-1}]
+export TRACE_SENTRY_DIR=<absolute path to installation dir>
+export PATH=$PATH:$TRACE_SENTRY_DIR/bin
+        \end{lstlisting}
+        And add these commands to your shell configuration file (probably ~/.bashrc).
+        \item If you want to use the inspect feature create an openapi API-KEY following these instructions: %todo
+        after that set the generated API-KEY as environment variable as follows in a terminal:
+        \begin{lstlisting}[label={lst:lstlisting-unix-2}]
+export TRACE_SENTRY_API_KEY=<generated API-KEY>
+        \end{lstlisting}
+        And add also this command to your shell configuration file.
+        When you skip this part you won't have access to the inspect feature but the rest will work the same way.
+        \item If you want that the daemon starts every time automatically in the background when you start your system,
+        you can do the following in a terminal:
+        \begin{lstlisting}[label={lst:lstlisting-unix-3}]
+crontab -e
+// Add this line to the opened file:
+@reboot $TRACE_SENTRY_DIR/bin/daemon
+        \end{lstlisting}
+        Then save the file.
+    \end{enumerate}
+
+    \subsection{Windows}
+    \begin{enumerate}
+        \item Download the latest .zip artifact from this repository.
+        \item Unpack the archive to your desired installation directory for the TraceSentry.
+        \item Open a terminal and set the following environment variables:
+        \begin{lstlisting}[label={lst:lstlisting-windows-1}]
+setx TRACE_SENTRY_DIR <absolute path to installation dir>
+setx PATH %PATH%;%TRACE_SENTRY_DIR%/bin
+        \end{lstlisting}
+        \item If you want to use the inspect feature create an openapi API-KEY following these instructions: %todo
+        after that set the generated API-KEY as environment variable as follows in a terminal:
+        \begin{lstlisting}[label={lst:lstlisting-windows-2}]
+setx TRACE_SENTRY_API_KEY <generated API-KEY>
+        \end{lstlisting}
+        When you skip this part you won't have access to the inspect feature but the rest will work the same way.
+        \item If you want that the daemon starts every time automatically in the background when you start your system,
+        you can do the following in a terminal:
+        \begin{lstlisting}[label={lst:lstlisting-windows-3}]
+copy %TRACE_SENTRY_DIR%\bin\daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+        \end{lstlisting}
+    \end{enumerate}
 
 
     \section{Benutzerhandbuch}
