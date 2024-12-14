@@ -4,3 +4,6 @@ out
 cli.log
 current_time.txt
 tracesentry.db
+deployment/unix/src
+deployment/windows/src
+target

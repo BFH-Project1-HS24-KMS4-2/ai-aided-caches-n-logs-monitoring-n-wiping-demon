@@ -11,4 +11,42 @@
         <module>daemon</module>
         <module>cli</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version> <!-- Use latest version -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase> <!-- This binds the task to the 'package' phase -->
+                        <configuration>
+                            <target>
+                                <copy file="daemon/target/daemon-${version}.jar"
+                                      tofile="deployment/unix/src/daemon.jar"/>
+                                <copy file="cli/target/cli-${version}.jar"
+                                      tofile="deployment/unix/src/cli.jar"/>
+                                <copy file="daemon/target/daemon-${version}.jar"
+                                      tofile="deployment/windows/src/daemon.jar"/>
+                                <copy file="cli/target/cli-${version}.jar"
+                                      tofile="deployment/windows/src/cli.jar"/>
+
+                                <zip destfile="${project.build.directory}/windows.zip">
+                                    <fileset dir="deployment/windows" />
+                                </zip>
+                                <zip destfile="${project.build.directory}/unix.zip">
+                                    <fileset dir="deployment/unix"/>
+                                </zip>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

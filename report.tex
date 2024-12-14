@@ -709,7 +709,7 @@ export TRACE_SENTRY_API_KEY=<generated API-KEY>
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
 crontab -e
 // Add this line to the opened file:
-@reboot $TRACE_SENTRY_DIR/bin/daemon
+@reboot $TRACE_SENTRY_DIR/bin/ts-daemon
         \end{lstlisting}
         Then save the file.
     \end{enumerate}
@@ -732,7 +732,7 @@ setx TRACE_SENTRY_API_KEY <generated API-KEY>
         \item If you want that the daemon starts every time automatically in the background when you start your system,
         you can do the following in a terminal:
         \begin{lstlisting}[label={lst:lstlisting-windows-3}]
-copy %TRACE_SENTRY_DIR%\bin\daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+copy %TRACE_SENTRY_DIR%\bin\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
         \end{lstlisting}
     \end{enumerate}
 
