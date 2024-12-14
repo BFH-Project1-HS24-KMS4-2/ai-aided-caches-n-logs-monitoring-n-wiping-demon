@@ -15,3 +15,5 @@ build-job:
     paths:
       - target/windows.zip
       - target/unix.zip
+  rules:
+    - if: $CI_COMMIT_BRANCH == main
