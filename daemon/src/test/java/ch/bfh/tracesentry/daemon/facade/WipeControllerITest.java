@@ -1,9 +1,11 @@
 package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.lib.dto.WipeFileDTO;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -18,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WipeControllerITest {
 
     @Test
-    public void testFileToWipeDoesNotExist(@TempDir Path tempDir) throws IOException {
+    public void testFileToWipeDoesNotExist(@TempDir Path tempDir) {
 
         WipeFileDTO wipeFileDTO = new WipeFileDTO();
 
@@ -32,7 +34,7 @@ public class WipeControllerITest {
                 .post()
                 .bodyValue(wipeFileDTO)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().value(status -> Assertions.assertEquals(status, HttpStatus.UNPROCESSABLE_ENTITY.value()));
     }
 
     @Test

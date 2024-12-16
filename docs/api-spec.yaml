@@ -249,8 +249,8 @@ paths:
                 example: "Successfully wiped /path/to/file.log."
         '400':
           description: Invalid input.
-        '404':
-          description: File not found.
+        '422':
+          description: File not found or not writable.
         '500':
           description: Internal server error.
 
