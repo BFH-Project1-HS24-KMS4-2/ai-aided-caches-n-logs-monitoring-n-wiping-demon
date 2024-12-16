@@ -220,6 +220,40 @@ paths:
           description: Not processable input
         '500':
           description: Internal server error
+  /wipe:
+    post:
+      summary: Wipes the content of a file or deletes it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The full path to the file you want to wipe.
+                remove:
+                  type: boolean
+                  description: If true, the file will be deleted. If false or omitted, the file content will be cleared.
+                  default: false
+              required:
+                - path
+      responses:
+        '200':
+          description: File successfully wiped or deleted.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Successfully wiped /path/to/file.log."
+        '400':
+          description: Invalid input.
+        '404':
+          description: File not found.
+        '500':
+          description: Internal server error.
+
 
 components:
   schemas:
