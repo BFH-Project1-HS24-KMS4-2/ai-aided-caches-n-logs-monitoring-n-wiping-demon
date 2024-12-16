@@ -163,4 +163,9 @@ public class DaemonAdapter {
     public String inspect(String canonicalPath) {
         return restTemplate.getForObject(BASE_URL + "inspect?path=" + canonicalPath, String.class);
     }
+
+    public ResponseEntity<Void> wipe(String path, boolean remove) {
+        var dto = new WipeFileDTO(path, remove);
+        return restTemplate.postForEntity(BASE_URL + "wipe", dto, Void.class);
+    }
 }

@@ -15,10 +15,13 @@ import org.springframework.shell.test.autoconfigure.AutoConfigureShellTestClient
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -41,8 +44,10 @@ public class WipeCommandsITest {
 
     @Test
     void testClearFileContents() {
-        var dto = new WipeFileDTO("test.log", false);
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "wipe", dto, Void.class))
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "wipe"),
+                any(WipeFileDTO.class),
+                eq(Void.class)))
                 .thenReturn(ResponseEntity.ok().build());
 
         ShellTestClient.NonInteractiveShellSession session = client
@@ -57,8 +62,10 @@ public class WipeCommandsITest {
 
     @Test
     void testRemoveFile() {
-        var dto = new WipeFileDTO("test.log", true);
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "wipe", dto, Void.class))
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "wipe"),
+                any(WipeFileDTO.class),
+                eq(Void.class)))
                 .thenReturn(ResponseEntity.ok().build());
 
         ShellTestClient.NonInteractiveShellSession session = client
@@ -73,9 +80,11 @@ public class WipeCommandsITest {
 
     @Test
     void testClearNotExistingFile() {
-        var dto = new WipeFileDTO("notexisting.log", false);
-        when(restTemplate.postForEntity(DaemonAdapter.BASE_URL + "wipe", dto, Void.class))
-                .thenReturn(ResponseEntity.notFound().build());
+        when(restTemplate.postForEntity(
+                eq(DaemonAdapter.BASE_URL + "wipe"),
+                any(WipeFileDTO.class),
+                eq(Void.class)))
+                .thenReturn(ResponseEntity.status(422).build());
 
         ShellTestClient.NonInteractiveShellSession session = client
                 .nonInterative("wipe", "notexisting.log")
