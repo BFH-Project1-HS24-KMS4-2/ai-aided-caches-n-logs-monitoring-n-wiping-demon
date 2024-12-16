@@ -396,14 +396,19 @@ ts wipe <path> [--remove]
     ts wipe /path/to/cool.log --remove
     ```
   
-Successful wipe:
+Successful clearing:
 ```
-Successfully wiped /path/to/cool.log.
+Successfully cleared file.
 ```
 
-File not found:
+Successful removal:
 ```
-Error: File not found.
+Successfully removed file.
+```
+
+File not processable:
+```
+Error: File could not be processed.
 ```
 
 Error message:
