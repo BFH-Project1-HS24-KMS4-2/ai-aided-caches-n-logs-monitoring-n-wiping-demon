@@ -330,8 +330,8 @@
 
     \chapter{Implementierung}
 
-    \subsection{Performanz und Optimierung}
-    \subsubsection{Komplexität}
+    \section{Performanz und Optimierung}
+    \subsection{Komplexität}
 
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
@@ -356,7 +356,7 @@
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
 
 
-    \subsubsection{Caching}
+    \subsection{Caching}
     Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
     haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
 
@@ -378,7 +378,7 @@
         \end{itemize}
     \end{enumerate}
 
-    \subsubsection{Indexing}
+    \subsection{Indexing}
     Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
 
     Index sinnvoll:

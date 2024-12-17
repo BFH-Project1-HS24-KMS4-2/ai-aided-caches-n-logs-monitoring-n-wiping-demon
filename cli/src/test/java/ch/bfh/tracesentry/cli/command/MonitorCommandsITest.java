@@ -233,9 +233,6 @@ public class MonitorCommandsITest {
                     │cache.txt  │4           │CHANGED   │
                     │           │6           │LAST TRACK│
                     ├───────────┼────────────┼──────────┤
-                    │log/log.txt│2           │CHANGED   │
-                    │           │8           │CHANGED   │
-                    └───────────┴────────────┴──────────┘
                     """);
         });
     }

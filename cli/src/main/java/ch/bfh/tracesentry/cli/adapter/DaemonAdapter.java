@@ -147,8 +147,25 @@ public class DaemonAdapter {
         return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/changes?start=" + start + "&end=" + end, MonitoredChangesDTO.class);
     }
 
+    /**
+     * @param monitoredPathId id of the monitored path to get snapshots from
+     * @return List of SnapshotDTO objects
+     */
     public ResponseEntity<List<SnapshotDTO>> getSnapshotsOf(Integer monitoredPathId) {
         ParameterizedTypeReference<List<SnapshotDTO>> responseType = new ParameterizedTypeReference<>() {};
         return restTemplate.exchange(BASE_URL + "monitored-path/" + monitoredPathId + "/snapshots", HttpMethod.GET, null, responseType);
+    }
+
+    /**
+     * @param canonicalPath path to the file to inspect
+     * @return String containing the inspection result
+     */
+    public String inspect(String canonicalPath) {
+        return restTemplate.getForObject(BASE_URL + "inspect?path=" + canonicalPath, String.class);
+    }
+
+    public ResponseEntity<Void> wipe(String path, boolean remove) {
+        var dto = new WipeFileDTO(path, remove);
+        return restTemplate.postForEntity(BASE_URL + "wipe", dto, Void.class);
     }
 }
