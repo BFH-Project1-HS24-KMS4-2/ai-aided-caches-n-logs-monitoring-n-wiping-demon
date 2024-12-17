@@ -1,0 +1,60 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 http://maven.apache.org/xsd/assembly-2.1.1.xsd">
+
+    <id>submission</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <!-- Include src files -->
+        <fileSet>
+            <directory>${basedir}</directory>
+            <outputDirectory>src</outputDirectory>
+            <includes>
+                <include>**/src/main/java/**</include>
+                <include>**/src/main/resources/**</include>
+                <include>**/src/test/java/**</include>
+                <include>**/src/test/resources/**</include>
+            </includes>
+        </fileSet>
+        <!-- Include jar and deployment files -->
+        <fileSet>
+            <directory>${basedir}/cli/target</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/daemon/target</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/lib/target</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/deployment</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+        <!-- Include README.md -->
+        <fileSet>
+            <directory>${basedir}</directory>
+            <outputDirectory>.</outputDirectory>
+            <includes>
+                <include>README.md</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

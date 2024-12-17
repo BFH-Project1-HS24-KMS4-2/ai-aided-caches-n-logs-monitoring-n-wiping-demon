@@ -13,7 +13,6 @@ build-job:
     - mvn package
   artifacts:
     paths:
-      - target/windows.zip
-      - target/unix.zip
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
+      - target/trace-sentry-*-submission.zip
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == "main"
