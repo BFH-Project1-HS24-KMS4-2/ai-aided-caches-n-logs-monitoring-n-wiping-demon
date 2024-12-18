@@ -15,18 +15,19 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 <!-- todo: add link for api-key generation -->
 
 ### Unix
-1. Download the latest .zip artifact from this repository.
+1. Browse the latest artifact built by the main branch from this repository and download
+the target/tracesentry-<version>-submission.zip to your machine.
 2. Unpack the archive to your desired installation directory for the TraceSentry.
 3. Open a terminal and set the following environment variables:
     ```
     export TRACE_SENTRY_DIR=<absolute path to installation dir>
-    export PATH=$PATH:$TRACE_SENTRY_DIR/bin
+    export PATH=$PATH:$TRACE_SENTRY_DIR
    ```
     And add these commands to your shell configuration file (probably ~/.bashrc).
 4. If you want to use the inspect feature create an openapi API-KEY following these instructions: ...
 after that set the generated API-KEY as environment variable as follows in a terminal:
     ```
-    export TRACE_SENTRY_API_KEY=<generated API-KEY>
+    export OPENAI_API_KEY=<generated API-KEY>
     ```
     And add also this command to your shell configuration file.
 When you skip this part you won't have access to the inspect feature but the rest will work the same way.
@@ -35,28 +36,29 @@ you can do the following in a terminal:
     ```
     crontab -e
     // Add this line to the opened file:
-    @reboot $TRACE_SENTRY_DIR/bin/ts-daemon
+    @reboot $TRACE_SENTRY_DIR/ts-daemon
     ```
    Then save the file.
 
 ### Windows
-1. Download the latest .zip artifact from this repository.
+1. Browse the latest artifact built by the main branch from this repository and download
+the target/tracesentry-<version>-submission.zip to your machine.
 2. Unpack the archive to your desired installation directory for the TraceSentry.
 3. Open a terminal and set the following environment variables:
     ```
    setx TRACE_SENTRY_DIR <absolute path to installation dir>
-   setx PATH %PATH%;%TRACE_SENTRY_DIR%/bin
+   setx PATH %PATH%;%TRACE_SENTRY_DIR%
    ```
 4. If you want to use the inspect feature create an openapi API-KEY following these instructions: ...
 after that set the generated API-KEY as environment variable as follows in a terminal:
     ```
-    setx TRACE_SENTRY_API_KEY <generated API-KEY>
+    setx OPENAI_API_KEY <generated API-KEY>
     ```
    When you skip this part you won't have access to the inspect feature but the rest will work the same way.
 5. If you want that the daemon starts every time automatically in the background when you start your system,
 you can do the following in a terminal:
    ```
-   copy %TRACE_SENTRY_DIR%\bin\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+   copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
    ```
 
 ## Usage

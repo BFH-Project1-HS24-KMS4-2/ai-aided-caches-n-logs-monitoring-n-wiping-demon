@@ -67,4 +67,3 @@ public class GPTInspectionService implements InspectionService {
         return objectMapper.writeValueAsString(request);
     }
 }
-
