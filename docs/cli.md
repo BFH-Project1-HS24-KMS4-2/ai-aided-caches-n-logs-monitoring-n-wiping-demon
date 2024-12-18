@@ -358,6 +358,9 @@ This log file seems to be associated with the UniFi Controller [...]
 
 Assessment:  
 Harmless
+
+Recommended to Wipe:  
+No
 ```
 
 File not found:
