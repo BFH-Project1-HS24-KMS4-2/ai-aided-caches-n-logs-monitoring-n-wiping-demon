@@ -11,10 +11,10 @@
 5. [monitor add](#5-monitor-add)
 6. [monitor list](#6-monitor-list)
 7. [monitor remove](#7-monitor-remove)
-8. [monitor compare](#8-monitor-compare)
-9. [monitor snapshots](#9-monitor-snapshots)
+8. [snapshots list](#8-snapshots-list)
+9. [snapshots compare](#9-snapshots-compare)
 10. [inspect](#10-inspect)
-11. 11 [wipe](#11-wipe)
+11. [wipe](#11-wipe)
 
 ---
 
@@ -246,13 +246,52 @@ Error message if the ID does not exist:
   ```
 
 ---
+### 8. `snapshots list`
+This command lists all snapshots taken for a monitored path.
 
-### 8. `monitor compare`
+#### Usage:
+```bash
+  ts snapshots list --id <ID>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the monitored path to get the snapshots from.
+
+#### Example:
+- Get the snapshots of a monitored path by ID:
+  ```bash
+  ts snapshots list --id 1
+  ```
+Example output of successful execution:
+```
+┌──────┬───────────────────┬──┐
+│Number│Timestamp          │ID│
+├──────┼───────────────────┼──┤
+│1     │01.12.2024 21:25:00│2 │
+├──────┼───────────────────┼──┤
+│2     │01.12.2024 20:25:00│1 │
+└──────┴───────────────────┴──┘
+```
+Example output of unsuccessful execution:
+```
+Error: could not list snapshots.
+```
+If the path is not monitored:
+```
+No monitored path found with ID [id].
+```
+If no snapshots are available:
+```
+No snapshots found for monitored path with ID [id].
+```
+---
+
+### 9. `snapshots compare`
 This command outputs the comparison of a user-defined range of snapshots taken from a given monitored path.
 
 #### Usage:
 ```bash
-  ts monitor compare --id <ID> --start <startNumber> --end <endNumber>
+  ts snapshots compare --id <ID> --start <startNumber> --end <endNumber>
 ```
 
 #### Parameters:
@@ -263,7 +302,7 @@ This command outputs the comparison of a user-defined range of snapshots taken f
 #### Example:
 - Get the comparison of a monitored path by ID and of the last 5 taken snapshots:
   ```bash
-  ts monitor compare --id 1 --start 1 --end 5
+  ts snapshots compare --id 1 --start 1 --end 5
   ```
 Example output of successful execution:
 ```
@@ -291,46 +330,6 @@ Error: Start index needs to be smaller than the end index and not negative.
 If it is an unexpected error:
 ```
 Error: could not compare snapshots.
-```
----
-
-### 9. `monitor snapshots`
-This command lists all snapshots taken for a monitored path.
-
-#### Usage:
-```bash
-  ts monitor snapshots --id <ID>
-```
-
-#### Parameters:
-- **`--id`**: The unique identifier for the monitored path to get the snapshots from.
-
-#### Example:
-- Get the snapshots of a monitored path by ID:
-  ```bash
-  ts monitor snapshots --id 1
-  ```
-Example output of successful execution:
-```
-┌──────┬───────────────────┬──┐
-│Number│Timestamp          │ID│
-├──────┼───────────────────┼──┤
-│1     │01.12.2024 21:25:00│2 │
-├──────┼───────────────────┼──┤
-│2     │01.12.2024 20:25:00│1 │
-└──────┴───────────────────┴──┘
-```
-Example output of unsuccessful execution:
-```
-Error: could not list snapshots.
-```
-If the path is not monitored:
-```
-No monitored path found with ID [id].
-```
-If no snapshots are available:
-```
-No snapshots found for monitored path with ID [id].
 ```
 ---
 

@@ -144,7 +144,7 @@ public class DaemonAdapter {
      * @return MonitoredChangesDTO
      */
     public ResponseEntity<MonitoredChangesDTO> getMonitoredChanges(int id, int start, int end) {
-        return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/changes?start=" + start + "&end=" + end, MonitoredChangesDTO.class);
+        return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/snapshots/changes?start=" + start + "&end=" + end, MonitoredChangesDTO.class);
     }
 
     /**

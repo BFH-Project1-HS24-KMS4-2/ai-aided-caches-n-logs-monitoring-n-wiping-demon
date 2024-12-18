@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.bfh.tracesentry</groupId>
     <artifactId>trace-sentry</artifactId>
-    <version>0.13</version>
+    <version>0.14</version>
     <packaging>pom</packaging>
     <modules>
         <module>lib</module>

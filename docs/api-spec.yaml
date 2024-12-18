@@ -137,7 +137,7 @@ paths:
           description: Path successfully removed from the monitoring database.
         '404':
           description: No monitored path with the specified ID found.
-  /monitored-path/{id}/changes:
+  /monitored-path/{id}/snapshots/changes:
     get:
       summary: Returns a comparison of the monitored path.
       parameters:
