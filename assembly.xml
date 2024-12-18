@@ -8,18 +8,22 @@
     </formats>
 
     <fileSets>
-        <!-- Include src files -->
+        <!-- Include src -->
         <fileSet>
             <directory>${basedir}</directory>
             <outputDirectory>src</outputDirectory>
             <includes>
-                <include>**/src/main/java/**</include>
-                <include>**/src/main/resources/**</include>
-                <include>**/src/test/java/**</include>
-                <include>**/src/test/resources/**</include>
+                <include>**/*</include>
             </includes>
+            <excludes>
+                <exclude>scripts/**</exclude>
+                <exclude>target/**</exclude>
+                <exclude>lib/target/**</exclude>
+                <exclude>daemon/target/**</exclude>
+                <exclude>cli/target/**</exclude>
+            </excludes>
         </fileSet>
-        <!-- Include jar and deployment files -->
+        <!-- Include bin -->
         <fileSet>
             <directory>${basedir}/cli/target</directory>
             <outputDirectory>bin</outputDirectory>
@@ -41,19 +45,12 @@
                 <include>*.jar</include>
             </includes>
         </fileSet>
+        <!-- Include scripts -->
         <fileSet>
-            <directory>${basedir}/deployment</directory>
-            <outputDirectory>bin</outputDirectory>
-            <includes>
-                <include>*</include>
-            </includes>
-        </fileSet>
-        <!-- Include README.md -->
-        <fileSet>
-            <directory>${basedir}</directory>
+            <directory>${basedir}/scripts</directory>
             <outputDirectory>.</outputDirectory>
             <includes>
-                <include>README.md</include>
+                <include>*</include>
             </includes>
         </fileSet>
     </fileSets>
