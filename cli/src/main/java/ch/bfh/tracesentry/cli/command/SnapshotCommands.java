@@ -52,7 +52,7 @@ public class SnapshotCommands {
             System.arraycopy(model, 0, data, 1, model.length);
             TableModel tableModel = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(tableModel);
-            tableBuilder.addFullBorder(BorderStyle.fancy_light);
+            tableBuilder.addFullBorder(BorderStyle.oldschool);
 
             final String table = tableBuilder.build().render(120);
 
@@ -101,7 +101,7 @@ public class SnapshotCommands {
             System.arraycopy(model, 0, data, 1, model.length);
             TableModel tableModel = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(tableModel);
-            tableBuilder.addFullBorder(BorderStyle.fancy_light);
+            tableBuilder.addFullBorder(BorderStyle.oldschool);
             return tableBuilder.build().render(120);
         } catch (RestClientResponseException e) {
             if (e.getStatusCode() == HttpStatusCode.valueOf(404)) {
