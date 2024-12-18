@@ -1,0 +1,6 @@
+@echo off
+setlocal
+
+java -jar "%TRACE_SENTRY_DIR%\src\daemon.jar"
+
+endlocal
