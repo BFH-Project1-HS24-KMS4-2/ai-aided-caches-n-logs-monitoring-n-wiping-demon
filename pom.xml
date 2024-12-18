@@ -3,12 +3,38 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.bfh.tracesentry</groupId>
-    <artifactId>root</artifactId>
-    <version>0.13</version>
+    <artifactId>trace-sentry</artifactId>
+    <version>0.14</version>
     <packaging>pom</packaging>
     <modules>
         <module>lib</module>
         <module>daemon</module>
         <module>cli</module>
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <executions>
+                    <execution>
+                        <id>make-zip</id>
+                        <phase>package</phase> <!-- Run during package phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <!-- Custom descriptor for the ZIP structure -->
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

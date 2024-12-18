@@ -10,7 +10,7 @@
     </parent>
     <groupId>ch.bfh.tracesentry</groupId>
     <artifactId>cli</artifactId>
-    <version>0.13</version>
+    <version>0.14</version>
     <name>cli</name>
     <description>cli</description>
     <url/>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>ch.bfh.tracesentry</groupId>
             <artifactId>lib</artifactId>
-            <version>0.13</version>
+            <version>0.14</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -72,49 +72,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <copy file="${project.build.directory}/${project.build.finalName}.jar"
-                                      todir="../deployment" />
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>clean-deployment-dir</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>../deployment</directory>
-                                    <includes>
-                                        <include>**/*.jar</include>
-                                    </includes>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

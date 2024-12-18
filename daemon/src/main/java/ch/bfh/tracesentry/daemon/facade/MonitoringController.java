@@ -1,7 +1,6 @@
 package ch.bfh.tracesentry.daemon.facade;
 
 import ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService;
-import ch.bfh.tracesentry.daemon.exception.UnprocessableException;
 import ch.bfh.tracesentry.lib.dto.*;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,36 +45,4 @@ public class MonitoringController {
     public void deleteMonitoring(@PathVariable Integer id) {
         monitoringDomainService.deleteMonitoring(id);
     }
-
-    @GetMapping("{id}/changes")
-    public MonitoredChangesDTO getMonitoredChanges(@PathVariable Integer id,
-                                                   @RequestParam(name = "start", defaultValue = "1") Integer startSnapshotNbr,
-                                                   @RequestParam(name = "end", defaultValue = "2") Integer endSnapshotNbr) {
-        final int startIdx = startSnapshotNbr - 1;
-        final int endIdx = endSnapshotNbr - 1;
-
-        if (startIdx >= endIdx || startIdx < 0) {
-            throw new UnprocessableException("Start index needs to be smaller than the end index and not negative.");
-        }
-
-        final List<SnapshotDTO> snapshots = monitoringDomainService.getSnapshotsOf(id);
-        if (startIdx > snapshots.size() - 2 || endIdx > snapshots.size() - 1) {
-            throw new UnprocessableException("Not enough snapshots existing at the moment for this range.");
-        }
-
-        final List<SnapshotComparisonDTO> snapshotComparison = monitoringDomainService.getSnapshotComparison(id, startIdx, endIdx);
-
-        return new MonitoredChangesDTO(
-                monitoringDomainService.getMonitoredPath(id).getPath(),
-                snapshots.get(startIdx).getTimestamp(),
-                snapshots.get(endIdx).getTimestamp(),
-                snapshotComparison
-        );
-    }
-
-    @GetMapping("/{monitoredPathId}/snapshots")
-    public List<SnapshotDTO> getSnapshots(@PathVariable Integer monitoredPathId) {
-        return monitoringDomainService.getSnapshotsOf(monitoredPathId);
-    }
-
 }
