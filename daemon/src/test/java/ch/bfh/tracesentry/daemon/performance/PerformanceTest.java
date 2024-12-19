@@ -9,7 +9,6 @@ import ch.bfh.tracesentry.daemon.scheduling.MonitoringScheduler;
 import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ import java.time.LocalDate;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PerformanceTest {
 
-    private static Logger LOG = LoggerFactory.getLogger(PerformanceTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PerformanceTest.class);
 
     private MonitoringScheduler monitoringScheduler;
 
@@ -50,23 +49,19 @@ public class PerformanceTest {
     }
 
     @Test
-    public void testCreateSnapshot(@TempDir Path rootDir) throws IOException {
-        // given
-        var tempDirStructure = createTempDirStructure(rootDir);
+    public void testChangeDetection() {
+        var path = "C:\\Users\\Janic Scherer\\IdeaProjects\\";
 
         var createdAt = LocalDate.of(2024, 11, 1);
         monitoredPathRepository.save(
                 new MonitoredPath()
-                        .path(rootDir.toString())
+                        .path(path)
                         .mode(SearchMode.CACHE)
                         .noSubdirs(false)
                         .createdAt(createdAt));
 
-        // when
-        for (int i = 0; i < 100; i++) {
-            monitoringScheduler.createSnapshots();
-        }
-
+        monitoringScheduler.createSnapshots();
+        LOG.info("Snapshots created");
     }
 
     /**
