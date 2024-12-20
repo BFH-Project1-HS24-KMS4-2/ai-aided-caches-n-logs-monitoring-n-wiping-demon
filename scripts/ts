@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd "$(dirname "$0")" || exit 1
-
 # check if the first argument is empty
 if [ $# -eq 0 ]; then
     java -Dlogging.level.root=OFF -Dspring.profiles.active=dev -jar "$TRACE_SENTRY_DIR/bin/cli.jar"
@@ -9,8 +7,6 @@ else
     java -Dlogging.level.root=OFF -jar "$TRACE_SENTRY_DIR/bin/cli.jar" "$@"
 fi
 
-# todo: search with workingdir (mby on line 3)
-# todo: check mvn wrapper
-# todo: remove todo from readme
-# todo: autostart on unix does not work like this
-# todo: update instructions in report
+# todo: update instructions in report in german
+# todo: where is db created?
+# todo: check @reboot

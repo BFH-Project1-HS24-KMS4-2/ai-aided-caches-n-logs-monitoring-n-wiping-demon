@@ -1,8 +1,6 @@
 @echo off
 setlocal
 
-cd /d "%~dp0"
-
 :: check if the first argument is empty
 if "%~1"=="" (
     java -Dlogging.level.root=OFF -Dspring.profiles.active=dev -jar "%TRACE_SENTRY_DIR%\bin\cli.jar"
