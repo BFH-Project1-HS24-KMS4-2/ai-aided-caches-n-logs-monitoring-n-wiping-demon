@@ -16,4 +16,9 @@ public interface Constants {
             
             Assessment:
             [Harmful / potentially harmful / harmless]""";
+
+    String TS_DIR_ENV_VARIABLE = "TRACE_SENTRY_DIR";
+    String JAR_EXTENSION = ".jar";
+    String DAEMON_MODULE_NAME = "daemon";
+    String DB_NAME = "tracesentry.db";
 }

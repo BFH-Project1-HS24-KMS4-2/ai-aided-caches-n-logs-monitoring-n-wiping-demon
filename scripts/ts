@@ -6,7 +6,3 @@ if [ $# -eq 0 ]; then
 else
     java -Dlogging.level.root=OFF -jar "$TRACE_SENTRY_DIR/bin/cli.jar" "$@"
 fi
-
-# todo: update instructions in report in german
-# todo: where is db created?
-# todo: check @reboot
