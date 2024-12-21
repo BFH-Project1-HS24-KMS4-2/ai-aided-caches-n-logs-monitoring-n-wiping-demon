@@ -21,20 +21,20 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 ### Unix
 
 1. Browse the latest artifact built by the main branch from this repository and download
-   the target/tracesentry-<version>-submission.zip to your machine.
+   the `target/tracesentry-<version>-submission.zip` to your machine.
 2. Unpack the archive to your desired installation directory for the TraceSentry.
-3. Define the following environment variables in the /etc/environment file:
+3. Define the following environment variables in the `/etc/environment` file:
     ```
    JAVA_HOME=<absolute path to jdk folder>
    TRACE_SENTRY_DIR=<absolute path to installation dir>
    ```
-   And add the TRACE_SENTRY_DIR variable to the PATH at the end of the /etc/profile file:
+   And add the `TRACE_SENTRY_DIR` variable to the `PATH` at the end of the `/etc/profile` file:
    ```
    PATH=$PATH:$TRACE_SENTRY_DIR
    ```
 4. If you want to use the inspect feature create an openai API-KEY following these
    instructions: https://platform.openai.com/settings/organization/billing/overview
-   after that set the generated API-KEY as environment variable at the end of the /etc/profile file:
+   after that set the generated API-KEY as environment variable at the end of the `/etc/profile` file:
     ```
     export OPENAI_API_KEY=<generated API-KEY>
     ```
@@ -52,7 +52,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 ### Windows
 
 1. Browse the latest artifact built by the main branch from this repository and download
-   the target/tracesentry-<version>-submission.zip to your machine.
+   the `target/tracesentry-<version>-submission.zip` to your machine.
 2. Unpack the archive to your desired installation directory for the TraceSentry.
 3. Open a terminal and set the following environment variables:
     ```

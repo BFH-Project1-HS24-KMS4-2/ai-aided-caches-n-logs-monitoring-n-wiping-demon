@@ -342,6 +342,7 @@
 
     \chapter{Implementierung}
 
+
     \section{Performanz und Optimierung}
 
     \subsection{Komplexität}
@@ -687,55 +688,58 @@
 
     Als Vorbedingung muss eine Java Laufzeitumgebung bereits auf dem entsprechenden Gerät installiert sein.
 
-    % todo: update instructions from readme and translate to german
-
     \subsection{Unix}
     \begin{enumerate}
-        \item Download the latest .zip artifact from this repository.
-        \item Unpack the archive to your desired installation directory for the TraceSentry.
-        \item Open a terminal and set the following environment variables:
+        \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
+        \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
+        \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
+        \item Definieren Sie die folgenden Umgebungsvariablen in der Datei \texttt{/etc/environment}:
         \begin{lstlisting}[label={lst:lstlisting-unix-1}]
-export TRACE_SENTRY_DIR=<absolute path to installation dir>
-export PATH=$PATH:$TRACE_SENTRY_DIR/bin
+JAVA_HOME=<absoluter Pfad zum JDK-Ordner>
+TRACE_SENTRY_DIR=<absoluter Pfad zum Installationsverzeichnis>
         \end{lstlisting}
-        And add these commands to your shell configuration file (probably ~/.bashrc).
-        \item If you want to use the inspect feature create an openapi API-KEY following these instructions: %todo
-        after that set the generated API-KEY as environment variable as follows in a terminal:
+        Und fügen Sie die Variable \texttt{TRACE\_SENTRY\_DIR} am Ende der Datei \texttt{/etc/profile} zum \texttt{PATH} hinzu:
         \begin{lstlisting}[label={lst:lstlisting-unix-2}]
-export TRACE_SENTRY_API_KEY=<generated API-KEY>
+PATH=$PATH:$TRACE_SENTRY_DIR
         \end{lstlisting}
-        And add also this command to your shell configuration file.
-        When you skip this part you won't have access to the inspect feature but the rest will work the same way.
-        \item If you want that the daemon starts every time automatically in the background when you start your system,
-        you can do the following in a terminal:
+        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/billing/overview} folgen.
+        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
-crontab -e
-// Add this line to the opened file:
-@reboot $TRACE_SENTRY_DIR/bin/ts-daemon
+export OPENAI_API_KEY=<generierter API-Schlüssel>
         \end{lstlisting}
-        Then save the file.
+        Wenn Sie diesen Teil überspringen, haben Sie keinen Zugriff auf die Inspektionsfunktion, aber der Rest wird genauso funktionieren.
+        \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
+        \begin{lstlisting}[label={lst:lstlisting-unix-4}]
+crontab -e
+// Fügen Sie die folgende Zeile am Ende der geöffneten Datei hinzu
+@reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts-daemon
+        \end{lstlisting}
+        Speichern Sie dann die Datei.
+        \item Nach einem Systemneustart sind Sie bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
     \subsection{Windows}
     \begin{enumerate}
-        \item Download the latest .zip artifact from this repository.
-        \item Unpack the archive to your desired installation directory for the TraceSentry.
-        \item Open a terminal and set the following environment variables:
+        \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
+        \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
+        \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
+        \item Öffnen Sie ein Terminal und setzen Sie die folgenden Umgebungsvariablen:
         \begin{lstlisting}[label={lst:lstlisting-windows-1}]
-setx TRACE_SENTRY_DIR <absolute path to installation dir>
-setx PATH %PATH%;%TRACE_SENTRY_DIR%/bin
+setx TRACE_SENTRY_DIR <absoluter Pfad zum Installationsverzeichnis>
+// Terminal neu starten
+setx PATH %PATH%;%TRACE_SENTRY_DIR%
         \end{lstlisting}
-        \item If you want to use the inspect feature create an openapi API-KEY following these instructions: %todo
-        after that set the generated API-KEY as environment variable as follows in a terminal:
+        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/billing/overview} folgen.
+        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable in einem Terminal:
         \begin{lstlisting}[label={lst:lstlisting-windows-2}]
-setx TRACE_SENTRY_API_KEY <generated API-KEY>
+setx OPENAI_API_KEY <generierter API-Schlüssel>
         \end{lstlisting}
-        When you skip this part you won't have access to the inspect feature but the rest will work the same way.
-        \item If you want that the daemon starts every time automatically in the background when you start your system,
-        you can do the following in a terminal:
+        Wenn Sie diesen Teil überspringen, haben Sie keinen Zugriff auf die Inspektionsfunktion, aber der Rest wird genauso funktionieren.
+        \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
         \begin{lstlisting}[label={lst:lstlisting-windows-3}]
-copy %TRACE_SENTRY_DIR%\bin\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
         \end{lstlisting}
+        \item Starten Sie das Terminal neu, und Sie sind bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
 
