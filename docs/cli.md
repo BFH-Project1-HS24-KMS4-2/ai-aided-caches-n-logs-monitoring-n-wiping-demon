@@ -20,6 +20,7 @@
 
 ### 1. `run`
 This command starts the daemon process by specifying the path to the JAR file if it is not already running. If the daemon is already running, it will not be restarted.
+If the path is not provided, the command will attempt to infer the path from the environment variable `TRACE_SENTRY_DIR`.
 
 #### Usage:
 ```bash
@@ -27,7 +28,7 @@ ts run <path>
 ```
 
 #### Parameters:
-- **`path`**: The full path to the daemon JAR file.  Either the relative path from the current directory or the absolute path can be used.
+- **`path`**: The full path to the daemon JAR file. Either the relative path from the current directory or the absolute path can be used. (Optional: default value is the composed path from the installation directory, as described above)
 
 #### Examples:
 ```bash
@@ -264,13 +265,13 @@ This command lists all snapshots taken for a monitored path.
   ```
 Example output of successful execution:
 ```
-┌──────┬───────────────────┬──┐
-│Number│Timestamp          │ID│
-├──────┼───────────────────┼──┤
-│1     │01.12.2024 21:25:00│2 │
-├──────┼───────────────────┼──┤
-│2     │01.12.2024 20:25:00│1 │
-└──────┴───────────────────┴──┘
++------+-------------------+--+
+|Number|Timestamp          |ID|
++------+-------------------+--+
+|1     |18.12.2024 22:42:01|2 |
++------+-------------------+--+
+|2     |18.12.2024 22:41:15|1 |
++------+-------------------+--+
 ```
 Example output of unsuccessful execution:
 ```
@@ -307,15 +308,15 @@ This command outputs the comparison of a user-defined range of snapshots taken f
 Example output of successful execution:
 ```
 Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
-┌───────────┬────────────┬──────────┐
-│Path       │Snapshot IDs│Comparison│
-├───────────┼────────────┼──────────┤
-│cache.txt  │4           │CHANGED   │
-│           │6           │LAST TRACK│
-├───────────┼────────────┼──────────┤
-│log/log.txt│2           │CHANGED   │
-│           │8           │CHANGED   │
-└───────────┴────────────┴──────────┘
++-------------------+-------------------+-----------+
+| Path              | Snapshot IDs      | Comparison|
++-------------------+-------------------+-----------+
+| cache.txt         | 4                 | CHANGED   |
+|                   | 6                 | LAST TRACK|
++-------------------+-------------------+-----------+
+| log/log.txt       | 2                 | CHANGED   |
+|                   | 8                 | CHANGED   |
++-------------------+-------------------+-----------+
 ```
 Example output of unsuccessful execution:
 
