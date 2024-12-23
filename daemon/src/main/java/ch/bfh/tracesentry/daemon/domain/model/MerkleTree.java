@@ -65,7 +65,7 @@ public class MerkleTree {
                 if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
                     try {
                         childNode = createNodeForFile(file, snapshot);
-                    } catch (IOException ignored) {
+                    } catch (Exception ignored) {
                         continue;
                     }
                 } else {
@@ -81,7 +81,7 @@ public class MerkleTree {
         parent.setChildren(children);
     }
 
-    private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException {
+    private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException, OutOfMemoryError {
         Node fileNode = new Node();
         fileNode.setPath(file.getAbsolutePath());
         fileNode.setSnapshot(snapshot);
