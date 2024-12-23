@@ -20,17 +20,11 @@ public class MerkleTree {
     private final List<Node> linearizedNodes = new ArrayList<>();
 
     public MerkleTree(MonitoredPath path, Snapshot snapshot) {
-        try {
-            this.monitoredPath = path;
-            this.buildMerkleTree(path, snapshot);
-        } catch (Exception e) {
-            // we're just throwing an unchecked exception here,
-            // corresponding snapshot save will roll back at transaction boundary
-            throw new RuntimeException(e);
-        }
+        this.monitoredPath = path;
+        this.buildMerkleTree(path, snapshot);
     }
 
-    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot) throws NoSuchAlgorithmException {
+    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot){
         File rootDir = new File(monitoredPath.getPath());
         File[] rootFiles = rootDir.listFiles();
 
@@ -43,7 +37,7 @@ public class MerkleTree {
         buildTreeRecursively(root, snapshot, rootFiles);
     }
 
-    private Node createNodeForDirectory(File dir, Snapshot snapshot, File[] files) throws NoSuchAlgorithmException {
+    private Node createNodeForDirectory(File dir, Snapshot snapshot, File[] files) {
         Node node = new Node();
         node.setPath(dir.getAbsolutePath());
         node.setSnapshot(snapshot);
@@ -53,7 +47,7 @@ public class MerkleTree {
         return node;
     }
 
-    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws NoSuchAlgorithmException, NullPointerException {
+    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) {
         List<Node> children = new ArrayList<>();
         for (File file : files) {
             Node childNode;
@@ -87,11 +81,15 @@ public class MerkleTree {
         parent.setChildren(children);
     }
 
-    private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException, OutOfMemoryError {
+    private Node createNodeForFile(File file, Snapshot snapshot) {
         Node fileNode = new Node();
         fileNode.setPath(file.getAbsolutePath());
         fileNode.setSnapshot(snapshot);
-        fileNode.setHash(hash(new String(Files.readAllBytes(file.toPath()))));
+        try {
+            fileNode.setHash(hash(new String(Files.readAllBytes(file.toPath()))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.linearizedNodes.add(fileNode);
 
         return fileNode;
@@ -117,8 +115,13 @@ public class MerkleTree {
         return linearizedNodes;
     }
 
-    private static String hash(String val) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    private static String hash(String val) {
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
         byte[] hash = digest.digest(val.getBytes(StandardCharsets.UTF_8));
         StringBuilder hexString = new StringBuilder();
         for (byte b : hash) {

@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Component
 public class MonitoringScheduler {
@@ -36,27 +39,28 @@ public class MonitoringScheduler {
         this.snapshotRepository = snapshotRepository;
     }
 
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRateString = "${monitoring-scheduler.snapshot.interval}", timeUnit = MINUTES)
     public void createSnapshots() {
         monitoredPathRepository.findAll().forEach(this::createSnapshot);
     }
 
     @Transactional
     protected void createSnapshot(MonitoredPath monitoredPath) {
+        var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+
+        handleRootDeletion(monitoredPath, lastSnapshot);
+
         var start = System.currentTimeMillis();
+
         var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
-        /* TODO: test if monitoredPath.getPath() still exists
-            if not, dont do snapshot
-        */
-        final var tree = new MerkleTree(monitoredPath, snapshot);
-        var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
-        /* TODO: test again if monitoredPath.getPath() still exists
-            if not, dont save snapshot
-        */
         snapshot = snapshotRepository.save(snapshot);
+
+        var tree = new MerkleTree(monitoredPath, snapshot);
+
         compareWithOldSnapshot(tree, lastSnapshot);
+
         var end = System.currentTimeMillis();
         LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes in \"{}\"ms",
                 monitoredPath.getPath(),
@@ -64,6 +68,17 @@ public class MonitoringScheduler {
                 snapshot.getTimestamp(),
                 tree.getLinearizedNodes().size(),
                 end - start);
+    }
+
+    private void handleRootDeletion(MonitoredPath monitoredPath, Optional<Snapshot> lastSnapshot) {
+        if (!new File(monitoredPath.getPath()).exists()) {
+            lastSnapshot.ifPresent(snapshot -> {
+                var nodes = nodeRepository.findAllBySnapshotId(snapshot.getId());
+                nodes.forEach(n -> n.setDeletedInNextSnapshot(true));
+                nodeRepository.saveAll(nodes);
+            });
+            throw new RuntimeException("Root directory does not exist");
+        }
     }
 
     private void compareWithOldSnapshot(MerkleTree tree, final Optional<Snapshot> lastSnapshot) {
