@@ -33,7 +33,7 @@ public class SearchCommands {
     @ShellMethod(key = "search", value = "Search for files in a given path.")
     @SuppressWarnings("unused")
     public String search(
-            @ShellOption(help = "The path to search for files in. Can be relative or absolute.")
+            @ShellOption(help = "The path to search for files in. Can be relative or absolute. If it contains spaces, it must be enclosed in quotes.")
             @NotBlank
             String path,
             @ShellOption(help = "The search mode to use. Can be: LOG, CACHE, FULL, PATTERN.", defaultValue = "full")
