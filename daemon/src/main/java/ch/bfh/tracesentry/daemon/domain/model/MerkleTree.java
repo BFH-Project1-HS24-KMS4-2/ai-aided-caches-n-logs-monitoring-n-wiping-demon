@@ -50,7 +50,7 @@ public class MerkleTree {
         return node;
     }
 
-    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws IOException, NoSuchAlgorithmException, NullPointerException {
+    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws NoSuchAlgorithmException, NullPointerException {
         List<Node> children = new ArrayList<>();
         for (File file : files) {
             Node childNode;
@@ -63,7 +63,11 @@ public class MerkleTree {
                 buildTreeRecursively(childNode, snapshot, childFiles);
             } else {
                 if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
-                    childNode = createNodeForFile(file, snapshot);
+                    try {
+                        childNode = createNodeForFile(file, snapshot);
+                    } catch (IOException ignored) {
+                        continue;
+                    }
                 } else {
                     continue;
                 }
