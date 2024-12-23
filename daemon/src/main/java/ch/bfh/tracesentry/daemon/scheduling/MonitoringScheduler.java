@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
@@ -46,11 +47,17 @@ public class MonitoringScheduler {
 
     @Transactional
     protected void createSnapshot(MonitoredPath monitoredPath) {
-        var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        Optional<Snapshot> lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        List<Node> lastSnapshotNodes = lastSnapshot.isPresent() ? nodeRepository.findAllBySnapshotId(lastSnapshot.get().getId()) : List.of();
 
-        handleRootDeletion(monitoredPath, lastSnapshot);
+        if (!new File(monitoredPath.getPath()).exists()) {
+            LOG.warn("Path \"{}\" does not exist, skipping snapshot creation", monitoredPath.getPath());
+            lastSnapshotNodes.forEach(n -> n.setDeletedInNextSnapshot(true));
+            nodeRepository.saveAll(lastSnapshotNodes);
+            return;
+        }
 
-        var start = System.currentTimeMillis();
+        var start = Instant.now();
 
         var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
@@ -59,33 +66,21 @@ public class MonitoringScheduler {
 
         var tree = new MerkleTree(monitoredPath, snapshot);
 
-        compareWithOldSnapshot(tree, lastSnapshot);
+        compareWithOldSnapshot(tree, lastSnapshotNodes);
 
-        var end = System.currentTimeMillis();
+        var end = Instant.now();
         LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes in \"{}\"ms",
                 monitoredPath.getPath(),
                 snapshot.getId(),
                 snapshot.getTimestamp(),
                 tree.getLinearizedNodes().size(),
-                end - start);
+                Duration.between(start, end).toMillis());
     }
 
-    private void handleRootDeletion(MonitoredPath monitoredPath, Optional<Snapshot> lastSnapshot) {
-        if (!new File(monitoredPath.getPath()).exists()) {
-            lastSnapshot.ifPresent(snapshot -> {
-                var nodes = nodeRepository.findAllBySnapshotId(snapshot.getId());
-                nodes.forEach(n -> n.setDeletedInNextSnapshot(true));
-                nodeRepository.saveAll(nodes);
-            });
-            throw new RuntimeException("Root directory does not exist");
-        }
-    }
-
-    private void compareWithOldSnapshot(MerkleTree tree, final Optional<Snapshot> lastSnapshot) {
-        if (lastSnapshot.isPresent()) {
-            var oldNodes = nodeRepository.findAllBySnapshotId(lastSnapshot.get().getId());
-            compareNode(tree.getRoot(), oldNodes);
-            markDeletedNodes(oldNodes, tree);
+    private void compareWithOldSnapshot(MerkleTree tree, final List<Node> lastSnapshotNodes) {
+        if (!lastSnapshotNodes.isEmpty()) {
+            compareNode(tree.getRoot(), lastSnapshotNodes);
+            markDeletedNodes(lastSnapshotNodes, tree);
         } else {
             tree.getLinearizedNodes().forEach(n -> n.setHasChanged(true));
         }
