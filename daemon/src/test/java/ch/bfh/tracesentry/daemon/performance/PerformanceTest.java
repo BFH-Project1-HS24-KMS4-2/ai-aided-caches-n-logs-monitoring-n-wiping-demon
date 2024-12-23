@@ -18,11 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -57,7 +54,8 @@ public class PerformanceTest {
         monitoringScheduler = new MonitoringScheduler(monitoredPathRepository, nodeRepository, snapshotRepository);
     }
 
-    @Test
+    // Remove comment out to run the test locally. Always comment annotation before committing and pushing (to not run the test on the pipeline).
+    //@Test
     public void testMonitoringOverLongPeriod() {
         var monitorings = List.of(
                 "C:\\Users\\Janic Scherer\\AppData\\Roaming\\discord\\Cache",
@@ -97,7 +95,7 @@ public class PerformanceTest {
         LOG.info("Memory used: {}GiB", (endMemory - startMemory) / 1024 / 1024 / 1024);
         LOG.info("Snapshots created: {}", snapshotRepository.count());
         LOG.info("Nodes created: {}", nodeRepository.count());
-        LOG.info("Monitoring took: {}min, average: {}ms", (end - start) / 1000 / 60, (end - start) / 720);
+        LOG.info("Monitoring took: {}min, average: {}s", (end - start) / 1000 / 60, (end - start) / 1000 / 720);
         LOG.info(snapshotComparisonRepository.getSnapshotComparisons(1, 0, 720).toString());
     }
 
@@ -105,11 +103,11 @@ public class PerformanceTest {
      * Outputs simple metrics about the search operation.
      * Intended usage: getting a rough idea of the performance of the search operation.
      */
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "C:\\Windows\\Temp\\",
-            "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
-    )
+    //@ParameterizedTest
+    //@ValueSource(strings = {
+    //        "C:\\Windows\\Temp\\",
+    //        "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
+    //)
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
         Runtime runtime = Runtime.getRuntime();
@@ -126,19 +124,5 @@ public class PerformanceTest {
         LOG.info("Search took: {}ms", end - start);
         LOG.info("Files found: {}", dto.getNumberOfFiles());
         LOG.info("Memory used: {}MiB", (endMemory - startMemory) / 1024 / 1024);
-    }
-
-    private record TempDirStructure(Path cacheFile, Path logsDir, Path someLogs) { }
-
-    private static TempDirStructure createTempDirStructure(Path rootDir) throws IOException {
-        Path cacheFile = rootDir.resolve("cache.txt");
-        Files.createFile(cacheFile);
-        Files.writeString(cacheFile, "12345");
-        Path logsDir = rootDir.resolve("logs");
-        Files.createDirectory(logsDir);
-        Path someLogs = logsDir.resolve("someLogs.txt");
-        Files.createFile(someLogs);
-        Files.writeString(someLogs, "some logs");
-        return new TempDirStructure(cacheFile, logsDir, someLogs);
     }
 }
