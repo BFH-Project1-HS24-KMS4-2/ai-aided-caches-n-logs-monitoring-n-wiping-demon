@@ -1,3 +1,2 @@
 #!/bin/bash
-
-java -jar "$TRACE_SENTRY_DIR/src/daemon.jar"
+nohup java -jar $TRACE_SENTRY_DIR/bin/daemon.jar >> /tmp/daemon.log 2>&1 &

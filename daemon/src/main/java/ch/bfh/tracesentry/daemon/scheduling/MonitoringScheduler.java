@@ -47,8 +47,14 @@ public class MonitoringScheduler {
         var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
+        /* TODO: test if monitoredPath.getPath() still exists
+            if not, dont do snapshot
+        */
         final var tree = new MerkleTree(monitoredPath, snapshot);
         var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        /* TODO: test again if monitoredPath.getPath() still exists
+            if not, dont save snapshot
+        */
         snapshot = snapshotRepository.save(snapshot);
         compareWithOldSnapshot(tree, lastSnapshot);
         var end = System.currentTimeMillis();

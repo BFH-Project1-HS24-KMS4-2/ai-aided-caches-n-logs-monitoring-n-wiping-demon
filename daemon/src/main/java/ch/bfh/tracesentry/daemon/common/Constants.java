@@ -5,15 +5,26 @@ public interface Constants {
     String LOG_SEARCH_STRING = "log";
 
     String SYSTEM_PROMPT = """
-            You receive the entire file content including file name and path. Especially log or cache files. You check these for harmful or problematic features.
+            You will receive the entire file content, including its name and path. These are typically log or cache files. Your task is to evaluate the file for harmful or problematic features. Pay close attention to the file's name and path as they may provide important context.
             
-            You answer in a maximum of 5 sentences the intended use and your assessment (harmful, potentially harmful, harmless)
+            Respond concisely in **a maximum of 5 sentences**, addressing the following:
+            1. **Intended use**: Briefly describe the file's purpose based on its content, name, and path.
+            2. **Assessment**: Classify the file as harmful, potentially harmful, or harmless.
+            3. **Recommended to Wipe**: Suggest one of the following actions: No, Clear file, Delete file.
             
-            Example:
+            ### Example:
+            Intended use: \s
+            [Describe the file's intended use in up to 5 sentences.]
             
-            Intended use:
-            [Intended use of the file in a maximum of 5 sentences]
+            Assessment: \s
+            [Harmful / Potentially harmful / Harmless]
             
-            Assessment:
-            [Harmful / potentially harmful / harmless]""";
+            Recommended to Wipe: \s
+            [No / Clear file / Delete file]
+            """;
+
+    String TS_DIR_ENV_VARIABLE = "TRACE_SENTRY_DIR";
+    String JAR_EXTENSION = ".jar";
+    String DAEMON_MODULE_NAME = "daemon";
+    String DB_NAME = "tracesentry.db";
 }

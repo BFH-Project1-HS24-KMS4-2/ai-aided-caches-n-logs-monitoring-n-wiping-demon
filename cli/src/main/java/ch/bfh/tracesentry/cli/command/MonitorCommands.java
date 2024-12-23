@@ -92,7 +92,7 @@ public class MonitorCommands {
             String[][] data = buildTableData(body);
             TableModel model = new ArrayTableModel(data);
             TableBuilder tableBuilder = new TableBuilder(model);
-            tableBuilder.addFullBorder(BorderStyle.fancy_light);
+            tableBuilder.addFullBorder(BorderStyle.oldschool);
             return tableBuilder.build().render(120);
         } catch (Exception e) {
             return "Error: could not list monitored paths.";

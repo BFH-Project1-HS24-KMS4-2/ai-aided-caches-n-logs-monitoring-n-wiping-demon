@@ -3,9 +3,6 @@ spring:
     name: daemon
   datasource:
     driver-class-name: org.sqlite.JDBC
-    username:
-    password:
-    url: jdbc:sqlite:tracesentry.db
   jpa:
     hibernate:
       ddl-auto: validate

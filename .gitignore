@@ -2,6 +2,4 @@
 out
 /out-docs/
 tracesentry.db
-deployment/unix/src
-deployment/windows/src
 target
