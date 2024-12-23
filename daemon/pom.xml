@@ -85,7 +85,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <finalName>daemon</finalName>
     </build>
 
 </project>
