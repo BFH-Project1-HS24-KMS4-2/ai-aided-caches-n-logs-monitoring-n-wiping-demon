@@ -349,19 +349,22 @@ ts inspect <path>
 #### Examples:
 - Inspect a file:
   ```bash
-  ts inspect /path/to/unifi-controller.log
+  ts inspect /path/to/apache.log
   ```
   
 Successful inspection:
 ```
 Intended use:  
-This log file seems to be associated with the UniFi Controller [...]
+The file `apache.log` appears to be a web server access log, capturing various HTTP requests [...] not valid IP addresses and may indicate malicious activity or probing attempts. [...] the abnormal entries warrant further investigation.
 
 Assessment:  
-Harmless
+Potentially harmful
 
 Recommended to Wipe:  
-No
+Clear file
+
+Additional recommendations:  
+Perform a thorough analysis of the web server's security posture and monitor for unusual traffic patterns. Validate legitimate access attempts to identify any potential breaches or vulnerabilities.
 ```
 
 File not found:
