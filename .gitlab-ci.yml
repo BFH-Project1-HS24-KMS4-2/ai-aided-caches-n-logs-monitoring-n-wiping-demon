@@ -8,11 +8,11 @@
 
 build-job:
   stage: build
-  image: maven:3.9.9-eclipse-temurin-21
+  image: eclipse-temurin:21
   script:
-    - mvn package
+    - ./mvnw package
   artifacts:
     paths:
-      - target/trace-sentry-*-submission.zip
+      - target/*.zip
 #  rules:
 #    - if: $CI_COMMIT_BRANCH == "main"
