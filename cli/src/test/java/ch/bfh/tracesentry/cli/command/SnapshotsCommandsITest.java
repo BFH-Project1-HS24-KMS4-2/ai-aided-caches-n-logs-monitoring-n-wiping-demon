@@ -69,12 +69,12 @@ public class SnapshotsCommandsITest {
             final String output = ShellLines.join(session.screen().lines());
             assertThat(output).startsWith("""
                     Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
-                    ┌───────────┬────────────┬──────────┐
-                    │Path       │Snapshot IDs│Comparison│
-                    ├───────────┼────────────┼──────────┤
-                    │cache.txt  │4           │CHANGED   │
-                    │           │6           │LAST TRACK│
-                    ├───────────┼────────────┼──────────┤
+                    +-----------+------------+----------+
+                    |Path       |Snapshot IDs|Comparison|
+                    +-----------+------------+----------+
+                    |cache.txt  |4           |CHANGED   |
+                    |           |6           |LAST TRACK|
+                    +-----------+------------+----------+
                     """);
         });
     }
@@ -103,13 +103,13 @@ public class SnapshotsCommandsITest {
         await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
             final String output = ShellLines.join(session.screen().lines());
             assertThat(output).startsWith("""
-                    ┌──────┬───────────────────┬──┐
-                    │Number│Timestamp          │ID│
-                    ├──────┼───────────────────┼──┤
-                    │1     │01.12.2024 21:25:00│2 │
-                    ├──────┼───────────────────┼──┤
-                    │2     │01.12.2024 20:25:00│1 │
-                    └──────┴───────────────────┴──┘
+                    +------+-------------------+--+
+                    |Number|Timestamp          |ID|
+                    +------+-------------------+--+
+                    |1     |01.12.2024 21:25:00|2 |
+                    +------+-------------------+--+
+                    |2     |01.12.2024 20:25:00|1 |
+                    +------+-------------------+--+
                     """);
         });
     }

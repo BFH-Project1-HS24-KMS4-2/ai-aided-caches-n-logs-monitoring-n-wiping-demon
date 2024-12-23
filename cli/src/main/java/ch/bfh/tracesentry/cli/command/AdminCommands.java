@@ -15,6 +15,10 @@ import java.net.ServerSocket;
 @ShellCommandGroup("Admin Commands")
 public class AdminCommands {
 
+    private final static String TRACE_SENTRY_DIR_ENV = "TRACE_SENTRY_DIR";
+    private final static String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
+    private final static String DAEMON_JAR = "daemon.jar";
+    private final static String INFERRED_DAEMON_LOCATION = System.getenv(TRACE_SENTRY_DIR_ENV) + DELIMITER + DAEMON_JAR;
     private final static int DAEMON_PORT = 8087;
 
     private final DaemonAdapter daemonAdapter;
@@ -46,7 +50,13 @@ public class AdminCommands {
     @ShellMethod(key = "run", value = "Run the daemon.")
     @SuppressWarnings("unused")
 
-    public String run(@ShellOption String path) {
+    public String run(@ShellOption(defaultValue = "") String path) {
+        String jarPath = path;
+
+        if (path.isEmpty()) {
+            jarPath = INFERRED_DAEMON_LOCATION;
+        }
+
         var running = daemonAdapter.checkStatus();
 
         if (isPortInUse() && !running) {
@@ -57,7 +67,7 @@ public class AdminCommands {
             return "daemon is already running";
         }
 
-        File daemonJar = new File(path);
+        File daemonJar = new File(jarPath);
         if (!daemonJar.exists()) {
             return "File does not exist";
         }

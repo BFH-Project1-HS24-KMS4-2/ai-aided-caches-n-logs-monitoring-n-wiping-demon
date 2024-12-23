@@ -1,6 +1,8 @@
 package ch.bfh.tracesentry.daemon.domain.model;
 
 import ch.bfh.tracesentry.daemon.search.SearchStrategyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerkleTree {
+    private static final Logger LOG = LoggerFactory.getLogger(MerkleTree.class);
     private Node root;
     private final MonitoredPath monitoredPath;
     private final List<Node> linearizedNodes = new ArrayList<>();
@@ -50,7 +53,7 @@ public class MerkleTree {
         return node;
     }
 
-    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws IOException, NoSuchAlgorithmException, NullPointerException {
+    private void buildTreeRecursively(Node parent, Snapshot snapshot, File[] files) throws NoSuchAlgorithmException, NullPointerException {
         List<Node> children = new ArrayList<>();
         for (File file : files) {
             Node childNode;
@@ -63,7 +66,14 @@ public class MerkleTree {
                 buildTreeRecursively(childNode, snapshot, childFiles);
             } else {
                 if (SearchStrategyFactory.create(monitoredPath.getMode(), monitoredPath.compilePattern()).matches(file.toPath())) {
-                    childNode = createNodeForFile(file, snapshot);
+                    try {
+                        childNode = createNodeForFile(file, snapshot);
+                    } catch (OutOfMemoryError e) {
+                        LOG.error("File too large to be read: {}", file.getAbsolutePath());
+                        continue;
+                    } catch (Exception ignored) {
+                        continue;
+                    }
                 } else {
                     continue;
                 }
@@ -77,7 +87,7 @@ public class MerkleTree {
         parent.setChildren(children);
     }
 
-    private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException {
+    private Node createNodeForFile(File file, Snapshot snapshot) throws NoSuchAlgorithmException, IOException, OutOfMemoryError {
         Node fileNode = new Node();
         fileNode.setPath(file.getAbsolutePath());
         fileNode.setSnapshot(snapshot);

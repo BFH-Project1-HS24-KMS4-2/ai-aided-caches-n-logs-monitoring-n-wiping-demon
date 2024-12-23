@@ -34,7 +34,7 @@ public class InspectCommands {
         try {
             File fileToInspect = new File(path);
             if (!new File(path).exists()) return "Error: File not found.";
-            return daemonAdapter.inspect(fileToInspect.getCanonicalPath());
+            return daemonAdapter.inspect(fileToInspect.getCanonicalPath()) + "\n";
         } catch (Exception ignored) {
             return "Error: Failed to inspect file. Make sure the file is accessible, the connection to the internet is working and the environment variable OPENAI_API_KEY is set.";
         }
