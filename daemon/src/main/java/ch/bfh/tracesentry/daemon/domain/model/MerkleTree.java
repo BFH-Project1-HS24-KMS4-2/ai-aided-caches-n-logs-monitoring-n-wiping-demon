@@ -23,14 +23,14 @@ public class MerkleTree {
         try {
             this.monitoredPath = path;
             this.buildMerkleTree(path, snapshot);
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             // we're just throwing an unchecked exception here,
             // corresponding snapshot save will roll back at transaction boundary
             throw new RuntimeException(e);
         }
     }
 
-    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot) throws IOException, NoSuchAlgorithmException {
+    private void buildMerkleTree(MonitoredPath monitoredPath, Snapshot snapshot) throws NoSuchAlgorithmException {
         File rootDir = new File(monitoredPath.getPath());
         File[] rootFiles = rootDir.listFiles();
 
