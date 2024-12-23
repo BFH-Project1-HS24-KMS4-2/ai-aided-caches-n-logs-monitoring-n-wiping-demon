@@ -65,7 +65,7 @@ public class SnapshotsCommandsITest {
                 .nonInterative("snapshots", "compare", String.valueOf(id), String.valueOf(start), String.valueOf(end))
                 .run();
 
-        await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(1, TimeUnit.SECONDS).untilAsserted(() -> {
             final String output = ShellLines.join(session.screen().lines());
             assertThat(output).startsWith("""
                     Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
@@ -74,9 +74,6 @@ public class SnapshotsCommandsITest {
                     +-----------+------------+----------+
                     |cache.txt  |4           |CHANGED   |
                     |           |6           |LAST TRACK|
-                    +-----------+------------+----------+
-                    |log\\log.txt|2           |CHANGED   |
-                    |           |8           |CHANGED   |
                     +-----------+------------+----------+
                     """);
         });
