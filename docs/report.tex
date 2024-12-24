@@ -908,11 +908,11 @@ Additional recommendations:
 
     \begin{table}[h!]
         \centering
-        \setlength{\leftmargini}{0.4cm}
+        \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-007 \\ \hline
-            \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen \\ \hline
+            \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon wird aus Entwicklungsumgebung gestartet.
@@ -922,24 +922,24 @@ Additional recommendations:
             \begin{enumerate}
                 \item \begin{verbatim}ts monitor add /path/with/few/subdirs\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
-                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen ID.
+                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen ID. Diese für folgende Schritte verwenden als <ID> verwenden.
                 \item Warten bis in Datenbank genau 1 Snapshot vorhanden ist.
-                \item \begin{verbatim}ts snapshots list {ID des zu überwachenden Pfads} {\end{verbatim}
+                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
                 \item Erwartet: Liste mit genau 1 Snapshot.
                 \item Eine Datei test.log in /path/with/few/subdirs erstellen und mit Inhalt füllen.
                 \item Warten bis in Datenbank genau 2 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list {ID des zu überwachenden Pfads} {\end{verbatim}
+                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
                 \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare {ID des zu überwachenden Pfads}\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare <ID>\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
                 \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list {ID des zu überwachenden Pfads} {\end{verbatim}
+                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
                 \item Erwartet: Liste mit genau 4 Snapshots.
                 \item Den Inhalte der Datei test.log ändern.
                 \item Wartern bis in Datenbank genau 5 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list {ID des zu überwachenden Pfads} {\end{verbatim}
+                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
                 \item Erwartet: Liste mit 5 Snapshots.
-                \item \begin{verbatim}ts snapshots compare {ID des zu überwachenden Pfads} --start 4 --end 5\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare <ID> --start 4 --end 5\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und verglichen. \\ \hline
