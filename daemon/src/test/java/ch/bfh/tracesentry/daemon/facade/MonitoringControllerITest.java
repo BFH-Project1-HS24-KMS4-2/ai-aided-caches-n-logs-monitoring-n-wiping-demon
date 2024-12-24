@@ -17,7 +17,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -79,7 +78,7 @@ public class MonitoringControllerITest {
         Assertions.assertEquals(absolutePath, monitorPathDTO.getPath());
         Assertions.assertEquals(SearchMode.FULL, monitorPathDTO.getMode());
         Assertions.assertFalse(monitorPathDTO.isNoSubdirs());
-        Assertions.assertEquals(Pattern.compile(".*").toString(), monitorPathDTO.compilePattern().toString());
+        Assertions.assertNull(monitorPathDTO.compilePattern());
         Assertions.assertEquals(LocalDate.now(), monitorPathDTO.getCreatedAt());
     }
 
