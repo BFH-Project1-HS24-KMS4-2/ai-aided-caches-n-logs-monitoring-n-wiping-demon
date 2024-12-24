@@ -29,6 +29,8 @@ import java.util.List;
 /**
  * Non-functional (and non-assertive) performance test for core daemon functionality.
  * Intended usage: getting a rough idea of the performance of key operations.
+ * <p>
+ * Always comment @Test annotation again before committing and pushing (to not run the test in the CI pipeline).
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -59,14 +61,13 @@ public class PerformanceTest {
     }
 
     /**
-     * Outputs simple metrics about the monitoring (and comparison) operation.
+     * Outputs simple metrics about the monitoring (and comparison) operation
+     * (might take multiple minutes depending on the monitored paths).
      * <p>
-     * Remove annotation comment to run the test (might take multiple minutes depending on the monitored paths).
-     * Always comment annotation again before committing and pushing (to not run the test in the CI pipeline).
-     * A node (dir or file) can manually be changed/added/removed while the test is running to test the comparison functionality.
+     * A node (dir or file) can manually be changed/added/removed while the test is running to also test the comparison functionality.
      * There are 720 snapshot creations, simulating a month of monitoring.
      **/
-    @Test
+    //@Test
     public void testMonitoringOverLongPeriod() {
         var monitorings = List.of(
                 "C:\\Users\\Janic Scherer\\AppData\\Roaming\\discord\\Cache",
@@ -121,11 +122,11 @@ public class PerformanceTest {
     /**
      * Outputs simple metrics about the search operation.
      */
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "C:\\Windows\\Temp\\",
-            "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
-    )
+    //@ParameterizedTest
+    //@ValueSource(strings = {
+    //        "C:\\Windows\\Temp\\",
+    //        "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
+    //)
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
         Runtime runtime = Runtime.getRuntime();
