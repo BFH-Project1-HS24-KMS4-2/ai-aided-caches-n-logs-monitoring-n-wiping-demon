@@ -81,8 +81,6 @@ public class MonitoringScheduler {
         if (!lastSnapshotNodes.isEmpty()) {
             compareNode(tree.getRoot(), lastSnapshotNodes);
             markDeletedNodes(lastSnapshotNodes, tree);
-        } else {
-            tree.getLinearizedNodes().forEach(n -> n.setHasChanged(true));
         }
         nodeRepository.saveAll(tree.getLinearizedNodes());
     }
