@@ -839,69 +839,85 @@ Additional recommendations:
 
     \begin{table}[h!]
         \centering
-        \setlength{\leftmargini}{0.4cm}
+        \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-004                                                                 \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen hinzufügen und entfernen         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item Daemon läuft
+                \item Pfad wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item \begin{verbatim}ts monitor add
+<TraceSentry Installationsverzeichnis>\end{verbatim}
+                \item Erwartet: \begin{verbatim}Hinzugefügt\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
+                \item \begin{verbatim}ts monitor remove
+<TraceSentry Installationsverzeichnis>\end{verbatim}
+                \item Erwartet: \begin{verbatim}Removed\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden.
+            Dabei wird auch der aktuelle Zustand mit der list-Anweisung immer korrekt ausgegeben.\\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
     \end{table}
 
     \begin{table}[h!]
         \centering
-        \setlength{\leftmargini}{0.4cm}
+        \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-005                                                                 \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen mit Mode und der Option (ohne Unterordner) hinzufügen.         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item Daemon läuft
+                \item Pfad wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item \begin{verbatim}ts monitor add
+<TraceSentry Installationsverzeichnis>
+--mode LOG --no-subdirs\end{verbatim}
+                \item Erwartet: \begin{verbatim}Hinzugefügt\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Pfad wird mit Mode=LOG und No Subdirs=true aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann mit den gewünschten Optionen hinzugefügt werden.
+            Danach wird mit der list-Anweisung der aktuelle Zustand korrekt ausgegeben. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
     \end{table}
 
     \begin{table}[h!]
         \centering
-        \setlength{\leftmargini}{0.4cm}
+        \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-006              \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen mit Regex-Pattern hinzufügen.         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item Daemon läuft
+                \item Pfad wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item \begin{verbatim}ts monitor add
+<TraceSentry Installationsverzeichnis>
+--pattern ^ts_.*_ts$\end{verbatim}
+                \item Erwartet: Hinzugefügt
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$\end{verbatim} aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann mit einem gewünschten Regex Pattern hinzugefügt werden.
+            Danach wird mit der list-Anweisung der neue Zustand korrekt ausgegeben.\\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
     \end{table}
