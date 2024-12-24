@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Properties;
 
 @Configuration
 public class SQLiteConfig {
@@ -47,6 +48,10 @@ public class SQLiteConfig {
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+
+        final Properties connectionProperties = new Properties();
+        connectionProperties.setProperty("foreign_keys", "true");
+        dataSource.setConnectionProperties(connectionProperties);
 
         return dataSource;
     }
