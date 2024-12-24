@@ -23,6 +23,7 @@
 
 
 \usepackage{geometry}
+\usepackage{booktabs}
 \geometry{
     top=1in,
     left=1in,
@@ -745,6 +746,45 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
 
     \section{Benutzerhandbuch}
 
+    \section{Manuelle End-2-End Tests}
+    Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
+
+    \subsection{Testfälle}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-001                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
+    \end{table}
+
+    \subsection{Testergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
+            01.01.2021     & Windows 10              & E2E-001          & Erfolgreich       \\ \hline
+        \end{tabular}
+        \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
+    \end{table}
 
     \chapter{Fazit}
 
