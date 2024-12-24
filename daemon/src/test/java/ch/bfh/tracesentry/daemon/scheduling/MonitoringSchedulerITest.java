@@ -85,21 +85,21 @@ public class MonitoringSchedulerITest {
         Assertions.assertEquals(rootDirNode.getSnapshot(), snapshot);
         Assertions.assertTrue(rootDirNode.getChildren().containsAll(List.of(cacheFileNode, logsDirNode)));
         Assertions.assertEquals(rootDirNode.getPath(), rootDir.toString());
-        Assertions.assertTrue(rootDirNode.isHasChanged());
+        Assertions.assertFalse(rootDirNode.isHasChanged());
         Assertions.assertFalse(rootDirNode.isDeletedInNextSnapshot());
 
         Assertions.assertEquals(cacheFileNode.getParent(), rootDirNode);
         Assertions.assertEquals(cacheFileNode.getSnapshot(), snapshot);
         Assertions.assertEquals(cacheFileNode.getChildren(), List.of());
         Assertions.assertEquals(cacheFileNode.getPath(), tempDirStructure.cacheFile.toString());
-        Assertions.assertTrue(cacheFileNode.isHasChanged());
+        Assertions.assertFalse(cacheFileNode.isHasChanged());
         Assertions.assertFalse(cacheFileNode.isDeletedInNextSnapshot());
 
         Assertions.assertEquals(logsDirNode.getParent(), rootDirNode);
         Assertions.assertEquals(logsDirNode.getSnapshot(), snapshot);
         Assertions.assertEquals(logsDirNode.getChildren(), List.of());
         Assertions.assertEquals(logsDirNode.getPath(), tempDirStructure.logsDir.toString());
-        Assertions.assertTrue(logsDirNode.isHasChanged());
+        Assertions.assertFalse(logsDirNode.isHasChanged());
         Assertions.assertFalse(logsDirNode.isDeletedInNextSnapshot());
     }
 
@@ -300,7 +300,7 @@ public class MonitoringSchedulerITest {
         Assertions.assertEquals(oldCacheFileNode.getSnapshot(), oldSnapshot);
         Assertions.assertEquals(oldCacheFileNode.getChildren(), List.of());
         Assertions.assertEquals(oldCacheFileNode.getPath(), tempDirStructure.cacheFile.toString());
-        Assertions.assertTrue(oldCacheFileNode.isHasChanged());
+        Assertions.assertFalse(oldCacheFileNode.isHasChanged());
         // cache file has been deleted (marked as deleted in previous snapshot)
         Assertions.assertTrue(oldCacheFileNode.isDeletedInNextSnapshot());
 
