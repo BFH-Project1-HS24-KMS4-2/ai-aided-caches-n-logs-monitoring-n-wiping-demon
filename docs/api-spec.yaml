@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: My CLI API
+  title: AI-Aided Caches n Logs Monitoring n Wiping Daemon API
   version: 1.0.0
   description: A command-line tool for monitoring and wiping cache and log files.
 
@@ -59,10 +59,12 @@ paths:
                     items:
                       type: string
                     example:
-                        - /var/log/syslog
-                        - /var/log/auth.log
-                        - C:\Windows\Temp\log.txt
-                        - C:\Windows\Temp\log2.txt
+                      - /var/log/syslog
+                      - /var/log/auth.log
+                      - C:\Windows\Temp\log.txt
+                      - C:\Windows\Temp\log2.txt
+        '400':
+          description: Invalid input
         '422':
           description: Not processable input
         '500':
@@ -70,20 +72,43 @@ paths:
   /monitored-path:
     post:
       summary: Adds a path to the monitoring database.
-      parameters:
-        - name: path
-          in: query
-          required: true
-          description: The absolute path to the directory you want to monitor.
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The absolute path to the directory you want to monitor.
+                mode:
+                  type: string
+                  description: Specifies the monitoring mode (log, cache, full, pattern). Default is full.
+                  enum:
+                    - log
+                    - cache
+                    - full
+                    - pattern
+                  default: full
+                pattern:
+                  type: string
+                  description: Specifies the regex pattern to match files (required if mode is pattern).
+                noSubdirs:
+                  type: boolean
+                  description: Prevents monitoring subdirectories (default is false).
+                  default: false
+              required:
+                - path
       responses:
         '201':
           description: Path successfully added to the monitoring database.
+        '400':
+          description: Invalid input.
         '422':
           description: Invalid or non-existent path.
         '409':
-            description: Path already exists in the monitoring database.
+          description: Path already exists in the monitoring database.
         '500':
           description: Internal server error.
     get:
@@ -112,9 +137,162 @@ paths:
           description: Path successfully removed from the monitoring database.
         '404':
           description: No monitored path with the specified ID found.
+  /monitored-path/{id}/snapshots/changes:
+    get:
+      summary: Returns a comparison of the monitored path.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the monitored path you want the comparison from.
+          schema:
+            type: integer
+        - name: start
+          in: query
+          required: false
+          description: The start index for the comparison range.
+          schema:
+            type: integer
+            default: 1
+        - name: end
+          in: query
+          required: false
+          description: The end index for the comparison range.
+          schema:
+            type: integer
+            default: 2
+      responses:
+        200:
+          description: Returns the comparison.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitoredChangesDTO'
+        422:
+          description: Not a valid index range or not found enough snapshots in the given index range.
+  /monitored-path/{id}/snapshots:
+    get:
+      summary: Returns all snapshots of the monitored path.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the monitored path you want the snapshots from.
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Returns all snapshots.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SnapshotDTO'
+        404:
+          description: The path with the specified ID is not being monitored.
+  /inspect:
+    get:
+      summary: Inspects a given file by querying a GPT service.
+      parameters:
+        - name: path
+          in: query
+          description: The full path to the file you want to inspect.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inspection completed successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "
+                Intended use:
+                This log file seems to be associated with.
+
+                Assessment:  
+                Harmless"
+        '400':
+          description: Invalid input
+        '422':
+          description: Not processable input
+        '500':
+          description: Internal server error
+  /wipe:
+    post:
+      summary: Wipes the content of a file or deletes it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The full path to the file you want to wipe.
+                remove:
+                  type: boolean
+                  description: If true, the file will be deleted. If false or omitted, the file content will be cleared.
+                  default: false
+              required:
+                - path
+      responses:
+        '200':
+          description: File successfully wiped or deleted.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Successfully wiped /path/to/file.log."
+        '400':
+          description: Invalid input.
+        '422':
+          description: File not found or not writable.
+        '500':
+          description: Internal server error.
+
 
 components:
   schemas:
+    MonitoredChangesDTO:
+      type: object
+      properties:
+        monitoredPath:
+          type: string
+          example: /test
+        startSnapshotCreation:
+          type: string
+          example: 2024-11-25T15:21:52.063
+        endSnapshotCreation:
+          type: string
+          example: 2024-11-25T13:21:52.063
+        comparison:
+          type: array
+          items:
+            $ref: '#/components/schemas/SnapshotComparisonDTO'
+    SnapshotComparisonDTO:
+      type: object
+      properties:
+        snapshotIds:
+          type: array
+          items:
+            type: integer
+          example:
+            - 1
+            - 2
+        path:
+          type: string
+          example: /test/cache.txt
+        comparison:
+          type: array
+          items:
+            type: string
+          example:
+            - CHANGED
+            - LAST TRACK
     MonitorPath:
       type: object
       properties:
@@ -128,3 +306,13 @@ components:
           type: string
           format: date
           example: "2024-11-01"
+    SnapshotDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-11-25T13:21:52.063"

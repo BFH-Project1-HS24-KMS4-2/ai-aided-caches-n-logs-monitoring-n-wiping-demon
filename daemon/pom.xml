@@ -10,7 +10,7 @@
     </parent>
     <groupId>ch.bfh.tracesentry</groupId>
     <artifactId>daemon</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.14</version>
     <name>daemon</name>
     <description>daemon</description>
     <url/>
@@ -52,13 +52,13 @@
         <dependency>
             <groupId>ch.bfh.tracesentry</groupId>
             <artifactId>lib</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.14</version>
         </dependency>
 
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.25.2</version>
+            <version>3.47.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -78,6 +78,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

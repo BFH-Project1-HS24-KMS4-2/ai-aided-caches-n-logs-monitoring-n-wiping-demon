@@ -1,7 +1,7 @@
 package ch.bfh.tracesentry.cli.adapter;
 
-import ch.bfh.tracesentry.lib.dto.MonitorPathDTO;
-import ch.bfh.tracesentry.lib.dto.SearchResponseDTO;
+import ch.bfh.tracesentry.lib.dto.*;
+import ch.bfh.tracesentry.lib.model.SearchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class DaemonAdapter {
@@ -58,27 +59,73 @@ public class DaemonAdapter {
     }
 
     /**
-     * @param absolutePath absolute path to the directory to search
+     * @param canonicalPath canonical path to the directory to search
+     * @param mode        search mode
+     * @param noSubdirs   do not search in subdirectories
      * @return SearchResponse object
      */
-    public ResponseEntity<SearchResponseDTO> search(Path absolutePath) {
-        return restTemplate.getForEntity(BASE_URL + "search?path=" + absolutePath, SearchResponseDTO.class);
+    public ResponseEntity<SearchResponseDTO> search(String canonicalPath, SearchMode mode, boolean noSubdirs) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(canonicalPath, mode, noSubdirs);
+        return restTemplate.getForEntity(urlBuilder.toString(), SearchResponseDTO.class);
     }
 
     /**
-     * @param path relative or absolute path to the directory to monitor
+     * @param canonicalPath absolute path to the directory to search
+     * @param mode         search mode
+     * @param noSubdirs    do not search in subdirectories
+     * @param pattern      pattern to search for, may be null
+     * @return SearchResponse object
+     */
+    public ResponseEntity<SearchResponseDTO> search(String canonicalPath, SearchMode mode, boolean noSubdirs, Pattern pattern) {
+        StringBuilder urlBuilder = buildSearchBaseUrl(canonicalPath, mode, noSubdirs);
+        urlBuilder.append("&pattern=");
+        urlBuilder.append(URLEncoder.encode(pattern.pattern(), StandardCharsets.UTF_8));
+        String url = urlBuilder.toString();
+        return restTemplate.getForEntity(url, SearchResponseDTO.class);
+
+    }
+
+    private StringBuilder buildSearchBaseUrl(String canonicalPath, SearchMode mode, boolean noSubdirs) {
+        var sb = new StringBuilder(BASE_URL)
+                .append("search?path=")
+                .append(canonicalPath)
+                .append("&mode=")
+                .append(mode.toString().toLowerCase());
+
+        if (noSubdirs) {
+            sb.append("&no-subdirs=true");
+        }
+        return sb;
+    }
+
+    /**
+     * @param path absolute path to the directory to monitor
+     * @param mode search mode
+     * @param noSubdirs do not monitor subdirectories
      * @return void
      */
-    public ResponseEntity<Void> monitorAdd(String path) {
-        var absolutePath = Paths.get(path).toAbsolutePath().toString();
-        return restTemplate.postForEntity(BASE_URL + "monitored-path", absolutePath, Void.class);
+    public ResponseEntity<Void> monitorAdd(String path, SearchMode mode, boolean noSubdirs) {
+        var createMonitorPathDTO = new CreateMonitorPathDTO(path, mode, noSubdirs);
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", createMonitorPathDTO, Void.class);
     }
 
     /**
-     * @return List of MonitorPathDTO objects
+     * @param path absolute path to the directory to monitor
+     * @param mode search mode
+     * @param noSubdirs do not monitor subdirectories
+     * @param pattern pattern to search for
+     * @return void
      */
-    public ResponseEntity<List<MonitorPathDTO>> monitorList() {
-        ParameterizedTypeReference<List<MonitorPathDTO>> responseType =
+    public ResponseEntity<Void> monitorAdd(String path, SearchMode mode, boolean noSubdirs, Pattern pattern) {
+        var createMonitorPathDTO = new CreateMonitorPathDTO(path, mode, noSubdirs, pattern.pattern());
+        return restTemplate.postForEntity(BASE_URL + "monitored-path", createMonitorPathDTO, Void.class);
+    }
+
+    /**
+     * @return List of MonitoredPathDTO objects
+     */
+    public ResponseEntity<List<MonitoredPathDTO>> monitorList() {
+        ParameterizedTypeReference<List<MonitoredPathDTO>> responseType =
                 new ParameterizedTypeReference<>() {
                 };
         return restTemplate.exchange(BASE_URL + "monitored-path", HttpMethod.GET, null, responseType);
@@ -90,5 +137,35 @@ public class DaemonAdapter {
      */
     public ResponseEntity<Void> monitorRemove(Integer id) {
         return restTemplate.exchange(DaemonAdapter.BASE_URL + "monitored-path/" + id, HttpMethod.DELETE, null, Void.class);
+    }
+
+    /**
+     * @param id of the monitored path to get changes from
+     * @return MonitoredChangesDTO
+     */
+    public ResponseEntity<MonitoredChangesDTO> getMonitoredChanges(int id, int start, int end) {
+        return restTemplate.getForEntity(BASE_URL + "monitored-path/" + id + "/snapshots/changes?start=" + start + "&end=" + end, MonitoredChangesDTO.class);
+    }
+
+    /**
+     * @param monitoredPathId id of the monitored path to get snapshots from
+     * @return List of SnapshotDTO objects
+     */
+    public ResponseEntity<List<SnapshotDTO>> getSnapshotsOf(Integer monitoredPathId) {
+        ParameterizedTypeReference<List<SnapshotDTO>> responseType = new ParameterizedTypeReference<>() {};
+        return restTemplate.exchange(BASE_URL + "monitored-path/" + monitoredPathId + "/snapshots", HttpMethod.GET, null, responseType);
+    }
+
+    /**
+     * @param canonicalPath path to the file to inspect
+     * @return String containing the inspection result
+     */
+    public String inspect(String canonicalPath) {
+        return restTemplate.getForObject(BASE_URL + "inspect?path=" + canonicalPath, String.class);
+    }
+
+    public ResponseEntity<Void> wipe(String path, boolean remove) {
+        var dto = new WipeFileDTO(path, remove);
+        return restTemplate.postForEntity(BASE_URL + "wipe", dto, Void.class);
     }
 }

@@ -1,5 +1,5 @@
 .idea
 out
 /out-docs/
-cli.log
-current_time.txt
+tracesentry.db
+target

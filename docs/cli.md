@@ -11,11 +11,16 @@
 5. [monitor add](#5-monitor-add)
 6. [monitor list](#6-monitor-list)
 7. [monitor remove](#7-monitor-remove)
+8. [snapshots list](#8-snapshots-list)
+9. [snapshots compare](#9-snapshots-compare)
+10. [inspect](#10-inspect)
+11. [wipe](#11-wipe)
 
 ---
 
 ### 1. `run`
 This command starts the daemon process by specifying the path to the JAR file if it is not already running. If the daemon is already running, it will not be restarted.
+If the path is not provided, the command will attempt to infer the path from the environment variable `TRACE_SENTRY_DIR`.
 
 #### Usage:
 ```bash
@@ -23,7 +28,7 @@ ts run <path>
 ```
 
 #### Parameters:
-- **`path`**: The full path to the daemon JAR file.  Either the relative path from the current directory or the absolute path can be used.
+- **`path`**: The full path to the daemon JAR file. Either the relative path from the current directory or the absolute path can be used. (Optional: default value is the composed path from the installation directory, as described above)
 
 #### Examples:
 ```bash
@@ -119,7 +124,7 @@ ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-sub
   ts search /etc/path/to/directory # absolute path unix
   ts search Path\\To\\Directory # relative path windows
   ```
-- Search only for log files withou[api-spec.yaml](api-spec.yaml)t scanning subdirectories:
+- Search only for log files without scanning subdirectories:
   ```bash
   ts search /path/to/directory --mode log --no-subdirs
   ```
@@ -149,12 +154,20 @@ This command adds a specified path for monitoring. Paths added will be tracked f
 
 #### Usage:
 ```bash
-ts monitor add --path <path/to/monitor>
+ts monitor add --path <path/to/monitor> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
 ```
 
 #### Parameters:
 - **`--path`**: The full path you want to add for monitoring. This can be a relative path from the current directory or an absolute path.
 It might be a directory or a specific file.
+- **`--mode`**: Defines the monitoring mode:
+  - `log`: Monitor log files.
+  - `cache`: Monitor cache files.
+  - `full`: Monitor both log and cache files (default).
+  - `pattern`: Monitor files that match a custom regex pattern (requires `--pattern` parameter).
+- **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
+- **`--no-subdirs`**: If this flag is present, the monitoring will not include subdirectories (default is to monitor subdirectories).
+
 
 #### Example:
 - Add an absolute path to the monitoring database:
@@ -175,7 +188,7 @@ Exact path already monitored:
   ```
 
 ---
-
+// TODO: fix list
 ### 6. `monitor list`
 This command retrieves and displays all paths currently being monitored. Each entry shows the ID, path, and date of addition.
 
@@ -191,10 +204,15 @@ ts monitor list
   ```
 Example output:
   ```
-  ID    | Added      | Date Added
-  ------------------------------------------------
-  3210  | 2024-11-01 | /etc/path/to/monitor   
-  3221  | 2024-11-01 | Path\\To\\Monitor      
++----+------------------------------------+-------+----------+----------+----------+
+|ID  |path                                |mode   |pattern   |no-subdirs|created at|
++----+------------------------------------+-------+----------+----------+----------+
+|0001|C:\Users                            |FULL   |          |false     |2024-11-26|
++----+------------------------------------+-------+----------+----------+----------+
+|0002|C:\Users\CoolDude                   |PATTERN|.*\.cookie|true      |2024-11-26|
++----+------------------------------------+-------+----------+----------+----------+
+|0003|C:\Users\CooolDude\IdeaProjects\_bfh|PATTERN|env       |false     |2024-11-27|
++----+------------------------------------+-------+----------+----------+----------+ 
   ```
 If no paths are being monitored:
   ```
@@ -229,3 +247,177 @@ Error message if the ID does not exist:
   ```
 
 ---
+### 8. `snapshots list`
+This command lists all snapshots taken for a monitored path.
+
+#### Usage:
+```bash
+  ts snapshots list --id <ID>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the monitored path to get the snapshots from.
+
+#### Example:
+- Get the snapshots of a monitored path by ID:
+  ```bash
+  ts snapshots list --id 1
+  ```
+Example output of successful execution:
+```
++------+-------------------+--+
+|Number|Timestamp          |ID|
++------+-------------------+--+
+|1     |18.12.2024 22:42:01|2 |
++------+-------------------+--+
+|2     |18.12.2024 22:41:15|1 |
++------+-------------------+--+
+```
+Example output of unsuccessful execution:
+```
+Error: could not list snapshots.
+```
+If the path is not monitored:
+```
+No monitored path found with ID [id].
+```
+If no snapshots are available:
+```
+No snapshots found for monitored path with ID [id].
+```
+---
+
+### 9. `snapshots compare`
+This command outputs the comparison of a user-defined range of snapshots taken from a given monitored path.
+
+#### Usage:
+```bash
+  ts snapshots compare --id <ID> --start <startNumber> --end <endNumber>
+```
+
+#### Parameters:
+- **`--id`**: The unique identifier for the monitored path to get the comparison from.
+- **`--start`**: Snapshot-number (begin at 1 and snapshots are ordered from latest to oldest) to start the comparison from. (Optional: default value is 1)
+- **`--end`**: Snapshot-number (begin at 2 and snapshots are ordered from latest to oldest) to end the comparison at. (Optional: default value is 2)
+
+#### Example:
+- Get the comparison of a monitored path by ID and of the last 5 taken snapshots:
+  ```bash
+  ts snapshots compare --id 1 --start 1 --end 5
+  ```
+Example output of successful execution:
+```
+Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
++-------------------+-------------------+-----------+
+| Path              | Snapshot IDs      | Comparison|
++-------------------+-------------------+-----------+
+| cache.txt         | 4                 | CHANGED   |
+|                   | 6                 | LAST TRACK|
++-------------------+-------------------+-----------+
+| log/log.txt       | 2                 | CHANGED   |
+|                   | 8                 | CHANGED   |
++-------------------+-------------------+-----------+
+```
+Example output of unsuccessful execution:
+
+If the range is too big for the existing snapshots:
+```
+Error: Not enough snapshots existing at the moment for this range.
+```
+If the index range is not valid:
+```
+Error: Start index needs to be smaller than the end index and not negative.
+```
+If it is an unexpected error:
+```
+Error: could not compare snapshots.
+```
+---
+
+### 10. `inspect`
+This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key
+is required so that this can be queried.
+
+#### Usage:
+```bash
+ts inspect <path>
+```
+
+#### Parameters:
+- **`path`**: The full path to the file you want to inspect. Either the relative path from the current directory or the absolute path can be used.
+
+#### Examples:
+- Inspect a file:
+  ```bash
+  ts inspect /path/to/apache.log
+  ```
+  
+Successful inspection:
+```
+Intended use:  
+The file `apache.log` appears to be a web server access log, capturing various HTTP requests [...] not valid IP addresses and may indicate malicious activity or probing attempts. [...] the abnormal entries warrant further investigation.
+
+Assessment:  
+Potentially harmful
+
+Recommended to Wipe:  
+Clear file
+
+Additional recommendations:  
+Perform a thorough analysis of the web server's security posture and monitor for unusual traffic patterns. Validate legitimate access attempts to identify any potential breaches or vulnerabilities.
+```
+
+File not found:
+```
+Error: File not found.
+```
+
+Error message:
+``` 
+Error: Failed to inspect file. Make sure the file is accessible, the connection to the internet is working and the environment variable OPENAI_API_KEY is set.
+```
+
+---
+
+### 11. `wipe`
+This command wipes a given file.  This either means to clear the content of the file or to delete it. Which can be specified by the `remove` flag.
+
+#### Usage:
+```bash
+ts wipe <path> [--remove]
+```
+
+#### Parameters:
+- **`path`**: The full path to the file you want to wipe. Either the relative path from the current directory or the absolute path can be used.
+- **`--remove`**: If this flag is present, the file will be deleted. Otherwise, the content will be cleared.
+
+#### Examples:
+- Wipe the content of a file:
+  ```bash
+  ts wipe /path/to/cool.log
+  ```
+  
+- Remove a file:
+  ```bash
+    ts wipe /path/to/cool.log --remove
+    ```
+  
+Successful clearing:
+```
+Successfully cleared file.
+```
+
+Successful removal:
+```
+Successfully removed file.
+```
+
+File not processable:
+```
+Error: File could not be processed.
+```
+
+Error message:
+```
+Error: Failed to wipe file.
+```

@@ -3,9 +3,6 @@ spring:
     name: daemon
   datasource:
     driver-class-name: org.sqlite.JDBC
-    username:
-    password:
-    url: jdbc:sqlite:tracesentry.db
   jpa:
     hibernate:
       ddl-auto: validate
@@ -14,3 +11,9 @@ spring:
       mode: always
 server:
   port: 8087
+ai:
+  openai_endpoint: "https://api.openai.com/v1/chat/completions"
+
+monitoring-scheduler:
+  snapshot:
+    interval: 60
