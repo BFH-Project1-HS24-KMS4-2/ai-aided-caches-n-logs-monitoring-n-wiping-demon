@@ -756,7 +756,34 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-001                                                                 \\ \hline
+            \textbf{ID}           & E2E-001 \\ \hline
+            \textbf{Beschreibung} & Daemon starten und stoppen \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft nicht
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
+                \item \begin{verbatim}ts run\end{verbatim}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
+                \item \begin{verbatim}ts kill\end{verbatim}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon kann gestartet und gestoppt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-002                                                                 \\ \hline
             \textbf{Beschreibung} & Beschreibung         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
@@ -771,8 +798,193 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
         \end{tabular}
-        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
+        \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
     \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-003                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-004                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-005                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-006                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-007                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-008                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-009                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-009}\label{tab:e2e-9}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-010                                                                 \\ \hline
+            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Vorbedingung
+                \item Vorbedingung
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item Schritt 1
+                \item Erwartet: Bla
+                \item Schritt 2
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-0010}\label{tab:e2e-10}
+    \end{table}
+
 
     \subsection{Testergebnisse}
     \begin{table}[h!]
