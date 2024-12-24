@@ -10,15 +10,15 @@ import org.springframework.shell.standard.ShellOption;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.nio.file.Paths;
 
 @ShellComponent
 @ShellCommandGroup("Admin Commands")
 public class AdminCommands {
 
     private final static String TRACE_SENTRY_DIR_ENV = "TRACE_SENTRY_DIR";
+    private final static String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
     private final static String DAEMON_JAR = "daemon.jar";
-    private final static String INFERRED_DAEMON_LOCATION = Paths.get(System.getenv(TRACE_SENTRY_DIR_ENV), "bin", DAEMON_JAR).toString();
+    private final static String INFERRED_DAEMON_LOCATION = System.getenv(TRACE_SENTRY_DIR_ENV) + DELIMITER + DAEMON_JAR;
     private final static int DAEMON_PORT = 8087;
 
     private final DaemonAdapter daemonAdapter;
