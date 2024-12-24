@@ -784,19 +784,19 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-002                                                                 \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Autostart         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item Autostart Konfiguration gem.\ Installationshandbuch
+                \item Daemon läuft nicht
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item System neustarten
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
     \end{table}
@@ -807,19 +807,32 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-003                                                                 \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Inspect         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item OPENAI\_API\_KEY Umgebungsvariable gesetzt gem.\ Installationshandbuch
+                \item Daemon läuft
+                \item Beispiel-Datei unter [PFAD] vorhanden
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item \begin{verbatim}ts inspect [PFAD]\end{verbatim}
+                \item Erwartet:
+                \begin{verbatim}
+Intended use:
+The file ...
+
+Assessment:
+...
+
+Recommended to Wipe:
+...
+
+Additional recommendations:
+...
+                \end{verbatim}
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt.\\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
     \end{table}
@@ -922,19 +935,18 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-008                                                                 \\ \hline
-            \textbf{Beschreibung} & Beschreibung         \\ \hline
+            \textbf{Beschreibung} & Search (Cache- und Log-Dateien)         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Vorbedingung
-                \item Vorbedingung
+                \item Daemon läuft
+                \item Beispiel-Verzeichnis unter [PFAD] vorhanden
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item Schritt 1
-                \item Erwartet: Bla
-                \item Schritt 2
+                \item \begin{verbatim}ts search [PFAD]\end{verbatim}
+                \item Erwartet: Auflistung der Inhalte unter [PFAD]
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Erwartetes Ergebnis \\ \hline
+            \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
     \end{table}
