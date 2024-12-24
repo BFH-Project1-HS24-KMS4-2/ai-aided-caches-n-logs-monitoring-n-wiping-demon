@@ -1,5 +1,6 @@
 package ch.bfh.tracesentry.daemon.performance;
 
+import ch.bfh.tracesentry.daemon.domain.model.MerkleTree;
 import ch.bfh.tracesentry.daemon.domain.model.MonitoredPath;
 import ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository;
 import ch.bfh.tracesentry.daemon.domain.repo.NodeRepository;
@@ -20,11 +21,14 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Non-functional (and non-assertive) performance test for core daemon functionality.
+ * Intended usage: getting a rough idea of the performance of key operations.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -54,8 +58,15 @@ public class PerformanceTest {
         monitoringScheduler = new MonitoringScheduler(monitoredPathRepository, nodeRepository, snapshotRepository);
     }
 
-    // Remove comment out to run the test locally. Always comment annotation before committing and pushing (to not run the test on the pipeline).
-    //@Test
+    /**
+     * Outputs simple metrics about the monitoring (and comparison) operation.
+     * <p>
+     * Remove annotation comment to run the test (might take multiple minutes depending on the monitored paths).
+     * Always comment annotation again before committing and pushing (to not run the test in the CI pipeline).
+     * A node (dir or file) can manually be changed/added/removed while the test is running to test the comparison functionality.
+     * There are 720 snapshot creations, simulating a month of monitoring.
+     **/
+    @Test
     public void testMonitoringOverLongPeriod() {
         var monitorings = List.of(
                 "C:\\Users\\Janic Scherer\\AppData\\Roaming\\discord\\Cache",
@@ -83,46 +94,65 @@ public class PerformanceTest {
         Runtime runtime = Runtime.getRuntime();
         var startMemory = runtime.totalMemory() - runtime.freeMemory();
 
-        var start = System.currentTimeMillis();
+        var start = Instant.now();
         // simulates monitoring over a month
         for (int i = 0; i < 720; i++) {
             monitoringScheduler.createSnapshots();
         }
-        var end = System.currentTimeMillis();
+        var end = Instant.now();
 
         var endMemory = runtime.totalMemory() - runtime.freeMemory();
 
-        LOG.info("Memory used: {}GiB", (endMemory - startMemory) / 1024 / 1024 / 1024);
+        logApproxMemoryUsage(startMemory, endMemory);
         LOG.info("Snapshots created: {}", snapshotRepository.count());
         LOG.info("Nodes created: {}", nodeRepository.count());
-        LOG.info("Monitoring took: {}min, average: {}s", (end - start) / 1000 / 60, (end - start) / 1000 / 720);
-        LOG.info(snapshotComparisonRepository.getSnapshotComparisons(1, 0, 720).toString());
+        var duration = Duration.between(start, end);
+        LOG.info("Monitoring took: {}min, average snapshot creation time: {}ms",
+                duration.toMinutes(),
+                duration.toMillis() / 720);
+
+        var startComp1 = Instant.now();
+        var comparisons = snapshotComparisonRepository.getSnapshotComparisons(1, 0, 720);
+        var endComp1 = Instant.now();
+        LOG.info("Comparisons: {}", comparisons.toString());
+        LOG.info("Comparisons took: {}ms", Duration.between(startComp1, endComp1).toMillis());
     }
 
     /**
      * Outputs simple metrics about the search operation.
-     * Intended usage: getting a rough idea of the performance of the search operation.
      */
-    //@ParameterizedTest
-    //@ValueSource(strings = {
-    //        "C:\\Windows\\Temp\\",
-    //        "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
-    //)
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "C:\\Windows\\Temp\\",
+            "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
+    )
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
         Runtime runtime = Runtime.getRuntime();
 
-        var start = System.currentTimeMillis();
+        var start = Instant.now();
         var startMemory = runtime.totalMemory() - runtime.freeMemory();
         var dto = searchController.search(path, "", "", false);
-        var end = System.currentTimeMillis();
+        var end = Instant.now();
         var endMemory = runtime.totalMemory() - runtime.freeMemory();
 
+
+        var tree = new MerkleTree(new MonitoredPath()
+                .path(path)
+                .mode(SearchMode.FULL)
+                .pattern(".*"),
+                null);
+        LOG.info("Tree depth: {}", tree.calculateDepth(tree.getRoot()));
+        LOG.info("Tree size: {}", tree.getLinearizedNodes().size());
         LOG.info("Operating System: {} {}", osBean.getName(), osBean.getVersion());
         LOG.info("Architecture: {}", osBean.getArch());
         LOG.info("Available Processors (CPU cores): {}", osBean.getAvailableProcessors());
-        LOG.info("Search took: {}ms", end - start);
+        LOG.info("Search took: {}ms", Duration.between(start, end).toMillis());
         LOG.info("Files found: {}", dto.getNumberOfFiles());
-        LOG.info("Memory used: {}MiB", (endMemory - startMemory) / 1024 / 1024);
+        logApproxMemoryUsage(startMemory, endMemory);
+    }
+
+    private static void logApproxMemoryUsage(long startMemory, long endMemory) {
+        LOG.info("Approx. memory used: {}MiB", (endMemory - startMemory) / 1024 / 1024);
     }
 }
