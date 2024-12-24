@@ -40,4 +40,13 @@ public class SnapshotComparisonDTO {
     public void setComparison(List<String> comparison) {
         this.comparison = comparison;
     }
+
+    @Override
+    public String toString() {
+        return "SnapshotComparisonDTO{" +
+                "snapshotIds=" + snapshotIds +
+                ", path='" + path + '\'' +
+                ", comparison=" + comparison +
+                '}';
+    }
 }

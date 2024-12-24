@@ -111,6 +111,27 @@ public class MerkleTree {
         return sb.toString();
     }
 
+    public int calculateDepth(Node node) {
+        if (node == null || node.getChildren() == null || node.getChildren().isEmpty()) {
+            return 1;
+        }
+
+        int maxDepth = 0;
+        for (Node child : node.getChildren()) {
+            maxDepth = Math.max(maxDepth, calculateDepth(child));
+        }
+
+        return maxDepth + 1;
+    }
+
+    public Node getRoot() {
+        return root;
+    }
+
+    public MonitoredPath getMonitoredPath() {
+        return monitoredPath;
+    }
+
     public List<Node> getLinearizedNodes() {
         return linearizedNodes;
     }
@@ -131,9 +152,5 @@ public class MerkleTree {
             hexString.append(hex);
         }
         return hexString.toString();
-    }
-
-    public Node getRoot() {
-        return root;
     }
 }
