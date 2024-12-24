@@ -32,7 +32,7 @@ public class MonitoringController {
         File dirToSearch = parseDirectory(dto.getPath());
         SearchMode searchMode = dto.getMode();
         Pattern patternToMatch = parsePattern(dto.getPattern(), searchMode);
-        monitoringDomainService.createMonitoring(dirToSearch.getAbsolutePath(), searchMode, patternToMatch.pattern(), dto.isNoSubdirs());
+        monitoringDomainService.createMonitoring(dirToSearch.getAbsolutePath(), searchMode, patternToMatch, dto.isNoSubdirs());
     }
 
     @GetMapping

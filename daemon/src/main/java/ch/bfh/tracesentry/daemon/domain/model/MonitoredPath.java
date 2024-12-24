@@ -29,6 +29,7 @@ public class MonitoredPath {
 
     private String path;
 
+    @Enumerated(EnumType.STRING)
     private SearchMode mode;
 
     @Nullable

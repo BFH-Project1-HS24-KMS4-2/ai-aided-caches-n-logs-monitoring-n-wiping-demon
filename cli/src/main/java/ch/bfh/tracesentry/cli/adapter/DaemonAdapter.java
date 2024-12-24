@@ -113,7 +113,7 @@ public class DaemonAdapter {
      * @param path absolute path to the directory to monitor
      * @param mode search mode
      * @param noSubdirs do not monitor subdirectories
-     * @param pattern pattern to search for, may be null
+     * @param pattern pattern to search for
      * @return void
      */
     public ResponseEntity<Void> monitorAdd(String path, SearchMode mode, boolean noSubdirs, Pattern pattern) {
