@@ -18,6 +18,10 @@
 
 ---
 
+Enter ```help``` to get a list of all available commands. Or `help <command>` to get more information about a specific command.
+
+---
+
 ### 1. `run`
 This command starts the daemon process by specifying the path to the JAR file if it is not already running. If the daemon is already running, it will not be restarted.
 If the path is not provided, the command will attempt to infer the path from the environment variable `TRACE_SENTRY_DIR`.
