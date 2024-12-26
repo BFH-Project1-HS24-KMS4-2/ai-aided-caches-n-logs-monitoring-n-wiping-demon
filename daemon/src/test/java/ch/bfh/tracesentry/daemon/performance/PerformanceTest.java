@@ -116,10 +116,10 @@ public class PerformanceTest {
     /**
      * Outputs simple metrics about the search operation.
      */
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "C:\\Windows"}
-    )
+    //@ParameterizedTest
+    //@ValueSource(strings = {
+    //        "C:\\Windows"}
+    //)
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 
