@@ -92,9 +92,6 @@ public class PerformanceTest {
                                 .createdAt(createdAt))
                         .toList());
 
-        Runtime runtime = Runtime.getRuntime();
-        var startMemory = runtime.totalMemory() - runtime.freeMemory();
-
         var start = Instant.now();
         // simulates monitoring over a month
         for (int i = 0; i < 720; i++) {
@@ -102,9 +99,6 @@ public class PerformanceTest {
         }
         var end = Instant.now();
 
-        var endMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        logApproxMemoryUsage(startMemory, endMemory);
         LOG.info("Snapshots created: {}", snapshotRepository.count());
         LOG.info("Nodes created: {}", nodeRepository.count());
         var duration = Duration.between(start, end);
@@ -122,20 +116,16 @@ public class PerformanceTest {
     /**
      * Outputs simple metrics about the search operation.
      */
-    //@ParameterizedTest
-    //@ValueSource(strings = {
-    //        "C:\\Windows\\Temp\\",
-    //        "C:\\Users\\Janic Scherer\\IdeaProjects\\"}
-    //)
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "C:\\Windows"}
+    )
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-        Runtime runtime = Runtime.getRuntime();
 
         var start = Instant.now();
-        var startMemory = runtime.totalMemory() - runtime.freeMemory();
         var dto = searchController.search(path, "", "", false);
         var end = Instant.now();
-        var endMemory = runtime.totalMemory() - runtime.freeMemory();
 
 
         var tree = new MerkleTree(new MonitoredPath()
@@ -150,10 +140,5 @@ public class PerformanceTest {
         LOG.info("Available Processors (CPU cores): {}", osBean.getAvailableProcessors());
         LOG.info("Search took: {}ms", Duration.between(start, end).toMillis());
         LOG.info("Files found: {}", dto.getNumberOfFiles());
-        logApproxMemoryUsage(startMemory, endMemory);
-    }
-
-    private static void logApproxMemoryUsage(long startMemory, long endMemory) {
-        LOG.info("Approx. memory used: {}MiB", (endMemory - startMemory) / 1024 / 1024);
     }
 }
