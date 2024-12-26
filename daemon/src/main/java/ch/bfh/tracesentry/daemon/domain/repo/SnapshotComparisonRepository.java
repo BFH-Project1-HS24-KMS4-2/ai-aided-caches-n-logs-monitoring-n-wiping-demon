@@ -27,8 +27,8 @@ public class SnapshotComparisonRepository {
                             ) as s
                 join
                         (select sn.snapshot_id, sn.path, case
-                            when sn.has_changed then 'CHANGED'
                             when sn.deleted_in_next_snapshot then 'LAST TRACK'
+                            when sn.has_changed then 'CHANGED'
                             else 'NOTHING' end as comparison
                          from snapshot_node sn
                          where sn.has_changed = true or
