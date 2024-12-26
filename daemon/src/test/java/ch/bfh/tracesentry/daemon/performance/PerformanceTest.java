@@ -9,6 +9,7 @@ import ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository;
 import ch.bfh.tracesentry.daemon.facade.SearchController;
 import ch.bfh.tracesentry.daemon.scheduling.MonitoringScheduler;
 import ch.bfh.tracesentry.lib.model.SearchMode;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -55,6 +56,9 @@ public class PerformanceTest {
     @Autowired
     private SearchController searchController;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @BeforeEach
     public void setup() {
         monitoringScheduler = new MonitoringScheduler(monitoredPathRepository, nodeRepository, snapshotRepository);
@@ -67,23 +71,25 @@ public class PerformanceTest {
      * A node (dir or file) can manually be changed/added/removed while the test is running to also test the comparison functionality.
      * There are 720 snapshot creations, simulating a month of monitoring.
      **/
-    //@Test
+    @Test
     public void testMonitoringOverLongPeriod() {
         var monitorings = List.of(
-                "C:\\Users\\Janic Scherer\\AppData\\Roaming\\discord\\Cache",
-                "C:\\\\Users\\\\Janic Scherer\\\\AppData\\\\Roaming\\\\discord\\\\logs",
-                "C:\\Users\\Janic Scherer\\AppData\\Roaming\\Docker Desktop\\Cache",
-                "C:\\Users\\Janic Scherer\\AppData\\Roaming\\Microsoft",
-                "C:\\Users\\Janic Scherer\\AppData\\Roaming\\NVIDIA",
-                "C:\\ProgramData\\VMware\\logs",
-                "C:\\ProgramData\\Package Cache",
-                "C:\\ProgramData\\Apple",
-                "C:\\ProgramData\\LogiOptionsPlus",
-                "C:\\ProgramData\\LGHUB");
+                "/home/luca/tracesentry-1.0.2",
+                "/opt/idea-IU-242.22855.74",
+                "/opt/vivaldi",
+                "/tmp",
+                "/etc",
+                "/usr/local",
+                "/usr/share/vim",
+                "/dev",
+                "/opt/az/lib/python3.12/email",
+                "/opt/android-studio");
 
         var createdAt = LocalDate.of(2024, 11, 1);
 
-        monitoredPathRepository.saveAll(
+        final Long dbSizeBefore = (Long) entityManager.createNativeQuery("SELECT MEMORY_USED() AS memory_used;").getSingleResult();
+
+        monitoredPathRepository.saveAllAndFlush(
                 monitorings.stream()
                         .map(path -> new MonitoredPath()
                                 .path(path)
@@ -99,6 +105,9 @@ public class PerformanceTest {
         }
         var end = Instant.now();
 
+        final Long dbSizeAfter = (Long) entityManager.createNativeQuery("SELECT MEMORY_USED() AS memory_used;").getSingleResult();
+
+        LOG.info("DB Memory Used in KB: before: {}, after: {}", dbSizeBefore, dbSizeAfter);
         LOG.info("Snapshots created: {}", snapshotRepository.count());
         LOG.info("Nodes created: {}", nodeRepository.count());
         var duration = Duration.between(start, end);
@@ -116,10 +125,10 @@ public class PerformanceTest {
     /**
      * Outputs simple metrics about the search operation.
      */
-    //@ParameterizedTest
-    //@ValueSource(strings = {
-    //        "C:\\Windows"}
-    //)
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "/home/luca", "/opt/idea-IU-242.22855.74"}
+    )
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 
