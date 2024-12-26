@@ -15,11 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 @Component
 public class MonitoringScheduler {
@@ -36,43 +40,47 @@ public class MonitoringScheduler {
         this.snapshotRepository = snapshotRepository;
     }
 
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRateString = "${monitoring-scheduler.snapshot.interval}", timeUnit = MINUTES)
     public void createSnapshots() {
         monitoredPathRepository.findAll().forEach(this::createSnapshot);
     }
 
     @Transactional
     protected void createSnapshot(MonitoredPath monitoredPath) {
-        var start = System.currentTimeMillis();
+        Optional<Snapshot> lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
+        List<Node> lastSnapshotNodes = lastSnapshot.isPresent() ? nodeRepository.findAllBySnapshotId(lastSnapshot.get().getId()) : List.of();
+
+        if (!new File(monitoredPath.getPath()).exists()) {
+            LOG.warn("Path \"{}\" does not exist, skipping snapshot creation", monitoredPath.getPath());
+            lastSnapshotNodes.forEach(n -> n.setDeletedInNextSnapshot(true));
+            nodeRepository.saveAll(lastSnapshotNodes);
+            return;
+        }
+
+        var start = Instant.now();
+
         var snapshot = new Snapshot();
         snapshot.setTimestamp(Timestamp.from(Instant.now()));
         snapshot.setMonitoredPath(monitoredPath);
-        /* TODO: test if monitoredPath.getPath() still exists
-            if not, dont do snapshot
-        */
-        final var tree = new MerkleTree(monitoredPath, snapshot);
-        var lastSnapshot = snapshotRepository.findFirstByMonitoredPathIdOrderByTimestampDesc(monitoredPath.getId());
-        /* TODO: test again if monitoredPath.getPath() still exists
-            if not, dont save snapshot
-        */
         snapshot = snapshotRepository.save(snapshot);
-        compareWithOldSnapshot(tree, lastSnapshot);
-        var end = System.currentTimeMillis();
+
+        var tree = new MerkleTree(monitoredPath, snapshot);
+
+        compareWithOldSnapshot(tree, lastSnapshotNodes);
+
+        var end = Instant.now();
         LOG.info("Created snapshot for path \"{}\" with id \"{}\" at \"{}\" with \"{}\" nodes in \"{}\"ms",
                 monitoredPath.getPath(),
                 snapshot.getId(),
                 snapshot.getTimestamp(),
                 tree.getLinearizedNodes().size(),
-                end - start);
+                Duration.between(start, end).toMillis());
     }
 
-    private void compareWithOldSnapshot(MerkleTree tree, final Optional<Snapshot> lastSnapshot) {
-        if (lastSnapshot.isPresent()) {
-            var oldNodes = nodeRepository.findAllBySnapshotId(lastSnapshot.get().getId());
-            compareNode(tree.getRoot(), oldNodes);
-            markDeletedNodes(oldNodes, tree);
-        } else {
-            tree.getLinearizedNodes().forEach(n -> n.setHasChanged(true));
+    private void compareWithOldSnapshot(MerkleTree tree, final List<Node> lastSnapshotNodes) {
+        if (!lastSnapshotNodes.isEmpty()) {
+            compareNode(tree.getRoot(), lastSnapshotNodes);
+            markDeletedNodes(lastSnapshotNodes, tree);
         }
         nodeRepository.saveAll(tree.getLinearizedNodes());
     }

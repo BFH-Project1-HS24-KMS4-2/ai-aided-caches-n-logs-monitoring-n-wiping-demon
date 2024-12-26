@@ -19,6 +19,7 @@ import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -54,12 +55,13 @@ public class MonitorCommands {
         var conflictMessage = "Error: " + path + " is already being monitored.";
         try {
             SearchMode searchMode = SearchMode.valueOf(mode.toUpperCase());
+            final String canonicalPath = new File(path).getCanonicalPath();
 
             ResponseEntity<Void> monitorResponse;
             if (PatternValidator.isValidPatternOccurrence(pattern, searchMode)) {
-                monitorResponse = daemonAdapter.monitorAdd(path, searchMode, noSubdirs, Pattern.compile(pattern));
+                monitorResponse = daemonAdapter.monitorAdd(canonicalPath, searchMode, noSubdirs, Pattern.compile(pattern));
             } else {
-                monitorResponse = daemonAdapter.monitorAdd(path, searchMode, noSubdirs);
+                monitorResponse = daemonAdapter.monitorAdd(canonicalPath, searchMode, noSubdirs);
             }
 
             if (monitorResponse.getStatusCode().is2xxSuccessful()) {

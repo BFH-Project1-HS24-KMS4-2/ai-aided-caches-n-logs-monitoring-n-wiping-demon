@@ -10,7 +10,7 @@
     </parent>
     <groupId>ch.bfh.tracesentry</groupId>
     <artifactId>cli</artifactId>
-    <version>0.14</version>
+    <version>1.0.2</version>
     <name>cli</name>
     <description>cli</description>
     <url/>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>ch.bfh.tracesentry</groupId>
             <artifactId>lib</artifactId>
-            <version>0.14</version>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

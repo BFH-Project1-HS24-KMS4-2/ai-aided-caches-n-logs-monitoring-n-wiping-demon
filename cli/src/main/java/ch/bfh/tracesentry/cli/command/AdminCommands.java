@@ -10,15 +10,14 @@ import org.springframework.shell.standard.ShellOption;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.file.Paths;
 
 @ShellComponent
 @ShellCommandGroup("Admin Commands")
 public class AdminCommands {
 
     private final static String TRACE_SENTRY_DIR_ENV = "TRACE_SENTRY_DIR";
-    private final static String DELIMITER = System.getProperty("os.name").startsWith("Windows") ? "\\" : "/";
     private final static String DAEMON_JAR = "daemon.jar";
-    private final static String INFERRED_DAEMON_LOCATION = System.getenv(TRACE_SENTRY_DIR_ENV) + DELIMITER + DAEMON_JAR;
     private final static int DAEMON_PORT = 8087;
 
     private final DaemonAdapter daemonAdapter;
@@ -54,7 +53,12 @@ public class AdminCommands {
         String jarPath = path;
 
         if (path.isEmpty()) {
-            jarPath = INFERRED_DAEMON_LOCATION;
+            var envValue = System.getenv(TRACE_SENTRY_DIR_ENV);
+            if (envValue != null) {
+                jarPath = Paths.get(envValue, "bin", DAEMON_JAR).toString();
+            } else {
+                return "Environment variable " + TRACE_SENTRY_DIR_ENV + " not set.";
+            }
         }
 
         var running = daemonAdapter.checkStatus();

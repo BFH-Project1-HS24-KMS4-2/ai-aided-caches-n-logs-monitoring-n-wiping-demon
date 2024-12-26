@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class MonitoringDomainService {
@@ -32,10 +33,10 @@ public class MonitoringDomainService {
         this.modelMapper = modelMapper;
     }
 
-    public void createMonitoring(String path, SearchMode mode, String pattern, boolean noSubdirs) throws IOException {
+    public void createMonitoring(String path, SearchMode mode, Pattern pattern, boolean noSubdirs) throws IOException {
         final File dirToSearch = new File(path);
         final String canonicalPath = dirToSearch.getCanonicalPath();
-        var monitoredPath = new MonitoredPath(canonicalPath, mode, pattern, noSubdirs);
+        var monitoredPath = new MonitoredPath(canonicalPath, mode, pattern == null ? null : pattern.pattern(), noSubdirs);
 
         if (!dirToSearch.isDirectory()) {
             LOG.info("Path to search is not a directory or does not exist.");

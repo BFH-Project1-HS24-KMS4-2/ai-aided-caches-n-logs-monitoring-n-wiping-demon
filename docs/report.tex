@@ -23,6 +23,7 @@
 
 
 \usepackage{geometry}
+\usepackage{booktabs}
 \geometry{
     top=1in,
     left=1in,
@@ -745,6 +746,320 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
 
     \section{Benutzerhandbuch}
 
+    \section{Manuelle End-2-End Tests}
+    Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
+
+    \subsection{Testfälle}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-001 \\ \hline
+            \textbf{Beschreibung} & Daemon starten und stoppen \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft nicht
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
+                \item \begin{verbatim}ts run\end{verbatim}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
+                \item \begin{verbatim}ts kill\end{verbatim}
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon kann gestartet und gestoppt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-002                                                                 \\ \hline
+            \textbf{Beschreibung} & Autostart         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Autostart Konfiguration gem.\ Installationshandbuch
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item System neustarten
+                \item \begin{verbatim}ts status\end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-003                                                                 \\ \hline
+            \textbf{Beschreibung} & Inspect         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item OPENAI\_API\_KEY Umgebungsvariable gesetzt gem.\ Installationshandbuch
+                \item Daemon läuft
+                \item Beispiel-Datei unter [PFAD] vorhanden
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts inspect [PFAD]\end{verbatim}
+                \item Erwartet:
+                \begin{verbatim}
+Intended use:
+The file ...
+
+Assessment:
+...
+
+Recommended to Wipe:
+...
+
+Additional recommendations:
+...
+                \end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt.\\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-004                                                                 \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen hinzufügen und entfernen         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD]\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD]
+to the monitoring database.\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
+                [ID] des Pfades notieren.
+                \item \begin{verbatim}ts monitor remove [ID]\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed path with ID [ID]
+from the monitoring database.\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-005                                                                 \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD]
+--mode log --no-subdirs\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.
+\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Pfad wird mit mode=LOG und no-subdirs=true aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-006              \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen mit Regex-Pattern hinzufügen.         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD] --mode pattern
+--pattern ^ts_.*_ts$\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.\end{verbatim}
+                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$\end{verbatim} aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit einem gewünschten Regex-Pattern hinzugefügt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-007 \\ \hline
+            \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item Der [PFAD] wurde noch nicht hinzugefügt.
+                (Empfohlen: ein nicht zu tiefer Pfad, damit die Snapshots schneller generiert werden)
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list\end{verbatim}
+                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item Erwartet: Liste mit genau 1 Snapshot.
+                \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item Erwartet: Liste mit genau 2 Snapshots.
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
+                (siehe oben)
+                \item Den Inhalte der Datei test.log ändern.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item test.log löschen.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item Erwartet: Löschung der Datei test.log wird aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
+            Erstellung, Änderung und Löschung einer Datei werden erkannt. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-008                                                                 \\ \hline
+            \textbf{Beschreibung} & Search (Cache- und Log-Dateien)         \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item Beispiel-Verzeichnis unter [PFAD] vorhanden
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts search [PFAD]\end{verbatim}
+                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}           & E2E-009 \\ \hline
+            \textbf{Beschreibung} & Leeren und Löschen einer Datei \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
+                \item Daemon läuft
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts wipe [PFAD]\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully cleared file.\end{verbatim}
+                \item Erwartet: Datei wurde geleert
+                \item \begin{verbatim}ts wipe [PFAD] --remove\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed file.\end{verbatim}
+                \item Erwartet: Datei wurde gelöscht
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Datei wird geleert und gelöscht. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-009}\label{tab:e2e-9}
+    \end{table}
+
+    \subsection{Testergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
+            26.12.2024     & Windows 10              & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-009          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-009          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-009          & Erfolgreich       \\ \hline
+
+        \end{tabular}
+        \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
+    \end{table}
 
     \chapter{Fazit}
 

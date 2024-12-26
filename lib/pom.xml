@@ -6,7 +6,7 @@
 
     <groupId>ch.bfh.tracesentry</groupId>
     <artifactId>lib</artifactId>
-    <version>0.14</version>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

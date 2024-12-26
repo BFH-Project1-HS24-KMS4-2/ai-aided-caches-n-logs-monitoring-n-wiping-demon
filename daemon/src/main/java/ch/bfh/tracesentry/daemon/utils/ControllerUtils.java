@@ -48,7 +48,7 @@ public final class ControllerUtils {
             if (pattern != null && !pattern.isEmpty()) {
                 throw new BadRequestException("Pattern is only allowed in pattern mode.");
             }
-            return Pattern.compile(".*");
+            return null;
         }
     }
 }
