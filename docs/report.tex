@@ -788,7 +788,6 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Autostart Konfiguration gem.\ Installationshandbuch
-                \item Daemon läuft nicht
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
@@ -847,23 +846,23 @@ Additional recommendations:
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
-                \item Pfad wurde noch nicht hinzugefügt
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add
-<TraceSentry Installationsverzeichnis>\end{verbatim}
-                \item Erwartet: \begin{verbatim}Hinzugefügt\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD]\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD]
+to the monitoring database.\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
                 \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
-                \item \begin{verbatim}ts monitor remove
-<TraceSentry Installationsverzeichnis>\end{verbatim}
-                \item Erwartet: \begin{verbatim}Removed\end{verbatim}
+                [ID] des Pfades notieren.
+                \item \begin{verbatim}ts monitor remove [ID]\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed path with ID [ID]
+from the monitoring database.\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
                 \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden.
-            Dabei wird auch der aktuelle Zustand mit der list-Anweisung immer korrekt ausgegeben.\\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
     \end{table}
@@ -874,23 +873,23 @@ Additional recommendations:
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & E2E-005                                                                 \\ \hline
-            \textbf{Beschreibung} & Pfad zum Überwachen mit Mode und der Option (ohne Unterordner) hinzufügen.         \\ \hline
+            \textbf{Beschreibung} & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.         \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
-                \item Pfad wurde noch nicht hinzugefügt
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add
-<TraceSentry Installationsverzeichnis>
---mode LOG --no-subdirs\end{verbatim}
-                \item Erwartet: \begin{verbatim}Hinzugefügt\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD]
+--mode log --no-subdirs\end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.
+\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
-                \item Erwartet: Pfad wird mit Mode=LOG und No Subdirs=true aufgelistet.
+                \item Erwartet: Pfad wird mit Mode=log und No-Subdirs=true aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann mit den gewünschten Optionen hinzugefügt werden.
-            Danach wird mit der list-Anweisung der aktuelle Zustand korrekt ausgegeben. \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
     \end{table}
@@ -905,19 +904,18 @@ Additional recommendations:
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
-                \item Pfad wurde noch nicht hinzugefügt
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add
-<TraceSentry Installationsverzeichnis>
+                \item \begin{verbatim}ts monitor add [PFAD]
 --pattern ^ts_.*_ts$\end{verbatim}
-                \item Erwartet: Hinzugefügt
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
                 \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$\end{verbatim} aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad, der noch nicht hinzugefügt wurde, kann mit einem gewünschten Regex Pattern hinzugefügt werden.
-            Danach wird mit der list-Anweisung der neue Zustand korrekt ausgegeben.\\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit einem gewünschten Regex-Pattern hinzugefügt werden. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
     \end{table}
@@ -931,34 +929,47 @@ Additional recommendations:
             \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Daemon wird aus Entwicklungsumgebung gestartet.
-                \item Snapshot-Intervall auf 5 Minuten gesetzt. (Konfiguration)
+                \item Daemon läuft
+                \item Der [PFAD] wurde noch nicht hinzugefügt.
+                (Empfohlen: ein nicht zu tiefer Pfad, damit die Snapshots schneller generiert werden)
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add /path/with/few/subdirs\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD]\end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
-                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen ID. Diese für nachfolgende Schritte verwenden.
-                \item Warten bis in Datenbank genau 1 Snapshot vorhanden ist.
-                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
+                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
+                \item Warten bis Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
                 \item Erwartet: Liste mit genau 1 Snapshot.
-                \item Eine Datei test.log in /path/with/few/subdirs erstellen und mit Inhalt füllen.
-                \item Warten bis in Datenbank genau 2 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
+                \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
                 \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare <ID>\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
-                \item Erwartet: Liste mit genau 4 Snapshots.
+                (siehe oben)
                 \item Den Inhalte der Datei test.log ändern.
-                \item Wartern bis in Datenbank genau 5 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots list <ID>\end{verbatim}
-                \item Erwartet: Liste mit 5 Snapshots.
-                \item \begin{verbatim}ts snapshots compare <ID> --start 4 --end 5\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts snapshots compare [ID] --start 4 --end 5\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item test.log löschen.
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
+                \item \begin{verbatim}ts snapshots compare [ID] --start 5 --end 6\end{verbatim}
+                \item Erwartet: Löschung der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und verglichen. \\ \hline
+            \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
+            Erstellung, Änderung und Löschung einer Datei werden erkannt. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
     \end{table}
@@ -978,7 +989,7 @@ Additional recommendations:
             \textbf{Ablauf} &
             \begin{enumerate}
                 \item \begin{verbatim}ts search [PFAD]\end{verbatim}
-                \item Erwartet: Auflistung der Inhalte unter [PFAD]
+                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
         \end{tabular}
@@ -994,49 +1005,22 @@ Additional recommendations:
             \textbf{Beschreibung} & Leeren und Löschen einer Datei \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Datei ist nicht geschützt. (z.B. durch Berechtigungen)
+                \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
                 \item Daemon läuft
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts wipe /path/to/file\end{verbatim}
-                \item Erwartet: Datei wurde geleert
+                \item \begin{verbatim}ts wipe [PFAD]\end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully cleared file.\end{verbatim}
-                \item \begin{verbatim}ts wipe /path/to/file --remove\end{verbatim}
-                \item Erwartet: Datei wurde gelöscht
+                \item Erwartet: Datei wurde geleert
+                \item \begin{verbatim}ts wipe [PFAD] --remove\end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully removed file.\end{verbatim}
+                \item Erwartet: Datei wurde gelöscht
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Datei wird geleert und gelöscht. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-009}\label{tab:e2e-9}
     \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}           & E2E-010              \\ \hline
-            \textbf{Beschreibung} & Leeren und Löschen einer geschützen Datei \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Datei ist geschützt. (z.B. durch Berechtigungen)
-                \item Daemon läuft
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts wipe /path/to/protected/file\end{verbatim}
-                \item Erwartet: Datei wurde nicht geleert
-                \item Erwartet: Fehlermeldung wird ausgegeben
-                \item \begin{verbatim}ts wipe /path/to/protected/file --remove\end{verbatim}
-                \item Erwartet: Datei wurde nicht gelöscht
-                \item Erwartet: Fehlermeldung wird ausgegeben
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Datei kann nicht geleert oder gelöscht werden. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-0010}\label{tab:e2e-10}
-    \end{table}
-
 
     \subsection{Testergebnisse}
     \begin{table}[h!]
