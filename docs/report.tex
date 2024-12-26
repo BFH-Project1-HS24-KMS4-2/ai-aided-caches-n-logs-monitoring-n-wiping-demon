@@ -83,7 +83,42 @@
     \section{Ausgangssituation}
 
 
+\subsection{Problem}\label{subsec:problem}
+Cache- und Logdateien sind temporäre Dateien, die von Betriebssystemen und
+Anwendungen zur Speicherung von Zwischenständen, Nutzeraktivitäten und
+Systemereignissen erstellt werden.
+Viele Computerbenutzer sind sich nicht bewusst, welche Arten dieser Dateien auf ihrem
+Computer existieren und insbesondere, welche Applikationen diese lesen, schreiben,
+verändern oder löschen.
+Dazu sind sich Anwender nicht bewusst, welchen Zwecken
+diese Dateien dienen und welche möglicherweise vertrauliche Informationen enthalten,
+die für Dritte von Interesse sein könnten.
+Diese Unkenntnis kann zu Datenschutzrisiken
+und fehlender Kontrolle führen.
+
+\subsection{Chance}\label{subsec:chance}
+    Durch das Angebot an generativen KI-Modellen, die – meist frei oder relativ günstig - im
+Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
+Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
+Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell nicht weiter realisiert, siehe Kapitel \nameref{sec:zukunftigearbeiten}.}
+Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
+welche unter anderem Momentaufnahmen (sogenannte\ Snapshots) relevanter Dateipfaden und Metadaten speichert,
+sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
+Benutzer auf einfache Art und Weise die Möglichkeit zur Kontrolle und Erleichterung dieses Umstandes
+geboten werden.
+
+\subsection{Umfeld}\label{subsec:stakeholder}
+    Das Projekt-Proposal umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt,
+andererseits das Ermitteln des Potentials aktueller KI-Modelle zur Lösung des genannten Problems.\\
+Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
+
     \section{Projektziel}
+
+Das Lieferobjekt soll von einem zentralen Repository heruntergeladen werden können,
+plattformunabhängig sein und mit einem User-Manual ausgestattet sein. Es soll OnDemand Search und periodisches Monitoring spezifizierter Dateipfade ermöglichen,
+indem es Einschätzungen von AI-Modellen einholt.
+Das AI-Modell wird nur abgefragt bzw. eingebunden und dessen Entwicklung und
+Betrieb wird vom Projekt abgegrenzt und als gegebene Verfügbarkeit vorausgesetzt.
 
 
     \section{Prioritäten}
@@ -1070,7 +1105,7 @@ monitoring database.\end{verbatim}
     \section{Zusammenfassung}
 
 
-    \section{Zukünftige Arbeiten}
+    \section{Zukünftige Arbeiten}\label{sec:zukunftigearbeiten}
     \url{https://doi.org/10.1145/3664811}
 
 
