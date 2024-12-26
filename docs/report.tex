@@ -887,7 +887,7 @@ from the monitoring database.\end{verbatim}
 monitoring database.
 \end{verbatim}
                 \item \begin{verbatim}ts monitor list\end{verbatim}
-                \item Erwartet: Pfad wird mit Mode=log und No-Subdirs=true aufgelistet.
+                \item Erwartet: Pfad wird mit mode=LOG und no-subdirs=true aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
         \end{tabular}
@@ -908,7 +908,7 @@ monitoring database.
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD]
+                \item \begin{verbatim}ts monitor add [PFAD] --mode pattern
 --pattern ^ts_.*_ts$\end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
 monitoring database.\end{verbatim}
@@ -935,9 +935,9 @@ monitoring database.\end{verbatim}
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD]\end{verbatim}
-                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list\end{verbatim}
                 \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
                 \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
@@ -960,12 +960,12 @@ monitoring database.\end{verbatim}
                 \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts snapshots compare [ID] --start 4 --end 5\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
                 \item test.log löschen.
                 \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots compare [ID] --start 5 --end 6\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Löschung der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
@@ -1029,7 +1029,34 @@ monitoring database.\end{verbatim}
         \begin{tabular}{|c|c|c|c|}
             \hline
             \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
-            01.01.2021     & Windows 10              & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-001          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-002          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-003          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-004          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-005          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-006          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-007          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-008          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-009          & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-009          & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-009          & Erfolgreich       \\ \hline
+
         \end{tabular}
         \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
     \end{table}
