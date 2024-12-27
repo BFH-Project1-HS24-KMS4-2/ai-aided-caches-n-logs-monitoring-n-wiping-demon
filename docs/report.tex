@@ -82,35 +82,35 @@
 
     \section{Ausgangssituation}
 
+    \subsection{Problem}\label{subsec:problem}
+    Cache- und Logdateien sind temporäre Dateien, die von Betriebssystemen und
+    Anwendungen zur Speicherung von Zwischenständen, Nutzeraktivitäten und
+    Systemereignissen erstellt werden.
+    Viele Computerbenutzer sind sich nicht bewusst, welche Arten dieser Dateien auf ihrem
+    Computer existieren und insbesondere, welche Applikationen diese lesen, schreiben,
+    verändern oder löschen.
+    Dazu sind sich Anwender nicht bewusst, welchen Zwecken
+    diese Dateien dienen und welche möglicherweise vertrauliche Informationen enthalten,
+    die für Dritte von Interesse sein könnten.
+    Diese Unkenntnis kann zu Datenschutzrisiken
+    und fehlender Kontrolle führen.
 
-\subsection{Problem}\label{subsec:problem}
-Cache- und Logdateien sind temporäre Dateien, die von Betriebssystemen und
-Anwendungen zur Speicherung von Zwischenständen, Nutzeraktivitäten und
-Systemereignissen erstellt werden.
-Viele Computerbenutzer sind sich nicht bewusst, welche Arten dieser Dateien auf ihrem
-Computer existieren und insbesondere, welche Applikationen diese lesen, schreiben,
-verändern oder löschen.
-Dazu sind sich Anwender nicht bewusst, welchen Zwecken
-diese Dateien dienen und welche möglicherweise vertrauliche Informationen enthalten,
-die für Dritte von Interesse sein könnten.
-Diese Unkenntnis kann zu Datenschutzrisiken
-und fehlender Kontrolle führen.
-
-\subsection{Chance}\label{subsec:chance}
+    \subsection{Chance}\label{subsec:chance}
     Durch das Angebot an generativen KI-Modellen, die – meist frei oder relativ günstig - im
-Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
-Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
-Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Kapitel \nameref{sec:zukunftigearbeiten}.}
-Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
-welche unter anderem Momentaufnahmen (sogenannte\ Snapshots) relevanter Dateipfaden und Metadaten speichert,
-sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
-Benutzer auf einfache Art und Weise die Möglichkeit zur Kontrolle und Erleichterung dieses Umstandes
-geboten werden.
+    Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
+    Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
+    Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Kapitel \nameref{sec:zukunftigearbeiten}.}
+    Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
+    welche unter anderem Momentaufnahmen (sogenannte\ Snapshots) relevanter Dateipfaden und Metadaten speichert,
+    sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
+    Benutzer auf einfache Art und Weise die Möglichkeit zur Kontrolle und Erleichterung dieses Umstandes
+    geboten werden.
 
-\subsection{Umfeld}\label{subsec:stakeholder}
+    \subsection{Umfeld}\label{subsec:stakeholder}
     Das Projekt-Proposal umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt,
-andererseits das Ermitteln des Potentials aktueller KI-Modelle zur Lösung des genannten Problems.\\
-Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
+    andererseits das Ermitteln des Potentials aktueller KI-Modelle zur Lösung des genannten Problems.\\
+    Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
+
 
     \section{Projektziel}\label{sec:projektziel}
     Es soll eine Anwendung entwickelt werden, welche die \textbf{Suche, Überwachung und Löschung von Cache- und Logdateien} ermöglicht.
@@ -135,6 +135,7 @@ Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
     Zurückpriorisierte Funktioalitäten, sowie Erweiterungen werden im Kapitel \nameref{sec:zukunftigearbeiten} beschrieben.
+
 
     \chapter{Spezifikation}
 
@@ -659,46 +660,144 @@ Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
     Die erste Frage ist \textbf{NoSQL} oder \textbf{SQL}.
 
     \textbf{1. NoSQL}
-    Beschreibung...
+    NoSQL bezeichnet nicht-relationale Datenbanken, die flexible Datenmodelle
+    (z.B. Dokumente, Key-Value, Graphen) verwenden und für hohe Skalierbarkeit sowie große Datenmengen optimiert sind.
 
     \textbf{Vorteile}
     \begin{itemize}
-        \item ...
+        \item Hohe Flexibilität: Kein festes Schema, was dynamische Anpassungen der Datenstruktur ermöglicht.
+        \item Einfache Skalierbarkeit: Unterstützt horizontale Skalierung, ideal für große Datenmengen.
+        \item Optimiert für spezielle Anwendungsfälle: Verschiedene Modelle wie Dokumente, Key-Value, oder Graphen.
     \end{itemize}
 
     \textbf{Nachteile}
     \begin{itemize}
-        \item ...
+        \item Fehlende Standardisierung: Unterschiedliche Implementierungen und keine einheitliche Abfragesprache.
+        \item Schwächere Transaktionssicherheit: Viele NoSQL-Datenbanken verzichten auf ACID-Eigenschaften zugunsten der Performance.
+        \item Komplexere Abfragen: Nicht so intuitiv wie SQL für relationale Daten.
     \end{itemize}
 
-    \textbf{Begründung NoSQL} ...
+    \textbf{Begründung NoSQL} Wir sehen für unser Projekt keinen der obengenannten Vorteile als grossen Mehrwertn an.
+    Da auch alle Teammitglieder bisher kaum Erfahrungen mit NoSQL-Datenbanken gesammelt haben, entschieden wir uns dagegen.
 
     \textbf{2. SQL}
-    Beschreibung...
+    SQL-Datenbanken basieren auf dem relationalen Modell, speichern Daten in Tabellen
+    mit definierten Schemata und verwenden die strukturierte Abfragesprache SQL für den Datenzugriff.
 
     \textbf{Vorteile}
     \begin{itemize}
-        \item ...
+        \item Standardisierung: Einheitliche Abfragesprache (SQL) und breite Unterstützung.
+        \item Datenkonsistenz: Unterstützung von ACID-Eigenschaften für zuverlässige Transaktionen.
+        \item Komplexe Abfragen: Leistungsstarke Werkzeuge für relationale Abfragen und Analysen.
     \end{itemize}
 
     \textbf{Nachteile}
     \begin{itemize}
-        \item ...
+        \item Wenig flexibel: Feste Schemata erfordern sorgfältige Planung und sind schwer anpassbar.
+        \item Begrenzte Skalierbarkeit: Horizontale Skalierung ist oft schwieriger als bei NoSQL.
+        \item Leistungsprobleme bei Big Data: Relationale Modelle können ineffizient für große, unstrukturierte Datenmengen sein.
     \end{itemize}
 
-    \textbf{Begründung SQL} ...
+    \textbf{Begründung SQL} Erstens haben alle Teammitglieder bereits viel Erfahrung mit SQL sammeln können und deswegen ist es schonmal intuitiver für uns als NoSQL.
+    Dazu war uns auch die Datenkonsistenz wichtig, damit wir mit den relationalen Abfragen, die SQL bietet unsere gespeicherten Daten auch entsprechend gut analysieren können.
+    Zum Schluss sehen wir auch die oben aufgelisteten Nachteile nicht als Problem für unser Projekt an.
+    Aus diesen Gründen entschieden wir uns für eine SQL-Datenbank.
 
     Nun wissen wir, dass wir eine Embedded-Datenbank mit SQL wollen.
     Also müssen wir uns noch für eine der folgenden Optionen entscheiden:
 
-    \textbf{H2,SQLite} ...
+    \textbf{1. H2}
+    H2 ist eine Java-basierte, leichtgewichtige relationale Datenbank,
+    die in Anwendungen eingebettet oder im Servermodus betrieben werden kann.
+    Sie bietet hohe Performance, unterstützt SQL-Standards und eignet sich gut für Java-Anwendungen.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Java-Integration: Speziell für Java-Anwendungen optimiert, mit JDBC-Unterstützung.
+        \item Vielseitigkeit: Kann sowohl als eingebettete Datenbank als auch im Servermodus verwendet werden.
+        \item Erweiterte Features: Unterstützt Funktionen wie in-memory-Datenbanken und Multi-Threaded-Betrieb.
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Nicht für große Workloads: Weniger geeignet für datenintensive Anwendungen.
+        \item Java-Abhängigkeit: Funktioniert am besten in Java-Umgebungen, eingeschränkte Nutzung in anderen Ökosystemen.
+        \item Begrenzte Persistenzoptionen: Daten können im Speicher verloren gehen, wenn nicht korrekt gesichert.
+    \end{itemize}
+
+    \textbf{Begründung H2} ... % todo
+
+    \textbf{2. SQLite}
+    SQLite ist eine serverlose, eingebettete relationale Datenbank, die keine separate Konfiguration erfordert.
+    Sie speichert Daten in einer einzelnen Datei und ist ideal für kleinere Anwendungen oder lokale Datenpersistenz.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Einfachheit: Keine Konfiguration oder separate Serverprozesse erforderlich.
+        \item Portabilität: Daten werden in einer einzigen Datei gespeichert, ideal für lokale Persistenz.
+        \item Ressourcenschonend: Sehr geringe Anforderungen an Speicher und Rechenleistung.
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Begrenzte Skalierbarkeit: Nicht ideal für gleichzeitigen Zugriff durch viele Benutzer.
+        \item Fehlende Features: Unterstützt nicht alle SQL-Standards wie fortgeschrittene Parallelisierung oder Stored Procedures.
+        \item Performance-Einbußen bei großen Datenmengen: Langsamer bei komplexen oder datenintensiven Abfragen.
+    \end{itemize}
+
+    \textbf{Begründung SQLite} ... % todo
 
         {\large\bfseries CLI/Daemon}
 
     Dann gibt es noch die Komponenten CLI und Daemon, wofür wir gerne eine einheitliche Technologie hätten,
     um es simpel zu halten und auch einfacher gewisse Teile zwischen den beiden Komponenten teilen zu können.
 
-    \textbf{Java/Python} ...
+    \textbf{1. Java}
+    Java ist eine objektorientierte, plattformunabhängige Programmiersprache,
+    die für ihre Stabilität, Performance und breite Unterstützung in der Industrie bekannt ist.
+    Sie ist besonders geeignet für komplexe, skalierbare Anwendungen.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Performance: Java bietet hohe Laufzeitgeschwindigkeit und Stabilität, ideal für rechenintensive Anwendungen.
+        \item Struktur: Starke Typisierung und klare Projektorganisation fördern langfristige Wartbarkeit.
+        \item Integration: Unterstützt stabile Verbindungen zu APIs und Modellen, z.B. über REST-Clients oder gRPC.
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Komplexität: Höherer Entwicklungsaufwand durch Boilerplate-Code und strikte Typisierung.
+        \item Eingeschränkte KI-Bibliotheken: KI- und ML-Frameworks sind weniger umfangreich als in Python und oft schwerfälliger zu nutzen.
+        \item Langsamere Prototypenentwicklung: Für schnelle Iterationen ist Java weniger geeignet.
+    \end{itemize}
+
+    \textbf{Begründung Java} Da für uns die Performance relativ wichtig war und auch hier wieder alle
+    Teammitglieder um einiges mehr Erfahrung als mit Python haben, entschieden wir uns für Java.
+    Der einzige Punkt, bei dem wir noch zweifelten war die Einschränkung bezüglich KI-Integration,
+    welcher aber unserer Meinung nach zu wenig ins Gewicht fiel.
+    Zudem sahen wir auch durch Spring-Bibliotheken eine grosse Unterstützung für unsere CLI/Daemon-Architektur.
+
+    \textbf{2. Python}
+    Python ist eine einfach zu erlernende, vielseitige Programmiersprache mit einer lesbaren Syntax
+    und einer riesigen Anzahl an Bibliotheken, die sie ideal für schnelle Entwicklung
+    und datengetriebene Projekte machen.
+
+    \textbf{Vorteile}
+    \begin{itemize}
+        \item Einfachheit: Kürzere Entwicklungszeit dank klarer Syntax und umfangreicher Standardbibliothek.
+        \item KI-Ökosystem: Native Unterstützung für KI-Bibliotheken (z.B. transformers, openai, torch) macht die Integration mit GPT-Modellen mühelos.
+        \item Flexibilität: Besonders geeignet für Skripte und Projekte, die schnell iteriert werden müssen.
+    \end{itemize}
+
+    \textbf{Nachteile}
+    \begin{itemize}
+        \item Performance: Kann langsamer sein als Java, besonders bei rechenintensiven Aufgaben.
+        \item Fehlende Strenge: Dynamische Typisierung kann bei größeren Projekten zu Wartbarkeitsproblemen führen.
+        \item Distributierbarkeit: Python-Anwendungen benötigen oft spezielle Umgebungen oder Pakete, was die Portabilität erschweren kann.
+    \end{itemize}
+
+    \textbf{Begründung Python} Hier wäre natürlich die grosse Auswahl und Unterstützung von KI-Bibliotheken ein grosser Vorteil gewesen.
+    Allerdings hat dieser Punkt uns zu wenig überzeugt, um uns für Python zu entscheiden.
 
 
     \section{Prozesse}
@@ -736,7 +835,7 @@ Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
 
     Als Vorbedingung muss eine Java Laufzeitumgebung bereits auf dem entsprechenden Gerät installiert sein.
 
-    \subsection{Unix}
+    \subsection{Linux}
     \begin{enumerate}
         \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
         \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
@@ -760,7 +859,7 @@ export OPENAI_API_KEY=<generierter API-Schlüssel>
         \begin{lstlisting}[label={lst:lstlisting-unix-4}]
 crontab -e
 // Fügen Sie die folgende Zeile am Ende der geöffneten Datei hinzu
-@reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts-daemon
+@reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts run
         \end{lstlisting}
         Speichern Sie dann die Datei.
         \item Nach einem Systemneustart sind Sie bereit, TraceSentry zu verwenden.
@@ -793,6 +892,7 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
 
     \section{Benutzerhandbuch}
 
+
     \section{Manuelle End-2-End Tests}
     Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
 
@@ -803,22 +903,30 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-001 \\ \hline
-            \textbf{Beschreibung} & Daemon starten und stoppen \\ \hline
+            \textbf{ID}                  & E2E-001                                    \\ \hline
+            \textbf{Beschreibung}        & Daemon starten und stoppen                 \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft nicht
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts status\end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
-                \item \begin{verbatim}ts run\end{verbatim}
-                \item \begin{verbatim}ts status\end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
-                \item \begin{verbatim}ts kill\end{verbatim}
-                \item \begin{verbatim}ts status\end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is not running\end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running
+                \end{verbatim}
+                \item \begin{verbatim}ts run
+                \end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running
+                \end{verbatim}
+                \item \begin{verbatim}ts kill
+                \end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running
+                \end{verbatim}
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Daemon kann gestartet und gestoppt werden. \\ \hline
         \end{tabular}
@@ -830,8 +938,8 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-002                                                                 \\ \hline
-            \textbf{Beschreibung} & Autostart         \\ \hline
+            \textbf{ID}                  & E2E-002                             \\ \hline
+            \textbf{Beschreibung}        & Autostart                           \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Autostart Konfiguration gem.\ Installationshandbuch
@@ -839,8 +947,10 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
             \textbf{Ablauf} &
             \begin{enumerate}
                 \item System neustarten
-                \item \begin{verbatim}ts status\end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is running\end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running
+                \end{verbatim}
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
         \end{tabular}
@@ -852,8 +962,8 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-003                                                                 \\ \hline
-            \textbf{Beschreibung} & Inspect         \\ \hline
+            \textbf{ID}                  & E2E-003                                                \\ \hline
+            \textbf{Beschreibung}        & Inspect                                                \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item OPENAI\_API\_KEY Umgebungsvariable gesetzt gem.\ Installationshandbuch
@@ -862,7 +972,8 @@ copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Pr
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts inspect [PFAD]\end{verbatim}
+                \item \begin{verbatim}ts inspect [PFAD]
+                \end{verbatim}
                 \item Erwartet:
                 \begin{verbatim}
 Intended use:
@@ -878,7 +989,7 @@ Additional recommendations:
 ...
                 \end{verbatim}
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt.\\ \hline
+            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
     \end{table}
@@ -888,8 +999,8 @@ Additional recommendations:
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-004                                                                 \\ \hline
-            \textbf{Beschreibung} & Pfad zum Überwachen hinzufügen und entfernen         \\ \hline
+            \textbf{ID}                  & E2E-004                                                                         \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen hinzufügen und entfernen                                    \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
@@ -897,16 +1008,22 @@ Additional recommendations:
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD]\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD]
+                \end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully added [PFAD]
-to the monitoring database.\end{verbatim}
-                \item \begin{verbatim}ts monitor list\end{verbatim}
+to the monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
                 \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
                 [ID] des Pfades notieren.
-                \item \begin{verbatim}ts monitor remove [ID]\end{verbatim}
+                \item \begin{verbatim}ts monitor remove [ID]
+                \end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully removed path with ID [ID]
-from the monitoring database.\end{verbatim}
-                \item \begin{verbatim}ts monitor list\end{verbatim}
+from the monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
                 \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Ein Pfad kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden. \\ \hline
@@ -919,8 +1036,8 @@ from the monitoring database.\end{verbatim}
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-005                                                                 \\ \hline
-            \textbf{Beschreibung} & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.         \\ \hline
+            \textbf{ID}                  & E2E-005                                                        \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.  \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
@@ -929,11 +1046,13 @@ from the monitoring database.\end{verbatim}
             \textbf{Ablauf} &
             \begin{enumerate}
                 \item \begin{verbatim}ts monitor add [PFAD]
---mode log --no-subdirs\end{verbatim}
+--mode log --no-subdirs
+                \end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
 monitoring database.
-\end{verbatim}
-                \item \begin{verbatim}ts monitor list\end{verbatim}
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
                 \item Erwartet: Pfad wird mit mode=LOG und no-subdirs=true aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
@@ -946,8 +1065,8 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-006              \\ \hline
-            \textbf{Beschreibung} & Pfad zum Überwachen mit Regex-Pattern hinzufügen.         \\ \hline
+            \textbf{ID}                  & E2E-006                                                               \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen mit Regex-Pattern hinzufügen.                     \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
@@ -956,11 +1075,15 @@ monitoring database.
             \textbf{Ablauf} &
             \begin{enumerate}
                 \item \begin{verbatim}ts monitor add [PFAD] --mode pattern
---pattern ^ts_.*_ts$\end{verbatim}
+--pattern ^ts_.*_ts$
+                \end{verbatim}
                 \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
-monitoring database.\end{verbatim}
-                \item \begin{verbatim}ts monitor list\end{verbatim}
-                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$\end{verbatim} aufgelistet.
+monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
+                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$
+                \end{verbatim} aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit einem gewünschten Regex-Pattern hinzugefügt werden. \\ \hline
         \end{tabular}
@@ -972,7 +1095,7 @@ monitoring database.\end{verbatim}
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-007 \\ \hline
+            \textbf{ID} & E2E-007 \\ \hline
             \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
@@ -982,37 +1105,49 @@ monitoring database.\end{verbatim}
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list
+                \end{verbatim}
                 \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
                 \item Erwartet: Liste mit genau 1 Snapshot.
                 \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
                 \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
                 (siehe oben)
                 \item Den Inhalte der Datei test.log ändern.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
                 \item test.log löschen.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Löschung der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
@@ -1026,8 +1161,8 @@ monitoring database.\end{verbatim}
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-008                                                                 \\ \hline
-            \textbf{Beschreibung} & Search (Cache- und Log-Dateien)         \\ \hline
+            \textbf{ID}                  & E2E-008                                            \\ \hline
+            \textbf{Beschreibung}        & Search (Cache- und Log-Dateien)                    \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Daemon läuft
@@ -1035,7 +1170,8 @@ monitoring database.\end{verbatim}
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts search [PFAD]\end{verbatim}
+                \item \begin{verbatim}ts search [PFAD]
+                \end{verbatim}
                 \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
@@ -1048,8 +1184,8 @@ monitoring database.\end{verbatim}
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & E2E-009 \\ \hline
-            \textbf{Beschreibung} & Leeren und Löschen einer Datei \\ \hline
+            \textbf{ID}                  & E2E-009                          \\ \hline
+            \textbf{Beschreibung}        & Leeren und Löschen einer Datei   \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
@@ -1057,11 +1193,15 @@ monitoring database.\end{verbatim}
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts wipe [PFAD]\end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully cleared file.\end{verbatim}
+                \item \begin{verbatim}ts wipe [PFAD]
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully cleared file.
+                \end{verbatim}
                 \item Erwartet: Datei wurde geleert
-                \item \begin{verbatim}ts wipe [PFAD] --remove\end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully removed file.\end{verbatim}
+                \item \begin{verbatim}ts wipe [PFAD] --remove
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed file.
+                \end{verbatim}
                 \item Erwartet: Datei wurde gelöscht
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Datei wird geleert und gelöscht. \\ \hline
@@ -1076,37 +1216,38 @@ monitoring database.\end{verbatim}
         \begin{tabular}{|c|c|c|c|}
             \hline
             \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
-            26.12.2024     & Windows 10              & E2E-001          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-001          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-001          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-002          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-002          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-002          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-003          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-003          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-003          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-004          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-004          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-004          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-005          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-005          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-005          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-006          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-006          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-006          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-007          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-007          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-007          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-008          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-008          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-008          & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-009          & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-009          & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-009          & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 10              & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & Debian 12               & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-009           & Erfolgreich       \\ \hline
 
         \end{tabular}
         \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
     \end{table}
+
 
     \chapter{Fazit}
 
