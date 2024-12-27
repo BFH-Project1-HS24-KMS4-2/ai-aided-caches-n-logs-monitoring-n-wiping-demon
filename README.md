@@ -18,7 +18,7 @@ This project aims to help users regain control over their computer's file system
 
 As a prerequisite, a Java runtime environment must already be installed on the corresponding device.
 
-### Unix
+### Linux
 
 1. Browse the latest artifact built by the main branch from this repository and download
    the `target/tracesentry-<version>-submission.zip` to your machine.
@@ -44,7 +44,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
     ```
    crontab -e
    // Add the following line to the end of the opened file
-   @reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts-daemon
+   @reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts run
     ```
    Then save the file.
 6. After a system restart you are ready to use the TraceSentry.
