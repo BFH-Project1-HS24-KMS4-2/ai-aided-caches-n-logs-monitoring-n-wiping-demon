@@ -30,8 +30,6 @@ import java.util.List;
 /**
  * Non-functional (and non-assertive) performance test for core daemon functionality.
  * Intended usage: getting a rough idea of the performance of key operations.
- * <p>
- * Always comment @Test annotation again before committing and pushing (to not run the test in the CI pipeline).
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
