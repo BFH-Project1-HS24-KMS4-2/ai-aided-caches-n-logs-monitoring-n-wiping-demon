@@ -1292,10 +1292,144 @@ monitoring database.
     \end{table}
 
 
+    \clearpage
+    \section{Messungen (Performanztests)}\label{sec:performanztests}
+    Um eine Aussage über die Performanz unseres Systems zu machen, haben wir einige Performanztests durchgeführt.
+    Diese dienen lediglich als Indikator und sind nicht repräsentativ für alle möglichen Szenarien.
+    Es werden nur Kernfunktionen getestet, die Performanz kritisch sein könnten.
+
+    \subsection{Suchfunktion}\label{subsec:testduchfuhrung}
+    Es wird im Modus FULL (Cache- und Logdateien) im spezifizierten Pfad nach Dateien gesucht.
+
+    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:beschreibung-der-metriken-und-umgebung}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{7cm}|}
+            \hline
+            \textbf{System} & Betriebssystem und Architektur \\ \hline
+            \textbf{Pfad} & Verzeichnis, in dem gesucht wird \\ \hline
+            \textbf{Anz. Dateien im Pfad} & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen) \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & Anzahl Unterverzeichnisse \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
+            \textbf{Gefundene Dateien} & Anzahl Dateien, die gefunden wurden \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & Mittelwert der Zeit in Millisekunden aus mehreren Stichproben \\ \hline
+        \end{tabular}
+        \caption{Beschreibung Umgebungsangaben und Metriken}\label{tab:search-perftest-metrics}
+    \end{table}
+
+    \newpage
+
+    \subsubsection{Ergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfad} & C:\textbackslash Windows \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 188'428 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 51'184 \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682 \\ \hline
+            \textbf{Gefundene Dateien} & 3'455 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 8'800ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfad} & C:\textbackslash Program Files \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 66'386 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 8'925 \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109 \\ \hline
+            \textbf{Gefundene Dateien} & 1'183 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 800ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{Pfad} & /Library/Logs/ \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 229 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 89  \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120 \\ \hline
+            \textbf{Gefundene Dateien} & 31 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 6.6ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{Pfad} & /Library/Caches/ \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 677 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 8  \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6 \\ \hline
+            \textbf{Gefundene Dateien} & 0 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 0.6ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfad} & /opt/idea-IU-242.22855.74 \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 2248 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 793  \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806 \\ \hline
+            \textbf{Gefundene Dateien} & 13 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 21ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfad} & /home/luca \\ \hline
+            \textbf{Anz. Dateien im Pfad} & 47'3915 \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad} & 9'8549  \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29 \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448 \\ \hline
+            \textbf{Gefundene Dateien} & 5'429 \\ \hline
+            \textbf{Stichprobenmittel der Zeit} & 2'663ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
+    \end{table}
+
+
     \chapter{Fazit}
 
 
     \section{Diskussion}
+    \subsection{Ausblick auf die Zukunft}
 
 
     \section{Zusammenfassung}
