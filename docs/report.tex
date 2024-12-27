@@ -347,7 +347,6 @@
         \label{fig:persona-1}
     \end{figure}
 
-
     Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
     Für seine Schüler unterrichtet er unter anderem auch
     Systemadministration und IT-Sicherheit.
@@ -366,7 +365,7 @@
             \hline
             \textbf Ziele       & Veränderungen beobachten können und diese überprüfen lassen               \\
             \hline
-            \textbf Wünsche     & Intuitive Benutzerschnittstelle                                           \\
+            \textbf Wünsche     & Intuitive Benutzerschnittstelle und teilweise Automatisierung             \\
             \hline
             \textbf Hindernisse & Trotz Erfahrung in der Informatik, sind teilweise Wissenslücken vorhanden \\
             \hline
@@ -379,14 +378,58 @@
 
     \newpage
 
-
-    \section{Usability}
-
-    \subsection{Personas}
-
     \subsection{Storyboard}
+    In diesem Abschnitt wird beschrieben, wie ein Nutzer mit den verschiedenen Funktionen der Software
+    interagieren kann.
+    Dafür haben wir folgend eine sinnvolle Abfolge zusammengestellt, wie ein Nutzer
+    unsere Software in einem realen Anwendungsfall verwenden könnte.
+
+    \begin{enumerate}
+        \item \textbf{Dateien suchen}\\
+        Der Nutzer hat kürzlich in seinem Task-Manager ein Programm entdeckt, das komischerweise
+        ziemlich viel Speicher braucht.
+        Also verwendet er unseren search-Befehl mit dem Pfad auf die Installation von diesem Programm
+        und ihm werden die in diesem Verzeichnis gefundenen Cache- sowie Log-Dateien aufgelistet:
+        \begin{verbatim}
+internal/test.log
+internal/cache.json
+        \end{verbatim}
+
+        \item \textbf{Dateien überwachen}\\
+        Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innnerhalb des Programmverzeichnisses genauer überwachen.
+        Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird diese Verzeichnis vom TraceSentry stündlich überwacht.
+
+        \item \textbf{Snapshots vergleichen}\\
+        Nach einigen Stunden möchte nun der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
+        Dafür nutzt er den snapshot compare-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
+        Das System gibt ihm eine entsprechende Ausgabe:
+        \begin{verbatim}
+Vergleich vom Verzeichnis /internal
+vom Zeitpunkt 01.12.2024 15:00:00 bis zum Zeitpunkt 01.12.2024 22:00:00:
+
+test.log CHANGED 7-times
+        \end{verbatim}
+
+        \item \textbf{KI-Abfrage für eine Datei}\\
+        Nun möchte der Nutzer natürlich wissen, wofür diese test.log Datei ist, wenn sich diese jede Stunden ändert.
+        Also nutzt er den inspect-Befehl, um die angebundene KI abzufragen, wofür diese Datei genau ist, ob sie ein Sicherheitsrisiko darstellt
+        und ob er die Datei evtl. leeren oder sogar löschen kann.
+        Daraus kommt dann eine standardisierte Ausgabe von der KI:
+        \begin{verbatim}
+Die Datei ist unbekannt für dieses Programm und deswegen potenziell
+schädlich, also empfehle ich es zu leeren.
+        \end{verbatim}
+
+        \item \textbf{Datei leeren oder löschen}\\
+        Zum Schluss kann der Nutzer dann selbst entscheiden was er mit dieser Information anfangen möchte.
+        In diesem Fall möchte er dem Ratschlag der KI folgen und die Datei leeren.
+        Also nutzt er den wipe-Befehl mit dem Pfad der test.log Datei und das System leert die Datei wie gewünscht.
+    \end{enumerate}
+
+    \newpage
 
     \subsection{UX-Prototyping}
+    % todo
 
 
     \chapter{Implementierung}
