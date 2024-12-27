@@ -1307,7 +1307,7 @@ monitoring database.
     \subsection{Suchfunktion}\label{subsec:testduchfuhrung}
     Es wird im Modus FULL (Cache- und Logdateien) im spezifizierten Pfad nach Dateien gesucht.
 
-    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:beschreibung-der-metriken-und-umgebung}
+    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:search-perftest-metrics-title}
     \begin{table}[h!]
         \centering
         \setlength{\leftmargini}{0.8cm}
@@ -1322,7 +1322,7 @@ monitoring database.
             \textbf{Gefundene Dateien} & Anzahl Dateien, die gefunden wurden \\ \hline
             \textbf{Stichprobenmittel der Zeit} & Mittelwert der Zeit in Millisekunden aus mehreren Stichproben \\ \hline
         \end{tabular}
-        \caption{Beschreibung Umgebungsangaben und Metriken}\label{tab:search-perftest-metrics}
+        \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
     \end{table}
 
     \newpage
@@ -1430,6 +1430,111 @@ monitoring database.
         \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
     \end{table}
 
+    \clearpage
+
+    \subsection{Monitoring}\label{subsec:monitoring)}
+    Es werden mehrere Pfade über einen längeren Zeitraum (simuliert) überwacht bzw.\ Snapshots erstellt.
+
+    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:monitoring-perftest-metrics-title}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{7cm}|}
+            \hline
+            \textbf{System} & Betriebssystem und Architektur \\ \hline
+            \textbf{Pfade} & Verzeichnisse, die überwacht werden \\ \hline
+            \textbf{Anz. Erstellte Snapshots} & Anzahl erstellter Snapshots \\ \hline
+            \textbf{Anz. Erstellte Knoten} & Anzahl erstellter Knoten in der Datenbank \\ \hline
+            \textbf{Benötigte Zeit} & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & Durchschnittliche Zeit, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
+        \end{tabular}
+        \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
+    \end{table}
+
+    \subsubsection{Ergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash Cache
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash logs
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Docker Desktop\textbackslash Cache
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Microsoft
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash NVIDIA
+                \item C:\textbackslash ProgramData\textbackslash ASUS
+                \item C:\textbackslash ProgramData\textbackslash Package Cache
+                \item C:\textbackslash ProgramData\textbackslash Corsair
+                \item C:\textbackslash ProgramData\textbackslash NVIDIA Corporation
+                \item C:\textbackslash ProgramData\textbackslash LGHUB
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
+            \textbf{Anz. Erstellte Knoten} & 583'920 \\ \hline
+            \textbf{Benötigte Zeit} & 8min \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 670ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring WIN}\label{tab:perf-monitoring-win}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item /Library/Logs/
+                \item /Library/Caches/
+                \item /Library/Google
+                \item /Library/Apple
+                \item /Library/OSAnalytics
+                \item /Library/Filesystems
+                \item /Library/Bluetooth
+                \item /Users/janicscherer/IdeaProjects
+                \item /Users/janicscherer/bin
+                \item /tmp
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
+            \textbf{Anz. Erstellte Knoten} & 9'079'920 \\ \hline
+            \textbf{Benötigte Zeit} & 10min \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 914ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring MAC}\label{tab:perf-monitoring-mac}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item /home/luca/tracesentry-1.0.2
+                \item /opt/idea-IU-242.22855.74
+                \item /opt/vivaldi
+                \item /tmp
+                \item /etc
+                \item /usr/local
+                \item /usr/share/vim
+                \item /dev
+                \item /opt/az/lib/python3.12/email
+                \item /opt/android-studio
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
+            \textbf{Anz. Erstellte Knoten} & 1'717'920 \\ \hline
+            \textbf{Benötigte Zeit} & 2min \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 173ms \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring LIN}\label{tab:perf-monitoring-lin}
+    \end{table}
 
     \chapter{Fazit}
 
