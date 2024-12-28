@@ -79,6 +79,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 
 
 ### macOS
+For simplicity, only configurations in the .zprofile file are used here. The following commands write the configurations directly to the file.
 
 1. Browse the latest artifact built by the main branch from this repository and download
    the `target/tracesentry-<version>-submission.zip` to your machine.
