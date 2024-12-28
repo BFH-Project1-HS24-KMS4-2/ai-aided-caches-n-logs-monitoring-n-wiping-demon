@@ -138,20 +138,23 @@
 
 
     \chapter{Spezifikation}
-
-    \newpage
-
-
     \section{Systemabgrenzung}
-
     \subsection{Systemumgebung}
+    \subsubsection{Systemübersicht}
+    Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in einem bestimmten Verzeichnis.
+    Dabei liegt der Fokus auf Log- und Cache-Dateien, welche auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
+    Diese Überprüfung erfolgt in einem Hintergrundprozess (Daemon), welcher autonom und periodisch die Dateien überwacht.
+    Die Resultate dieser Überwachung sollen persistiert und dem Benutzer über eine Benutzerschnittstelle zugänglich gemacht werden.
+    Der Benutzer hat zusätzlich die Möglichkeit, nach Dateien zu suchen, um sinnvolle Verzeichnisse für die Überwachung zu finden.
+    Findet der Benutzer eine für ihn interessante Datei durch die Suche oder Überwachung, kann er eine Inspektion dieser Datei anfordern.
+    Dabei soll ein KI-Modell die Datei analysieren und eine Einschätzung abgeben, ob die Datei schädlich ist und wie damit umgegangen werden sollte.
+    Ebenfalls über die Benutzerschnittstelle kann der Benutzer Dateien leeren oder löschen, insofern es für Ihn oder das KI-Modell sinnvoll erscheint.
 
 
+    \clearpage
     \subsection{Prozessumgebung}
 
-    \newpage
-
-
+    \clearpage
     \section{Anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
 
