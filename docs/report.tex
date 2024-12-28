@@ -753,40 +753,70 @@ schädlich, also empfehle ich es zu leeren.
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v2}
+        \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v3}
         \caption{UML Komponentendiagramm}
         \label{fig:comp-diag}
+        \vspace{2em}
     \end{figure}
 
     \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
     Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
-    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Befehle aus. Ausserdem stellt er der
+    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus. Ausserdem stellt er der
     CLI eine REST-Schnittstelle zur Verfügung.
-    Ein eingebettetes Datenbanksystem speichert die Applikationsdaten.}
+    Ein Datenbanksystem speichert die Applikationsdaten.\\
+    Die im Diagramm dargestellten Subkomponenten kapseln Funktionalitäten und sind in der Regel in eigenen Klassen implementiert.
+    Es können mehrere Instanzen dieser Subkomponenten implementiert werden und nach fachlichen Aspekten, sogenannten Domänen, aufgeteilt werden.
+    \\Am Beispiel einer Snapshot-Domäne würden dann im Backend ein Snapshot-(Rest)-Controller, ein Snapshot-(Domain)-Service und ein Snapshot-Repository existieren.
+    D.h. eine Kapselung findet in technischer und fachlicher Hinsicht statt. Eine komplette Abkapselung ist jedoch in der Praxis schwierig und soll lediglich angestrebt werden.\\
+    }
+    \newpage
 
+    \subsubsection{Shell}
+    Die Shell stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.
+    Sie kapselt die Definition von Kommandos und deren Parameter.
+    Ausserdem übernimmt sie das Parsen der Benutzereingaben, clientseitige Validierung sowie Exception-Handling.
+
+    \subsubsection{Rest Adapter}
+    Der Rest Adapter kapselt Funktionen zur Interaktion mit der REST-Schnittstelle.
+
+    \subsubsection{Rest Controller}
+    Der Rest Controller implementiert die Endpunkte der REST-Schnittstelle gemäss API-Spezifikation. TODO Querverweis
+
+    \subsubsection{Domain Service}
+    Der Domain Service implementiert die Applikations- bzw.\ Geschäftslogik.
+    Dazu gehört Serverseitige Validierung, Datenverarbeitung und -persistierung.
+
+    \subsubsection{Operations Scheduler}
+    Der Monitoring Scheduler führt periodisch Operationen aus.
+
+    \subsubsection{Repository}
+    Das Repository stellt den Zugang zur Persistenzschicht zur Verfügung.
+    Dabei handelt es sich um Create, Read, Update, Delete (CRUD) Operationen in Form von Datenbankqueries.
+
+    \subsubsection{Technologien}
     \begin{table}[h!]
         \centering
         \setlength{\leftmargini}{0.4cm}
-        \begin{tabular}{|p{2.5cm}|p{5.5cm}|p{3cm}|}
+        \begin{tabular}{|p{5.5cm}|p{5cm}|}
             \hline
-            \textbf                       & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
+            & \textbf{Technologien (primär)} \\
             \hline
-            \textbf{Shell}                & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
+            \textbf{Shell}                & Java, Spring (Shell)           \\
             \hline
-            \textbf{Rest Adapter}         & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung}          & Java, Spring (Web)             \\
+            \textbf{Rest Adapter}         & Java, Spring (Web)             \\
             \hline
-            \textbf{Rest Controller}      & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)             \\
+            \textbf{Rest Controller}      & Java, Spring (Web)             \\
             \hline
-            \textbf{Domain Service}       & Applikationslogik                                                 & Java, Spring                   \\
+            \textbf{Domain Service}       & Java, Spring                   \\
             \hline
-            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus                        & Java, Spring                   \\
+            \textbf{Operations Scheduler} & Java, Spring                   \\
             \hline
-            \textbf{Repository}           & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
+            \textbf{Repository}           & Java, Spring (Data)            \\
             \hline
-            \textbf{Embedded Database}    & Speichert Applikationsdaten                                       & SQLite                         \\
+            \textbf{Database}    & SQLite                         \\
             \hline
         \end{tabular}
-        \caption{Beschreibung der Komponenten}\label{tab:table3}
+        \caption{Technologien der Komponenten}\label{tab:table}
     \end{table}
 
     \clearpage
