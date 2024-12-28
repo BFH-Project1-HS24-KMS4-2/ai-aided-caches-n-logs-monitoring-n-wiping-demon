@@ -98,7 +98,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    echo ts run >> ~/.zprofile
    ```
    This is recommended as the most pragmatic solution. Alternatively, you can also use launchd.
-6. Restart the terminal and you are ready to use TraceSentry.
+6. Restart the terminal. If you followed step 5, the daemon will start automatically. You are now ready to use TraceSentry.
 
 ## Usage
 
