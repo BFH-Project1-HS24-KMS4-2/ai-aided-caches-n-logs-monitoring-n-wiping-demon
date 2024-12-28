@@ -89,9 +89,9 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    echo export TRACE_SENTRY_DIR="<absolute path to installation dir>" >> ~/.zprofile
    echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
    ```
-4. If you want to use the inspect feature create an openai API-KEY following these
-   instructions: https://platform.openai.com/settings/organization/billing/overview
-   after that set the generated API-KEY as environment variable at the end of the `~/.zprofile` file:
+4. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+   The following command will add the API-KEY to the `~/.zprofile` file:
     ```
     echo export OPENAI_API_KEY=<generated API-KEY> >> ~/.zprofile
     ```

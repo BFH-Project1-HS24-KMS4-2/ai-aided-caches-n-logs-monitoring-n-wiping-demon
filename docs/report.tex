@@ -1524,12 +1524,11 @@ monitoring database.
 
 
     \section{Installationshandbuch \& Skript}
-    In diesem Kapitel sind die Installationsanleitungen für alle unterstützten Plattformen beschrieben, um es
-    den Benutzern einfach zu machen unser System auf ihren Geräten zu verwenden.
+    In diesem Kapitel sind die Installationsanleitungen für alle unterstützten Plattformen beschrieben.
 
-    Als Vorbedingung muss eine Java Laufzeitumgebung bereits auf dem entsprechenden Gerät installiert sein.
+    Eine Installation der Java Laufzeitumgebung (JRE) wird für die Installation vorrausgesetzt.
 
-    \subsection{Linux}
+    \subsection{Linux}\label{subsec:linux}
     \begin{enumerate}
         \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
         \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
@@ -1548,7 +1547,7 @@ PATH=$PATH:$TRACE_SENTRY_DIR
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
 export OPENAI_API_KEY=<generierter API-Schlüssel>
         \end{lstlisting}
-        Wenn Sie diesen Teil überspringen, haben Sie keinen Zugriff auf die Inspektionsfunktion, aber der Rest wird genauso funktionieren.
+        Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
         \begin{lstlisting}[label={lst:lstlisting-unix-4}]
 crontab -e
@@ -1592,6 +1591,8 @@ Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\
     \clearpage
 
     \subsection{macOS}\label{subsec:macos}
+    Der Einfachheit halber werden hier ausschliesslich Konfigurationen im \texttt{.zprofile} File benützt.
+    Die nachfolgenden Befehle schreiben die Konfigurationen direkt in die Datei.
     \begin{enumerate}
         \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
         \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
@@ -1607,7 +1608,7 @@ echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
         \end{lstlisting}
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File in ihrem Home-Verzeichnis:
+        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File:
         \begin{lstlisting}[label={lst:lstlisting-mac-3}]
 echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \end{lstlisting}
@@ -1616,7 +1617,7 @@ echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \begin{lstlisting}[label={lst:lstlisting-mac-4}]
 echo ts run >> ~/.zprofile
         \end{lstlisting}
-        Dies wird als pragmatischste Lösung empfohlen.
+        Dies wird als pragmatische Lösung empfohlen.
         Alternativ können Sie auch \textit{launchd} verwenden.\footnote{\url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}}
         \item Starten Sie das Terminal neu, dadurch wird der Daemon automatisch gestartet (sofern Sie Schritt 6 befolgt haben), und Sie sind bereit, TraceSentry zu verwenden.
     \end{enumerate}
