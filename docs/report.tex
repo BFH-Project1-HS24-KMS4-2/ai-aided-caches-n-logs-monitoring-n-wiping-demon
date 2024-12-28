@@ -931,7 +931,7 @@ $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
         Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
         \begin{lstlisting}[label={lst:lstlisting-windows-3}]
-[System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schlüssel>","User")
+[System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schluessel>","User")
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, muss die Datei \texttt{ts-daemon.bat} vom Installationsverzeichnis in den Autostart-Ordner kopiert werden:
