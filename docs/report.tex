@@ -139,16 +139,26 @@
 
     \chapter{Spezifikation}
     \section{Systemabgrenzung}
-    \subsection{Systemumgebung}
+    \subsection{Systemumgebung (statisch)}
     \subsubsection{Systemübersicht}
     Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in einem bestimmten Verzeichnis.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
     Diese Überprüfung erfolgt in einem Hintergrundprozess (Daemon), welcher autonom und periodisch die Dateien überwacht.
-    Die Resultate dieser Überwachung sollen persistiert und dem Benutzer über eine Benutzerschnittstelle zugänglich gemacht werden.
+    Die Resultate dieser Überwachung werden persistiert und dem Benutzer über eine Benutzerschnittstelle zugänglich gemacht.
     Der Benutzer hat zusätzlich die Möglichkeit, nach Dateien zu suchen, um sinnvolle Verzeichnisse für die Überwachung zu finden.
     Findet der Benutzer eine für ihn interessante Datei durch die Suche oder Überwachung, kann er eine Inspektion dieser Datei anfordern.
-    Dabei soll ein KI-Modell die Datei analysieren und eine Einschätzung abgeben, ob die Datei schädlich ist und wie damit umgegangen werden sollte.
-    Ebenfalls über die Benutzerschnittstelle kann der Benutzer Dateien leeren oder löschen, insofern es für Ihn oder das KI-Modell sinnvoll erscheint.
+    Dabei analysiert ein KI-Modell die Datei und gibt eine Einschätzung ab, ob die Datei schädlich ist und wie damit umgegangen werden sollte.
+    Über die Benutzerschnittstelle kann der Benutzer zusätzlich Dateien leeren oder löschen, insofern es für Ihn oder das KI-Modell sinnvoll erscheint.
+
+    \subsubsection{Systemkontext}
+    Der TraceSentry ist ein eigenständiges, plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
+    Grundsätzlich wird dabei zwischen dem Daemon und der Benutzerschnittstelle unterschieden.
+    \begin{itemize}
+        \item \textbf{Daemon}: Der Daemon läuft im Hintergrund ohne direkte Benutzerinteraktion und übernimmt die grundlegende Geschäftslogik, wie die Interaktion mit dem Dateisystem.
+        \item \textbf{Benutzerschnittstelle}: Die Benutzerschnittstelle ist die Schnittstelle zwischen dem Benutzer und dem Daemon und enthält keine Geschäftslogik.
+    \end{itemize}
+
+    TODO im Team definieren, ob Endscheidungen wie CLI, GPT etc. hier rein sollen oder in die Architektur.
 
 
     \clearpage
