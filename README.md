@@ -47,7 +47,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    @reboot PATH=$JAVA_HOME/bin:$PATH $TRACE_SENTRY_DIR/ts run
     ```
    Then save the file.
-6. After a system restart you are ready to use the TraceSentry.
+6. After a system restart you are ready to use TraceSentry.
 
 ### Windows
 
@@ -72,7 +72,32 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    ```
    copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
    ```
-6. Restart the terminal and you are ready to use the TraceSentry.
+6. Restart the terminal and you are ready to use TraceSentry.
+
+### macOS
+
+1. Browse the latest artifact built by the main branch from this repository and download
+   the `target/tracesentry-<version>-submission.zip` to your machine.
+2. Unpack the archive to your desired installation directory for the TraceSentry.
+3. Set the following environment variables in the `~/.zprofile` file:
+    ```
+   echo ’ export TRACE_SENTRY_DIR="<absolute path to installation dir>" ’ >> ~/. zprofile
+   echo ’ export PATH=" $TRACE_SENTRY_DIR : $PATH " ’ >> ~/. zprofile
+   ```
+4. If you want to use the inspect feature create an openai API-KEY following these
+   instructions: https://platform.openai.com/settings/organization/billing/overview
+   after that set the generated API-KEY as environment variable at the end of the `~/.zprofile` file:
+    ```
+    echo ’export OPENAI_API_KEY=<generated API-KEY>’ >> ~/. zprofile
+    ```
+   When you skip this part you won't have access to the inspect feature but the rest will work the same way.
+5. If you want that the daemon starts every time automatically in the background when you start your system,
+   adjust your `~/.zprofile` file as follows:
+   ```
+   echo ’ts run’ >> ~/. zprofile
+   ```
+   This is recommended as the most pragmatic solution. Alternatively, you can also use launchd.
+6. Restart the terminal and you are ready to use TraceSentry.
 
 ## Usage
 
