@@ -397,7 +397,7 @@ internal/cache.json
 
         \item \textbf{Dateien überwachen}\\
         Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innnerhalb des Programmverzeichnisses genauer überwachen.
-        Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird diese Verzeichnis vom TraceSentry stündlich überwacht.
+        Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
 
         \item \textbf{Snapshots vergleichen}\\
         Nach einigen Stunden möchte nun der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
@@ -429,7 +429,10 @@ schädlich, also empfehle ich es zu leeren.
     \newpage
 
     \subsection{UX-Prototyping}
-    % todo
+    Da wir nur ein Command-Line-Interface haben, decken wir dieses Kapitel bereits mit
+    der Dokumentation dieser Schnittstelle ab, welche im folgenden Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch} vorhanden ist.
+    Dort werden alle Befehle mit ihrer Struktur und auch ihren Parametern genau beschrieben.
+    Dazu werden auch Anwendungsbeispiele mit den möglichen Systemantworten erläutert.
 
 
     \chapter{Implementierung}
@@ -768,7 +771,8 @@ schädlich, also empfehle ich es zu leeren.
         \item Begrenzte Persistenzoptionen: Daten können im Speicher verloren gehen, wenn nicht korrekt gesichert.
     \end{itemize}
 
-    \textbf{Begründung H2} ... % todo
+    \textbf{Begründung H2} Da es praktisch nur in Java-Umgebungen läuft, also weniger standardisiert ist auch bezüglich SQL-Funktionalitäten und nicht für grössere Datenmengen
+    ausgelegt ist haben wir uns dagegen entschieden.
 
     \textbf{2. SQLite}
     SQLite ist eine serverlose, eingebettete relationale Datenbank, die keine separate Konfiguration erfordert.
@@ -788,9 +792,10 @@ schädlich, also empfehle ich es zu leeren.
         \item Performance-Einbußen bei großen Datenmengen: Langsamer bei komplexen oder datenintensiven Abfragen.
     \end{itemize}
 
-    \textbf{Begründung SQLite} ... % todo
+    \textbf{Begründung SQLite} Vor allem wegen der Einfachheit und vernachlässigbaren Nachteilen haben wir uns für eine
+    SQLite Datenbank entschieden.
 
-        {\large\bfseries CLI/Daemon}
+    {\large\bfseries CLI/Daemon}
 
     Dann gibt es noch die Komponenten CLI und Daemon, wofür wir gerne eine einheitliche Technologie hätten,
     um es simpel zu halten und auch einfacher gewisse Teile zwischen den beiden Komponenten teilen zu können.
@@ -925,12 +930,12 @@ $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
         Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
-        \begin{lstlisting}[label={lst:lstlisting-windows-2}]
+        \begin{lstlisting}[label={lst:lstlisting-windows-3}]
 [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schlüssel>","User")
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, muss die Datei \texttt{ts-daemon.bat} vom Installationsverzeichnis in den Autostart-Ordner kopiert werden:
-        \begin{lstlisting}[label={lst:lstlisting-windows-3}]
+        \begin{lstlisting}[label={lst:lstlisting-windows-4}]
 Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
         \end{lstlisting}
         Beim nächsten Systemstart wird der Daemon automatisch gestartet.
@@ -938,8 +943,11 @@ Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\
         \item Starten Sie das Terminal neu, und Sie sind bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
-\clearpage
+    \clearpage
+
+
     \section{Benutzerhandbuch}
+    \label{sec:user-manual}
 
 
     \section{Manuelle End-2-End Tests}
@@ -1299,6 +1307,8 @@ monitoring database.
 
 
     \clearpage
+
+
     \section{Messungen (Performanztests)}\label{sec:performanztests}
     Um eine Aussage über die Performanz unseres Systems zu machen, haben wir einige Performanztests durchgeführt.
     Diese dienen lediglich als Indikator und sind nicht repräsentativ für alle möglichen Szenarien.
@@ -1313,14 +1323,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{7cm}|}
             \hline
-            \textbf{System} & Betriebssystem und Architektur \\ \hline
-            \textbf{Pfad} & Verzeichnis, in dem gesucht wird \\ \hline
-            \textbf{Anz. Dateien im Pfad} & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen) \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & Anzahl Unterverzeichnisse \\ \hline
+            \textbf{System}                                            & Betriebssystem und Architektur                                                  \\ \hline
+            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                                \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                       \\ \hline
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
-            \textbf{Gefundene Dateien} & Anzahl Dateien, die gefunden wurden \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & Mittelwert der Zeit in Millisekunden aus mehreren Stichproben \\ \hline
+            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & Mittelwert der Zeit in Millisekunden aus mehreren Stichproben                   \\ \hline
         \end{tabular}
         \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
     \end{table}
@@ -1333,14 +1343,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
-            \textbf{Pfad} & C:\textbackslash Windows \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 188'428 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 51'184 \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682 \\ \hline
-            \textbf{Gefundene Dateien} & 3'455 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 8'800ms \\ \hline
+            \textbf{System}                                            & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfad}                                              & C:\textbackslash Windows \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 188'428                  \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 51'184                   \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682                   \\ \hline
+            \textbf{Gefundene Dateien}                                 & 3'455                    \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 8'800ms                  \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
     \end{table}
@@ -1350,14 +1360,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
-            \textbf{Pfad} & C:\textbackslash Program Files \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 66'386 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 8'925 \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109 \\ \hline
-            \textbf{Gefundene Dateien} & 1'183 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 800ms \\ \hline
+            \textbf{System}                                            & Windows 11--10.0 / amd64       \\ \hline
+            \textbf{Pfad}                                              & C:\textbackslash Program Files \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 66'386                         \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 8'925                          \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20                             \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109                         \\ \hline
+            \textbf{Gefundene Dateien}                                 & 1'183                          \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 800ms                          \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
     \end{table}
@@ -1367,14 +1377,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
-            \textbf{Pfad} & /Library/Logs/ \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 229 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 89  \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120 \\ \hline
-            \textbf{Gefundene Dateien} & 31 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 6.6ms \\ \hline
+            \textbf{System}                                            & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                              & /Library/Logs/          \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 229                     \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                      \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                     \\ \hline
+            \textbf{Gefundene Dateien}                                 & 31                      \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 6.6ms                   \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
     \end{table}
@@ -1384,14 +1394,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
-            \textbf{Pfad} & /Library/Caches/ \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 677 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 8  \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6 \\ \hline
-            \textbf{Gefundene Dateien} & 0 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 0.6ms \\ \hline
+            \textbf{System}                                            & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                              & /Library/Caches/        \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 677                     \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                       \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                       \\ \hline
+            \textbf{Gefundene Dateien}                                 & 0                       \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 0.6ms                   \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
     \end{table}
@@ -1401,14 +1411,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
-            \textbf{Pfad} & /opt/idea-IU-242.22855.74 \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 2248 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 793  \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806 \\ \hline
-            \textbf{Gefundene Dateien} & 13 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 21ms \\ \hline
+            \textbf{System}                                            & Linux 6.1.0-28 / amd64    \\ \hline
+            \textbf{Pfad}                                              & /opt/idea-IU-242.22855.74 \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 2248                      \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 793                       \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10                        \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806                       \\ \hline
+            \textbf{Gefundene Dateien}                                 & 13                        \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 21ms                      \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
     \end{table}
@@ -1418,14 +1428,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
-            \textbf{Pfad} & /home/luca \\ \hline
-            \textbf{Anz. Dateien im Pfad} & 47'3915 \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad} & 9'8549  \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29 \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448 \\ \hline
-            \textbf{Gefundene Dateien} & 5'429 \\ \hline
-            \textbf{Stichprobenmittel der Zeit} & 2'663ms \\ \hline
+            \textbf{System}                                            & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfad}                                              & /home/luca             \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 47'3915                \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 9'8549                 \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29                     \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448                \\ \hline
+            \textbf{Gefundene Dateien}                                 & 5'429                  \\ \hline
+            \textbf{Stichprobenmittel der Zeit}                        & 2'663ms                \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
     \end{table}
@@ -1441,11 +1451,11 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{7cm}|}
             \hline
-            \textbf{System} & Betriebssystem und Architektur \\ \hline
-            \textbf{Pfade} & Verzeichnisse, die überwacht werden \\ \hline
-            \textbf{Anz. Erstellte Snapshots} & Anzahl erstellter Snapshots \\ \hline
-            \textbf{Anz. Erstellte Knoten} & Anzahl erstellter Knoten in der Datenbank \\ \hline
-            \textbf{Benötigte Zeit} & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen \\ \hline
+            \textbf{System}                                               & Betriebssystem und Architektur                                             \\ \hline
+            \textbf{Pfade}                                                & Verzeichnisse, die überwacht werden                                        \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & Anzahl erstellter Snapshots                                                \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & Anzahl erstellter Knoten in der Datenbank                                  \\ \hline
+            \textbf{Benötigte Zeit}                                       & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen           \\ \hline
             \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & Durchschnittliche Zeit, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
         \end{tabular}
         \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
@@ -1457,7 +1467,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System} & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{System}                                               & Windows 11--10.0 / amd64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash Cache
@@ -1472,10 +1482,10 @@ monitoring database.
                 \item C:\textbackslash ProgramData\textbackslash LGHUB
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
-            \textbf{Anz. Erstellte Knoten} & 583'920 \\ \hline
-            \textbf{Benötigte Zeit} & 8min \\ \hline
-            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 670ms \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                    \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 583'920                  \\ \hline
+            \textbf{Benötigte Zeit}                                       & 8min                     \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 670ms                    \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring WIN}\label{tab:perf-monitoring-win}
     \end{table}
@@ -1485,7 +1495,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System} & Mac OS X 15.2 / aarch64 \\ \hline
+            \textbf{System}                                               & Mac OS X 15.2 / aarch64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item /Library/Logs/
@@ -1500,10 +1510,10 @@ monitoring database.
                 \item /tmp
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
-            \textbf{Anz. Erstellte Knoten} & 9'079'920 \\ \hline
-            \textbf{Benötigte Zeit} & 10min \\ \hline
-            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 914ms \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                   \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 9'079'920               \\ \hline
+            \textbf{Benötigte Zeit}                                       & 10min                   \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 914ms                   \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring MAC}\label{tab:perf-monitoring-mac}
     \end{table}
@@ -1513,7 +1523,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System} & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{System}                                               & Linux 6.1.0-28 / amd64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item /home/luca/tracesentry-1.0.2
@@ -1528,18 +1538,20 @@ monitoring database.
                 \item /opt/android-studio
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots} & 7'200 \\ \hline
-            \textbf{Anz. Erstellte Knoten} & 1'717'920 \\ \hline
-            \textbf{Benötigte Zeit} & 2min \\ \hline
-            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 173ms \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                  \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 1'717'920              \\ \hline
+            \textbf{Benötigte Zeit}                                       & 2min                   \\ \hline
+            \textbf{Durchschnittliche Zeit zum Erstellen eines Snapshots} & 173ms                  \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring LIN}\label{tab:perf-monitoring-lin}
     \end{table}
+
 
     \chapter{Fazit}
 
 
     \section{Diskussion}
+
     \subsection{Ausblick auf die Zukunft}
 
 
