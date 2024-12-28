@@ -81,7 +81,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 2. Unpack the archive to your desired installation directory for the TraceSentry.
 3. Set the following environment variables in the `~/.zprofile` file:
     ```
-   echo '\n' >> ~/.zprofile  # Added for TraceSentry
+   echo '\n# Added for TraceSentry' >> ~/.zprofile
    echo export TRACE_SENTRY_DIR="<absolute path to installation dir>" >> ~/.zprofile
    echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
    ```
