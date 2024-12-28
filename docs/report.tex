@@ -408,82 +408,11 @@ schädlich, also empfehle ich es zu leeren.
 
     \chapter{Implementierung}
 
-
-    \section{Performanz und Optimierung}
-
-    \subsection{Komplexität}
-
-    Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
-    Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
-    Daher ist eine Analyse der Komplexität der verschiedenen Operationen angebracht.
-    \\
-    Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
-    Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
-    Dateien sind stets Blätter.\newline
-    Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
-
-    \paragraph{Bau}
-    Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
-    was einer Komplexität von $O(n)$ für das Traversieren entspricht.
-    Das Hashen eines Ordners mit $k$ Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
-    Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
-    \\\\
-    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
-    Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
-
-    \paragraph{Linearisierung}
-    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
-    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
-
-    \subsection{Caching}
-    Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
-    haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
-
-    \begin{enumerate}
-        \item Pro MonitoredPath könnte man immer den letzten gebauten MerkleTree cachen, um beim nächsten Snapshot
-        direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
-        \begin{itemize}
-            \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
-            Da aber der MerkleTree vom letzten Snapshot nur einmal wiederverwendet wird (beim Vergleichen mit dem Neuen), macht dies hier keinen Sinn.
-            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und die Query
-            eine tiefe Komplexität hat, kann bereits effizient auf die Daten zugegriffen werden.
-        \end{itemize}
-        \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
-        direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
-        \begin{itemize}
-            \item Auch hier wird keine sich lohnende Performance-Steigerung erwartet, denn auch wenn die Daten schon in Memory wären
-            braucht es für die zusammengefasste Response der abgefragten Vergleiche trotzdem noch Logik,
-            welche auch mit einem Query auf die lokale DB implementiert werden kann und so kein grosser Gewinn daraus resultiert.
-        \end{itemize}
-    \end{enumerate}
-
-    \subsection{Indexing}
-    Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
-
-    Index sinnvoll:
-    \begin{itemize}
-        \item Attribut hat viele verschiedene Werte
-        \item Attribut hat wenige/keine null-Werte
-        \item Attribut wird oft in einer SQL WHERE oder JOIN Abfrage genutzt
-    \end{itemize}
-
-    Index nicht sinnvoll:
-    \begin{itemize}
-        \item kleine Tabelle
-        \item Attribut wird oft manipuliert
-    \end{itemize}
-
-    So wurde entschieden die folgenden Attribute zu indexieren:
-    \begin{itemize}
-        \item \verb|snapshot_node.snapshot_id|
-        \item \verb|snapshot_node.has_changed|
-        \item \verb|snapshot_node.deleted_in_next_snapshot|
-    \end{itemize}
-
-
     \section{Architektur}
 
-    \subsection{Architekturentscheid}
+    \subsection{Technische Variantenentscheide}
+
+    \subsubsection{Architekturentscheid}
     In diesem Abschnitt soll erläutert werden, was wir uns für Gedanken bezüglich der Architektur gemacht haben
     und für was wir uns schlussendlich aus welchen Gründen entschieden haben.
 
@@ -667,7 +596,7 @@ schädlich, also empfehle ich es zu leeren.
     damit auskennen, haben wir uns gegen Sockets entschieden.
     Dadurch haben wir auch weniger Aufwand mit der Definition und dem Parsen der Kommunikation.
 
-    \subsection{Technologieentscheid}
+    \subsubsection{Technologieentscheid}
     In diesem Abschnitt wird erläutert, was wir uns für Gedanken bezüglich Technologien für die verschiedenen Komponenten
     des Systems gemacht haben und wie wir uns entschieden haben.
 
@@ -820,8 +749,7 @@ schädlich, also empfehle ich es zu leeren.
 
 
     \clearpage
-    \subsection{Komponenten}\label{subsec:komponenten}
-
+    \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
 
     \begin{figure}[h]
         \centering
@@ -863,10 +791,713 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
+    \subsection{Realisierung}\label{subsec:realisierung}
+
+    \subsubsection{Frontend}
+    \clearpage
+
+    \subsubsection{Backend}
+    büsnei Logik & Komplexität
+    taskscheduler
+    \clearpage
+
+    \subsubsection{Datenbank}
+    \clearpage
+
+    \subsubsection{REST-Schnittstelle}
+    \clearpage
+
+    \subsubsection{KI-Anbindung}
+    \clearpage
+
+    \subsubsection{Performanz und Optimierung}
+
+    \subsubsubsection{Komplexität}
+
+    Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
+    Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
+    Daher ist eine Analyse der Komplexität der verschiedenen Operationen angebracht.
+    \\
+    Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
+    Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
+    Dateien sind stets Blätter.\newline
+    Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
+
+    \paragraph{Bau}
+    Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
+    was einer Komplexität von $O(n)$ für das Traversieren entspricht.
+    Das Hashen eines Ordners mit $k$ Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
+    Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
+    \\\\
+    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
+    Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
+
+    \paragraph{Linearisierung}
+    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
+    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
+
+    \subsubsubsection{Caching}
+    Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
+    haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
+
+    \begin{enumerate}
+        \item Pro MonitoredPath könnte man immer den letzten gebauten MerkleTree cachen, um beim nächsten Snapshot
+        direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
+        \begin{itemize}
+            \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
+            Da aber der MerkleTree vom letzten Snapshot nur einmal wiederverwendet wird (beim Vergleichen mit dem Neuen), macht dies hier keinen Sinn.
+            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und die Query
+            eine tiefe Komplexität hat, kann bereits effizient auf die Daten zugegriffen werden.
+        \end{itemize}
+        \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
+        direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
+        \begin{itemize}
+            \item Auch hier wird keine sich lohnende Performance-Steigerung erwartet, denn auch wenn die Daten schon in Memory wären
+            braucht es für die zusammengefasste Response der abgefragten Vergleiche trotzdem noch Logik,
+            welche auch mit einem Query auf die lokale DB implementiert werden kann und so kein grosser Gewinn daraus resultiert.
+        \end{itemize}
+    \end{enumerate}
+
+    \subsubsubsection{Indexing}
+    Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
+
+    Index sinnvoll:
+    \begin{itemize}
+        \item Attribut hat viele verschiedene Werte
+        \item Attribut hat wenige/keine null-Werte
+        \item Attribut wird oft in einer SQL WHERE oder JOIN Abfrage genutzt
+    \end{itemize}
+
+    Index nicht sinnvoll:
+    \begin{itemize}
+        \item kleine Tabelle
+        \item Attribut wird oft manipuliert
+    \end{itemize}
+
+    So wurde entschieden die folgenden Attribute zu indexieren:
+    \begin{itemize}
+        \item \verb|snapshot_node.snapshot_id|
+        \item \verb|snapshot_node.has_changed|
+        \item \verb|snapshot_node.deleted_in_next_snapshot|
+    \end{itemize}
+
+    \clearpage
+
     \section{Prozesse}
     \url{https://www.ganttlab.com} \\
     \url{https://www.hermes.admin.ch/de/projektmanagement/verstehen/ubersicht-hermes/methodenubersicht.html}
 
+    \chapter{Evaluation und Tests}
+    \section{Manuelle End-2-End Tests}
+    Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
+
+    \subsection{Testfälle}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-001                                    \\ \hline
+            \textbf{Beschreibung}        & Daemon starten und stoppen                 \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft nicht
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running
+                \end{verbatim}
+                \item \begin{verbatim}ts run
+                \end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running
+                \end{verbatim}
+                \item \begin{verbatim}ts kill
+                \end{verbatim}
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is not running
+                \end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon kann gestartet und gestoppt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
+    \end{table}
+
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-002                             \\ \hline
+            \textbf{Beschreibung}        & Autostart                           \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Autostart Konfiguration gem.\ Installationshandbuch
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item System neustarten
+                \item \begin{verbatim}ts status
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}daemon is running
+                \end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-003                                                \\ \hline
+            \textbf{Beschreibung}        & Inspect                                                \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item OPENAI\_API\_KEY Umgebungsvariable gesetzt gem.\ Installationshandbuch
+                \item Daemon läuft
+                \item Beispiel-Datei unter [PFAD] vorhanden
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts inspect [PFAD]
+                \end{verbatim}
+                \item Erwartet:
+                \begin{verbatim}
+Intended use:
+The file ...
+
+Assessment:
+...
+
+Recommended to Wipe:
+...
+
+Additional recommendations:
+...
+                \end{verbatim}
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
+    \end{table}
+
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-004                                                                         \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen hinzufügen und entfernen                                    \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD]
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD]
+to the monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
+                \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
+                [ID] des Pfades notieren.
+                \item \begin{verbatim}ts monitor remove [ID]
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed path with ID [ID]
+from the monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
+                \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
+    \end{table}
+
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-005                                                        \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.  \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD]
+--mode log --no-subdirs
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
+                \item Erwartet: Pfad wird mit mode=LOG und no-subdirs=true aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-006                                                               \\ \hline
+            \textbf{Beschreibung}        & Pfad zum Überwachen mit Regex-Pattern hinzufügen.                     \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item  Der [PFAD] wurde noch nicht hinzugefügt
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD] --mode pattern
+--pattern ^ts_.*_ts$
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
+monitoring database.
+                \end{verbatim}
+                \item \begin{verbatim}ts monitor list
+                \end{verbatim}
+                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$
+                \end{verbatim} aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit einem gewünschten Regex-Pattern hinzugefügt werden. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
+    \end{table}
+
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID} & E2E-007 \\ \hline
+            \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item Der [PFAD] wurde noch nicht hinzugefügt.
+                (Empfohlen: ein nicht zu tiefer Pfad, damit die Snapshots schneller generiert werden)
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list
+                \end{verbatim}
+                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
+                \item Erwartet: Liste mit genau 1 Snapshot.
+                \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
+                Mit nachfolgendem Schritt überprüfen.
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
+                \item Erwartet: Liste mit genau 2 Snapshots.
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
+                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
+                (siehe oben)
+                \item Den Inhalte der Datei test.log ändern.
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
+                (siehe oben)
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
+                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                \item test.log löschen.
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
+                \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
+                \item Erwartet: Löschung der Datei test.log wird aufgelistet.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
+            Erstellung, Änderung und Löschung einer Datei werden erkannt. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
+    \end{table}
+
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-008                                            \\ \hline
+            \textbf{Beschreibung}        & Search (Cache- und Log-Dateien)                    \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Daemon läuft
+                \item Beispiel-Verzeichnis unter [PFAD] vorhanden
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts search [PFAD]
+                \end{verbatim}
+                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{ID}                  & E2E-009                          \\ \hline
+            \textbf{Beschreibung}        & Leeren und Löschen einer Datei   \\ \hline
+            \textbf{Vorbedingungen} &
+            \begin{itemize}
+                \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
+                \item Daemon läuft
+            \end{itemize} \\ \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \item \begin{verbatim}ts wipe [PFAD]
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully cleared file.
+                \end{verbatim}
+                \item Erwartet: Datei wurde geleert
+                \item \begin{verbatim}ts wipe [PFAD] --remove
+                \end{verbatim}
+                \item Erwartet: \begin{verbatim}Successfully removed file.
+                \end{verbatim}
+                \item Erwartet: Datei wurde gelöscht
+            \end{enumerate} \\ \hline
+            \textbf{Erwartetes Ergebnis} & Datei wird geleert und gelöscht. \\ \hline
+        \end{tabular}
+        \caption{Manueller End-2-End Test E2E-009}\label{tab:e2e-9}
+    \end{table}
+
+    \clearpage
+
+    \subsection{Testergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0              & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28               & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & macOS Sequoia 15.2      & E2E-009           & Erfolgreich       \\ \hline
+
+        \end{tabular}
+        \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
+    \end{table}
+
+
+    \clearpage
+
+
+    \section{Messungen (Performanztests)}\label{sec:performanztests}
+    Um eine Aussage über die Performanz unseres Systems zu machen, haben wir einige Performanztests durchgeführt.
+    Diese dienen lediglich als Indikator und sind nicht repräsentativ für alle möglichen Szenarien.
+    Es werden nur Kernfunktionen getestet, die Performanz kritisch sein könnten.
+
+    \subsection{Suchfunktion}\label{subsec:testduchfuhrung}
+    Es wird im Modus FULL (Cache- und Logdateien) im spezifizierten Pfad nach Dateien gesucht.
+
+    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:search-perftest-metrics-title}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{7cm}|}
+            \hline
+            \textbf{System}                                            & Betriebssystem und Architektur                                                  \\ \hline
+            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                                \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                       \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
+            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                   \\ \hline
+        \end{tabular}
+        \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
+    \end{table}
+
+    \newpage
+
+    \subsubsection{Ergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfad}                                              & C:\textbackslash Windows \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 188'428                  \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 51'184                   \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682                   \\ \hline
+            \textbf{Gefundene Dateien}                                 & 3'455                    \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 8'800ms                  \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & Windows 11--10.0 / amd64       \\ \hline
+            \textbf{Pfad}                                              & C:\textbackslash Program Files \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 66'386                         \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 8'925                          \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20                             \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109                         \\ \hline
+            \textbf{Gefundene Dateien}                                 & 1'183                          \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 800ms                          \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                              & /Library/Logs/          \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 229                     \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                      \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                     \\ \hline
+            \textbf{Gefundene Dateien}                                 & 31                      \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 6.6ms                   \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                              & /Library/Caches/        \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 677                     \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                       \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                       \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                       \\ \hline
+            \textbf{Gefundene Dateien}                                 & 0                       \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 0.6ms                   \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & Linux 6.1.0-28 / amd64    \\ \hline
+            \textbf{Pfad}                                              & /opt/idea-IU-242.22855.74 \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 2248                      \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 793                       \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10                        \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806                       \\ \hline
+            \textbf{Gefundene Dateien}                                 & 13                        \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 21ms                      \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{5cm}|}
+            \hline
+            \textbf{System}                                            & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfad}                                              & /home/luca             \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 47'3915                \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 9'8549                 \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29                     \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448                \\ \hline
+            \textbf{Gefundene Dateien}                                 & 5'429                  \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                        & 2'663ms                \\ \hline
+        \end{tabular}
+        \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
+    \end{table}
+
+    \clearpage
+
+    \subsection{Monitoring}\label{subsec:monitoring)}
+    Es werden mehrere Pfade über einen längeren Zeitraum (simuliert) überwacht bzw.\ Snapshots erstellt.
+
+    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:monitoring-perftest-metrics-title}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{7cm}|p{7cm}|}
+            \hline
+            \textbf{System}                                               & Betriebssystem und Architektur                                             \\ \hline
+            \textbf{Pfade}                                                & Verzeichnisse, die überwacht werden                                        \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & Anzahl erstellter Snapshots                                                \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & Anzahl erstellter Knoten in der Datenbank                                  \\ \hline
+            \textbf{Benötigte Zeit}                                       & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen           \\ \hline
+            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & Durchschnittliche Dauer, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
+        \end{tabular}
+        \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
+    \end{table}
+
+    \subsubsection{Ergebnisse}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System}                                               & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash Cache
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash logs
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Docker Desktop\textbackslash Cache
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Microsoft
+                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash NVIDIA
+                \item C:\textbackslash ProgramData\textbackslash ASUS
+                \item C:\textbackslash ProgramData\textbackslash Package Cache
+                \item C:\textbackslash ProgramData\textbackslash Corsair
+                \item C:\textbackslash ProgramData\textbackslash NVIDIA Corporation
+                \item C:\textbackslash ProgramData\textbackslash LGHUB
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                    \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 583'920                  \\ \hline
+            \textbf{Benötigte Zeit}                                       & 8min                     \\ \hline
+            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 670ms                    \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring WIN}\label{tab:perf-monitoring-win}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System}                                               & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item /Library/Logs/
+                \item /Library/Caches/
+                \item /Library/Google
+                \item /Library/Google
+                \item /Library/Apple
+                \item /Library/OSAnalytics
+                \item /Library/Filesystems
+                \item /Library/Bluetooth
+                \item /Users/janicscherer/IdeaProjects
+                \item /Users/janicscherer/bin
+                \item /tmp
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                   \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 9'079'920               \\ \hline
+            \textbf{Benötigte Zeit}                                       & 10min                   \\ \hline
+            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 914ms                   \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring MAC}\label{tab:perf-monitoring-mac}
+    \end{table}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|p{5cm}|p{10cm}|}
+            \hline
+            \textbf{System}                                               & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfade} &
+            \begin{itemize}
+                \item /home/luca/tracesentry-1.0.2
+                \item /opt/idea-IU-242.22855.74
+                \item /opt/vivaldi
+                \item /tmp
+                \item /etc
+                \item /usr/local
+                \item /usr/share/vim
+                \item /dev
+                \item /opt/az/lib/python3.12/email
+                \item /opt/android-studio
+            \end{itemize}
+            \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                             & 7'200                  \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                & 1'717'920              \\ \hline
+            \textbf{Benötigte Zeit}                                       & 2min                   \\ \hline
+            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 173ms                  \\ \hline
+        \end{tabular}
+        \caption{Performanztest Monitoring LIN}\label{tab:perf-monitoring-lin}
+    \end{table}
+
+    \section{KI Case Study}\label{sec:ki-case-study}
 
     \chapter{Bereitstellung/Integration}
 
@@ -995,603 +1626,6 @@ echo ts run >> ~/.zprofile
 
     \section{Benutzerhandbuch}
     \label{sec:user-manual}
-
-
-    \section{Manuelle End-2-End Tests}
-    Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
-
-    \subsection{Testfälle}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-001                                    \\ \hline
-            \textbf{Beschreibung}        & Daemon starten und stoppen                 \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft nicht
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts status
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is not running
-                \end{verbatim}
-                \item \begin{verbatim}ts run
-                \end{verbatim}
-                \item \begin{verbatim}ts status
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is running
-                \end{verbatim}
-                \item \begin{verbatim}ts kill
-                \end{verbatim}
-                \item \begin{verbatim}ts status
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is not running
-                \end{verbatim}
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Daemon kann gestartet und gestoppt werden. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-001}\label{tab:e2e-1}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-002                             \\ \hline
-            \textbf{Beschreibung}        & Autostart                           \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Autostart Konfiguration gem.\ Installationshandbuch
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item System neustarten
-                \item \begin{verbatim}ts status
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}daemon is running
-                \end{verbatim}
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-003                                                \\ \hline
-            \textbf{Beschreibung}        & Inspect                                                \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item OPENAI\_API\_KEY Umgebungsvariable gesetzt gem.\ Installationshandbuch
-                \item Daemon läuft
-                \item Beispiel-Datei unter [PFAD] vorhanden
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts inspect [PFAD]
-                \end{verbatim}
-                \item Erwartet:
-                \begin{verbatim}
-Intended use:
-The file ...
-
-Assessment:
-...
-
-Recommended to Wipe:
-...
-
-Additional recommendations:
-...
-                \end{verbatim}
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Einschätzung und Empfehlung von der KI wird angezeigt. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-003}\label{tab:e2e-3}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-004                                                                         \\ \hline
-            \textbf{Beschreibung}        & Pfad zum Überwachen hinzufügen und entfernen                                    \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft
-                \item  Der [PFAD] wurde noch nicht hinzugefügt
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD]
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully added [PFAD]
-to the monitoring database.
-                \end{verbatim}
-                \item \begin{verbatim}ts monitor list
-                \end{verbatim}
-                \item Erwartet: Der hinzugefügte Pfad wird aufgelistet.
-                [ID] des Pfades notieren.
-                \item \begin{verbatim}ts monitor remove [ID]
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully removed path with ID [ID]
-from the monitoring database.
-                \end{verbatim}
-                \item \begin{verbatim}ts monitor list
-                \end{verbatim}
-                \item Erwartet: Der gelöschte Pfad wird nicht mehr aufgelistet.
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad kann ohne Fehler hinzugefügt und anschliessend wieder entfernt werden. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-004}\label{tab:e2e-4}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-005                                                        \\ \hline
-            \textbf{Beschreibung}        & Pfad zum Überwachen mit Mode und ohne Unterordner hinzufügen.  \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft
-                \item  Der [PFAD] wurde noch nicht hinzugefügt
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD]
---mode log --no-subdirs
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
-monitoring database.
-                \end{verbatim}
-                \item \begin{verbatim}ts monitor list
-                \end{verbatim}
-                \item Erwartet: Pfad wird mit mode=LOG und no-subdirs=true aufgelistet.
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit den gewünschten Optionen hinzugefügt werden. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-005}\label{tab:e2e-5}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-006                                                               \\ \hline
-            \textbf{Beschreibung}        & Pfad zum Überwachen mit Regex-Pattern hinzufügen.                     \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft
-                \item  Der [PFAD] wurde noch nicht hinzugefügt
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD] --mode pattern
---pattern ^ts_.*_ts$
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully added [PFAD] to the
-monitoring database.
-                \end{verbatim}
-                \item \begin{verbatim}ts monitor list
-                \end{verbatim}
-                \item Erwartet: Pfad wird mit pattern=\begin{verbatim}^ts_.*_ts$
-                \end{verbatim} aufgelistet.
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Ein Pfad kann mit einem gewünschten Regex-Pattern hinzugefügt werden. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-006}\label{tab:e2e-6}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID} & E2E-007 \\ \hline
-            \textbf{Beschreibung} & Snapshots generieren lassen und vergleichen. \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft
-                \item Der [PFAD] wurde noch nicht hinzugefügt.
-                (Empfohlen: ein nicht zu tiefer Pfad, damit die Snapshots schneller generiert werden)
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list
-                \end{verbatim}
-                \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis Snapshot in Datenbank vorhanden ist.
-                Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]
-                \end{verbatim}
-                \item Erwartet: Liste mit genau 1 Snapshot.
-                \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
-                Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]
-                \end{verbatim}
-                \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
-                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
-                (siehe oben)
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
-                (siehe oben)
-                \item Den Inhalte der Datei test.log ändern.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
-                (siehe oben)
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
-                \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
-                \item test.log löschen.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
-                \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
-                \item Erwartet: Löschung der Datei test.log wird aufgelistet.
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
-            Erstellung, Änderung und Löschung einer Datei werden erkannt. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-008                                            \\ \hline
-            \textbf{Beschreibung}        & Search (Cache- und Log-Dateien)                    \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Daemon läuft
-                \item Beispiel-Verzeichnis unter [PFAD] vorhanden
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts search [PFAD]
-                \end{verbatim}
-                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|c|p{10cm}|}
-            \hline
-            \textbf{ID}                  & E2E-009                          \\ \hline
-            \textbf{Beschreibung}        & Leeren und Löschen einer Datei   \\ \hline
-            \textbf{Vorbedingungen} &
-            \begin{itemize}
-                \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
-                \item Daemon läuft
-            \end{itemize} \\ \hline
-            \textbf{Ablauf} &
-            \begin{enumerate}
-                \item \begin{verbatim}ts wipe [PFAD]
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully cleared file.
-                \end{verbatim}
-                \item Erwartet: Datei wurde geleert
-                \item \begin{verbatim}ts wipe [PFAD] --remove
-                \end{verbatim}
-                \item Erwartet: \begin{verbatim}Successfully removed file.
-                \end{verbatim}
-                \item Erwartet: Datei wurde gelöscht
-            \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Datei wird geleert und gelöscht. \\ \hline
-        \end{tabular}
-        \caption{Manueller End-2-End Test E2E-009}\label{tab:e2e-9}
-    \end{table}
-
-    \subsection{Testergebnisse}
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.4cm}
-        \begin{tabular}{|c|c|c|c|}
-            \hline
-            \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
-            26.12.2024     & Windows 10              & E2E-001           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-001           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-001           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-002           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-002           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-002           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-003           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-003           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-003           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-004           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-004           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-004           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-005           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-005           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-005           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-006           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-006           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-006           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-007           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-007           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-007           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-008           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-008           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-008           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 10              & E2E-009           & Erfolgreich       \\ \hline
-            26.12.2024     & Debian 12               & E2E-009           & Erfolgreich       \\ \hline
-            26.12.2024     & macOS Sequoia 15.2      & E2E-009           & Erfolgreich       \\ \hline
-
-        \end{tabular}
-        \caption{Manuelle End-2-End Testergebnisse}\label{tab:e2e-results}
-    \end{table}
-
-
-    \clearpage
-
-
-    \section{Messungen (Performanztests)}\label{sec:performanztests}
-    Um eine Aussage über die Performanz unseres Systems zu machen, haben wir einige Performanztests durchgeführt.
-    Diese dienen lediglich als Indikator und sind nicht repräsentativ für alle möglichen Szenarien.
-    Es werden nur Kernfunktionen getestet, die Performanz kritisch sein könnten.
-
-    \subsection{Suchfunktion}\label{subsec:testduchfuhrung}
-    Es wird im Modus FULL (Cache- und Logdateien) im spezifizierten Pfad nach Dateien gesucht.
-
-    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:search-perftest-metrics-title}
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{7cm}|}
-            \hline
-            \textbf{System}                                            & Betriebssystem und Architektur                                                  \\ \hline
-            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                                \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                          \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
-            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                   \\ \hline
-        \end{tabular}
-        \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
-    \end{table}
-
-    \newpage
-
-    \subsubsection{Ergebnisse}
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Windows 11--10.0 / amd64 \\ \hline
-            \textbf{Pfad}                                              & C:\textbackslash Windows \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 188'428                  \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 51'184                   \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682                   \\ \hline
-            \textbf{Gefundene Dateien}                                 & 3'455                    \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 8'800ms                  \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Windows 11--10.0 / amd64       \\ \hline
-            \textbf{Pfad}                                              & C:\textbackslash Program Files \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 66'386                         \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 8'925                          \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20                             \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109                         \\ \hline
-            \textbf{Gefundene Dateien}                                 & 1'183                          \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 800ms                          \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Mac OS X 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Logs/          \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 229                     \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                      \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                     \\ \hline
-            \textbf{Gefundene Dateien}                                 & 31                      \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 6.6ms                   \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Mac OS X 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Caches/        \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 677                     \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                       \\ \hline
-            \textbf{Gefundene Dateien}                                 & 0                       \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 0.6ms                   \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Linux 6.1.0-28 / amd64    \\ \hline
-            \textbf{Pfad}                                              & /opt/idea-IU-242.22855.74 \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 2248                      \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 793                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10                        \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806                       \\ \hline
-            \textbf{Gefundene Dateien}                                 & 13                        \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 21ms                      \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{5cm}|}
-            \hline
-            \textbf{System}                                            & Linux 6.1.0-28 / amd64 \\ \hline
-            \textbf{Pfad}                                              & /home/luca             \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 47'3915                \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 9'8549                 \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29                     \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448                \\ \hline
-            \textbf{Gefundene Dateien}                                 & 5'429                  \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 2'663ms                \\ \hline
-        \end{tabular}
-        \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
-    \end{table}
-
-    \clearpage
-
-    \subsection{Monitoring}\label{subsec:monitoring)}
-    Es werden mehrere Pfade über einen längeren Zeitraum (simuliert) überwacht bzw.\ Snapshots erstellt.
-
-    \subsubsection{Verwendete Umgebungsangaben und Metriken}\label{subsubsec:monitoring-perftest-metrics-title}
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{7cm}|p{7cm}|}
-            \hline
-            \textbf{System}                                               & Betriebssystem und Architektur                                             \\ \hline
-            \textbf{Pfade}                                                & Verzeichnisse, die überwacht werden                                        \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & Anzahl erstellter Snapshots                                                \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & Anzahl erstellter Knoten in der Datenbank                                  \\ \hline
-            \textbf{Benötigte Zeit}                                       & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen           \\ \hline
-            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & Durchschnittliche Dauer, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
-        \end{tabular}
-        \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
-    \end{table}
-
-    \subsubsection{Ergebnisse}
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{5cm}|p{10cm}|}
-            \hline
-            \textbf{System}                                               & Windows 11--10.0 / amd64 \\ \hline
-            \textbf{Pfade} &
-            \begin{itemize}
-                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash Cache
-                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash logs
-                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Docker Desktop\textbackslash Cache
-                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash Microsoft
-                \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash NVIDIA
-                \item C:\textbackslash ProgramData\textbackslash ASUS
-                \item C:\textbackslash ProgramData\textbackslash Package Cache
-                \item C:\textbackslash ProgramData\textbackslash Corsair
-                \item C:\textbackslash ProgramData\textbackslash NVIDIA Corporation
-                \item C:\textbackslash ProgramData\textbackslash LGHUB
-            \end{itemize}
-            \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                    \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 583'920                  \\ \hline
-            \textbf{Benötigte Zeit}                                       & 8min                     \\ \hline
-            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 670ms                    \\ \hline
-        \end{tabular}
-        \caption{Performanztest Monitoring WIN}\label{tab:perf-monitoring-win}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{5cm}|p{10cm}|}
-            \hline
-            \textbf{System}                                               & Mac OS X 15.2 / aarch64 \\ \hline
-            \textbf{Pfade} &
-            \begin{itemize}
-                \item /Library/Logs/
-                \item /Library/Caches/
-                \item /Library/Google
-                \item /Library/Apple
-                \item /Library/OSAnalytics
-                \item /Library/Filesystems
-                \item /Library/Bluetooth
-                \item /Users/janicscherer/IdeaProjects
-                \item /Users/janicscherer/bin
-                \item /tmp
-            \end{itemize}
-            \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                   \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 9'079'920               \\ \hline
-            \textbf{Benötigte Zeit}                                       & 10min                   \\ \hline
-            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 914ms                   \\ \hline
-        \end{tabular}
-        \caption{Performanztest Monitoring MAC}\label{tab:perf-monitoring-mac}
-    \end{table}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.8cm}
-        \begin{tabular}{|p{5cm}|p{10cm}|}
-            \hline
-            \textbf{System}                                               & Linux 6.1.0-28 / amd64 \\ \hline
-            \textbf{Pfade} &
-            \begin{itemize}
-                \item /home/luca/tracesentry-1.0.2
-                \item /opt/idea-IU-242.22855.74
-                \item /opt/vivaldi
-                \item /tmp
-                \item /etc
-                \item /usr/local
-                \item /usr/share/vim
-                \item /dev
-                \item /opt/az/lib/python3.12/email
-                \item /opt/android-studio
-            \end{itemize}
-            \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                  \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 1'717'920              \\ \hline
-            \textbf{Benötigte Zeit}                                       & 2min                   \\ \hline
-            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 173ms                  \\ \hline
-        \end{tabular}
-        \caption{Performanztest Monitoring LIN}\label{tab:perf-monitoring-lin}
-    \end{table}
 
 
     \chapter{Fazit}
