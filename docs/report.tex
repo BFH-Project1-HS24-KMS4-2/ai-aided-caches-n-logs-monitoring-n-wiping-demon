@@ -146,48 +146,6 @@
 
     \subsection{Systemumgebung}
 
-    \subsubsection{Komponenten}
-
-
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v2}
-        \caption{UML Komponentendiagramm}
-        \label{fig:comp-diag}
-    \end{figure}
-
-    \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
-    Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
-    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Befehle aus. Ausserdem stellt er der
-    CLI eine REST-Schnittstelle zur Verfügung.
-    Ein eingebettetes Datenbanksystem speichert die Applikationsdaten.}
-
-    \begin{table}[h!]
-        \centering
-        \setlength{\leftmargini}{0.4cm}
-        \begin{tabular}{|p{2.5cm}|p{5.5cm}|p{3cm}|}
-            \hline
-            \textbf                       & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
-            \hline
-            \textbf{Shell}                & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
-            \hline
-            \textbf{Rest Adapter}         & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung}          & Java, Spring (Web)             \\
-            \hline
-            \textbf{Rest Controller}      & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)             \\
-            \hline
-            \textbf{Domain Service}       & Applikationslogik                                                 & Java, Spring                   \\
-            \hline
-            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus                        & Java, Spring                   \\
-            \hline
-            \textbf{Repository}           & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
-            \hline
-            \textbf{Embedded Database}    & Speichert Applikationsdaten                                       & SQLite                         \\
-            \hline
-        \end{tabular}
-        \caption{Beschreibung der Komponenten}\label{tab:table3}
-    \end{table}
-
-    \newpage
 
     \subsection{Prozessumgebung}
 
@@ -847,6 +805,50 @@ schädlich, also empfehle ich es zu leeren.
     \textbf{Begründung Python} Hier wäre natürlich die grosse Auswahl und Unterstützung von KI-Bibliotheken ein grosser Vorteil gewesen.
     Allerdings hat dieser Punkt uns zu wenig überzeugt, um uns für Python zu entscheiden.
 
+
+    \clearpage
+    \subsection{Komponenten}\label{subsec:komponenten}
+
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v2}
+        \caption{UML Komponentendiagramm}
+        \label{fig:comp-diag}
+    \end{figure}
+
+    \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
+    Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
+    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Befehle aus. Ausserdem stellt er der
+    CLI eine REST-Schnittstelle zur Verfügung.
+    Ein eingebettetes Datenbanksystem speichert die Applikationsdaten.}
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|p{2.5cm}|p{5.5cm}|p{3cm}|}
+            \hline
+            \textbf                       & \textbf{Zweck}                                                    & \textbf{Technologien (primär)} \\
+            \hline
+            \textbf{Shell}                & {Stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.} & Java, Spring (Shell)           \\
+            \hline
+            \textbf{Rest Adapter}         & {Stellt den Zugang zur REST-Schnittstelle zur Verfügung}          & Java, Spring (Web)             \\
+            \hline
+            \textbf{Rest Controller}      & Implementiert die Endpunkte der REST-Schnittstelle                & Java, Spring (Web)             \\
+            \hline
+            \textbf{Domain Service}       & Applikationslogik                                                 & Java, Spring                   \\
+            \hline
+            \textbf{Monitoring Scheduler} & Führt Monitoring-Funktionen periodisch aus                        & Java, Spring                   \\
+            \hline
+            \textbf{Repository}           & Stellt den Zugang zu den persisiterten Daten zur Verfüfung        & Java, Spring (Data)            \\
+            \hline
+            \textbf{Embedded Database}    & Speichert Applikationsdaten                                       & SQLite                         \\
+            \hline
+        \end{tabular}
+        \caption{Beschreibung der Komponenten}\label{tab:table3}
+    \end{table}
+
+    \clearpage
 
     \section{Prozesse}
     \url{https://www.ganttlab.com} \\
