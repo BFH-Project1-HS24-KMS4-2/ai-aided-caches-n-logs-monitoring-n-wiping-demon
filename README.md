@@ -50,29 +50,33 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 6. After a system restart you are ready to use TraceSentry.
 
 ### Windows
-
 1. Browse the latest artifact built by the main branch from this repository and download
    the `target/tracesentry-<version>-submission.zip` to your machine.
-2. Unpack the archive to your desired installation directory for the TraceSentry.
-3. Open a terminal and set the following environment variables:
+2. Extract the archive to your desired installation directory for TraceSentry.
+3. Set the environment variable `TRACE_SENTRY_DIR` via the Control Panel or via PowerShell:
+    ```powershell
+    [System.Environment]::SetEnvironmentVariable("TRACE_SENTRY_DIR", "<absolute path to the installation directory>", "User")
     ```
-   setx TRACE_SENTRY_DIR <absolute path to installation dir>
-   // restart the terminal
-   setx PATH %PATH%;%TRACE_SENTRY_DIR%
-   ```
-4. If you want to use the inspect feature create an openai API-KEY following these
-   instructions: https://platform.openai.com/settings/organization/billing/overview
-   after that set the generated API-KEY as environment variable as follows in a terminal:
+4. To ensure the CLI works correctly, add the installation directory to the `PATH`:
+    ```powershell
+    $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
+    [System.Environment]::SetEnvironmentVariable("Path", "$currentPath;<absolute path to the installation directory>", "User")
     ```
-    setx OPENAI_API_KEY <generated API-KEY>
+5. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+   Then set the generated API key as an environment variable via PowerShell:
+    ```powershell
+    [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generated API key>", "User")
     ```
-   When you skip this part you won't have access to the inspect feature but the rest will work the same way.
-5. If you want that the daemon starts every time automatically in the background when you start your system,
-   you can do the following in a terminal:
-   ```
-   copy %TRACE_SENTRY_DIR%\ts-daemon.bat "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
-   ```
-6. Restart the terminal and you are ready to use TraceSentry.
+   If you skip this step, you will not have access to the inspection feature.
+6. If you want the daemon to start automatically in the background at system startup, copy the file `ts-daemon.bat` from the installation directory to the Startup folder:
+    ```powershell
+    Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
+    ```
+   On the next system startup, the daemon will start automatically.
+   The first time you start it, a security warning may appear, in which you will need to uncheck a checkbox to prevent it from appearing again in the future.
+7. Restart the terminal, and you are ready to use TraceSentry.
+
 
 ### macOS
 
