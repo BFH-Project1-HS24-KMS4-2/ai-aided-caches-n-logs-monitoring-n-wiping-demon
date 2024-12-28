@@ -965,28 +965,29 @@ Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\
         \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
         \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
         \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
-        \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} im \texttt{.zprofile} File in ihrem Home-Verzeichnis:
+        \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} im \texttt{.zprofile} File (befindet sich in Ihrem Home-Verzeichnis):
         \begin{lstlisting}[label={lst:lstlisting-mac-1}]
-echo 'export TRACE_SENTRY_DIR="<absoluter Pfad zum Installationsverzeichnis>"' >> ~/.zprofile
+echo '\n# Added for TraceSentry' >> ~/.zprofile
+echo export TRACE_SENTRY_DIR="<absoluter Pfad zum Installationsverzeichnis>" >> ~/.zprofile
         \end{lstlisting}
-        \item Damit die CLI korrekt funktioniert, fügen Sie das Installationsverzeichnis zum \texttt{PATH} hinzu:
+        \item Damit die CLI korrekt funktioniert, fügen Sie im \texttt{.zprofile} File das Installationsverzeichnis zum \texttt{PATH} hinzu:
         \begin{lstlisting}[label={lst:lstlisting-mac-2}]
-echo 'export PATH="$TRACE_SENTRY_DIR:$PATH"' >> ~/.zprofile
+echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
         \end{lstlisting}
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
         Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File in ihrem Home-Verzeichnis:
         \begin{lstlisting}[label={lst:lstlisting-mac-3}]
-echo 'export OPENAI_API_KEY=<generierter API-Schluessel>' >> ~/.zprofile
+echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, passen Sie das \texttt{.zprofile} File in ihrem Home-Verzeichnis wie folgt an:
         \begin{lstlisting}[label={lst:lstlisting-mac-4}]
-echo 'ts run' >> ~/.zprofile
+echo ts run >> ~/.zprofile
         \end{lstlisting}
         Dies wird als pragmatischste Lösung empfohlen.
         Alternativ können Sie auch \textit{launchd} verwenden.\footnote{\url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}}
-        \item Starten Sie das Terminal neu, und Sie sind bereit, TraceSentry zu verwenden.
+        \item Starten Sie das Terminal neu, dadurch wird der Daemon automatisch gestartet (sofern Sie Schritt 6 befolgt haben), und Sie sind bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
     \clearpage
