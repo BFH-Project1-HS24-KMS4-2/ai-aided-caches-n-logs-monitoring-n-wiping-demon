@@ -1187,49 +1187,38 @@ monitoring database.
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list
-                \end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list\end{verbatim}
                 \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]
-                \end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
                 \item Erwartet: Liste mit genau 1 Snapshot.
                 \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]
-                \end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
                 \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
                 (siehe oben)
                 \item Den Inhalte der Datei test.log ändern.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
+                HIER
                 \item test.log löschen.
-                \item \begin{verbatim}ts kill && ts run
-                \end{verbatim}
+                \item \begin{verbatim}ts kill && ts run\end{verbatim}
                 \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots compare [ID]
-                \end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
                 \item Erwartet: Löschung der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
