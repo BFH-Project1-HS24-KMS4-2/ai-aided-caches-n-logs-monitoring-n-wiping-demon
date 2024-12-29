@@ -793,8 +793,7 @@ schädlich, also empfehle ich es zu leeren.
     \subsubsection{Frontend}
 
     \subsubsection{Backend}
-    \subsubsubsection{\textbf{Geschäftslogik}}
-    \\
+    \paragraph*{Geschäftslogik}
     Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss Lösungsarchitektur.
     Man sieht innerhalb der Monitoring-Domäne den Controller (MonitoringController), den Service (MonitoringDomainService) und das Repository (MonitoredPathRepository).
     Des Weiteren sieht man eine Utility-Klasse (ControllerUtils) und eine Entitätsklasse (MonitoredPath) und zur Veranschaulichung (in rot) die Superklasse vom Spring-Framework (CrudRepository).
@@ -808,7 +807,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsubsection{\textbf{Monitoring}}
+    \paragraph*{Monitoring}
     \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (Lösungsarchitektur).
     Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
     Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).
