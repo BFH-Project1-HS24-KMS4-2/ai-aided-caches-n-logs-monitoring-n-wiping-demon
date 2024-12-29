@@ -46,6 +46,9 @@
 \renewcommand{\abstractname}{Zusammenfassung}
 \renewcommand{\chaptername}{Kapitel}
 
+\setcounter{secnumdepth}{4}
+
+
 \begin{document}
 
 % Title Page
@@ -711,7 +714,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
 
-    \subsubsection{}Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
+    Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
     Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
     Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus.
     Ausserdem stellt er der
@@ -805,7 +808,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsubsection{\textbf{Monitoring Scheduler}}
+    \subsubsubsection{\textbf{Monitoring}}
     \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (Lösungsarchitektur).
     Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
     Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).
@@ -822,7 +825,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsection{Merkle-Tree}
+    \subsubsection{Merkle-Tree (Hashbaum)}
     Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
 
 \begin{lstlisting}[language=Pseudo,label={lst:merkle-pseudo}]
@@ -844,18 +847,18 @@ buildTreeRecursively(parent, snapshot, files):
 
 \end{lstlisting}
 
-    \textbf{Komplexität}
+    \paragraph*{Komplexität}
 
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
-    Eine Analyse der Komplexität der verschiedenen Operationen ist also angebracht.
+    Eine Analyse der Komplexität der verschiedenen Operationen des Merkle-Trees ist daher angebracht.
     \\
     Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
     Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
     Dateien sind stets Blätter.\newline
     Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
 
-    \textbf{Bau}
+    \paragraph*{Konstruktion}
 
     Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
     was einer Komplexität von $O(n)$ für das Traversieren entspricht.
@@ -865,12 +868,12 @@ buildTreeRecursively(parent, snapshot, files):
     Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
     Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
 
-    \textbf{Linearisierung}
+    \paragraph*{Linearisierung}
 
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
 
-    \textbf{Caching}
+    \subsubsection{Caching}
 
     In den folgenden zwei Szenarien wurde geprüft, ob die Implementierung eines Caching-Mechanismus sinnvoll ist.
     Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
