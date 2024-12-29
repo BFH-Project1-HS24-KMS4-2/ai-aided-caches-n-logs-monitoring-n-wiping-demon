@@ -951,10 +951,9 @@ buildTreeRecursively(parent, snapshot, files):
         \item \texttt{snapshot\_node.has\_changed}
         \item \texttt{snapshot\_node.deleted\_in\_next\_snapshot}
     \end{itemize}
-    \clearpage
 
     \subsubsection{REST-Schnittstelle}
-    Einbindung Swagger Spez.
+    Siehe~\nameref{sec:api-spec} im Anhang.
     \clearpage
 
     \subsubsection{KI-Anbindung}
@@ -1999,10 +1998,21 @@ echo ts run >> ~/.zprofile
 
     \chapter{Anhang}
     \clearpage
-    \includepdf[pages=1, pagecommand={
-        \section{Originale Projektbeschreibung}}]{../misc/proposal.pdf}
-    \includepdf[pages=2-]{../misc/proposal.pdf}
 
+    \vspace*{\fill}
+    \thispagestyle{empty}
+    \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+    \section{Originale Projektbeschreibung}\label{sec:originale-projektbeschreibung}
+    \vspace*{\fill}
+    \includepdf[pages=-]{../misc/proposal.pdf}
+
+
+    \vspace*{\fill}
+    \thispagestyle{empty}
+    \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+    \section{API-Dokumentation}\label{sec:api-spec}
+    \vspace*{\fill}
+    \includepdf[pages=-]{assets/api-documentation.pdf}
 
     \section{Facsimile der Projektbeschreibung}
 
