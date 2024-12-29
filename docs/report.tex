@@ -11,6 +11,7 @@
 \usepackage{xcolor}
 \usepackage{xfrac}
 \usepackage{longtable}
+\usepackage{pdfpages}
 
 \lstset{
     backgroundcolor=\color{black}, % Black background
@@ -365,14 +366,13 @@
     \subsection{Storyboard}
     In diesem Abschnitt wird beschrieben, wie ein Nutzer mit den verschiedenen Funktionen der Software
     interagieren kann.
-    Dafür haben wir folgend eine sinnvolle Abfolge zusammengestellt, wie ein Nutzer
-    unsere Software in einem realen Anwendungsfall verwenden könnte.
+    Dafür ist folgend eine sinnvolle Abfolge zusammengestellt, wie ein Nutzer die Software in einem realen Anwendungsfall verwenden könnte.
 
     \begin{enumerate}
         \item \textbf{Dateien suchen}\\
         Der Nutzer hat kürzlich in seinem Task-Manager ein Programm entdeckt, das komischerweise
         ziemlich viel Speicher braucht.
-        Also verwendet er unseren search-Befehl mit dem Pfad auf die Installation von diesem Programm
+        Also verwendet er den search-Befehl mit dem Pfad auf die Installation von diesem Programm
         und ihm werden die in diesem Verzeichnis gefundenen Cache- sowie Log-Dateien aufgelistet:
         \begin{verbatim}
 internal/test.log
@@ -384,7 +384,7 @@ internal/cache.json
         Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
 
         \item \textbf{Snapshots vergleichen}\\
-        Nach einigen Stunden möchte nun der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
+        Nach einigen Stunden möchte der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
         Dafür nutzt er den snapshot compare-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
         Das System gibt ihm eine entsprechende Ausgabe:
         \begin{verbatim}
@@ -395,7 +395,7 @@ test.log CHANGED 7-times
         \end{verbatim}
 
         \item \textbf{KI-Abfrage für eine Datei}\\
-        Nun möchte der Nutzer natürlich wissen, wofür diese test.log Datei ist, wenn sich diese jede Stunden ändert.
+        Als nächstes möchte der Nutzer natürlich wissen, wofür diese test.log Datei ist, wenn sich diese jede Stunde ändert.
         Also nutzt er den inspect-Befehl, um die angebundene KI abzufragen, wofür diese Datei genau ist, ob sie ein Sicherheitsrisiko darstellt
         und ob er die Datei evtl. leeren oder sogar löschen kann.
         Daraus kommt dann eine standardisierte Ausgabe von der KI:
@@ -434,12 +434,12 @@ schädlich, also empfehle ich es zu leeren.
     In diesem Abschnitt werden die Überlegungen zur Architektur des Systems dargestellt.
     Es wird erläutert, welche Varianten in Betracht gezogen wurden, welche Entscheidung getroffen wurde und welche Gründe dazu geführt haben.
 
-    \paragraph{1. Datenbankauswahl}\mbox{}\\
+    \paragraph{1. Datenbank}\mbox{}\\
     Eine zentrale Anforderung besteht darin, dass Pfad-Analysen zu einem späteren Zeitpunkt miteinander verglichen werden können.
     Daraus ergibt sich die Notwendigkeit, eine Datenbank (DBMS) zu integrieren.
     Im Folgenden werden die in Betracht gezogenen Varianten analysiert.
 
-    \paragraph{1.1 In-Memory-Datenbank}\mbox{}\\
+    \paragraph{1.1 In-Memory}\mbox{}\\
     Bei dieser Variante wird die Datenbank während der Laufzeit des Programms im Arbeitsspeicher initialisiert und beim Beenden des Programms wieder gelöscht.
     Dies bedeutet, dass die Datenbank nur temporär verfügbar ist und den Hauptspeicher des Systems nutzt.
 
@@ -459,7 +459,28 @@ schädlich, also empfehle ich es zu leeren.
     Diese Variante wurde ausgeschlossen, da die Persistenz der Daten eine essentielle Anforderung darstellt.
     Eine In-Memory-Datenbank würde nicht ermöglichen, dass Analysen auch nach einem Neustart des Systems verfügbar bleiben.
 
-    \paragraph{1.2 Eingebettete Datenbank}\mbox{}\\
+    \paragraph{1.2 Remote}\mbox{}\\
+    Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk vom Abnehmer aus angesprochen.
+    Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäß funktioniert.
+
+    \paragraph{Vorteile}
+    \begin{itemize}
+        \item Höhere Datensicherheit, da die Daten auf einem separaten System gespeichert werden können, welches durch Backup-Strategien abgesichert ist.
+        \item Größere Speicherkapazität, da die Skalierung auf leistungsfähige Server oder Cloud-Dienste möglich ist.
+    \end{itemize}
+
+    \paragraph{Nachteile}
+    \begin{itemize}
+        \item Abhängigkeit von einer stabilen Netzwerkverbindung, wodurch das System ohne Internet nicht verfügbar ist.
+        \item Zusätzlicher Aufwand und Kosten durch die Einrichtung und Wartung der externen Infrastruktur.
+    \end{itemize}
+
+    \paragraph{Fazit}
+    Die Remote-Datenbank wurde als ungeeignet für diesen Anwendungsfall bewertet.
+    Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind für das derzeitige System nicht notwendig, da es sich um eine kleine, lokal betriebene Anwendung handelt.
+    Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismäßigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
+
+    \paragraph{\underline{1.3 Eingebettet}}\mbox{}\\
     Eine eingebettete Datenbank wird als Ressource des Programms bereitgestellt und bleibt persistent, solange die entsprechenden Dateien im Programmverzeichnis nicht gelöscht werden.
     Sie bietet eine leichtgewichtige Lösung für kleinere Anwendungen.
 
@@ -482,53 +503,11 @@ schädlich, also empfehle ich es zu leeren.
     Da das System hauptsächlich offline betrieben werden soll, bietet diese Lösung eine optimale Balance zwischen Effizienz und Funktionalität.
     Die Verantwortung für die Datenbank wird dabei auf den Anwender übertragen, was den Verwaltungsaufwand reduziert.
 
-    \paragraph{1.3 Remote-Datenbank}\mbox{}\\
-    Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk vom Abnehmer aus angesprochen.
-    Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäß funktioniert.
-
-    \paragraph{Vorteile}
-    \begin{itemize}
-        \item Höhere Datensicherheit, da die Daten auf einem separaten System gespeichert werden können, welches durch Backup-Strategien abgesichert ist.
-        \item Größere Speicherkapazität, da die Skalierung auf leistungsfähige Server oder Cloud-Dienste möglich ist.
-    \end{itemize}
-
-    \paragraph{Nachteile}
-    \begin{itemize}
-        \item Abhängigkeit von einer stabilen Netzwerkverbindung, wodurch das System ohne Internet nicht verfügbar ist.
-        \item Zusätzlicher Aufwand und Kosten durch die Einrichtung und Wartung der externen Infrastruktur.
-    \end{itemize}
-
-    \paragraph{Fazit}
-    Die Remote-Datenbank wurde als ungeeignet für diesen Anwendungsfall bewertet.
-    Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind für das derzeitige System nicht notwendig, da es sich um eine kleine, lokal betriebene Anwendung handelt.
-    Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismäßigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
-
     \paragraph{2. Schnittstelle CLI $\leftrightarrow$ Daemon}\mbox{}\\
     Für die Kommunikation zwischen der CLI (Command Line Interface) und dem Daemon ist eine geeignete Schnittstelle erforderlich, um Anweisungen des Anwenders effizient und zuverlässig zu übertragen.
     Im Folgenden werden die in Betracht gezogenen Varianten analysiert.
 
-    \paragraph{2.1 REST-Schnittstelle}\mbox{}\\
-    Die REST-Schnittstelle ermöglicht den Austausch von Ressourcen zwischen Client und Server über das HTTP-Protokoll.
-    Der Austausch erfolgt im Rahmen definierter Formate (Content-Types) und kann über das Netzwerk abgewickelt werden.
-
-    \paragraph{Vorteile}
-    \begin{itemize}
-        \item Standardisierte Schnittstelle, die durch zahlreiche Frameworks unterstützt wird.
-        \item Hohe Robustheit, da REST auf etablierten HTTP-Standards basiert.
-        \item Ermöglicht die Ausführung von CLI und Daemon auf getrennten Systemen, was eine flexible Architektur fördert.
-    \end{itemize}
-
-    \paragraph{Nachteile}
-    \begin{itemize}
-        \item Erfordert die Implementierung eines Webservices, was zusätzlichen Entwicklungsaufwand bedeutet.
-    \end{itemize}
-
-    \paragraph{Fazit}
-    Die REST-Schnittstelle wurde als die bevorzugte Option gewählt, da sie eine klare und standardisierte technische Kommunikation ermöglicht.
-    Sie ist stabil, flexibel und erweiterbar, was besonders wichtig für den langfristigen Betrieb und mögliche zukünftige Anforderungen, wie die Systemtrennung von CLI und Daemon, ist.
-    Zudem ist die Implementierung dank vorhandener Frameworks verhältnismäßig einfach und effizient.
-
-    \paragraph{2.2 Inter-Prozess-Kommunikation (IPC)}\mbox{}\\
+    \paragraph{2.1 Inter-Prozess-Kommunikation (IPC)}\mbox{}\\
     Diese Variante nutzt einen gemeinsamen Speicherbereich, beispielsweise ein geteiltes Verzeichnis, um Dateien für die Kommunikation zwischen CLI und Daemon auszutauschen.
     Die CLI schreibt Anweisungen in Dateien, die der Daemon anschließend ausliest und verarbeitet.
 
@@ -550,7 +529,7 @@ schädlich, also empfehle ich es zu leeren.
     Insbesondere die lokale Bindung zwischen CLI und Daemon sowie die fehlende Standardisierung und Robustheit der Kommunikation sprechen gegen diese Variante.
     Für zukünftige Anforderungen, wie die Kommunikation über ein Netzwerk, wäre sie ungeeignet.
 
-    \paragraph{2.3 Netzwerk-Sockets}\mbox{}\\
+    \paragraph{2.2 Netzwerk-Sockets}\mbox{}\\
     Netzwerk-Sockets ermöglichen die Kommunikation zwischen Prozessen durch das Senden und Empfangen binärer Daten über spezifische Ports.
     Diese Methode kann sowohl lokal als auch über das Netzwerk verwendet werden.
 
@@ -570,6 +549,27 @@ schädlich, also empfehle ich es zu leeren.
     Obwohl Netzwerk-Sockets eine flexible und leistungsfähige Lösung darstellen, wurde diese Variante zugunsten der REST-Schnittstelle verworfen.
     Die REST-Implementierung erscheint aufgrund ihrer Standardisierung und einfacher Handhabung im Kontext des Projekts effizienter.
     Zudem entfällt der Aufwand für die Definition und das Parsen eines eigenen Nachrichtenformats.
+
+    \paragraph{\underline{2.3 REST-Schnittstelle}}\mbox{}\\
+    Die REST-Schnittstelle ermöglicht den Austausch von Ressourcen zwischen Client und Server über das HTTP-Protokoll.
+    Der Austausch erfolgt im Rahmen definierter Formate (Content-Types) und kann über das Netzwerk abgewickelt werden.
+
+    \paragraph{Vorteile}
+    \begin{itemize}
+        \item Standardisierte Schnittstelle, die durch zahlreiche Frameworks unterstützt wird.
+        \item Hohe Robustheit, da REST auf etablierten HTTP-Standards basiert.
+        \item Ermöglicht die Ausführung von CLI und Daemon auf getrennten Systemen, was eine flexible Architektur fördert.
+    \end{itemize}
+
+    \paragraph{Nachteile}
+    \begin{itemize}
+        \item Erfordert die Implementierung eines Webservices, was zusätzlichen Entwicklungsaufwand bedeutet.
+    \end{itemize}
+
+    \paragraph{Fazit}
+    Die REST-Schnittstelle wurde als die bevorzugte Option gewählt, da sie eine klare und standardisierte technische Kommunikation ermöglicht.
+    Sie ist stabil, flexibel und erweiterbar, was besonders wichtig für den langfristigen Betrieb und mögliche zukünftige Anforderungen, wie die Systemtrennung von CLI und Daemon, ist.
+    Zudem ist die Implementierung dank vorhandener Frameworks verhältnismäßig einfach und effizient.
     \clearpage
 
     \subsubsection{Technologieentscheid}
@@ -601,7 +601,7 @@ schädlich, also empfehle ich es zu leeren.
     Die Vorteile von NoSQL-Datenbanken bringen für dieses Projekt keinen nennenswerten Mehrwert, da dieser Anwendungsfall keine besonderen Anforderungen an Skalierbarkeit oder unstrukturierte Daten stellt.
     Auch aufgrund mangelnder Erfahrung im Team mit NoSQL-Systemen wurde diese Option verworfen.
 
-    \paragraph{1.2 SQL}\mbox{}\\
+    \paragraph{\underline{1.2 SQL}}\mbox{}\\
     SQL-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.
     Sie verwenden die standardisierte Abfragesprache SQL und sind besonders geeignet für datenintensive Anwendungen mit hohen Anforderungen an Konsistenz.
 
@@ -645,7 +645,7 @@ schädlich, also empfehle ich es zu leeren.
     H2 wurde ausgeschlossen, da es nicht für große Datenmengen ausgelegt ist und eine zu starke Abhängigkeit von Java besteht.
     Zudem erfüllt SQLite unsere Anforderungen besser.
 
-    \paragraph{1.2.2 SQLite}\mbox{}\\
+    \paragraph{\underline{1.2.2 SQLite}}\mbox{}\\
     SQLite ist eine serverlose, eingebettete relationale Datenbank, die Daten in einer einzigen Datei speichert und keine separate Konfiguration erfordert.
 
     \paragraph{Vorteile}
@@ -669,7 +669,28 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph{2. CLI/Daemon}\mbox{}\\
     Für die Entwicklung von CLI und Daemon wurde eine einheitliche Technologie gewählt, um den Entwicklungsaufwand zu reduzieren und die Wiederverwendbarkeit von Code zu fördern.
 
-    \paragraph{2.1 Java}\mbox{}\\
+    \paragraph{2.1 Python}\mbox{}\\
+    Python ist eine einfach zu erlernende, vielseitige Programmiersprache, die insbesondere für datengetriebene Anwendungen und schnelle Entwicklung geeignet ist.
+
+    \paragraph{Vorteile}
+    \begin{itemize}
+        \item Einfache Syntax: Kürzere Entwicklungszeit und schnelle Einarbeitung.
+        \item Starke KI-Unterstützung: Umfangreiche Bibliotheken wie \texttt{transformers} und \texttt{torch}.
+        \item Flexibilität: Besonders geeignet für schnelle Iterationen und Skripte.
+    \end{itemize}
+
+    \paragraph{Nachteile}
+    \begin{itemize}
+        \item Geringere Performance: Nicht ideal für rechenintensive Anwendungen.
+        \item Dynamische Typisierung: Kann bei großen Projekten zu Wartungsproblemen führen.
+        \item Distributionsprobleme: Erfordert oft spezielle Umgebungen oder Pakete.
+    \end{itemize}
+
+    \paragraph{Fazit}
+    Obwohl Python starke Vorteile in Bezug auf KI-Bibliotheken bietet, wurde diese Option aufgrund der geringeren Performanz und fehlenden Erfahrung im Team verworfen.
+    Java erwies sich als besser geeignet für unsere Anforderungen.
+
+    \paragraph{\underline{2.2 Java}}\mbox{}\\
     Java ist eine objektorientierte, plattformunabhängige Sprache, die sich durch Stabilität, Performance und breite Unterstützung auszeichnet.
 
     \paragraph{Vorteile}
@@ -690,27 +711,6 @@ schädlich, also empfehle ich es zu leeren.
     Java wurde gewählt, da alle Teammitglieder bereits über umfassende Erfahrung verfügen und die Sprache eine hohe Performanz und Stabilität bietet.
     Die Einschränkungen hinsichtlich KI-Integration waren für dieses Projekt zu wenig gewichtig.
     Frameworks wie Spring erleichtern zudem die Implementierung der CLI/Daemon-Architektur.
-
-    \paragraph{2.2 Python}\mbox{}\\
-    Python ist eine einfach zu erlernende, vielseitige Programmiersprache, die insbesondere für datengetriebene Anwendungen und schnelle Entwicklung geeignet ist.
-
-    \paragraph{Vorteile}
-    \begin{itemize}
-        \item Einfache Syntax: Kürzere Entwicklungszeit und schnelle Einarbeitung.
-        \item Starke KI-Unterstützung: Umfangreiche Bibliotheken wie \texttt{transformers} und \texttt{torch}.
-        \item Flexibilität: Besonders geeignet für schnelle Iterationen und Skripte.
-    \end{itemize}
-
-    \paragraph{Nachteile}
-    \begin{itemize}
-        \item Geringere Performance: Nicht ideal für rechenintensive Anwendungen.
-        \item Dynamische Typisierung: Kann bei großen Projekten zu Wartungsproblemen führen.
-        \item Distributionsprobleme: Erfordert oft spezielle Umgebungen oder Pakete.
-    \end{itemize}
-
-    \paragraph{Fazit}
-    Obwohl Python starke Vorteile in Bezug auf KI-Bibliotheken bietet, wurde diese Option aufgrund der geringeren Performanz und fehlenden Erfahrung im Team verworfen.
-    Java erwies sich als besser geeignet für unsere Anforderungen.
     \clearpage
 
     \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
@@ -781,7 +781,7 @@ schädlich, also empfehle ich es zu leeren.
             \hline
             \textbf{Repository}           & Java, Spring (Data)            \\
             \hline
-            \textbf{Database}    & SQLite                         \\
+            \textbf{Database}             & SQLite                         \\
             \hline
         \end{tabular}
         \caption{Technologien der Komponenten}\label{tab:table}
@@ -1617,7 +1617,7 @@ index forbidden by rule: /var/www/html/
     Der Aufruf der HTTP-Schnittstelle erfolgte über einen SpringBootTest im Daemon-Projekt.
     Die Antworten des KI-Modells wurden in einem Ausgabe-Verzeichnis als Textdateien abgelegt.
     Diese wurden schliesslich manuell bewertet und mit, der zuvor definierten, Erwartungshaltung verglichen.
-    
+
     \subsection{Testdateien}\label{subsec:testdateien}
     Im Internet existieren zwar zahlreiche reale, vorgelabelte und gesäuberte Datasets, welche für das Erkennen von Anomalien in Logdateien verwendet werden können.
     Diese befinden sich jedoch vorwiegend in einer Form, welche sich für Machine Learning eignet.
@@ -1825,6 +1825,29 @@ index forbidden by rule: /var/www/html/
 
 
     \section{Lizenzierung}
+    Unser Projekt basiert auf den Prinzipien von \textbf{Free/Libre and Open Source Software (FLOSS)} und ist unter der \textbf{MIT-Lizenz} veröffentlicht.
+    Diese Lizenz ermöglicht es, die Software frei zu nutzen, zu modifizieren und weiterzuverbreiten, sowohl für private als auch kommerzielle Zwecke, solange der ursprüngliche Lizenztext beibehalten wird.
+
+    \subsection{Open-Source Abhängigkeiten}
+    Im Projekt werden folgende Technologien und Bibliotheken verwendet, die ebenfalls unter Open-Source-Lizenzen stehen:
+
+    \begin{itemize}
+        \item \textbf{Java}: Entwickelt unter der \textbf{GPL v2 mit Classpath Exception}, was die Nutzung in geschlossenen Projekten ermöglicht.
+        \item \textbf{Maven}: Unter der \textbf{Apache License 2.0}, die eine flexible Nutzung und Modifikation erlaubt.
+        \item \textbf{Spring}: Ebenfalls lizenziert unter der \textbf{Apache License 2.0}, was eine Integration und Anpassung in eigenen Projekten ohne Einschränkungen unterstützt.
+        \item \textbf{SQLite}: Steht unter der \textbf{Public Domain} bzw. der \textbf{blessing license}, wodurch es uneingeschränkt genutzt und verteilt werden kann.
+        \item \textbf{H2}: Unter der \textbf{Mozilla Public License 2.0} (MPL 2.0), die flexible Nutzung, Modifikation und Distribution erlaubt, solange Änderungen am Quellcode unter derselben Lizenz veröffentlicht werden.
+    \end{itemize}
+
+    Durch die sorgfältige Auswahl dieser FLOSS-Lizenzen bleibt das Projekt vollständig mit den Open-Source-Grundsätzen kompatibel und bietet maximale Flexibilität für zukünftige Erweiterungen.
+
+    \subsection{Kommerzielle Abhängigkeiten}
+    Zusätzlich wird im Projekt ein kostenpflichtiger \textbf{GPT-Service} von \textit{OpenAI} eingebunden, der über eine API-Schnittstelle angebunden ist.
+    Die Nutzung dieses Dienstes unterliegt den \textbf{kommerziellen Nutzungsbedingungen von OpenAI}.
+    Es wird sichergestellt, dass der Zugriff auf diesen Dienst in unserem Projekt optional ist und die Kernfunktionalität auch ohne dessen Nutzung gewährleistet bleibt.
+    Somit bleibt das Projekt als FLOSS klassifiziert, während die GPT-Integration als optionaler, externer Dienst gehandhabt wird.
+
+    \clearpage
 
 
     \section{Installationshandbuch \& Skript}
@@ -1948,17 +1971,29 @@ echo ts run >> ~/.zprofile
     \section{Zukünftige Arbeiten}\label{sec:zukunftigearbeiten}
     \url{https://doi.org/10.1145/3664811}
 
+    %------------ Glossary -------------------
+    \printglossary
 
-    \chapter{Glossar}
+    %------------ Index ----------------------
+    \clearpage
+    \addcontentsline{toc}{chapter}{Index}
+    \printindex
 
-
-    \chapter{Index}
+    %----------- Bibliography ----------------
+    \clearpage
 
 
     \chapter{Bibliografie}
 
+    %------------ Appendix ----------------
+    \appendix
+
 
     \chapter{Anhang}
+    \clearpage
+    \includepdf[pages=1, pagecommand={
+        \section{Originale Projektbeschreibung}}]{../misc/proposal.pdf}
+    \includepdf[pages=2-]{../misc/proposal.pdf}
 
 
     \section{Facsimile der Projektbeschreibung}
