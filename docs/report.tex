@@ -828,7 +828,7 @@ schädlich, also empfehle ich es zu leeren.
     \subsection{Realisierung}\label{subsec:realisierung}
     Die Realisierung ist die Umsetzung der~\nameref{sec:anforderungen} mittels der~\nameref{subsec:loesungsarchitektur}.
     Hauptbaublöcke sind Java-Klassen.
-    Ein vollsändiges Klassendiagramm kann im Anhang~\nameref{sec:klassendiagramm} gefunden werden. TODO
+    Die Klassendiagramme für die CLI und den Daemon sind im Anhang unter \hyperref[sec:class-diag-cli]{Klassendiagramm CLI} und \hyperref[sec:class-diag-daemon]{Klassendiagramm Daemon} zu finden.
 
     \subsubsection{Frontend (CLI)}
     \paragraph*{Beispiel Komponenteninteraktion}
@@ -2213,6 +2213,37 @@ echo ts run >> ~/.zprofile
     \section{API-Dokumentation}\label{sec:api-spec}
     \vspace*{\fill}
     \includepdf[pages=-]{assets/api-documentation.pdf}
+
+    \vspace*{\fill}
+    \thispagestyle{empty}
+    \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+    \section{Klassendiagramm CLI \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
+    \label{sec:class-diag-cli}
+
+    \footnotetext[1]{Diagramm erstellt mit IntelliJ IDEA Ultimate.}
+    \footnotetext[2]{Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.}
+    \footnotetext[3]{
+        Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
+        \texttt{docs/diagrams/intellij/cli.uml} bzw. \texttt{docs/assets/cli\_class\_diag.png}
+    }
+    \vspace*{\fill}
+    \includepdf[pages=-]{assets/cli_class_diag.png}
+
+    \vspace*{\fill}
+    \thispagestyle{empty}
+    \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+    \section{Klassendiagramm Daemon \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
+    \label{sec:class-diag-daemon}
+
+    \footnotetext[1]{Diagramm erstellt mit IntelliJ IDEA Ultimate.}
+    \footnotetext[2]{Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.}
+    \footnotetext[3]{
+        Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
+        \texttt{docs/diagrams/intellij/daemon.umll} bzw. \texttt{docs/assets/daemon\_class\_diag.png}
+    }
+    \vspace*{\fill}
+    \includepdf[pages=-]{assets/daemon_class_diag.png}
+
 
     \section{Facsimile der Projektbeschreibung}
 
