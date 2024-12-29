@@ -711,6 +711,13 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
 
+    \subsubsection{}Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
+    Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
+    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus.
+    Ausserdem stellt er der
+    CLI eine REST-Schnittstelle zur Verfügung.
+    Ein Datenbanksystem speichert die Applikationsdaten.
+
     \begin{figure}[h]
         \centering
         \includegraphics[width=1\textwidth]{assets/comp-diag-tracesentry-v3}
@@ -718,13 +725,6 @@ schädlich, also empfehle ich es zu leeren.
         \label{fig:comp-diag}
         \vspace{2em}
     \end{figure}
-
-    \subsubsection{}Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
-    Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
-    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus.
-    Ausserdem stellt er der
-    CLI eine REST-Schnittstelle zur Verfügung.
-    Ein Datenbanksystem speichert die Applikationsdaten.
 
     \subsubsection{Domänen}
     Die im Diagramm dargestellten Subkomponenten kapseln Funktionalitäten und sind in der Regel in eigenen Klassen implementiert.
@@ -789,12 +789,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsubsection{Frontend}
 
-    \clearpage
-
     \subsubsection{Backend}
-    TODO Büsnei Logik & Komplexität
-    \\
-
     \subsubsubsection{\textbf{Geschäftslogik}}
     \\
     Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss Lösungsarchitektur.
@@ -807,6 +802,8 @@ schädlich, also empfehle ich es zu leeren.
         \caption{Sequenzdiagramm Monitoring Controller}
         \label{fig:seq-diag-monitoring-controller}
     \end{figure}
+
+    \clearpage
 
     \subsubsubsection{\textbf{Monitoring Scheduler}}
     \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (Lösungsarchitektur).
@@ -825,17 +822,27 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsection{Datenbank}
-    \clearpage
+    \subsubsection{Merkle-Tree}
+    Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
 
-    \subsubsection{REST-Schnittstelle}
-    Einbindung Swagger Spez.
-    \clearpage
+\begin{lstlisting}[language=Pseudo,label={lst:merkle-pseudo}]
+buildMerkleTree(path, snapshot):
+    1. ueberpruefe, ob der Pfad gueltig ist. Falls nicht: Abbrechen.
+    2. Erstelle Wurzel-Knoten fuer das Verzeichnis.
+    3. Rufe BuildTreeRecursively(Wurzel, snapshot, Verzeichnisinhalte) auf.
 
-    \subsubsection{KI-Anbindung}
-    \clearpage
+buildTreeRecursively(parent, snapshot, files):
+    1. Initialisiere eine Liste fuer Kind-Knoten.
+    2. Fuer jede Datei im Verzeichnis:
+        a. Wenn Datei ein Unterverzeichnis ist:
+            - Erstelle Knoten fuer das Verzeichnis.
+            - Rufe BuildTreeRecursively fuer das Unterverzeichnis auf.
+        b. Wenn Datei gueltig ist (entspricht Filter):
+            - Erstelle Knoten fuer die Datei.
+        c. Fuege den neuen Knoten zur Kinderliste hinzu.
+    3. Kombiniere Hashes aller Kinder und speichere im Elternknoten.
 
-    \subsubsection{Performanz und Optimierung}
+\end{lstlisting}
 
     \textbf{Komplexität}
 
@@ -887,6 +894,11 @@ schädlich, also empfehle ich es zu leeren.
         \end{itemize}
     \end{enumerate}
 
+    \clearpage
+
+    \subsubsection{Datenbank}
+    ...
+
     \textbf{Indexing}
 
     Die Entscheidung über die Sinnhaftigkeit eines SQL-Indexes für bestimmte Attribute der Datenbank basierte auf den folgenden Kriterien:
@@ -910,6 +922,14 @@ schädlich, also empfehle ich es zu leeren.
         \item \texttt{snapshot\_node.has\_changed}
         \item \texttt{snapshot\_node.deleted\_in\_next\_snapshot}
     \end{itemize}
+    \clearpage
+
+    \subsubsection{REST-Schnittstelle}
+    Einbindung Swagger Spez.
+    \clearpage
+
+    \subsubsection{KI-Anbindung}
+    \clearpage
 
     \clearpage
 
