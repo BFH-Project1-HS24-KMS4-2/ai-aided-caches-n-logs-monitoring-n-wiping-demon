@@ -841,6 +841,32 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
+    \paragraph*{Caching}
+
+    In den folgenden zwei Szenarien wurde geprüft, ob die Implementierung eines Caching-Mechanismus sinnvoll ist.
+    Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
+    Die Entscheidungsgrundlage wird im Folgenden erläutert:
+
+    \begin{enumerate}
+        \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte Merkle-Tree zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
+        ohne ihn erneut aus der Datenbank laden zu müssen.
+        \begin{itemize}
+            \item Ein Caching-Ansatz ist nur dann sinnvoll, wenn dieselben Daten mehrfach genutzt werden.
+            Da jedoch der Merkle-Tree des letzten Snapshots lediglich einmal (beim Vergleich mit dem neuen Baum) verwendet wird, ergibt sich hieraus kein signifikanter Nutzen.
+            \item Der Leistungsgewinn durch Caching wäre im Vergleich zum Laden aus der Datenbank marginal.
+            Die Datenbank ist lokal angebunden, und die Abfrage weist eine geringe Komplexität auf, sodass ein effizienter Zugriff bereits gewährleistet ist.
+        \end{itemize}
+        \item Für jeden \texttt{MonitoredPath} könnte eine geordnete Liste der Änderungen jedes Snapshots im Speicher gehalten werden, um diese direkt zurückgeben zu können,
+        ohne auf die Datenbank zugreifen zu müssen.
+        \begin{itemize}
+            \item Auch in diesem Szenario wird keine nennenswerte Steigerung der Performance erwartet.
+            Selbst wenn die Daten bereits im Speicher verfügbar wären, erfordert die Erstellung der zusammengefassten Antwort zusätzliche Logik.
+            Diese kann ebenso effizient durch eine Abfrage auf die lokale Datenbank umgesetzt werden, wodurch sich kein signifikanter Vorteil ergibt.
+        \end{itemize}
+    \end{enumerate}
+
+    \clearpage
+
     \subsubsection{Merkle-Tree (Hashbaum)}
     Ein Merkle-Tree ist eine binäre Baumstruktur, die zur effizienten Überprüfung von Datenintegrität verwendet wird.
     Er eignet sich für das Vergleichen von Baumstrukturen, wie sie in Dateisystemen vorkommen.
@@ -892,30 +918,6 @@ buildTreeRecursively(parent, snapshot, files):
 
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
-
-    \subsubsection{Caching}
-
-    In den folgenden zwei Szenarien wurde geprüft, ob die Implementierung eines Caching-Mechanismus sinnvoll ist.
-    Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
-    Die Entscheidungsgrundlage wird im Folgenden erläutert:
-
-    \begin{enumerate}
-        \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte Merkle-Tree zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
-        ohne ihn erneut aus der Datenbank laden zu müssen.
-        \begin{itemize}
-            \item Ein Caching-Ansatz ist nur dann sinnvoll, wenn dieselben Daten mehrfach genutzt werden.
-            Da jedoch der Merkle-Tree des letzten Snapshots lediglich einmal (beim Vergleich mit dem neuen Baum) verwendet wird, ergibt sich hieraus kein signifikanter Nutzen.
-            \item Der Leistungsgewinn durch Caching wäre im Vergleich zum Laden aus der Datenbank marginal.
-            Die Datenbank ist lokal angebunden, und die Abfrage weist eine geringe Komplexität auf, sodass ein effizienter Zugriff bereits gewährleistet ist.
-        \end{itemize}
-        \item Für jeden \texttt{MonitoredPath} könnte eine geordnete Liste der Änderungen jedes Snapshots im Speicher gehalten werden, um diese direkt zurückgeben zu können,
-        ohne auf die Datenbank zugreifen zu müssen.
-        \begin{itemize}
-            \item Auch in diesem Szenario wird keine nennenswerte Steigerung der Performance erwartet.
-            Selbst wenn die Daten bereits im Speicher verfügbar wären, erfordert die Erstellung der zusammengefassten Antwort zusätzliche Logik.
-            Diese kann ebenso effizient durch eine Abfrage auf die lokale Datenbank umgesetzt werden, wodurch sich kein signifikanter Vorteil ergibt.
-        \end{itemize}
-    \end{enumerate}
 
     \clearpage
 
