@@ -729,7 +729,7 @@ schädlich, also empfehle ich es zu leeren.
         \vspace{2em}
     \end{figure}
 
-    \subsubsection{Domänen}
+    \subsubsection{Domänen}\label{subsubsec:domaenen}
     Die im Diagramm dargestellten Subkomponenten kapseln Funktionalitäten und sind in der Regel in eigenen Klassen implementiert.
     Es können mehrere Instanzen dieser Subkomponenten implementiert werden und nach fachlichen Aspekten, sogenannten Domänen, aufgeteilt werden.
     \\Am Beispiel einer Snapshot-Domäne würden dann im Backend ein Snapshot-(Rest)-Controller, ein Snapshot-(Domain)-Service und ein Snapshot-Repository existieren.
@@ -793,8 +793,8 @@ schädlich, also empfehle ich es zu leeren.
     \subsubsection{Frontend}
 
     \subsubsection{Backend}
-    \paragraph*{Geschäftslogik}
-    Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss Lösungsarchitektur.
+    \paragraph*{Beispiel Komponenteninteraktion}
+    Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss~\nameref{subsec:loesungsarchitektur}.
     Man sieht innerhalb der Monitoring-Domäne den Controller (MonitoringController), den Service (MonitoringDomainService) und das Repository (MonitoredPathRepository).
     Des Weiteren sieht man eine Utility-Klasse (ControllerUtils) und eine Entitätsklasse (MonitoredPath) und zur Veranschaulichung (in rot) die Superklasse vom Spring-Framework (CrudRepository).
     \\In diesem Beispiel wird ein überwachter Pfad (MonitoredPath) erstellt:
@@ -808,13 +808,16 @@ schädlich, also empfehle ich es zu leeren.
     \clearpage
 
     \paragraph*{Monitoring}
-    \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (Lösungsarchitektur).
+    \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
     Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
-    Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).
-    Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, ob sich der Knoten geändert hat.
+    Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
+    Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
     Falls ein Knoten nicht mehr existiert, wird dafür ein Flag im alten Snapshot gesetzt.
     Diese zwei Flags sind die einzigen Felder, die auf Informationen vom Vorgänger (1.1.1, 1.1.2) bzw.\ Nachfolger zurückgreifen,
     alle anderen Felder stellen Informationen des aktuellen Snapshots im Sinne einer Momentaufnahme dar.
+    \\Der Intervall für die Periodizität der Snapshot-Erstellung ist konfigurierbar und kann z.B.\ via Programmargument oder Konfigurationsdatei gesetzt
+    \\(mit Key \texttt{monitoring-scheduler.snapshot.interval}) werden.
+    Standardmässig ist der Wert auf 1 Stunde gesetzt.
     \begin{figure}[h]
         \centering
         \includegraphics[width=1\textwidth]{assets/MonitoringScheduler_createSnapshots_seq_diag}
@@ -825,7 +828,11 @@ schädlich, also empfehle ich es zu leeren.
     \clearpage
 
     \subsubsection{Merkle-Tree (Hashbaum)}
-    Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
+    Ein Merkle-Tree ist eine binäre Baumstruktur, die zur effizienten Überprüfung von Datenintegrität verwendet wird.
+    Er eignet sich für das Vergleichen von Baumstrukturen, wie sie in Dateisystemen vorkommen.
+    \\Bei der Erstellung eines Snapshots eines überwachten Pfades wird ein eben solcher Baum erstellt.
+    Er besteht aus Knoten, die Hashes von Dateien oder Unterverzeichnissen enthalten.
+    \\Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
 
 \begin{lstlisting}[language=Pseudo,label={lst:merkle-pseudo}]
 buildMerkleTree(path, snapshot):
@@ -846,7 +853,7 @@ buildTreeRecursively(parent, snapshot, files):
 
 \end{lstlisting}
 
-    \paragraph*{Komplexität}
+    \subsubsubsection{\textbf{Komplexität}}
 
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
