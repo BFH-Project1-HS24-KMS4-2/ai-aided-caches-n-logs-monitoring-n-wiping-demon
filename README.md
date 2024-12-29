@@ -32,13 +32,13 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    ```
    PATH=$PATH:$TRACE_SENTRY_DIR
    ```
-4. If you want to use the inspect feature create an openai API-KEY following these
-   instructions: https://platform.openai.com/settings/organization/billing/overview
-   after that set the generated API-KEY as environment variable at the end of the `/etc/profile` file:
+4. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+   Then set the generated API key as an environment variable at the end of the file `/etc/profile`:
     ```
     export OPENAI_API_KEY=<generated API-KEY>
     ```
-   When you skip this part you won't have access to the inspect feature but the rest will work the same way.
+   If you skip this part, you won't have access to the inspection feature.
 5. If you want that the daemon starts every time automatically in the background when you start your system,
    you can do the following in a terminal:
     ```

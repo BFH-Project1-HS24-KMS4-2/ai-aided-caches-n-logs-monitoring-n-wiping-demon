@@ -138,8 +138,12 @@
 
 
     \chapter{Spezifikation}
+
+
     \section{Systemabgrenzung}
+
     \subsection{Systemumgebung (statisch)}
+
     \subsubsection{Systemübersicht}
     Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in einem bestimmten Verzeichnis.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
@@ -162,9 +166,12 @@
 
 
     \clearpage
+
     \subsection{Prozessumgebung}
 
     \clearpage
+
+
     \section{Anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
 
@@ -401,355 +408,306 @@ schädlich, also empfehle ich es zu leeren.
     \newpage
 
     \subsection{UX-Prototyping}
-    Da wir nur ein Command-Line-Interface haben, decken wir dieses Kapitel bereits mit
-    der Dokumentation dieser Schnittstelle ab, welche im folgenden Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch} vorhanden ist.
-    Dort werden alle Befehle mit ihrer Struktur und auch ihren Parametern genau beschrieben.
-    Dazu werden auch Anwendungsbeispiele mit den möglichen Systemantworten erläutert.
+    Da das System ausschließlich über ein Command-Line-Interface (CLI) verfügt,
+    wird die Dokumentation dieser Schnittstelle im nachfolgenden Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch}
+    umfassend behandelt.
+    Diese Dokumentation wurde im Rahmen eines iterativen und agilen Entwicklungsprozesses
+    kontinuierlich während der Implementierung der einzelnen Befehle erstellt.
+    Sie enthält eine detaillierte Beschreibung aller verfügbaren Befehle, einschließlich ihrer Syntax, Parameter und Anwendungsbeispiele.
+    Darüber hinaus werden mögliche Systemantworten im Kontext verschiedener Szenarien erläutert,
+    um eine praxisnahe Nutzung zu gewährleisten.
 
 
     \chapter{Implementierung}
+
 
     \section{Architektur}
 
     \subsection{Technische Variantenentscheide}
 
     \subsubsection{Architekturentscheid}
-    In diesem Abschnitt soll erläutert werden, was wir uns für Gedanken bezüglich der Architektur gemacht haben
-    und für was wir uns schlussendlich aus welchen Gründen entschieden haben.
+    In diesem Abschnitt werden die Überlegungen zur Architektur des Systems dargestellt.
+    Es wird erläutert, welche Varianten in Betracht gezogen wurden, welche Entscheidung getroffen wurde und welche Gründe dazu geführt haben.
 
-        {\large\bfseries Daemon}
+    \paragraph{1. Datenbankauswahl}\mbox{}\\
+    Eine zentrale Anforderung besteht darin, dass Pfad-Analysen zu einem späteren Zeitpunkt miteinander verglichen werden können.
+    Daraus ergibt sich die Notwendigkeit, eine Datenbank (DBMS) zu integrieren.
+    Im Folgenden werden die in Betracht gezogenen Varianten analysiert.
 
-    Als erstes war uns aus den Anforderungen klar, dass wir einen Daemon brauchen, also ein Programm, welches immer im
-    Hintergrund (seit Start des Computers) laufen soll.
-    Also muss das bereits ein eigenständiges Programm sein, das z.B. beim Systemstart (Autostart bei Windows) ausgeführt werden kann.
+    \paragraph{1.1 In-Memory-Datenbank}\mbox{}\\
+    Bei dieser Variante wird die Datenbank während der Laufzeit des Programms im Arbeitsspeicher initialisiert und beim Beenden des Programms wieder gelöscht.
+    Dies bedeutet, dass die Datenbank nur temporär verfügbar ist und den Hauptspeicher des Systems nutzt.
 
-        {\large\bfseries Database}
-
-    Als nächstes gibt es die Anforderung, dass Pfad-Analysen zu einem späteren Zeitpunkt verglichen werden können sollen.
-    So war für uns auch klar, dass wir eine Datenbank (DBMS) brauchen.
-    Dazu haben wir verschiedene Varianten:
-
-    \textbf{1. In-Memory}
-    In diesem Fall würde die Datenbank mit dem Start des Programms mitinitialisiert und beim Beenden des Programms auch wieder gelöscht.
-    Das bedeutet die Datenbank lebt nur während der Laufzeit des Programms und braucht auch den Speicher des Programms mit.
-
-    \textbf{Begründung zur Variante In-Memory} Diese kommt für uns nicht in Frage, da wir die Analysen auch über die Laufzeit des Daemons hinaus persistieren möchten.
-    Damit der Anwender beispielsweise auch nach einem Neustart noch Zugriff auf seine früheren Datei-Analysen hat.
-
-    \textbf{2. Embedded}
-    Hier wird die Datenbank in Form von Files innerhalb des Programms (Programm-Ressourcen) mitgeliefert und bleibt
-    somit persistent solange es nicht gelöscht wird im Verzeichnis des Programms.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Braucht keine externe Infrastruktur
-        \item Offline-Verfügbarkeit
-        \item Performance
+        \item Sehr hohe Zugriffsgeschwindigkeit, da die Daten im Arbeitsspeicher gehalten werden.
+        \item Einfache Integration ohne dauerhaften Speicherbedarf.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Datenverlust bei einem Problem des Anwender-Systems
+        \item Keine Persistenz der Daten über die Laufzeit hinaus.
+        \item Erhöhter Speicherbedarf während der Laufzeit des Programms.
     \end{itemize}
 
-    \textbf{Begründung zur Variante Embedded} Diese Variante passt für unseren Use-Case am Besten, da wir nur ein kleines System entwickeln.
-    Dadurch brauchen wir keine grosse Kapazität an Speicher.
-    Die Datenbank ist ebenso einfach und schnell eingerichtet und benötigt keine weitere Infrastruktur.
-    Die Verantwortung der Datenbank liegt somit nicht bei uns, sondern beim Anwender.
-    Dazu streben wir an, unser System vorallem offline zu betreiben.
+    \paragraph{Fazit}
+    Diese Variante wurde ausgeschlossen, da die Persistenz der Daten eine essentielle Anforderung darstellt.
+    Eine In-Memory-Datenbank würde nicht ermöglichen, dass Analysen auch nach einem Neustart des Systems verfügbar bleiben.
 
-    \textbf{3. Remote}
-    Hier läuft die Datenbank auf einem externen System und ist über das Netzwerk für unser Programm erreichbar.
-    Somit persistent solange auf dem externen System nichts gelöscht wird oder das System nicht beschädigt wird.
+    \paragraph{1.2 Eingebettete Datenbank}\mbox{}\\
+    Eine eingebettete Datenbank wird als Ressource des Programms bereitgestellt und bleibt persistent, solange die entsprechenden Dateien im Programmverzeichnis nicht gelöscht werden.
+    Sie bietet eine leichtgewichtige Lösung für kleinere Anwendungen.
 
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Datensicherheit
-        \item Kapazität
+        \item Keine Notwendigkeit für externe Infrastruktur, wodurch die Einrichtung vereinfacht wird.
+        \item Volle Offline-Funktionalität, da keine Verbindung zu externen Diensten erforderlich ist.
+        \item Hohe Performance durch direkte Anbindung an das Programm.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Nicht erreichbar ohne Netzwerkverbindung
-        \item Braucht externe Infrastruktur (Kosten, Aufwand)
+        \item Risiko eines Datenverlusts bei Fehlern oder Ausfällen des Anwendersystems.
+        \item Eingeschränkte Skalierbarkeit bei wachsenden Datenmengen.
     \end{itemize}
 
-    \textbf{Begründung zur Variante Remote} Diese Variante bringt für uns keinen Mehrwert gegenüber der Embedded-Variante.
-    Es wäre eher nur Mehraufwand, der sich aktuell nicht lohnt.
+    \paragraph{Fazit}
+    Die eingebettete Datenbank wurde als die am besten geeignete Option identifiziert.
+    Sie erfüllt die Anforderungen eines kleinen Systems ohne die Notwendigkeit zusätzlicher Infrastruktur und ermöglicht eine einfache und schnelle Einrichtung.
+    Da das System hauptsächlich offline betrieben werden soll, bietet diese Lösung eine optimale Balance zwischen Effizienz und Funktionalität.
+    Die Verantwortung für die Datenbank wird dabei auf den Anwender übertragen, was den Verwaltungsaufwand reduziert.
 
-        {\large\bfseries TaskScheduler}
+    \paragraph{1.3 Remote-Datenbank}\mbox{}\\
+    Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk vom Abnehmer aus angesprochen.
+    Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäß funktioniert.
 
-    Für die Anforderung, dass periodisch Dateipfade analysiert werden sollen, war für uns klar dass wir dafür so etwas wie einen
-    Task-Scheduler brauchen.
-    Und da wir den Daemon genau für das haben ist auch klar, dass diese Tasks am einfachsten über den Daemon gesteuert werden können.
-    So ist es auch für die Kommunikation einfacher, da die Resultate der Analyse-Tasks direkt wieder zum Daemon zurückkommuniziert werden können
-    und so auch einfach weiterverarbeitet werden können, was vor allem das Speichern in die Datenbank betrifft.
-
-        {\large\bfseries Anwender-Schnittstelle}
-
-    Als Nächstes müssen wir dem Anwender natürlich noch eine Schnittstelle anbieten, über die er Anweisungen/Funktionen von unserem System
-    aufrufen kann.
-    Dafür gibt es folgende Möglichkeiten:
-
-    \textbf{1. CLI}
-    Diese Variante bietet dem Anwender an, über das Kommandozeilen-Interface das System anzuwenden und somit über
-    Text-Input auch wieder Text-Output als Resultat zu erhalten.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Simpel/Schlicht
+        \item Höhere Datensicherheit, da die Daten auf einem separaten System gespeichert werden können, welches durch Backup-Strategien abgesichert ist.
+        \item Größere Speicherkapazität, da die Skalierung auf leistungsfähige Server oder Cloud-Dienste möglich ist.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Schwierigere Anwendung für Anfänger
+        \item Abhängigkeit von einer stabilen Netzwerkverbindung, wodurch das System ohne Internet nicht verfügbar ist.
+        \item Zusätzlicher Aufwand und Kosten durch die Einrichtung und Wartung der externen Infrastruktur.
     \end{itemize}
 
-    \textbf{Begründung CLI} Auch hier haben wir entschieden eine möglichst simple Variante mit geringem initialen Aufwand zu wählen.
-    In erster Linie geht es um die Funktionalität, welche auch problemlos mit der CLI-Variante umgesetzt werden kann.
-    In der Zukunft können immernoch weitere Schnittstellen hinzugefügt werden, um das System benutzerfreundlicher zu gestalten.
+    \paragraph{Fazit}
+    Die Remote-Datenbank wurde als ungeeignet für diesen Anwendungsfall bewertet.
+    Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind für das derzeitige System nicht notwendig, da es sich um eine kleine, lokal betriebene Anwendung handelt.
+    Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismäßigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
 
-    \textbf{2. GUI}
-    Bei der GUI-Variante würde es ein neues Fenster geben z.B. über den Browser oder als Desktop-Applikation,
-    worüber der Anwender das System benutzen könnte.
-    So wäre es zu Beginn sicherlich etwas einfacher das System zu verstehen und zu verwenden.
-    Ausserdem hat man auch eine bessere Übersicht über die Funktionalitäten und kann diese so auch einfacher aufrufen.
-    Ebenso können die Resultate übersichtlicher dargestellt werden.
+    \paragraph{2. Schnittstelle CLI $\leftrightarrow$ Daemon}\mbox{}\\
+    Für die Kommunikation zwischen der CLI (Command Line Interface) und dem Daemon ist eine geeignete Schnittstelle erforderlich, um Anweisungen des Anwenders effizient und zuverlässig zu übertragen.
+    Im Folgenden werden die in Betracht gezogenen Varianten analysiert.
 
-    \textbf{Vorteile}
+    \paragraph{2.1 REST-Schnittstelle}\mbox{}\\
+    Die REST-Schnittstelle ermöglicht den Austausch von Ressourcen zwischen Client und Server über das HTTP-Protokoll.
+    Der Austausch erfolgt im Rahmen definierter Formate (Content-Types) und kann über das Netzwerk abgewickelt werden.
+
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Benutzerfreundlichkeit
+        \item Standardisierte Schnittstelle, die durch zahlreiche Frameworks unterstützt wird.
+        \item Hohe Robustheit, da REST auf etablierten HTTP-Standards basiert.
+        \item Ermöglicht die Ausführung von CLI und Daemon auf getrennten Systemen, was eine flexible Architektur fördert.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Aufwand
+        \item Erfordert die Implementierung eines Webservices, was zusätzlichen Entwicklungsaufwand bedeutet.
     \end{itemize}
 
-    \textbf{Begründung GUI} Die Variante GUI können wir uns für dieses Projekt auch sehr gut vorstellen.
-    Allerdings wäre der Aufwand direkt damit zu starten für uns zu gross, da wir den Fokus erstmal auf die Funktionalitäten legen wollen.
-    Aber als Future Work könnte man definitiv noch ein GUI dazubauen.
+    \paragraph{Fazit}
+    Die REST-Schnittstelle wurde als die bevorzugte Option gewählt, da sie eine klare und standardisierte technische Kommunikation ermöglicht.
+    Sie ist stabil, flexibel und erweiterbar, was besonders wichtig für den langfristigen Betrieb und mögliche zukünftige Anforderungen, wie die Systemtrennung von CLI und Daemon, ist.
+    Zudem ist die Implementierung dank vorhandener Frameworks verhältnismäßig einfach und effizient.
 
-        {\large\bfseries Schnittstelle CLI $\leftrightarrow$ Daemon}
+    \paragraph{2.2 Inter-Prozess-Kommunikation (IPC)}\mbox{}\\
+    Diese Variante nutzt einen gemeinsamen Speicherbereich, beispielsweise ein geteiltes Verzeichnis, um Dateien für die Kommunikation zwischen CLI und Daemon auszutauschen.
+    Die CLI schreibt Anweisungen in Dateien, die der Daemon anschließend ausliest und verarbeitet.
 
-    Zuletzt braucht es noch eine Schnittstelle zwischen der CLI und dem Daemon,
-    um die Anweisungen des Anwenders von der CLI auf den Daemon zu kommunizieren.
-    Auch hier machen wir uns Gedanken zu den folgenden Varianten:
-
-    \textbf{1. Rest-Schnittstelle}
-    Die Rest-Schnittstelle tauscht über Request/Response zwischen Client und Server Ressourcen aus.
-    Dieser Austausch erfolgt mit definierten Formaten (Content-Types) über das HTTP-Protokoll und das Netzwerk.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Standardisiert
-        \item Robust
-        \item CLI und Daemon können auf getrennten Systemen laufen
+        \item Einfach zu implementieren bei lokalem Einsatz auf demselben Rechner.
+        \item Keine Netzwerkkonfiguration erforderlich.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Es muss ein Webservice implementiert werden.
+        \item Erfordert die Definition eines eigenen Dateiformats und entsprechender Parser.
+        \item CLI und Daemon müssen auf demselben System laufen, was die Flexibilität einschränkt.
+        \item Es besteht das Risiko von Konflikten beim gleichzeitigen Schreiben und Lesen von Dateien, was zusätzliche Synchronisationsmechanismen erfordert.
     \end{itemize}
 
-    \textbf{Begründung Rest} Diese Variante passt für uns am Besten, da wir dadurch bereits eine klar strukturierte technische
-    Kommunikation haben, die wir relativ einfach nach unserem individuellen Projekt implementieren können.
-    Ausserdem ist es eine stabile Schnittstelle, die uns kaum Probleme bereiten sollte, was für uns in diesem Projekt auch wichtig ist.
-    Zusätzlich ist die Schnittstelle flexibel und erweiterbar, was es ermöglicht die CLI und den Daemon auch Systemgetrennt zu betreiben.
+    \paragraph{Fazit}
+    Diese Option wurde aufgrund ihrer mangelnden Flexibilität und Erweiterbarkeit ausgeschlossen.
+    Insbesondere die lokale Bindung zwischen CLI und Daemon sowie die fehlende Standardisierung und Robustheit der Kommunikation sprechen gegen diese Variante.
+    Für zukünftige Anforderungen, wie die Kommunikation über ein Netzwerk, wäre sie ungeeignet.
 
-    \textbf{2. IPC (Inter-process communication)}
-    Bei dieser Variante ist das Ziel, zwischen zwei Prozessen (z.B. CLI und Daemon) zu kommunizieren.
-    Ein einfacher Weg dafür wäre es sich z.B. ein Directory zu teilen und die CLI könnte dort immer wieder neue Files hineinschreiben,
-    welche der Daemon dann nacheinander lesen und verarbeiten würde.
+    \paragraph{2.3 Netzwerk-Sockets}\mbox{}\\
+    Netzwerk-Sockets ermöglichen die Kommunikation zwischen Prozessen durch das Senden und Empfangen binärer Daten über spezifische Ports.
+    Diese Methode kann sowohl lokal als auch über das Netzwerk verwendet werden.
 
-    \textbf{Nachteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Eigenes Format muss für Files definiert werden.
-        (muss auch geparst werden)
-        \item Daemon und CLI müssen sich immer auf dem selben Computer befinden
-        \item Es muss sichergestellt werden, dass die Files in der richtigen Reihenfolge gelesen werden und sich
-        Schreiber/Leser von den Files nicht überschneiden
+        \item Einfach zu verwenden und flexibel steuerbar.
+        \item Unterstützt die Kommunikation zwischen CLI und Daemon auf getrennten Systemen über das Netzwerk.
+        \item In Java durch das \texttt{java.net}-Package nativ verfügbar.
     \end{itemize}
 
-    \textbf{Begründung IPC} Kommt für uns nicht in Frage, da es unflexibel und auch nicht wirklich erweiterbar ist,
-    falls die CLI einmal über das Netzwerk mit dem Daemon kommunizieren können sollte.
-    Ausserdem ist es aus unserer Sicht auch keine saubere Kommunikation, da es kein standardisiertes Protokoll,
-    sowie Format gibt und auch nicht sehr robust ist, was man den Nachteilen entnehmen kann.
-
-    \textbf{3. Sockets}
-    Das sind einfache Netzwerk-Sockets, auf welchen binäre Daten geschrieben bzw. gelesen werden.
-    Wie gesagt sind diese über das Netzwerk erreichbar und laufen auf entsprechenden Ports des Hosts.
-    Welche Bytes an Daten hier geschrieben wird ist völlig offen.
-
-    \textbf{Vorteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Einfache Verwendung und Steuerung
-        \item CLI und Daemon können auf getrennten Systemen laufen (Netzwerk)
-        \item Out-of-the-Box in java.net package verfügbar
+        \item Nachrichtenformat muss individuell definiert und implementiert werden, was zusätzlichen Entwicklungsaufwand verursacht.
     \end{itemize}
 
-    \textbf{Nachteile}
-    \begin{itemize}
-        \item Nachrichten-Format muss selbst definiert und geparst werden
-    \end{itemize}
-
-    \textbf{Begründung Sockets} Da für uns die Variante Rest noch etwas einfacher erscheint und wir uns auch schon besser
-    damit auskennen, haben wir uns gegen Sockets entschieden.
-    Dadurch haben wir auch weniger Aufwand mit der Definition und dem Parsen der Kommunikation.
+    \paragraph{Fazit}
+    Obwohl Netzwerk-Sockets eine flexible und leistungsfähige Lösung darstellen, wurde diese Variante zugunsten der REST-Schnittstelle verworfen.
+    Die REST-Implementierung erscheint aufgrund ihrer Standardisierung und einfacher Handhabung im Kontext des Projekts effizienter.
+    Zudem entfällt der Aufwand für die Definition und das Parsen eines eigenen Nachrichtenformats.
+    \clearpage
 
     \subsubsection{Technologieentscheid}
-    In diesem Abschnitt wird erläutert, was wir uns für Gedanken bezüglich Technologien für die verschiedenen Komponenten
-    des Systems gemacht haben und wie wir uns entschieden haben.
+    In diesem Abschnitt werden die Überlegungen zu den Technologien für die verschiedenen Systemkomponenten dargestellt.
+    Basierend auf einer Analyse der Vor- und Nachteile wurde eine Entscheidung für die geeignetsten Technologien getroffen.
 
-        {\large\bfseries Datenbank}
+    \paragraph{1. Datenbank}\mbox{}\\
+    Die Auswahl einer passenden Datenbank ist entscheidend für die Persistenz und Verarbeitung der Anwendungsdaten.
+    Dabei wurde zunächst die grundsätzliche Entscheidung zwischen \textbf{NoSQL} und \textbf{SQL} analysiert.
 
-    Bezüglich der Komponente Datenbank gibt es einige Varianten, die wir abwägen und eine geeignete für unser Projekt finden müssen.
-    Die erste Frage ist \textbf{NoSQL} oder \textbf{SQL}.
+    \paragraph{1.1 NoSQL}\mbox{}\\
+    NoSQL-Datenbanken verwenden flexible Datenmodelle wie Dokumente, Key-Value oder Graphen und sind für hohe Skalierbarkeit sowie große Datenmengen ausgelegt.
 
-    \textbf{1. NoSQL}
-    NoSQL bezeichnet nicht-relationale Datenbanken, die flexible Datenmodelle
-    (z.B. Dokumente, Key-Value, Graphen) verwenden und für hohe Skalierbarkeit sowie große Datenmengen optimiert sind.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Hohe Flexibilität: Kein festes Schema, was dynamische Anpassungen der Datenstruktur ermöglicht.
-        \item Einfache Skalierbarkeit: Unterstützt horizontale Skalierung, ideal für große Datenmengen.
-        \item Optimiert für spezielle Anwendungsfälle: Verschiedene Modelle wie Dokumente, Key-Value, oder Graphen.
+        \item Hohe Flexibilität: Anpassbare Datenstrukturen ohne festes Schema.
+        \item Einfache horizontale Skalierbarkeit: Gut geeignet für große Datenmengen.
+        \item Spezialisierung: Verschiedene Modelle für spezifische Anwendungsfälle.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Fehlende Standardisierung: Unterschiedliche Implementierungen und keine einheitliche Abfragesprache.
-        \item Schwächere Transaktionssicherheit: Viele NoSQL-Datenbanken verzichten auf ACID-Eigenschaften zugunsten der Performance.
-        \item Komplexere Abfragen: Nicht so intuitiv wie SQL für relationale Daten.
+        \item Fehlende Standardisierung: Unterschiedliche Abfragesprachen und Protokolle je nach Implementierung.
+        \item Eingeschränkte Transaktionssicherheit: ACID-Eigenschaften werden häufig zugunsten der Performance vernachlässigt.
+        \item Höhere Komplexität: Abfragen sind weniger intuitiv als in SQL-basierten Systemen.
     \end{itemize}
 
-    \textbf{Begründung NoSQL} Wir sehen für unser Projekt keinen der obengenannten Vorteile als grossen Mehrwertn an.
-    Da auch alle Teammitglieder bisher kaum Erfahrungen mit NoSQL-Datenbanken gesammelt haben, entschieden wir uns dagegen.
+    \paragraph{Fazit}
+    Die Vorteile von NoSQL-Datenbanken bringen für dieses Projekt keinen nennenswerten Mehrwert, da dieser Anwendungsfall keine besonderen Anforderungen an Skalierbarkeit oder unstrukturierte Daten stellt.
+    Auch aufgrund mangelnder Erfahrung im Team mit NoSQL-Systemen wurde diese Option verworfen.
 
-    \textbf{2. SQL}
-    SQL-Datenbanken basieren auf dem relationalen Modell, speichern Daten in Tabellen
-    mit definierten Schemata und verwenden die strukturierte Abfragesprache SQL für den Datenzugriff.
+    \paragraph{1.2 SQL}\mbox{}\\
+    SQL-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.
+    Sie verwenden die standardisierte Abfragesprache SQL und sind besonders geeignet für datenintensive Anwendungen mit hohen Anforderungen an Konsistenz.
 
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Standardisierung: Einheitliche Abfragesprache (SQL) und breite Unterstützung.
-        \item Datenkonsistenz: Unterstützung von ACID-Eigenschaften für zuverlässige Transaktionen.
-        \item Komplexe Abfragen: Leistungsstarke Werkzeuge für relationale Abfragen und Analysen.
+        \item Standardisierung: Einheitliche Abfragesprache und breite Unterstützung.
+        \item Datenkonsistenz: Verlässliche Transaktionen dank ACID-Eigenschaften.
+        \item Leistungsstarke Abfragemöglichkeiten: Geeignet für komplexe relationale Analysen.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Wenig flexibel: Feste Schemata erfordern sorgfältige Planung und sind schwer anpassbar.
-        \item Begrenzte Skalierbarkeit: Horizontale Skalierung ist oft schwieriger als bei NoSQL.
-        \item Leistungsprobleme bei Big Data: Relationale Modelle können ineffizient für große, unstrukturierte Datenmengen sein.
+        \item Feste Schemata: Weniger flexibel bei Änderungen in der Datenstruktur.
+        \item Begrenzte horizontale Skalierbarkeit: Schwieriger als bei NoSQL umzusetzen.
+        \item Suboptimale Performance bei großen unstrukturierten Datenmengen.
     \end{itemize}
 
-    \textbf{Begründung SQL} Erstens haben alle Teammitglieder bereits viel Erfahrung mit SQL sammeln können und deswegen ist es schonmal intuitiver für uns als NoSQL.
-    Dazu war uns auch die Datenkonsistenz wichtig, damit wir mit den relationalen Abfragen, die SQL bietet unsere gespeicherten Daten auch entsprechend gut analysieren können.
-    Zum Schluss sehen wir auch die oben aufgelisteten Nachteile nicht als Problem für unser Projekt an.
-    Aus diesen Gründen entschieden wir uns für eine SQL-Datenbank.
+    \paragraph{Fazit}
+    Die Wahl fiel auf SQL-Datenbanken, da diese den Anforderungen an Konsistenz und relationale Abfragemöglichkeiten optimal entsprechen.
+    Alle Teammitglieder verfügen über umfassende Erfahrung mit SQL, was die Implementierung erleichtert.
+    Die Nachteile, wie begrenzte Skalierbarkeit, sind für dieses Projekt vernachlässigbar.
 
-    Nun wissen wir, dass wir eine Embedded-Datenbank mit SQL wollen.
-    Also müssen wir uns noch für eine der folgenden Optionen entscheiden:
+    \paragraph{1.2.1 H2}\mbox{}\\
+    H2 ist eine leichtgewichtige, Java-basierte relationale Datenbank, die sowohl eingebettet als auch im Servermodus betrieben werden kann.
 
-    \textbf{1. H2}
-    H2 ist eine Java-basierte, leichtgewichtige relationale Datenbank,
-    die in Anwendungen eingebettet oder im Servermodus betrieben werden kann.
-    Sie bietet hohe Performance, unterstützt SQL-Standards und eignet sich gut für Java-Anwendungen.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Java-Integration: Speziell für Java-Anwendungen optimiert, mit JDBC-Unterstützung.
-        \item Vielseitigkeit: Kann sowohl als eingebettete Datenbank als auch im Servermodus verwendet werden.
-        \item Erweiterte Features: Unterstützt Funktionen wie in-memory-Datenbanken und Multi-Threaded-Betrieb.
+        \item Integration in Java: Optimiert für Java-Anwendungen und unterstützt JDBC.
+        \item Vielseitigkeit: Kann als eingebettete oder serverbasierte Datenbank eingesetzt werden.
+        \item Erweiterte Funktionen: Unterstützung für in-memory-Datenbanken und Multi-Threaded-Betrieb.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Nicht für große Workloads: Weniger geeignet für datenintensive Anwendungen.
-        \item Java-Abhängigkeit: Funktioniert am besten in Java-Umgebungen, eingeschränkte Nutzung in anderen Ökosystemen.
-        \item Begrenzte Persistenzoptionen: Daten können im Speicher verloren gehen, wenn nicht korrekt gesichert.
+        \item Eingeschränkte Eignung für große Workloads: Nicht für datenintensive Anwendungen ausgelegt.
+        \item Java-Abhängigkeit: Begrenzte Unterstützung in nicht-Java-Umgebungen.
+        \item Persistenzprobleme: Daten können im Speicher verloren gehen, wenn nicht korrekt gesichert.
     \end{itemize}
 
-    \textbf{Begründung H2} Da es praktisch nur in Java-Umgebungen läuft, also weniger standardisiert ist auch bezüglich SQL-Funktionalitäten und nicht für grössere Datenmengen
-    ausgelegt ist haben wir uns dagegen entschieden.
+    \paragraph{Fazit}
+    H2 wurde ausgeschlossen, da es nicht für große Datenmengen ausgelegt ist und eine zu starke Abhängigkeit von Java besteht.
+    Zudem erfüllt SQLite unsere Anforderungen besser.
 
-    \textbf{2. SQLite}
-    SQLite ist eine serverlose, eingebettete relationale Datenbank, die keine separate Konfiguration erfordert.
-    Sie speichert Daten in einer einzelnen Datei und ist ideal für kleinere Anwendungen oder lokale Datenpersistenz.
+    \paragraph{1.2.2 SQLite}\mbox{}\\
+    SQLite ist eine serverlose, eingebettete relationale Datenbank, die Daten in einer einzigen Datei speichert und keine separate Konfiguration erfordert.
 
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Einfachheit: Keine Konfiguration oder separate Serverprozesse erforderlich.
-        \item Portabilität: Daten werden in einer einzigen Datei gespeichert, ideal für lokale Persistenz.
-        \item Ressourcenschonend: Sehr geringe Anforderungen an Speicher und Rechenleistung.
+        \item Einfachheit: Keine zusätzliche Konfiguration oder separate Server erforderlich.
+        \item Portabilität: Daten sind in einer Datei gespeichert, was die Migration erleichtert.
+        \item Ressourcenschonend: Geringe Anforderungen an Speicher und Rechenleistung.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Begrenzte Skalierbarkeit: Nicht ideal für gleichzeitigen Zugriff durch viele Benutzer.
-        \item Fehlende Features: Unterstützt nicht alle SQL-Standards wie fortgeschrittene Parallelisierung oder Stored Procedures.
-        \item Performance-Einbußen bei großen Datenmengen: Langsamer bei komplexen oder datenintensiven Abfragen.
+        \item Begrenzte Skalierbarkeit: Nicht geeignet für Anwendungen mit hohem gleichzeitigen Datenzugriff.
+        \item Eingeschränkte Funktionalität: Unterstützt nicht alle erweiterten SQL-Funktionen.
+        \item Performance-Einbußen bei großen Datenmengen.
     \end{itemize}
 
-    \textbf{Begründung SQLite} Vor allem wegen der Einfachheit und vernachlässigbaren Nachteilen haben wir uns für eine
-    SQLite Datenbank entschieden.
+    \paragraph{Fazit}
+    SQLite wurde ausgewählt, da es unseren Anforderungen an Einfachheit und lokale Persistenz optimal entspricht.
+    Die Nachteile sind für dieses Projekt vernachlässigbar.
 
-    {\large\bfseries CLI/Daemon}
+    \paragraph{2. CLI/Daemon}\mbox{}\\
+    Für die Entwicklung von CLI und Daemon wurde eine einheitliche Technologie gewählt, um den Entwicklungsaufwand zu reduzieren und die Wiederverwendbarkeit von Code zu fördern.
 
-    Dann gibt es noch die Komponenten CLI und Daemon, wofür wir gerne eine einheitliche Technologie hätten,
-    um es simpel zu halten und auch einfacher gewisse Teile zwischen den beiden Komponenten teilen zu können.
+    \paragraph{2.1 Java}\mbox{}\\
+    Java ist eine objektorientierte, plattformunabhängige Sprache, die sich durch Stabilität, Performance und breite Unterstützung auszeichnet.
 
-    \textbf{1. Java}
-    Java ist eine objektorientierte, plattformunabhängige Programmiersprache,
-    die für ihre Stabilität, Performance und breite Unterstützung in der Industrie bekannt ist.
-    Sie ist besonders geeignet für komplexe, skalierbare Anwendungen.
-
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Performance: Java bietet hohe Laufzeitgeschwindigkeit und Stabilität, ideal für rechenintensive Anwendungen.
-        \item Struktur: Starke Typisierung und klare Projektorganisation fördern langfristige Wartbarkeit.
-        \item Integration: Unterstützt stabile Verbindungen zu APIs und Modellen, z.B. über REST-Clients oder gRPC.
+        \item Hohe Performance: Geeignet für rechenintensive Anwendungen.
+        \item Strukturierte Entwicklung: Klare Organisation und starke Typisierung fördern die Wartbarkeit.
+        \item Integration: Gute Unterstützung für APIs und Frameworks wie Spring.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Komplexität: Höherer Entwicklungsaufwand durch Boilerplate-Code und strikte Typisierung.
-        \item Eingeschränkte KI-Bibliotheken: KI- und ML-Frameworks sind weniger umfangreich als in Python und oft schwerfälliger zu nutzen.
-        \item Langsamere Prototypenentwicklung: Für schnelle Iterationen ist Java weniger geeignet.
+        \item Höhere Komplexität: Erfordert mehr Boilerplate-Code und strikte Typisierung.
+        \item Eingeschränkte Bibliotheken für KI: Weniger umfangreiche KI- und ML-Bibliotheken im Vergleich zu Python.
+        \item Langsamere Prototypenentwicklung: Weniger geeignet für schnelle Iterationen.
     \end{itemize}
 
-    \textbf{Begründung Java} Da für uns die Performance relativ wichtig war und auch hier wieder alle
-    Teammitglieder um einiges mehr Erfahrung als mit Python haben, entschieden wir uns für Java.
-    Der einzige Punkt, bei dem wir noch zweifelten war die Einschränkung bezüglich KI-Integration,
-    welcher aber unserer Meinung nach zu wenig ins Gewicht fiel.
-    Zudem sahen wir auch durch Spring-Bibliotheken eine grosse Unterstützung für unsere CLI/Daemon-Architektur.
+    \paragraph{Fazit}
+    Java wurde gewählt, da alle Teammitglieder bereits über umfassende Erfahrung verfügen und die Sprache eine hohe Performanz und Stabilität bietet.
+    Die Einschränkungen hinsichtlich KI-Integration waren für dieses Projekt zu wenig gewichtig.
+    Frameworks wie Spring erleichtern zudem die Implementierung der CLI/Daemon-Architektur.
 
-    \textbf{2. Python}
-    Python ist eine einfach zu erlernende, vielseitige Programmiersprache mit einer lesbaren Syntax
-    und einer riesigen Anzahl an Bibliotheken, die sie ideal für schnelle Entwicklung
-    und datengetriebene Projekte machen.
+    \paragraph{2.2 Python}\mbox{}\\
+    Python ist eine einfach zu erlernende, vielseitige Programmiersprache, die insbesondere für datengetriebene Anwendungen und schnelle Entwicklung geeignet ist.
 
-    \textbf{Vorteile}
+    \paragraph{Vorteile}
     \begin{itemize}
-        \item Einfachheit: Kürzere Entwicklungszeit dank klarer Syntax und umfangreicher Standardbibliothek.
-        \item KI-Ökosystem: Native Unterstützung für KI-Bibliotheken (z.B. transformers, openai, torch) macht die Integration mit GPT-Modellen mühelos.
-        \item Flexibilität: Besonders geeignet für Skripte und Projekte, die schnell iteriert werden müssen.
+        \item Einfache Syntax: Kürzere Entwicklungszeit und schnelle Einarbeitung.
+        \item Starke KI-Unterstützung: Umfangreiche Bibliotheken wie \texttt{transformers} und \texttt{torch}.
+        \item Flexibilität: Besonders geeignet für schnelle Iterationen und Skripte.
     \end{itemize}
 
-    \textbf{Nachteile}
+    \paragraph{Nachteile}
     \begin{itemize}
-        \item Performance: Kann langsamer sein als Java, besonders bei rechenintensiven Aufgaben.
-        \item Fehlende Strenge: Dynamische Typisierung kann bei größeren Projekten zu Wartbarkeitsproblemen führen.
-        \item Distributierbarkeit: Python-Anwendungen benötigen oft spezielle Umgebungen oder Pakete, was die Portabilität erschweren kann.
+        \item Geringere Performance: Nicht ideal für rechenintensive Anwendungen.
+        \item Dynamische Typisierung: Kann bei großen Projekten zu Wartungsproblemen führen.
+        \item Distributionsprobleme: Erfordert oft spezielle Umgebungen oder Pakete.
     \end{itemize}
 
-    \textbf{Begründung Python} Hier wäre natürlich die grosse Auswahl und Unterstützung von KI-Bibliotheken ein grosser Vorteil gewesen.
-    Allerdings hat dieser Punkt uns zu wenig überzeugt, um uns für Python zu entscheiden.
-
-
+    \paragraph{Fazit}
+    Obwohl Python starke Vorteile in Bezug auf KI-Bibliotheken bietet, wurde diese Option aufgrund der geringeren Performanz und fehlenden Erfahrung im Team verworfen.
+    Java erwies sich als besser geeignet für unsere Anforderungen.
     \clearpage
+
     \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
 
     \begin{figure}[h]
@@ -843,7 +801,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsubsection{Performanz und Optimierung}
 
-    \subsubsubsection{Komplexität}
+    \textbf{Komplexität}
 
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
@@ -854,7 +812,8 @@ schädlich, also empfehle ich es zu leeren.
     Dateien sind stets Blätter.\newline
     Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
 
-    \paragraph{Bau}
+    \textbf{Bau}
+
     Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
     was einer Komplexität von $O(n)$ für das Traversieren entspricht.
     Das Hashen eines Ordners mit $k$ Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
@@ -863,62 +822,70 @@ schädlich, also empfehle ich es zu leeren.
     Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
     Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
 
-    \paragraph{Linearisierung}
+    \textbf{Linearisierung}
+
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
 
-    \subsubsubsection{Caching}
-    Bei den folgenden zwei Fällen haben wir uns überlegt, ob es sich lohnen würde, ein Caching einzubauen,
-    haben uns dann aber aus den aufgelisteten Gründen dagegen entschieden.
+    \textbf{Caching}
+
+    In den folgenden zwei Szenarien wurde geprüft, ob die Implementierung eines Caching-Mechanismus sinnvoll ist.
+    Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
+    Die Entscheidungsgrundlage wird im Folgenden erläutert:
 
     \begin{enumerate}
-        \item Pro MonitoredPath könnte man immer den letzten gebauten MerkleTree cachen, um beim nächsten Snapshot
-        direkt mit dem gecachten Baum verlgeichen zu können, ohne diesen wieder aus der Datenbank laden zu müssen.
+        \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte Merkle-Tree zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
+        ohne ihn erneut aus der Datenbank laden zu müssen.
         \begin{itemize}
-            \item Caching macht nur Sinn wenn mehrmals die gleichen Daten gelesen werden.
-            Da aber der MerkleTree vom letzten Snapshot nur einmal wiederverwendet wird (beim Vergleichen mit dem Neuen), macht dies hier keinen Sinn.
-            \item Kein sich lohnender Mehrwert an Performance gegenüber dem Laden aus der DB, da die DB lokal ist und die Query
-            eine tiefe Komplexität hat, kann bereits effizient auf die Daten zugegriffen werden.
+            \item Ein Caching-Ansatz ist nur dann sinnvoll, wenn dieselben Daten mehrfach genutzt werden.
+            Da jedoch der Merkle-Tree des letzten Snapshots lediglich einmal (beim Vergleich mit dem neuen Baum) verwendet wird, ergibt sich hieraus kein signifikanter Nutzen.
+            \item Der Leistungsgewinn durch Caching wäre im Vergleich zum Laden aus der Datenbank marginal.
+            Die Datenbank ist lokal angebunden, und die Abfrage weist eine geringe Komplexität auf, sodass ein effizienter Zugriff bereits gewährleistet ist.
         \end{itemize}
-        \item Pro MonitoredPath eine geordnete Liste nur mit den Änderungen von jedem Snapshot, damit diese bei der Abfrage
-        direkt aus dem Memory zurückgegeben werden können und nicht noch die DB abgefragt werden muss.
+        \item Für jeden \texttt{MonitoredPath} könnte eine geordnete Liste der Änderungen jedes Snapshots im Speicher gehalten werden, um diese direkt zurückgeben zu können,
+        ohne auf die Datenbank zugreifen zu müssen.
         \begin{itemize}
-            \item Auch hier wird keine sich lohnende Performance-Steigerung erwartet, denn auch wenn die Daten schon in Memory wären
-            braucht es für die zusammengefasste Response der abgefragten Vergleiche trotzdem noch Logik,
-            welche auch mit einem Query auf die lokale DB implementiert werden kann und so kein grosser Gewinn daraus resultiert.
+            \item Auch in diesem Szenario wird keine nennenswerte Steigerung der Performance erwartet.
+            Selbst wenn die Daten bereits im Speicher verfügbar wären, erfordert die Erstellung der zusammengefassten Antwort zusätzliche Logik.
+            Diese kann ebenso effizient durch eine Abfrage auf die lokale Datenbank umgesetzt werden, wodurch sich kein signifikanter Vorteil ergibt.
         \end{itemize}
     \end{enumerate}
 
-    \subsubsubsection{Indexing}
-    Anhand der folgenden Punkte wurde entschieden, ob/für welche Attribute in der DB ein SQL-Index sinnvoll wäre.
+    \textbf{Indexing}
 
-    Index sinnvoll:
+    Die Entscheidung über die Sinnhaftigkeit eines SQL-Indexes für bestimmte Attribute der Datenbank basierte auf den folgenden Kriterien:
+
+    \textit{Index sinnvoll:}
     \begin{itemize}
-        \item Attribut hat viele verschiedene Werte
-        \item Attribut hat wenige/keine null-Werte
-        \item Attribut wird oft in einer SQL WHERE oder JOIN Abfrage genutzt
+        \item Das Attribut weist eine hohe Kardinalität (viele unterschiedliche Werte) auf.
+        \item Das Attribut enthält wenige oder keine Null-Werte.
+        \item Das Attribut wird häufig in SQL \texttt{WHERE/JOIN}-Klauseln verwendet.
     \end{itemize}
 
-    Index nicht sinnvoll:
+    \textit{Index nicht sinnvoll:}
     \begin{itemize}
-        \item kleine Tabelle
-        \item Attribut wird oft manipuliert
+        \item Die Tabelle ist von geringer Größe.
+        \item Das Attribut wird häufig manipuliert.
     \end{itemize}
 
-    So wurde entschieden die folgenden Attribute zu indexieren:
+    Auf Basis dieser Überlegungen wurden die folgenden Attribute zur Indexierung ausgewählt:
     \begin{itemize}
-        \item \verb|snapshot_node.snapshot_id|
-        \item \verb|snapshot_node.has_changed|
-        \item \verb|snapshot_node.deleted_in_next_snapshot|
+        \item \texttt{snapshot\_node.snapshot\_id}
+        \item \texttt{snapshot\_node.has\_changed}
+        \item \texttt{snapshot\_node.deleted\_in\_next\_snapshot}
     \end{itemize}
 
     \clearpage
+
 
     \section{Prozesse}
     \url{https://www.ganttlab.com} \\
     \url{https://www.hermes.admin.ch/de/projektmanagement/verstehen/ubersicht-hermes/methodenubersicht.html}
 
+
     \chapter{Evaluation und Tests}
+
+
     \section{Manuelle End-2-End Tests}
     Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
 
@@ -1254,32 +1221,32 @@ monitoring database.
         \begin{tabular}{|c|c|c|c|}
             \hline
             \textbf{Datum} & \textbf{Betriebssystem} & \textbf{Testfall} & \textbf{Ergebnis} \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-001           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-001           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-001           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-001           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-002           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-002           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-002           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-002           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-003           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-003           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-003           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-003           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-004           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-004           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-004           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-004           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-005           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-005           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-005           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-005           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-006           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-006           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-006           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-006           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-007           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-007           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-007           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-007           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-008           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-008           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-008           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-008           & Erfolgreich       \\ \hline
-            26.12.2024     & Windows 11--10.0              & E2E-009           & Erfolgreich       \\ \hline
-            26.12.2024     & Linux 6.1.0-28               & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & Windows 11--10.0        & E2E-009           & Erfolgreich       \\ \hline
+            26.12.2024     & Linux 6.1.0-28          & E2E-009           & Erfolgreich       \\ \hline
             26.12.2024     & macOS Sequoia 15.2      & E2E-009           & Erfolgreich       \\ \hline
 
         \end{tabular}
@@ -1311,7 +1278,7 @@ monitoring database.
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
             \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                   \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                  \\ \hline
         \end{tabular}
         \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
     \end{table}
@@ -1331,7 +1298,7 @@ monitoring database.
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14                       \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682                   \\ \hline
             \textbf{Gefundene Dateien}                                 & 3'455                    \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 8'800ms                  \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 8'800ms                  \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
     \end{table}
@@ -1348,7 +1315,7 @@ monitoring database.
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20                             \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109                         \\ \hline
             \textbf{Gefundene Dateien}                                 & 1'183                          \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 800ms                          \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 800ms                          \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
     \end{table}
@@ -1359,13 +1326,13 @@ monitoring database.
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
             \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Logs/          \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 229                     \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                      \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                     \\ \hline
-            \textbf{Gefundene Dateien}                                 & 31                      \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 6.6ms                   \\ \hline
+            \textbf{Pfad}                                              & /Library/Logs/               \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 229                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                           \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                            \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                          \\ \hline
+            \textbf{Gefundene Dateien}                                 & 31                           \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 6.6ms                        \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
     \end{table}
@@ -1376,13 +1343,13 @@ monitoring database.
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
             \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Caches/        \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 677                     \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                       \\ \hline
-            \textbf{Gefundene Dateien}                                 & 0                       \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 0.6ms                   \\ \hline
+            \textbf{Pfad}                                              & /Library/Caches/             \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & 677                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                            \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                            \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                            \\ \hline
+            \textbf{Gefundene Dateien}                                 & 0                            \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 0.6ms                        \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
     \end{table}
@@ -1399,7 +1366,7 @@ monitoring database.
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10                        \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806                       \\ \hline
             \textbf{Gefundene Dateien}                                 & 13                        \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 21ms                      \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 21ms                      \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
     \end{table}
@@ -1416,7 +1383,7 @@ monitoring database.
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29                     \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448                \\ \hline
             \textbf{Gefundene Dateien}                                 & 5'429                  \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                        & 2'663ms                \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & 2'663ms                \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
     \end{table}
@@ -1432,11 +1399,11 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{7cm}|}
             \hline
-            \textbf{System}                                               & Betriebssystem und Architektur                                             \\ \hline
-            \textbf{Pfade}                                                & Verzeichnisse, die überwacht werden                                        \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & Anzahl erstellter Snapshots                                                \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & Anzahl erstellter Knoten in der Datenbank                                  \\ \hline
-            \textbf{Benötigte Zeit}                                       & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen           \\ \hline
+            \textbf{System}                                                & Betriebssystem und Architektur                                              \\ \hline
+            \textbf{Pfade}                                                 & Verzeichnisse, die überwacht werden                                         \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                              & Anzahl erstellter Snapshots                                                 \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                 & Anzahl erstellter Knoten in der Datenbank                                   \\ \hline
+            \textbf{Benötigte Zeit}                                        & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen            \\ \hline
             \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & Durchschnittliche Dauer, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
         \end{tabular}
         \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
@@ -1448,7 +1415,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System}                                               & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{System}                                                & Windows 11--10.0 / amd64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item C:\textbackslash Users\textbackslash Luca\textbackslash AppData\textbackslash Roaming\textbackslash discord\textbackslash Cache
@@ -1463,9 +1430,9 @@ monitoring database.
                 \item C:\textbackslash ProgramData\textbackslash LGHUB
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                    \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 583'920                  \\ \hline
-            \textbf{Benötigte Zeit}                                       & 8min                     \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                              & 7'200                    \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                 & 583'920                  \\ \hline
+            \textbf{Benötigte Zeit}                                        & 8min                     \\ \hline
             \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 670ms                    \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring WIN}\label{tab:perf-monitoring-win}
@@ -1476,7 +1443,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System}                                               & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{System}                                                & macOS Sequoia 15.2 / aarch64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item /Library/Logs/
@@ -1492,10 +1459,10 @@ monitoring database.
                 \item /tmp
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                   \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 9'079'920               \\ \hline
-            \textbf{Benötigte Zeit}                                       & 10min                   \\ \hline
-            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 914ms                   \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                              & 7'200                        \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                 & 9'079'920                    \\ \hline
+            \textbf{Benötigte Zeit}                                        & 10min                        \\ \hline
+            \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 914ms                        \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring MAC}\label{tab:perf-monitoring-mac}
     \end{table}
@@ -1505,7 +1472,7 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{5cm}|p{10cm}|}
             \hline
-            \textbf{System}                                               & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{System}                                                & Linux 6.1.0-28 / amd64 \\ \hline
             \textbf{Pfade} &
             \begin{itemize}
                 \item /home/luca/tracesentry-1.0.2
@@ -1520,15 +1487,17 @@ monitoring database.
                 \item /opt/android-studio
             \end{itemize}
             \\ \hline
-            \textbf{Anz. Erstellte Snapshots}                             & 7'200                  \\ \hline
-            \textbf{Anz. Erstellte Knoten}                                & 1'717'920              \\ \hline
-            \textbf{Benötigte Zeit}                                       & 2min                   \\ \hline
+            \textbf{Anz. Erstellte Snapshots}                              & 7'200                  \\ \hline
+            \textbf{Anz. Erstellte Knoten}                                 & 1'717'920              \\ \hline
+            \textbf{Benötigte Zeit}                                        & 2min                   \\ \hline
             \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & 173ms                  \\ \hline
         \end{tabular}
         \caption{Performanztest Monitoring LIN}\label{tab:perf-monitoring-lin}
     \end{table}
 
+
     \section{KI Case Study}\label{sec:ki-case-study}
+
 
     \chapter{Bereitstellung/Integration}
 
@@ -1573,7 +1542,8 @@ TRACE_SENTRY_DIR=<absoluter Pfad zum Installationsverzeichnis>
         \begin{lstlisting}[label={lst:lstlisting-unix-2}]
 PATH=$PATH:$TRACE_SENTRY_DIR
         \end{lstlisting}
-        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/billing/overview} folgen.
+        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
+        Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
         Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
 export OPENAI_API_KEY=<generierter API-Schlüssel>
@@ -1664,7 +1634,6 @@ echo ts run >> ~/.zprofile
 
 
     \section{Diskussion}
-
 
     \subsection{Ausblick auf die Zukunft}
 
