@@ -180,7 +180,7 @@
     \clearpage
 
 
-    \section{Anforderungen}
+    \section{Anforderungen}\label{sec:anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
 
     \subsection{Funktionale Anforderungen}
@@ -792,6 +792,9 @@ schädlich, also empfehle ich es zu leeren.
     \clearpage
 
     \subsection{Realisierung}\label{subsec:realisierung}
+    Die Realisierung ist die Umsetzung der~\nameref{sec:anforderungen} mittels der~\nameref{subsec:loesungsarchitektur}.
+    Hauptbaublöcke sind Java-Klassen.
+    Ein vollsändiges Klassendiagramm kann im Anhang~\nameref{sec:klassendiagramm} gefunden werden. TODO
 
     \subsubsection{Frontend (CLI)}
     \paragraph*{Beispiel Komponenteninteraktion}
@@ -804,6 +807,7 @@ schädlich, also empfehle ich es zu leeren.
         \caption{Sequenzdiagramm Inspect Command}
         \label{fig:seq-diag-inspect-commands}
     \end{figure}
+    \\Dieses Muster ist für alle Kommandos in der Shell identisch, daher wird dieses Kapitel in prägnanter Form gehalten.
 
     \subsubsection{Backend (Daemon)}
     \paragraph*{Beispiel Komponenteninteraktion}
