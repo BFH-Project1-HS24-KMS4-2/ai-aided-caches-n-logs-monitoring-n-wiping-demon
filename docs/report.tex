@@ -9,6 +9,7 @@
 \usepackage{parskip}
 \usepackage{bm}
 \usepackage{xcolor}
+\usepackage{xfrac}
 
 \lstset{
     backgroundcolor=\color{black}, % Black background
@@ -1531,9 +1532,67 @@ monitoring database.
     \end{table}
 
 
-    \section{KI Case Study}\label{sec:ki-case-study}
+    \clearpage
+    \section{KI Fallstudie}\label{sec:ki-case-study}
+    In diesem Abschnitt wird das Potenzial des, in TraceSentry integrierten, KI-Modells für die Erkennung von Anomalien in Logdateien untersucht.
+    Es wurden insgesamt 48 Logdateien generiert und per Inspektionsfunktion an das KI-Modell übergeben.
+
+    \subsection{Wahl des KI-Modells}\label{subsec:wahl-des-ki-modells}
+    \subsubsection{Generative KI}\label{subsubsec:generative-ki}
+    Generative KI-Modelle, wie die GPT-Modelle von OpenAI sind in der Lage unstrukturierte Daten zu analysieren und Einschätzungen in Form von Text auszugeben.
+    Diese Technologie hat in den letzten Jahren erheblich an Popularität gewonnen und wird sehr breit als Lern- oder Arbeitswerkzeug eingesetzt.
+    Für den Anwendungsfall von TraceSentry wurde sich für generative KI entschieden, da:
+    \begin{itemize}
+        \item sie in der Lage ist, Informationen aus unstrukturierten Daten zu extrahieren und zu bewerten.
+        Obwohl einzelne Logdateien strukturiert sind, ist die Gesamtheit verschiedener Logdateien unstrukturiert und schwer zu interpretieren bzw. übergreifende Muster zu erkennen.
+        \item sie in der Lage ist, grundlegende semantische Zusammenhänge zu erkennen und dadurch sensible oder schädliche Informationen zu identifizieren.
+        \item die Popularität und der breite Einsatz von Modellen wie ChatGPT darauf hinweisen, dass generative KI eine vielversprechende Technologie ist und breite Anwendungsfälle hat.
+        \item ein praxisnaher Anwendungsfall evaluiert werden sollte, um die Grenzen und Möglichkeiten von aktuellen KI-Techologien zu untersuchen.
+    \end{itemize}
+    Darüber hinaus ermöglicht generative KI eine effiziente Verarbeitung und Interpretation von Textdaten, was sie zu einer idealen Wahl für den Anwendungsfall von TraceSentry macht.
+
+    \subsubsection{OpenAI GPT-4o mini}\label{subsubsec:openai-gpt-4o}
+    Die Wahl des KI-Modells fiel auf das GPT-4o mini Modell von OpenAI.
+    Dieses Modell befindet sich zusammen mit den Modellen GPT-4o, o1 und o1-mini im Flagship-Portfolio von OpenAI (Stand September 2024).
+    Es ist zudem das aktuelle Standardmodell auf \url{https://chatgpt.com/} und ohne Einschränkung im Gratis-Tarif verfügbar.
+    Die genaue Modellbezeichnung lautet \texttt{gpt-4o-mini-2024-07-18}, wobei o für \textit{omni} steht, was den breiten Anwendungsbereich des Modells beschreibt.
+    \textit{mini} steht für die leichtgewichtige Variante des grossen 4o Modells.
+    Es ist speziell für schnelle und ressourcenschonende, fokussierte Anwendungen entwickelt worden.
+    Es kann durch sogenannte \texttt{fine-tuning}- oder \texttt{distillation}-Techniken annähernd an die Leistung des grossen 4o Modells herankommen, dies sogar oft mit weniger Kosten und Latenz.
+    Der sogenannte \texttt{knowledge-cutoff} des Modells liegt im Oktober 2023.
+    Dies bedeutet, dass das Modell mit Daten bis zu diesem Zeitpunkt trainiert wurde.
+    Für den Anwendungsfall des TraceSentry wurden die Modelle 4o und o1-mini initial evaluiert.
+    Die Resultate wiesen jedoch keine signifikanten Unterschiede auf.
+    Die deutlich höheren Kosten und die längere Latenz beider Modelle waren deren ausschlaggebende Ausschlusskriterien.
+
+    \subsection{Aktuelle Einschränkungen}\label{subsec:technische-einschrankungen}
+    Das sogenannte Context Window des GPT-4o mini Modells beträgt, wie auch dasjenige des GPT-4o Modells, 128'000 Token.
+    Das bedeutet, das die Eingabe (Prompt) und die Ausgabe (Completion) in der Summe maximal 128'000 Token lang sein dürfen.
+    Grundsätzlich lässt sich 1 Token zu rund \sfrac{3}{4} Wörtern umrechnen.
+    Da jedoch in Systemdateien wie Log- oder Cache-Dateien viele Sonderzeichen und Leerzeichen oder Klammern vorkommen, ist eher mit einem Verhältnis von 1 Token zu \sfrac{1}{2} Wörtern zu rechnen.
+    Eine genaue Umrechnung kann mit dem Online-Werkzeug \url{https://platform.openai.com/tokenizer} durchgeführt werden.
+
+    \subsubsection{Praxisbeispiel}\label{subsubsec:praxisbeispiel}
+    Nachfolgend eine Zeile aus einer Webserver-Logdatei:
+    \begin{verbatim}[Thu Jul 07 07:54:05 2005] [error] [client 221.203.160.2] Directory
+index forbidden by rule: /var/www/html/
+    \end{verbatim}
+    Diese 107 Zeichen lange Zeile entspricht 40 Tokens.
+    Angenommen die System-Prompt und Completion soll 2000 Tokens lang sein, so könnte ein Logdatei mit maximal \sfrac{128'000 - 2'000}{40} = 3'150 Zeilen analysiert werden.
 
 
+    \subsection{Vorgehensweise}\label{subsec:vorgehensweise}
+    
+    \subsection{Testdateien}\label{subsec:testdateien}
+
+    \subsection{Ergebnisse}\label{subsec:ergebnisse}
+
+    \subsection{Kostenanalyse}\label{subsec:kostenanalyse}
+
+    \subsection{Diskussion}\label{subsec:diskussion}
+
+
+    \clearpage
     \chapter{Bereitstellung/Integration}
 
     \begin{figure}[h]
