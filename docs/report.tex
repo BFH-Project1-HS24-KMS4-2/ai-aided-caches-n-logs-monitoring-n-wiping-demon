@@ -718,16 +718,20 @@ schädlich, also empfehle ich es zu leeren.
         \vspace{2em}
     \end{figure}
 
-    \textnormal{Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
+    \subsubsection{}Das System besteht aus zwei Hauptkomponenten, welche als eigene Laufzeiteinheiten ausgeführt werden.
     Die CLI wird ad hoc gestartet und dient als Benutzerschnittstelle.
-    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus. Ausserdem stellt er der
+    Der Daemon läuft nach dem Start im Hintergrund und führt periodisch Operationen aus.
+    Ausserdem stellt er der
     CLI eine REST-Schnittstelle zur Verfügung.
-    Ein Datenbanksystem speichert die Applikationsdaten.\\
+    Ein Datenbanksystem speichert die Applikationsdaten.
+
+    \subsubsection{Domänen}
     Die im Diagramm dargestellten Subkomponenten kapseln Funktionalitäten und sind in der Regel in eigenen Klassen implementiert.
     Es können mehrere Instanzen dieser Subkomponenten implementiert werden und nach fachlichen Aspekten, sogenannten Domänen, aufgeteilt werden.
     \\Am Beispiel einer Snapshot-Domäne würden dann im Backend ein Snapshot-(Rest)-Controller, ein Snapshot-(Domain)-Service und ein Snapshot-Repository existieren.
-    D.h. eine Kapselung findet in technischer und fachlicher Hinsicht statt. Eine komplette Abkapselung ist jedoch in der Praxis schwierig und soll lediglich angestrebt werden.\\
-    }
+    D.h.\ eine Kapselung findet in technischer und fachlicher Hinsicht statt.
+    Eine komplette Abkapselung ist jedoch in der Praxis schwierig und soll lediglich angestrebt werden.\\
+
     \newpage
 
     \subsubsection{Shell}
@@ -783,11 +787,41 @@ schädlich, also empfehle ich es zu leeren.
     \subsection{Realisierung}\label{subsec:realisierung}
 
     \subsubsection{Frontend}
+
     \clearpage
 
     \subsubsection{Backend}
-    büsnei Logik & Komplexität
-    taskscheduler
+    TODO Büsnei Logik & Komplexität
+    \\
+
+    \subsubsubsection{\textbf{Geschäftslogik}}
+    \\
+    Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss Lösungsarchitektur.
+    Man sieht innerhalb der Monitoring-Domäne den Controller (MonitoringController), den Service (MonitoringDomainService) und das Repository (MonitoredPathRepository).
+    Des Weiteren sieht man eine Utility-Klasse (ControllerUtils) und eine Entitätsklasse (MonitoredPath) und zur Veranschaulichung (in rot) die Superklasse vom Spring-Framework (CrudRepository).
+    \\In diesem Beispiel wird ein überwachter Pfad (MonitoredPath) erstellt:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/MonitoringController_createMonitoring_seq_diag}
+        \caption{Sequenzdiagramm Monitoring Controller}
+        \label{fig:seq-diag-monitoring-controller}
+    \end{figure}
+
+    \subsubsubsection{\textbf{Monitoring Scheduler}}
+    \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (Lösungsarchitektur).
+    Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
+    Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).
+    Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, ob sich der Knoten geändert hat.
+    Falls ein Knoten nicht mehr existiert, wird dafür ein Flag im alten Snapshot gesetzt.
+    Diese zwei Flags sind die einzigen Felder, die auf Informationen vom Vorgänger (1.1.1, 1.1.2) bzw.\ Nachfolger zurückgreifen,
+    alle anderen Felder stellen Informationen des aktuellen Snapshots im Sinne einer Momentaufnahme dar.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/MonitoringScheduler_createSnapshots_seq_diag}
+        \caption{Sequenzdiagramm Monitoring Scheduler}
+        \label{fig:seq-diag-monitoring-scheduler}
+    \end{figure}
+
     \clearpage
 
     \subsubsection{Datenbank}
