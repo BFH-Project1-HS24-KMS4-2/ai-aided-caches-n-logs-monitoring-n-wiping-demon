@@ -10,6 +10,7 @@
 \usepackage{bm}
 \usepackage{xcolor}
 \usepackage{xfrac}
+\usepackage{longtable}
 
 \lstset{
     backgroundcolor=\color{black}, % Black background
@@ -1562,9 +1563,9 @@ monitoring database.
 
 
     \clearpage
-    \section{KI Fallstudie}\label{sec:ki-case-study}
+    \section{KI Fallstudie}\label{sec:ki-fallstudie}
     In diesem Abschnitt wird das Potenzial des, in TraceSentry integrierten, KI-Modells für die Erkennung von Anomalien in Logdateien untersucht.
-    Es wurden insgesamt 48 Logdateien generiert und per Inspektionsfunktion an das KI-Modell übergeben.
+    Es wurden insgesamt 46 Logdateien generiert und per Inspektionsfunktion an das KI-Modell übergeben.
 
     \subsection{Wahl des KI-Modells}\label{subsec:wahl-des-ki-modells}
     \subsubsection{Generative KI}\label{subsubsec:generative-ki}
@@ -1611,15 +1612,195 @@ index forbidden by rule: /var/www/html/
 
 
     \subsection{Vorgehensweise}\label{subsec:vorgehensweise}
+    Ziel war es die Testdateien per HTTP-Schnittstelle an den Daemon zu senden, welcher diese mit der System-Prompt an das KI-Modell weiterleitet.
+    Alle Testdateien befanden sich auf dem Testsystem.
+    Der Aufruf der HTTP-Schnittstelle erfolgte über einen SpringBootTest im Daemon-Projekt.
+    Die Antworten des KI-Modells wurden in einem Ausgabe-Verzeichnis als Textdateien abgelegt.
+    Diese wurden schliesslich manuell bewertet und mit, der zuvor definierten, Erwartungshaltung verglichen.
     
     \subsection{Testdateien}\label{subsec:testdateien}
+    Im Internet existieren zwar zahlreiche reale, vorgelabelte und gesäuberte Datasets, welche für das Erkennen von Anomalien in Logdateien verwendet werden können.
+    Diese befinden sich jedoch vorwiegend in einer Form, welche sich für Machine Learning eignet.
+    Sprich, in CSV-Dateien oder als riesige, zusammengeführte Textdateien, welche sich oft über mehrere Gigabyte erstrecken.
+    \subsubsection{Beispiele:}
+    \begin{itemize}
+        \item \url{https://github.com/logpai/loghub}
+        \item \url{https://www.kaggle.com/datasets/ispangler/csic-2010-web-application-attacks}
+    \end{itemize}
+
+    \subsubsection{Sammlung eigener Testdateien}
+    Da kein Dataset in der passenden Form gefunden werden konnte, wurden eigene Testdateien generiert sowie Logs aus der Gitlab CI/CD Pipeline verwendet.
+    Zur Generierung der Logdateien für unsere Fallstudie wurde ein Python-Skript erstellt.
+    Dieses Skript enthält sogenannte Template-Funktionen für die Log-Typen HTTP, System (linux), MySQL, Router, Authentifizierung, SMTP und Docker der Form:
+    \begin{verbatim}def logtyp_template(is_anomalous=False)\end{verbatim}
+    Die Funktion generiert genau eine Zeile, wobei der Parameter \texttt{is\_anomalous} bestimmt, ob die Zeile anomalous sein soll.
+    Jede Funktion enthielt eine Auswahl an realistischen Anomalien sowie eine Auswahl an normalen Zeilen.
+    Dynamische Inhalte wie IP-Adressen, URLs, Dateipfade, etc. wurden zufällig generiert.
+    Nachfolgend alle generierten Log-Typen:
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.4cm}
+        \begin{tabular}{|c|p{6cm}|p{6cm}|}
+            \hline
+            \textbf{Log-Typ} & \textbf{Normale Zeilen} & \textbf{Anomalien} \\ \hline
+            \textnormal{HTTP} &
+            \begin{itemize}
+                \item Einfache GET-Request
+            \end{itemize} &
+            \begin{itemize}
+                \item SQL-Injektion
+                \item Ungültiger Statuscode
+                \item Unauthorisierter Zugriff
+            \end{itemize} \\ \hline
+
+            \textnormal{System} &
+            \begin{itemize}
+                \item USB-Gerät angeschlossen
+                \item CRON-Job ausgeführt
+                \item CPU-Temperatur über Schwellwert
+                \item systemd-Service gestartet
+                \item Netzwerkkonfiguration aktualisiert
+                \item systemd-Service gestoppt
+                \item Speicherzuweisungsfehler
+            \end{itemize} &
+            \begin{itemize}
+                \item Kernel Panic
+                \item Unauthorisierter Zugriff
+            \end{itemize} \\ \hline
+
+            \textnormal{MySQL} &
+            \begin{itemize}
+                \item SELECT-Queries
+                \item UPDATE-Queries
+                \item DELETE-Queries
+            \end{itemize} &
+            \begin{itemize}
+                \item SELECT-Query mit SQL-Injektion
+                \item DROP TABLE-Query
+                \item INSERT-Query mit Angreiferdaten
+            \end{itemize} \\ \hline
+
+            \textnormal{Router} &
+            \begin{itemize}
+                \item Packet Akzeptiert
+                \item Packet Abgelehnt
+            \end{itemize} &
+            \begin{itemize}
+                \item Unauthorisierter Zugriff
+                \item Port-Scanning
+                \item DoS-Attacke
+            \end{itemize} \\ \hline
+
+            \textnormal{Auth} &
+            \begin{itemize}
+                \item Login Akzeptiert
+                \item Login Abgelehnt
+            \end{itemize} &
+            \begin{itemize}
+                \item Brute Force
+                \item Unauthorisierter Zugriff
+            \end{itemize} \\ \hline
+
+            \textnormal{SMTP} &
+            \begin{itemize}
+                \item E-Mail versendet
+            \end{itemize} &
+            \begin{itemize}
+                \item Spam
+                \item Relay abgelehnt
+                \item Invalide Domain
+            \end{itemize} \\ \hline
+
+            \textnormal{Docker} &
+            \begin{itemize}
+                \item Container gestartet
+                \item Container gestoppt
+                \item Container neugestartet
+            \end{itemize} &
+            \begin{itemize}
+                \item Container abgestürzt
+                \item Image-Pull fehlgeschlagen
+                \item Speicherlimit erreicht
+                \item Speicherplatz niedrig
+                \item Unauthorisierter Zugriff
+            \end{itemize} \\ \hline
+
+        \end{tabular}
+        \caption{HTTP Logdateien}\label{tab:table2}
+    \end{table}
+
+    \clearpage
+    Insgesamt wurde für alle 7 Log-Typen folgende Anzahl an Testdateien generiert:
+    \begin{itemize}
+        \item 2 normale Testdateien ohne Anomalien
+        \item 2 Testdateien mit seltenen Anomalien (alle 40-60 Zeilen)
+        \item 2 Testdateien mit häufigeren Anomalien (alle 18-25 Zeilen)
+    \end{itemize}
+    Dies führte zu insgesamt 42 generierten Testdateien.
+    Dazu wurden 2 normale sowie 2 anomale (häufig) Logdateien aus der Gitlab CI/CD Pipeline verwendet.
+    Somit standen insgesamt 46 Testdateien zur Verfügung.
 
     \subsection{Ergebnisse}\label{subsec:ergebnisse}
+    \subsubsection{Normale Testdateien}
+    Aus den 16 normalen Testdateien wurden 9 als unschädlich und 7 als potenziell schädlich eingestuft.
+    Die empfohlene Aktion für alle 7 potenziell schädlichen Dateien war diese zu leeren.
+    Die Gründe für die \textbf{potenzielle Schädlichkeit} waren:
+    \begin{itemize}
+        \item Auth: viele fehlgeschlagene Login-Versuche
+        \item MySQL: viele manipulative SQL-Queries
+        \item Router: viele abgelehnte Pakete
+        \item SMTP: Senderadressen Spam-Verdächtig
+    \end{itemize}
+    Die Klassifizierung als potenziell schädlich erfolgte in jedem Fall gut begründet und nachvollziehbar.
+    Das Ergebnis ist vor allem auf die Beschaffenheit der Testdateien zurückzuführen.
+
+    \subsubsection{Anomale Testdateien (seltene Anomalien)}
+    Aus den 14 Testdateien mit seltenen Anomalien wurden 11 als potenziell schädlich und 2 als schädlich  und 1 als unschädlich eingestuft.
+    Die empfohlene Aktionen korrelierten mit der Einstufung.
+    Alle potenziell schädlichen Dateien sollten geleert, alle schädlichen Dateien gelöscht und die unschädliche Datei ignoriert werden.
+
+    Nennenswerte Ergebnisse:
+    \begin{itemize}
+        \item MySQL: Beide Dateien wurden als schädlich eingestuft, dies ist auf die Anomalien zurückzuführen, welche klar als Angriffe identifiziert wurden.
+        \item Router: Eine Datei wurde als unschädlich eingestuft, dies da die Anomalien als zu harmlos eingestuft wurden.
+    \end{itemize}
+    Auch hier lassen sich die Ergebnisse auf die Beschaffenheit der Testdateien zurückführen.
+
+    \subsubsection{Anomale Testdateien (häufige Anomalien)}
+    Aus den 16 Testdateien mit häufigen Anomalien wurden 11 als potenziell schädlich, 2 als schädlich und 3 als unschädlich eingestuft.
+    Die empfohlene Aktionen korrelierten, wie bereits bei den seltenen Anomalien, mit der Einstufung.
+    Unerwartete Ergebnisse:
+    \begin{itemize}
+        \item Docker: Eine Datei wurde als unschädlich eingestuft, dies da die Anomalien als zu harmlos eingestuft wurden.
+        Fehler beim Image-Pull oder Speicherplatzmangel wurden als zu harmlos interpretiert.
+        \item Gitlab: Beide Dateien wurden als unschädlich eingestuft, dies da fehlgeschlagene Pipelines als zu harmlos eingestuft wurden.
+    \end{itemize}
+
+    \subsubsection{Zusammenfassung}
+    Aus den 46 Testdateien wurden insgesamt 7 schädlicher und 4 weniger schädlich eingestuft als erwartet.
+    Alle Klassifizierungen erfolgten, unter Berücksichtigung der Beschaffenheit der Testdateien, nachvollziehbar und gut begründet.
+    Ebenso wurden alle empfohlenen Aktionen nachvollziehbar begründet und korrelierten mit der Einstufung.
+    Die Verwendungszwecke der Testdateien wurden richtig hergeleitet und beschrieben.
 
     \subsection{Kostenanalyse}\label{subsec:kostenanalyse}
+    Die genauen Kosten sind auf \url{https://platform.openai.com/} ersichtlich und werden pro Tag und Modell dargestellt.
+    Die Kosten für die Analyse der 46 Testdateien beliefen sich auf insgesamt \textbf{0.58 USD}.
+    Diese lassen sich in nachfolgende Kategorien unterteilen:
+    \begin{itemize}
+        \item 0.561 USD für das Annehmen des Inputs (System-Prompt + Testdatei)
+        \item 0.004 USD für das Cachen einiger Teile des Inputs
+        \item 0.016 USD für das Erstellen des Outputs (Completion)
+    \end{itemize}
 
-    \subsection{Diskussion}\label{subsec:diskussion}
+    \subsection{Fazit}\label{subsec:diskussion}
+    Die Ergebnisse der KI Fallstudie sind als erfolgreich zu bewerten.
+    Das Herleiten der Verwendungszwecke sowie die Klassifizierung der Testdateien erfolgten nachvollziehbar und gut begründet.
+    Die empfohlenen Aktionen korrelierten mit der Einstufung und waren nachvollziehbar begründet.
+    Die Kosten für die Analyse der Testdateien beliefen sich auf insgesamt 0.58 USD, was rund 0.011 USD pro Testdatei entspricht.
 
+    Der Verwendungszweck sowie Empfehlungen für die Testdateien wurden grundsätzlich technisch beschrieben und waren für technisch versierte Personen verständlich.
+    In Anbetracht der Tatsache, dass Logdateien wie MySQL-Logs oder Router-Logs eher von technisch versierten Personen analysiert werden, ist dies als positiv zu bewerten.
 
     \clearpage
     \chapter{Bereitstellung/Integration}
