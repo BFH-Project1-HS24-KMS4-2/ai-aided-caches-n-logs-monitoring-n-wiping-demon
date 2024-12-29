@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/Janic Scherer/IdeaProjects/ai-aided-caches-n-logs-monitoring-n-wiping-demon/daemon</OriginalElement>
+  <nodes>
+    <node x="2304.998949089041" y="738.7699840533307">ch.bfh.tracesentry.daemon.search.SubStringSearchStrategy</node>
+    <node x="2673.356798988021" y="1447.9906022848538">ch.bfh.tracesentry.daemon.common.Constants</node>
+    <node x="2992.5725936431077" y="265.5395927738129">ch.bfh.tracesentry.daemon.facade.WipeController</node>
+    <node x="194.09725579732412" y="1049.0956501160558">ch.bfh.tracesentry.daemon.domain.repo.NodeRepository</node>
+    <node x="2397.0019365503185" y="418.6308332174408">ch.bfh.tracesentry.daemon.search.SearchStrategyFactory</node>
+    <node x="816.7680089729535" y="924.7911788523566">ch.bfh.tracesentry.daemon.domain.model.MonitoredPath</node>
+    <node x="1822.601193686383" y="546.1953405865688">ch.bfh.tracesentry.daemon.domain.service.GPTInspectionService</node>
+    <node x="2514.636842591277" y="1709.4820698616456">ch.bfh.tracesentry.daemon.config.ModelMapperConfig</node>
+    <node x="1845.101193686383" y="265.03959277381296">ch.bfh.tracesentry.daemon.facade.InspectController</node>
+    <node x="1409.0067130428401" y="1596.2069577460402">ch.bfh.tracesentry.daemon.exception.BadRequestException</node>
+    <node x="2328.4972426043996" y="265.03959277381296">ch.bfh.tracesentry.daemon.facade.SearchController</node>
+    <node x="1849.1011936863829" y="787.3546680453786">ch.bfh.tracesentry.daemon.domain.model.gptclient.GPTRequest</node>
+    <node x="1677.3978366573497" y="1596.2069577460402">ch.bfh.tracesentry.daemon.exception.ConflictException</node>
+    <node x="1887.1011936863827" y="1004.5139955041885">ch.bfh.tracesentry.daemon.domain.model.gptclient.GPTMessage</node>
+    <node x="359.51104625725253" y="1172.0508352658949">ch.bfh.tracesentry.daemon.domain.model.Node</node>
+    <node x="3004.0725936431077" y="433.4594324467262">ch.bfh.tracesentry.daemon.facade.AdminController</node>
+    <node x="766.7680089729533" y="267.8848826074916">ch.bfh.tracesentry.daemon.facade.MonitoringController</node>
+    <node x="2469.0019365503185" y="572.2220736610686">ch.bfh.tracesentry.daemon.search.SearchStrategy</node>
+    <node x="1871.101193686383" y="408.71814927404756">ch.bfh.tracesentry.daemon.domain.service.InspectionService</node>
+    <node x="1244.1416430502095" y="1672.9135408200784">ch.bfh.tracesentry.daemon.exception.InternalServerErrorException</node>
+    <node x="1295.434601329668" y="607.3546680453786">ch.bfh.tracesentry.daemon.domain.model.MerkleTree</node>
+    <node x="60.37196005493661" y="751.8546680453786">ch.bfh.tracesentry.daemon.domain.repo.SnapshotRepository</node>
+    <node x="3082.8979347414474" y="1709.4820698616456">ch.bfh.tracesentry.daemon.DaemonApplication</node>
+    <node x="1909.7889602718587" y="1596.2069577460402">ch.bfh.tracesentry.daemon.exception.UnprocessableException</node>
+    <node x="1785.093398464604" y="1657.3072354755923">ch.bfh.tracesentry.daemon.exception.NotFoundException</node>
+    <node x="1810.1011936863822" y="1387.337274131659">ch.bfh.tracesentry.daemon.exception.TraceSentryException</node>
+    <node x="2822.9491292806965" y="1709.4820698616456">ch.bfh.tracesentry.daemon.config.AppConfig</node>
+    <node x="2941.9677204897275" y="570.6953405865688">ch.bfh.tracesentry.daemon.utils.ControllerUtils</node>
+    <node x="53.09725579732401" y="901.1404649662169">ch.bfh.tracesentry.daemon.domain.repo.SnapshotComparisonRepository</node>
+    <node x="2293.6967176488574" y="1095.8493144092736">ch.bfh.tracesentry.daemon.search.LogSearchStrategy</node>
+    <node x="1609.4135336506981" y="1745.0766413604215">ch.bfh.tracesentry.daemon.exception.GlobalExceptionHandler</node>
+    <node x="60.37196005493661" y="453.25182125651367">ch.bfh.tracesentry.daemon.domain.service.SnapshotsDomainService</node>
+    <node x="2406.0721795751833" y="976.7912939314579">ch.bfh.tracesentry.daemon.search.CacheSearchStrategy</node>
+    <node x="791.7680089729533" y="751.8546680453786">ch.bfh.tracesentry.daemon.domain.repo.MonitoredPathRepository</node>
+    <node x="7.486294525926439" y="1172.0508352658949">ch.bfh.tracesentry.daemon.domain.model.Snapshot</node>
+    <node x="2631.0925405260887" y="738.7699840533307">ch.bfh.tracesentry.daemon.search.PatternSearchStrategy</node>
+    <node x="95.37196005493695" y="267.8848826074916">ch.bfh.tracesentry.daemon.facade.SnapshotsController</node>
+    <node x="2988.134955984608" y="1459.4906022848538">ch.bfh.tracesentry.daemon.config.SQLiteConfig</node>
+    <node x="1279.434601329668" y="265.03959277381296">ch.bfh.tracesentry.daemon.scheduling.MonitoringScheduler</node>
+    <node x="758.35623073747" y="477.2518212565138">ch.bfh.tracesentry.daemon.domain.service.MonitoringDomainService</node>
+    <node x="2169.048524914054" y="976.7912939314579">ch.bfh.tracesentry.daemon.search.FullSearchStrategy</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ch.bfh.tracesentry.daemon.exception.NotFoundException" target="ch.bfh.tracesentry.daemon.exception.TraceSentryException" relationship="GENERALIZATION">
+      <point x="-4.320286618622049E-4" y="-14.99995633952949" />
+      <point x="1890.0929664359421" y="1533.2324350493589" />
+      <point x="1950.1015421674815" y="1533.2324350493589" />
+      <point x="3.4848109930862847E-4" y="45.00031450131769" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.search.PatternSearchStrategy" target="ch.bfh.tracesentry.daemon.search.SearchStrategy" relationship="REALIZATION">
+      <point x="3.5929835848946823E-4" y="-44.99978756931023" />
+      <point x="2751.592899824447" y="702.8525779628758" />
+      <point x="2570.002142145266" y="702.8525779628758" />
+      <point x="2.0559494760163943E-4" y="32.49950430180718" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.exception.ConflictException" target="ch.bfh.tracesentry.daemon.exception.TraceSentryException" relationship="GENERALIZATION">
+      <point x="-3.223608891858021E-4" y="-14.999834451564993" />
+      <point x="1773.8975142964605" y="1533.2324350493589" />
+      <point x="1950.1015421674815" y="1533.2324350493589" />
+      <point x="3.4848109930862847E-4" y="45.00031450131769" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.domain.service.GPTInspectionService" target="ch.bfh.tracesentry.daemon.domain.service.InspectionService" relationship="REALIZATION">
+      <point x="-166.0" y="7.591336212826036" />
+      <point x="1988.601193686383" y="646.7866767993949" />
+      <point x="0.0" y="32.5" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.exception.BadRequestException" target="ch.bfh.tracesentry.daemon.exception.TraceSentryException" relationship="GENERALIZATION">
+      <point x="-3.127703048448893E-4" y="-14.999797565950757" />
+      <point x="1523.5064002725353" y="1533.2324350493589" />
+      <point x="1950.1015421674815" y="1533.2324350493589" />
+      <point x="3.4848109930862847E-4" y="45.00031450131769" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.exception.UnprocessableException" target="ch.bfh.tracesentry.daemon.exception.TraceSentryException" relationship="GENERALIZATION">
+      <point x="4.1133200875265175E-4" y="-14.99961169136509" />
+      <point x="2036.7893716038675" y="1552.4906022848538" />
+      <point x="2036.7889602718592" y="1552.4906022848538" />
+      <point x="2036.7889602718592" y="1533.2324350493589" />
+      <point x="1950.1015421674815" y="1533.2324350493589" />
+      <point x="3.4848109930862847E-4" y="45.00031450131769" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.search.CacheSearchStrategy" target="ch.bfh.tracesentry.daemon.search.SubStringSearchStrategy" relationship="GENERALIZATION">
+      <point x="-115.9998756169125" y="4.791483365137992" />
+      <point x="2435.4011434882555" y="996.5827772965959" />
+      <point x="2435.4011434882555" y="982.4838011873808" />
+      <point x="2515.8931470412595" y="982.4838011873808" />
+      <point x="2515.8931470412595" y="783.7695779628757" />
+      <point x="-130.99968407688084" y="-4.060904550442501E-4" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.search.SubStringSearchStrategy" target="ch.bfh.tracesentry.daemon.search.SearchStrategy" relationship="REALIZATION">
+      <point x="3.159231191602885E-4" y="-45.000406090455044" />
+      <point x="2435.9992650121603" y="702.8525779628758" />
+      <point x="2570.002142145266" y="702.8525779628758" />
+      <point x="2.0559494760163943E-4" y="32.49950430180718" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.search.FullSearchStrategy" target="ch.bfh.tracesentry.daemon.search.SubStringSearchStrategy" relationship="GENERALIZATION">
+      <point x="11.40213941551292" y="-17.419944637524168" />
+      <point x="2283.9506643295667" y="863.9351050336893" />
+      <point x="2355.6696034135043" y="863.9351050336893" />
+      <point x="2355.6696034135043" y="783.7695779628757" />
+      <point x="-130.99968407688084" y="-4.060904550442501E-4" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.search.LogSearchStrategy" target="ch.bfh.tracesentry.daemon.search.SubStringSearchStrategy" relationship="GENERALIZATION">
+      <point x="3.4162017345806817E-4" y="-15.000364432745982" />
+      <point x="2398.697059269031" y="783.7695779628757" />
+      <point x="-130.99968407688084" y="-4.060904550442501E-4" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.daemon.exception.InternalServerErrorException" target="ch.bfh.tracesentry.daemon.exception.TraceSentryException" relationship="GENERALIZATION">
+      <point x="-6.288679333010805E-5" y="-15.000341265600127" />
+      <point x="1388.1415801634162" y="1587.65783068406" />
+      <point x="1388.1415801634157" y="1587.65783068406" />
+      <point x="1388.1415801634157" y="1567.0890903394613" />
+      <point x="1407.168987593343" y="1567.0890903394613" />
+      <point x="1407.168987593343" y="1533.2324350493589" />
+      <point x="1950.1015421674815" y="1533.2324350493589" />
+      <point x="3.4848109930862847E-4" y="45.00031450131769" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.6383442265795207" showDependencies="false" x="2120.3575085324237" y="1111.0153583617744" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
