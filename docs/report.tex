@@ -52,6 +52,39 @@
 
 \setcounter{secnumdepth}{4}
 
+\definecolor{eclipseStrings}{RGB}{42,0.0,255}
+\definecolor{eclipseKeywords}{RGB}{127,0,85}
+\colorlet{numb}{magenta!60!black}
+
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    commentstyle=\color{eclipseStrings}, % style of comment
+    stringstyle=\color{eclipseKeywords}, % style of strings
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{lightgray},
+    string=[s]{"}{"},
+    comment=[l]{:\ "},
+    morecomment=[l]{:"},
+    literate=
+        *{0}{{{\color{numb}0}}}{1}
+         {1}{{{\color{numb}1}}}{1}
+         {2}{{{\color{numb}2}}}{1}
+         {3}{{{\color{numb}3}}}{1}
+         {4}{{{\color{numb}4}}}{1}
+         {5}{{{\color{numb}5}}}{1}
+         {6}{{{\color{numb}6}}}{1}
+         {7}{{{\color{numb}7}}}{1}
+         {8}{{{\color{numb}8}}}{1}
+         {9}{{{\color{numb}9}}}{1}
+}
+
 
 \begin{document}
 
@@ -957,11 +990,118 @@ buildTreeRecursively(parent, snapshot, files):
     \clearpage
 
     \subsubsection{KI-Anbindung}
-    \clearpage
+    \paragraph*{Architektur und Funktionsweise}
+    Die Anbindung an KI-Modelle erfolgt über den \textit{InspectController}, der die HTTP-Anfragen der CLI entgegennimmt.
+    Dieser liest die zu analysierende Datei ein und ruft eine Implementierung des \textit{InspectionService} Interfaces auf, welche für die Kommunikation mit einem spezifischen KI-Modell zuständig ist.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{assets/InspectController_inspect_seq_diag}
+        \caption{Sequenzdiagramm InspectController}
+        \label{fig:seq-diag-inspect-controller}
+    \end{figure}
+
+    Im Rahmen dieses Projekts wurde GPT-4o mini als KI-Modell verwendet
+    (Siehe~\nameref{sec:ki-fallstudie}).
+    Für dieses Modell wurde der \textit{GPTInspectionService} implementiert, welcher die Anfrage an die OpenAI-API sendet und die Antwort verarbeitet.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{assets/GPTInspectionService_inspect_seq_diag}
+        \caption{Sequenzdiagramm GPTInspectionService}
+        \label{fig:seq-diag-gpt-inspection-service}
+    \end{figure}
 
     \clearpage
+    \paragraph*{OpenAI Schnittstelle}\label{par:openai-schnittstelle}
+    Die Kommunikation mit dem KI-Modell basiert auf REST-API-Calls.
+    Um eine Anfrage an die OpenAI-API zu senden, wird ein HTTP-POST-Request an \texttt{https://api.openai.com/v1/chat/completions} gesendet.
+    Die Authentifizierung erfolgt über einen API-Key, der im Authorization-Header mitgegeben wird.
+    Dieser wird im Vorfeld aus der Umgebungsvariable \texttt{OPENAI\_API\_KEY} ausgelesen.
+    Die Anfrage ist wie folgt strukturiert:
 
+    \begin{lstlisting}[language=json,label={lst:openai-request}]
+    {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "system",
+          "content": "<SYSTEM_PROMPT>"
+        },
+        {
+          "role": "user",
+          "content": "<userPrompt>"
+        }
+      ]
+    }
+    \end{lstlisting}
+    Diese Struktur wird durch die Klassen \texttt{GPTRequest} inkl. \texttt{GPTMessage} abgebildet (siehe~\nameref{fig:seq-diag-gpt-inspection-service}).
 
+    Die Antwort der OpenAI Schnittstelle ist deutlich umfangreicher und enthält neben der eigentlichen Antwort auch Metadaten.
+    Für die Analyse wird lediglich der Antworttext benötigt, welcher aus der JSON-Response extrahiert wird.
+
+    TODO: ist das für das Code-Verzeichnis?
+    \begin{lstlisting}[language=json,label={lst:openai-response}]
+    {
+      "choices": [
+        {
+          "message": {
+            "content": "<Antwort>"
+          }
+        },
+        {}
+      ]
+    } \end{lstlisting}
+
+    \paragraph*{Prompt-Engineering}
+    Die Qualität der Antwort des KI-Modells hängt stark von der Qualität des System- und Benutzer-Prompts ab.
+    Beide Prompts werden in derselben Anfrage an die OpenAI-API übergeben.
+    Das System-Prompt ist fix und definiert den Kontext, in dem die Antwort generiert wird.
+    Das Benutzer-Prompt beinhaltet den absoluten Pfad im Dateisystem sowie den gesamten Inhalt der zu analysierenden Datei.
+
+    \clearpage
+    System-Prompt: TODO mit anderen listings abgleichen, DESIGN
+
+    \begin{lstlisting}[label={lst:system-prompt}]
+You will receive the entire file content, including its name
+and path. These are typically log or cache files. Your task
+is to evaluate the file for harmful or problematic features.
+Pay close attention to the file's name and path as they may
+provide important context.
+
+Respond concisely in **a maximum of 5 sentences**, addressing the following:
+1. **Intended use**: Briefly describe the file's purpose based on its content, name, and path. If its content contains suspicious or harmful elements, describe them.
+2. **Assessment**: Classify the file as harmful, potentially harmful, or harmless.
+3. **Recommended to Wipe**: Suggest one of the following actions: No, Clear file, Delete file.
+4. **Additional recommendations**: If necessary, provide additional recommendations or actions.
+
+### Example:
+Intended use:
+[Describe the file's intended use in up to 10 sentences. Use up
+to 10 sentences to describe harmful or suspicious elements.]
+
+Assessment:
+[Harmful / Potentially harmful / Harmless]
+
+Recommended to Wipe:
+[No / Clear file / Delete file]
+
+Additional recommendations:
+[Provide additional recommendations or actions only if
+necessary.]
+    \end{lstlisting}
+    Diese System-Prompt beschreibt bereits die zu erwartende Struktur der Benutzer-Prompt, wie auch die zu erwartende Antwortstruktur.
+    Dank dieser ausführlichen System-Prompt erfolgen die Antworten des Modells zuverlässig und konsistent (siehe~\nameref{sec:ki-fallstudie}).
+
+    Benutzer-Prompt: TODO mit anderen listings abgleichen, DESIGN
+    \begin{lstlisting}[label={lst:user-prompt}]
+file path: <absoluter Pfad>
+file content:
+<Inhalt der Datei>
+    \end{lstlisting}
+    Die Benutzer-Prompt ist bewusst kurz gehalten, damit sich das Modell auf die relevanten Informationen konzentrieren kann.
+
+    \clearpage
     \section{Prozesse}
     \url{https://www.ganttlab.com} \\
     \url{https://www.hermes.admin.ch/de/projektmanagement/verstehen/ubersicht-hermes/methodenubersicht.html}
@@ -1734,7 +1874,7 @@ index forbidden by rule: /var/www/html/
             \end{itemize} \\ \hline
 
         \end{tabular}
-        \caption{HTTP Logdateien}\label{tab:table2}
+        \caption{Generierte Log-Typen}\label{tab:generated-log-types}
     \end{table}
 
     \clearpage
