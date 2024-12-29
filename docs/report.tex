@@ -12,6 +12,8 @@
 \usepackage{xfrac}
 \usepackage{longtable}
 \usepackage{pdfpages}
+\usepackage{rotating}
+
 
 \lstset{
     backgroundcolor=\color{black}, % Black background
@@ -739,12 +741,12 @@ schädlich, also empfehle ich es zu leeren.
 
     \newpage
 
-    \subsubsection{Shell}
+    \subsubsection{Shell}\label{subsubsec:shell}
     Die Shell stellt eine Kommandozeilen-Benutzerschnittstelle zur Verfügung.
     Sie kapselt die Definition von Kommandos und deren Parameter.
     Ausserdem übernimmt sie das Parsen der Benutzereingaben, clientseitige Validierung sowie Exception-Handling.
 
-    \subsubsection{Rest Adapter}
+    \subsubsection{Rest Adapter}\label{subsubsec:rest-adapter}
     Der Rest Adapter kapselt Funktionen zur Interaktion mit der REST-Schnittstelle.
 
     \subsubsection{Rest Controller}
@@ -791,20 +793,31 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsection{Realisierung}\label{subsec:realisierung}
 
-    \subsubsection{Frontend}
-
-    \subsubsection{Backend}
+    \subsubsection{Frontend (CLI)}
     \paragraph*{Beispiel Komponenteninteraktion}
-    Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss~\nameref{subsec:loesungsarchitektur}.
+    Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss der~\nameref{subsec:loesungsarchitektur}.
+    In diesem Fall handelt es sich um das Inspect Kommando (siehe Benutzerhandbuch). TODO Querverweis
+    Die Klasse InspectCommand ist Teil der Shell (siehe~\nameref{subsubsec:shell}). Der DaemonAdapter ist die Implementation des RestAdapters (siehe~\nameref{subsubsec:rest-adapter}).
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{assets/InspectCommands_inspect_seq_diag}
+        \caption{Sequenzdiagramm Inspect Command}
+        \label{fig:seq-diag-inspect-commands}
+    \end{figure}
+
+    \subsubsection{Backend (Daemon)}
+    \paragraph*{Beispiel Komponenteninteraktion}
+    Das folgende Sequenzdiagramm zeigt ebenfalls eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss \\
+    der~\nameref{subsec:loesungsarchitektur}.
     Man sieht innerhalb der Monitoring-Domäne den Controller (MonitoringController), den Service (MonitoringDomainService) und das Repository (MonitoredPathRepository).
     Des Weiteren sieht man eine Utility-Klasse (ControllerUtils) und eine Entitätsklasse (MonitoredPath) und zur Veranschaulichung (in rot) die Superklasse vom Spring-Framework (CrudRepository).
     \\In diesem Beispiel wird ein überwachter Pfad (MonitoredPath) erstellt:
-    \begin{figure}[h]
+    \begin{sidewaysfigure}
         \centering
         \includegraphics[width=1\textwidth]{assets/MonitoringController_createMonitoring_seq_diag}
         \caption{Sequenzdiagramm Monitoring Controller}
         \label{fig:seq-diag-monitoring-controller}
-    \end{figure}
+    \end{sidewaysfigure}
 
     \clearpage
 
@@ -819,12 +832,12 @@ schädlich, also empfehle ich es zu leeren.
     \\Der Intervall für die Periodizität der Snapshot-Erstellung ist konfigurierbar und kann z.B.\ via Programmargument oder Konfigurationsdatei gesetzt
     \\(mit Key \texttt{monitoring-scheduler.snapshot.interval}) werden.
     Standardmässig ist der Wert auf 1 Stunde gesetzt.
-    \begin{figure}[h]
+    \begin{sidewaysfigure}
         \centering
         \includegraphics[width=1\textwidth]{assets/MonitoringScheduler_createSnapshots_seq_diag}
         \caption{Sequenzdiagramm Monitoring Scheduler}
         \label{fig:seq-diag-monitoring-scheduler}
-    \end{figure}
+    \end{sidewaysfigure}
 
     \clearpage
 
