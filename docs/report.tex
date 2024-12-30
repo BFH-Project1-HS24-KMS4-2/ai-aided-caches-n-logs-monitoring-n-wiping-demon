@@ -2225,6 +2225,8 @@ echo ts run >> ~/.zprofile
     \begin{itemize}
         \item \textbf{Individuelle Monitoring Intervalle}: Der Anwender soll die Möglichkeit haben, die Periodizität des Monitorings pro überwachter Datei individuell einzustellen.
         \item \textbf{Monitoring von geschützten Verzeichnissen/Dateien}: Der Anwender soll die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystems), geschützte Verzeichnisse/Dateien zu überwachen.
+        \item \textbf{Doppel-Backslash in Windows}: Wegen des Escapings von Java sind momentan in Windows-Pfaden doppelte Backslashes notwendig.
+        Dies könnte mit einer Erweiterung im \texttt{ts.bat} Skript für Windows behoben werden.
     \end{itemize}
 
     \footnotetext[1]{Gemäss
@@ -2241,6 +2243,8 @@ echo ts run >> ~/.zprofile
     Die REST-Schnittstelle des Daemons bietet die notwendige Flexibilität dafür.
 
     In Belagen der Benutzerfreundlichkeit wäre ausserdem eine Verbesserung der Fehlermeldungen (mit besserem Exceptionhandling) in Betracht zu ziehen.
+
+    \clearpage
 
     \subsection{Sicherheit}\label{subsec:sicherheit}
     In der jetzigen Lösung wurde wenig bis gar keine Rücksicht auf Sicherheitsaspekte genommen.
