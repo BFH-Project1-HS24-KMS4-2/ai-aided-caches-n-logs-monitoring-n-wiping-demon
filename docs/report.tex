@@ -182,8 +182,12 @@
 
 
     \chapter{Spezifikation}\label{ch:spezifikation}
+
+
     \section{Systemabgrenzung}\label{sec:systemabgrenzung}
+
     \subsection{Systemumgebung (statisch)}\label{subsec:systemumgebung-(statisch)}
+
     \subsubsection{Systemübersicht}
     Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in bestimmten Verzeichnissen.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche periodisch auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
@@ -235,7 +239,9 @@
     Die Vorgehensweise sowie die Resultate dieser Fallstudie sind im Kapitel \nameref{sec:ki-fallstudie} dokumentiert.
 
     \clearpage
+
     \subsection{Prozessumgebung (dynamisch)}\label{subsec:prozessumgebung}
+
     \subsubsection{Daemon Lifecycle}
     Der Daemon-Prozess kann on-demand oder als Autostart-Service gestartet werden.
     Er läuft autonom im Hintergrund und kann über die CLI angesteuert werden.
@@ -280,7 +286,6 @@
         \label{fig:communication-scheduler}
     \end{figure}
 
-
     \subsubsection{Fehlerbehandlung}
     Wie in der Abbildung \ref{fig:communication} ersichtlich, werden Fehler grundsätzlich auf zwei Ebenen behandelt.
 
@@ -295,6 +300,8 @@
     Fehler, die während einer periodischen Überwachung entstehen, werden geloggt und falls notwendig wird die Überwachung verworfen.
 
     \clearpage
+
+
     \section{Anforderungen}\label{sec:anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang \ref{sec:originale-projektbeschreibung}).
     sowie einem initialen Termin mit Herr Kramer.
@@ -321,6 +328,7 @@
     \newpage
 
     \subsection{Grenz- und Vorbedingungen}
+
     \subsubsection{Nichfunktionale Anforderungen}\label{subsubsec:nichtfunktionale-anforderungen}
     Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw.
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
@@ -411,7 +419,6 @@
         \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB.
         Diese Limitation hängt mit der Java Files API zusammen.
     \end{itemize}
-
 
     \subsubsection{Voraussetzungen}
     Das System wurden unter den folgenden Voraussetzungen entwickelt und getestet:
@@ -1301,34 +1308,50 @@ file content:
     \end{table}
 
     \subsection{Sprintziele}
-    % todo: list 2 examples
+    Die Sprintziele wurden jeweils nach dem SMART-Prinzip definiert.
+    Dazu folgende zwei Beispiele:
+    \begin{itemize}
+        \item Aufsetzen von lauffähiger CLI- und Daemon-Komponente und vollständige, sowie getestete Implementation der Search-Funktion (gemäss Testkonzept).
+        \item Monitoring-Kommandos (gemäss Spezifikation) für das Persistieren und Auflisten der Dateipfade sind vollständig implementiert und getestet (gemäss Testkonzept).
+    \end{itemize}
 
     \subsection{Anwendung}
 
+    \subsubsection{Sprints}
+    Die Sprints leben auf Stufe einer Group in Gitlab.
+    Sie werden als Iterations bezeichnet.
+    Issues können explizit zu einer Iteration zugewiesen werden.
+
+    \clearpage
+
     \subsubsection{Epics}
     Epics werden in Gitlab auf Stufe einer Group verwaltet.
-    User Storys können zu einem Epic promoted werden.
+    User Stories können zu einem Epic promoted werden.
     Epics sind grob beschrieben und kapseln mehrere kohärente Funktionen in Form von User Stories.
-    % todo: mby image
+    Dazu folgendes Beispiel:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/epic-example}
+        \caption{Epic Beispiel}
+        \label{fig:epic-example}
+    \end{figure}
 
-    \subsubsection{User Stories} % todo: mby image
+    \clearpage
+
+    \subsubsection{User Stories}
     Eine User Story wird in Gitlab als Issue bezeichnet.
     Sie lebt auf der Stufe eines Projektes (Repository) und kann einem Epic zugeordnet sein.
     Sie kann ebenfalls sogenannte Tasks enthalten, welche kleinere Arbeiten der User Stories (meistens aus Entwickler-Sicht) repräsentieren.
     Jede User Story ist gemäß folgendem Schema dokumentiert:
     \\
     \texttt{Als <Benutzerrolle> möchte ich <Funktion>, sodass <Begründung/Benefit>.}
-
-    \subsubsection{Sprints}
-    Die Sprints leben ebenfalls auf Stufe einer Group in Gitlab.
-    Sie werden als Iterations bezeichnet.
-    Issues können explizit zu einer Iteration zugewiesen werden.
-
-    \subsubsection{Taskboard} % todo: mby image
-    Das Taskboard lebt ebenfalls in unserem Gitlab Project.
-    Es beinhaltet folgende Spalten: Open (Product Backlog), Sprint Backlog, Spalte pro Entwickler sowie die Spalte Closed.
-    Dies ist die empfohlene Vorgehensweise, da Gitlab so automatisch versteht, welche Issues in welchen Sprint gezogen und auch darin erledigt wurden.
-    Gitlab kann so beispielsweise, ohne jegliche Konfigurationen, Burndowncharts pro Iteration erstellen.
+    Dazu folgendes Beispiel:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/user-story-example}
+        \caption{User-Story Beispiel}
+        \label{fig:user-story-example}
+    \end{figure}
 
     \subsubsection{Definition of Ready}
     Damit eine User Story in ein Sprint Backlog gezogen werden darf, muss sie die Definition of Ready erfüllen.
@@ -1352,6 +1375,19 @@ file content:
         \item Functionality tested by someone who was not involved in the story as a developer.
         \item Documentation is done.
     \end{itemize}
+
+    \subsubsection{Taskboard}
+    Das Taskboard lebt ebenfalls in unserem Gitlab Project.
+    Es beinhaltet folgende Spalten: Open (Product Backlog), Sprint Backlog, Spalte pro Entwickler sowie die Spalte Closed.
+    Dies ist die empfohlene Vorgehensweise, da Gitlab so automatisch versteht, welche Issues in welchen Sprint gezogen und auch darin erledigt wurden.
+    Gitlab kann so beispielsweise, ohne jegliche Konfigurationen, Burndowncharts pro Iteration erstellen.
+    Dazu folgendes Beispiel:
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1\textwidth]{assets/issue-board-example}
+        \caption{Taskboard Beispiel}
+        \label{fig:issue-board-example}
+    \end{figure}
 
     \subsection{Adaptionen}
     Die \textbf{Sprint-Dauer} haben wir auf \textbf{1 Woche} gesetzt, um so in Bezug auf Änderungen
@@ -2291,8 +2327,15 @@ index forbidden by rule: /var/www/html/
 
     \section{Installationshandbuch \& Skript}
     In diesem Kapitel sind die Installationsanleitungen für alle unterstützten Plattformen beschrieben.
+    Grundsätzlich ist der TraceSentry ein plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
+    Entwickelt und getestet wurde allerdings nur auf den folgenden Betriebssystemversionen, weshalb die Kompatibilität mit anderen Versionen nicht garantiert werden kann:
+    \begin{itemize}
+        \item Windows 11--10.0
+        \item Linux 6.1.0-28
+        \item macOS Sequoia 15.2
+    \end{itemize}
 
-    Eine Installation der Java Laufzeitumgebung (JRE) wird für die Installation vorrausgesetzt.
+    \textbf{Eine Installation der Java Laufzeitumgebung (JRE) wird für die Installation vorausgesetzt.}
 
     \subsection{Linux}\label{subsec:linux}
     \begin{enumerate}
@@ -2398,6 +2441,7 @@ echo ts run >> ~/.zprofile
 
     \chapter{Fazit}
 
+
     \section{Diskussion}
     Das Projekt hat die Relevanz der Problematik im Umgang mit Cache- und Log-Dateien aufgezeigt und eine erste Lösung erarbeitet, mit der ein Anwender die Integrität dieser Dateien überwachen kann.
     Die Nutzung von generativen KI-Modellen zur Analyse von solchen Dateien hat sich dabei als effektives Mittel erwiesen, um Anomalien zu erkennen und einzuordnen.
@@ -2417,6 +2461,7 @@ echo ts run >> ~/.zprofile
     Die Arbeit bietet zudem die Möglichkeit, das Potential von generativen KI-Modellen für spezifische Anwendungsfälle zu erkennen und einen Konsens zu schaffen, wie diese in Zukunft eingesetzt werden können.
 
     \clearpage
+
 
     \section{Endergebnis}\label{sec:endergebnis}
     Im Verlauf des Projekts wurde eine Software entwickelt, die es ermöglicht, jegliche Art von Dateien zu suchen, zu überwachen und zu löschen.
@@ -2446,6 +2491,7 @@ echo ts run >> ~/.zprofile
     \end{itemize}
 
     \clearpage
+
     \subsubsection{Analyse \texttt{inspect} Funktion}
     \textbf{Ohne TraceSentry:} \\
     \begin{align*}
@@ -2466,9 +2512,11 @@ echo ts run >> ~/.zprofile
 
     \clearpage
 
+
     \section{Zukünftige Arbeiten}\label{sec:zukunftigearbeiten}
 
     \subsection{Funktionale Erweiterungen}\label{subsec:funktionale-erweiterungen}
+
     \subsubsection{Ideen aus der Originalen Projektbeschreibung}
     Folgende Features können dem Proposal (\nameref{sec:originale-projektbeschreibung}) entnommen werden.
     Teilweise wurden diese nicht vollständig umgesetzt.
@@ -2487,7 +2535,7 @@ echo ts run >> ~/.zprofile
     \end{itemize}
 
     \footnotetext[1]{Gemäss
-        \nameref{sec:originale-projektbeschreibung}:
+    \nameref{sec:originale-projektbeschreibung}:
         \begin{quote}
             \("\)\ldots any sense of it being wiped or even deleted (and its recreation
             being prohibited through file access rights, which - en passant - may enable the
@@ -2594,6 +2642,8 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
     \section{Klassendiagramm Lib \protect\footnotemark[1]  \protect\footnotemark[2]}
     \label{sec:class-diag-lib}
 
@@ -2604,6 +2654,7 @@ echo ts run >> ~/.zprofile
     }
     \vspace*{\fill}
     \includepdf[pages=-]{assets/lib_class_diag.png}
+
 
     \section{Erklärung zur Urheberschaft}
 
