@@ -140,7 +140,7 @@
     Durch das Angebot an generativen KI-Modellen, die – meist frei oder relativ günstig - im
     Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
     Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
-    Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Kapitel \nameref{sec:zukunftigearbeiten}.}
+    Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
     Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
     welche unter anderem Momentaufnahmen (sogenannte\ Snapshots) relevanter Dateipfaden und Metadaten speichert,
     sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
@@ -2208,23 +2208,39 @@ echo ts run >> ~/.zprofile
     cost per time unit,
     cost economy)
 
-
+    \clearpage
     \section{Zukünftige Arbeiten}\label{sec:zukunftigearbeiten}
 
+    \subsection{Funktionale Erweiterungen}\label{subsec:funktionale-erweiterungen}
+    \subsubsection{Ideen aus der Originalen Projektbeschreibung}
+    Folgende Features können dem Proposal (\nameref{sec:originale-projektbeschreibung}) entnommen werden.
+    Teilweise wurden diese nicht vollständig umgesetzt.
+    Dies hängt mit der generellen Philosophie der realisierten Lösung, sowie Gründen der Zeit und Komplexität zusammen.
+    \begin{itemize}
+        \item \textbf{Schlüsse aus Änderungen ziehen\footnotemark[1]}: Die Abfrage des KI-Modells könnte erweitert werden, um nicht nur Dateiinhalte zu analysieren, sondern auch Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateimetadaten und/oder Dateiinhalten zu ziehen.
+        \item \textbf{Detektion von unautorisiertem Schreibzugriff \footnotemark[1]}: Das System könnte erweitert werden, um unautorisierte Schreibzugriffe auf Dateien zu erkennen, einzuordnen und zu verhindern.
+    \end{itemize}
+
+    \subsubsection{Generelle Ideen für zukünftige Features}
+    \begin{itemize}
+        \item \textbf{Individuelle Monitoring Intervalle}: Der Anwender soll die Möglichkeit haben, die Periodizität des Monitorings pro überwachter Datei individuell einzustellen.
+        \item \textbf{Monitoring von geschützten Verzeichnissen/Dateien}: Der Anwender soll die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystems), geschützte Verzeichnisse/Dateien zu überwachen.
+    \end{itemize}
+
+    \footnotetext[1]{Gemäss
+        \nameref{sec:originale-projektbeschreibung}:
+        \begin{quote}
+            \("\)\ldots any sense of it being wiped or even deleted (and its recreation
+            being prohibited through file access rights, which - en passant - may enable the
+            detection of any unauthorised file writer)\("\)
+        \end{quote}}
+
     \subsection{User Experience}\label{subsec:user-experience}
-    Der generelle technische Aufbau des Systems und insbesondere deren Architektur bieten die Möglichkeit zusätzliche Clients zu entwickeln.
+    Der generelle technische Aufbau des Systems und insbesondere dessen Architektur bieten die Möglichkeit zusätzliche Clients zu entwickeln.
     Insbesondere eine grafische Benutzeroberfläche (GUI) könnte die Benutzerfreundlichkeit des Systems erheblich verbessern und die Zielgruppe erweitern.
-    Die REST-Schnittstelle des Daemons bietet die notwendige Flexibilität, um eine solche GUI zu entwickeln.
+    Die REST-Schnittstelle des Daemons bietet die notwendige Flexibilität dafür.
 
     In Belagen der Benutzerfreundlichkeit wäre ausserdem eine Verbesserung der Fehlermeldungen (mit besserem Exceptionhandling) in Betracht zu ziehen.
-
-    \subsection{Usability}\label{subsec:usability}
-    Generelle Ideen für zukünfitge Features:
-    \begin{itemize}
-        \item \textbf{Individuelle Monitoring Intervalle}: Der Anwender sollte die Möglichkeit haben, die Periodizität des Monitorings pro überwachter Datei individuell einzustellen.
-        \item \textbf{Monitoring von geschützen Verzeichnissen/Dateien}: Der Anwender sollte die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystems), geschützte Verzeichnisse/Dateien zu überwachen.
-        \item \textbf{Schlüsse aus Änderungen ziehen}: Die Abfrage des KI-Modells könnte erweitert werden, um nicht nur Dateiinhalte zu analysieren, sondern auch Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien(-metadaten) und/oder Dateiinhalten zu ziehen.
-    \end{itemize}
 
     \subsection{Sicherheit}\label{subsec:sicherheit}
     In der jetzigen Lösung wurde wenig bis gar keine Rücksicht auf Sicherheitsaspekte genommen.
