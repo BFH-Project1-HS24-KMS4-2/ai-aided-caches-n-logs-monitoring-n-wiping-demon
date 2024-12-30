@@ -293,6 +293,7 @@ No snapshots found for monitored path with ID [id].
 
 ### 9. `snapshots compare`
 This command outputs the comparison of a user-defined range of snapshots taken from a given monitored path.
+The parameters `start` and `end` refer to the `Number` column in the output of the `snapshots list` command.
 
 #### Usage:
 ```bash
