@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/Janic Scherer/IdeaProjects/ai-aided-caches-n-logs-monitoring-n-wiping-demon/lib</OriginalElement>
+  <nodes>
+    <node x="17.51325178389402" y="347.2981651376147">ch.bfh.tracesentry.lib.dto.SearchResponseDTO</node>
+    <node x="-243.82415902140679" y="198.31141692150865">ch.bfh.tracesentry.lib.exception.ErrorResponse</node>
+    <node x="-185.62155963302735" y="773.4123343527014">ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO</node>
+    <node x="141.5" y="632.39500509684">ch.bfh.tracesentry.lib.dto.SnapshotComparisonDTO</node>
+    <node x="27.785423037716555" y="198.31141692150865">ch.bfh.tracesentry.lib.dto.WipeFileDTO</node>
+    <node x="-297.73802242609577" y="347.2981651376147">ch.bfh.tracesentry.lib.dto.SnapshotDTO</node>
+    <node x="-323.33486238532123" y="539.9791029561671">ch.bfh.tracesentry.lib.model.SearchMode</node>
+    <node x="-439.7431192660547" y="773.4123343527014">ch.bfh.tracesentry.lib.dto.MonitoredPathDTO</node>
+    <node x="103.5" y="840.39500509684">ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ch.bfh.tracesentry.lib.dto.CreateMonitorPathDTO" target="ch.bfh.tracesentry.lib.model.SearchMode" relationship="TO_ONE">
+      <point x="0.0" y="-68.5" />
+      <point x="-63.121559633027346" y="725.1957186544342" />
+      <point x="-244.83486238532123" y="725.1957186544342" />
+      <point x="0.0" y="68.5" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.lib.dto.MonitoredPathDTO" target="ch.bfh.tracesentry.lib.model.SearchMode" relationship="TO_ONE">
+      <point x="0.0" y="-92.5" />
+      <point x="-334.7431192660547" y="708.4791029561671" />
+      <point x="-244.83486238532123" y="708.4791029561671" />
+      <point x="0.0" y="68.5" />
+    </edge>
+    <edge source="ch.bfh.tracesentry.lib.dto.MonitoredChangesDTO" target="ch.bfh.tracesentry.lib.dto.SnapshotComparisonDTO" relationship="TO_MANY">
+      <point x="0.0" y="-68.5" />
+      <point x="0.0" y="56.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.8188647746243739" showDependencies="true" x="147.5" y="650.5555555555555" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
