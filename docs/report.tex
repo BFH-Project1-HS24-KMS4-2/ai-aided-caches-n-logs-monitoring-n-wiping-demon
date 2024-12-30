@@ -2199,7 +2199,44 @@ echo ts run >> ~/.zprofile
 
     Die primäre Zielsetzung wurde erreicht und das Erweiterungspotential wird im folgenden Kapitel diskutiert.
 
+    TODO
+    incl. the calculation of the estimated
+    productivity increase for the users of your SoftWare:
+    task duration without your SW,
+    task duration with your SW,
+    task duration economy,
+    cost per time unit,
+    cost economy)
+
+
     \section{Zukünftige Arbeiten}\label{sec:zukunftigearbeiten}
+
+    \subsection{User Experience}\label{subsec:user-experience}
+    Der generelle technische Aufbau des Systems und insbesondere deren Architektur bieten die Möglichkeit zusätzliche Clients zu entwickeln.
+    Insbesondere eine grafische Benutzeroberfläche (GUI) könnte die Benutzerfreundlichkeit des Systems erheblich verbessern und die Zielgruppe erweitern.
+    Die REST-Schnittstelle des Daemons bietet die notwendige Flexibilität, um eine solche GUI zu entwickeln.
+
+    In Belagen der Benutzerfreundlichkeit wäre ausserdem eine Verbesserung der Fehlermeldungen (mit besserem Exceptionhandling) in Betracht zu ziehen.
+
+    \subsection{Usability}\label{subsec:usability}
+    Generelle Ideen für zukünfitge Features:
+    \begin{itemize}
+        \item \textbf{Individuelle Monitoring Intervalle}: Der Anwender sollte die Möglichkeit haben, die Periodizität des Monitorings pro überwachter Datei individuell einzustellen.
+        \item \textbf{Monitoring von geschützen Verzeichnissen/Dateien}: Der Anwender sollte die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystems), geschützte Verzeichnisse/Dateien zu überwachen.
+        \item \textbf{Schlüsse aus Änderungen ziehen}: Die Abfrage des KI-Modells könnte erweitert werden, um nicht nur Dateiinhalte zu analysieren, sondern auch Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien(-metadaten) und/oder Dateiinhalten zu ziehen.
+    \end{itemize}
+
+    \subsection{Sicherheit}\label{subsec:sicherheit}
+    In der jetzigen Lösung wurde wenig bis gar keine Rücksicht auf Sicherheitsaspekte genommen.
+    Das deshalb, weil das System als Ganzes nur auf dem Host des Anwenders läuft und keine externen Schnittstellen bietet.
+    Es sind also primär Angriffe \("\)von innen\("\) möglich.
+    Dabei ist vor allem die ungesicherte REST-Schnittstelle des Daemons anfällig.
+    Das Hinzufügen von Authentifizierung und Autorisierung (v.a.\ der REST-Schnittstelle), wäre also ein wichtiger Schritt in einer zukünftigen Version.
+
+    \subsection{Erweiterung der KI-Modelle bzw. Anbindung}\label{subsec:erweiterung-der-ki-modelle}
+    TODO
+
+
     \url{https://doi.org/10.1145/3664811}
 
     %------------ Glossary -------------------
