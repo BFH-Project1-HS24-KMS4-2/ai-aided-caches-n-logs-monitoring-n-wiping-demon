@@ -339,6 +339,12 @@ Error: could not compare snapshots.
 ---
 
 ### 10. `inspect`
+> **⚠️**  
+> This command sends the contents of the file to the OpenAI API for analysis.  
+> Ensure that no sensitive, confidential, or private data is included in the file before proceeding.  
+> By using this command, you agree to the terms and conditions of the OpenAI API.
+
+
 This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key
 is required so that this can be queried.
 
