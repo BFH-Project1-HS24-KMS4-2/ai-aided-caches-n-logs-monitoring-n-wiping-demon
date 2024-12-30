@@ -296,32 +296,37 @@
 
     \clearpage
     \section{Anforderungen}\label{sec:anforderungen}
-    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
+    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang \ref{sec:originale-projektbeschreibung}).
+    sowie einem initialen Termin mit Herr Kramer.
 
-    \subsection{Funktionale Anforderungen}
+    \subsection{Funktionale Anforderungen}\label{subsec:funktionale-anforderungen}
 
-    Alle funktionalen Anforderungen werden in Form von User Stories im Scrum Product Backlog geführt. Dieser wird laufend erweitert beziehungsweise konkretisiert. Eine User Story gilt erst als abgeschlossen, sobald alle dazugehörende Akzeptanzkriterien erfüllt sind. Folgende funktionale Anforderungen wurden definiert und in User Stories inkl. Akzeptanzkriterien abgebildet:
+    Alle funktionalen Anforderungen werden in Form von User Stories im Scrum Product Backlog geführt.
+    Dieser wird laufend erweitert beziehungsweise konkretisiert.
+    Nachfolgend wurden die grundlegenden Anforderungen an das System definiert.
+    Diese wurden konkretisiert, aufgebrochen und in User Stories inkl. Akzeptanzkriterien abgebildet:
     \begin{itemize}
-        \item Das System findet jegliche Log- oder Cache-Dateien, welche sich in einem angegebenen Verzeichnis befinden. Dabei werden auch alle Unterverzeichnisse berücksichtigt.
-        \item Das System durchsucht periodisch angegebene Verzeichnisse inkl. Unterverzeichnisse nach Log- oder Cache-Dateien.
+        \item Das System findet jegliche Dateien (insbesondere Log- und Cache-Dateien), welche sich in einem angegebenen Verzeichnis befinden.
+        Dabei werden auch alle Unterverzeichnisse berücksichtigt.
+        \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
+        Unterverzeichnisse nach Log- oder Cache-Dateien.
         \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinerander zu vergleichen.
         \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
-        \item Das System kann den Verwendungszweck von angegebenen Dateien erkennen und nach folgenden Merkalen kategorisieren oder bewerten:
-        \begin{itemize}
-            \item Dateityp
-            \item Verwendungszweck
-            \item Schädlichkeit
-            \item Leer- bzw. löschbar
-        \end{itemize}
-        \item Das System kann angegebene Dateien, nach einer Bestätigung des Benutzers leeren oder löschen.
+        \item Das System bewertet Dateien nach deren Schädlichkeit und gibt eine Empfehlung ab, ob die Datei gelöscht oder geleert werden soll.
+        \item Das System kann angegebene Dateien leeren oder löschen.
     \end{itemize}
-    TODO: Backlog einbinden/beschreiben
+    Auf die detaillierte Darstellung aller User Stories wird bewusst verzichtet.
+    Der Einsatz von Scrum als agile Arbeitsmethode wird im Kapitel \nameref{sec:prozesse} beschrieben.
 
     \newpage
 
     \subsection{Grenz- und Vorbedingungen}
-    Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw. Grenz- oder Vorbedingungen nicht explizit als User Story geführt. Aus dem Projekt-Proposal und dem initialen Termin ergaben sich nachfolgende nichtfunktionale Anforderungen.
-    Diese beeinflussten massgeblich die Architektur des Systems. Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
+    \subsubsection{Nichfunktionale Anforderungen}\label{subsubsec:nichtfunktionale-anforderungen}
+    Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw.
+    Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
+    Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
+    Diese beeinflussten massgeblich die Architektur des Systems.
+    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
         \centering
@@ -369,14 +374,14 @@
             \textbf{Beschreibung} & Lauffähigkeit mit vollem Funktionsumfang auf gängigen Betriebssystemen. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
-                \item Hintergrundprozess sowie Konsolenschnittstelle sind auf allen gängigen Betriebssystemen lauffähig und mit vollem Funktionsumfang verwendbar.
-                \item Neuimplementierte Features werden auf aktuellen Versionen von Windows, Linux (Ubuntu) und MacOS getestet.
+                \item Hintergrundprozess sowie Konsolenschnittstelle sind auf den gängigen Betriebssystemen lauffähig und mit vollem Funktionsumfang verwendbar.
+                \item Alle Funktionen werden auf den Betriebssystemen Windows 11--10.0, Linux 6.1.0-28 und macOS Sequoia 15.2 getestet.
             \end{itemize}
             \\ \hline
         \end{tabular}
         \caption{Nichtfunktionale Anforderung NFR-003}\label{tab:table5}
     \end{table}
-
+    \clearpage
     \begin{table}[h!]
         \centering
         \setlength{\leftmargini}{0.4cm}
@@ -398,6 +403,24 @@
         \caption{Nichtfunktionale Anforderung NFR-004}\label{tab:table6}
     \end{table}
 
+    \subsubsection{Aktuelle Limitationen}
+    Die Funktionalität des Systems ist wie folgt eingeschränkt:
+    \begin{itemize}
+        \item \textbf{KI-Modell}: Im Rahmen dieser Arbeit wurde nur das KI-Modell \textit{GPT-4o mini} von OpenAI integriert.
+        Mit diesem lassen sich Dateien von knapp 128'000 Token bzw. rund 320'000 Zeichen analysieren.
+        \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB.
+        Diese Limitation hängt mit der Java Files API zusammen.
+    \end{itemize}
+
+
+    \subsubsection{Voraussetzungen}
+    Das System wurden unter den folgenden Voraussetzungen entwickelt und getestet:
+    \begin{itemize}
+        \item \textbf{Java}: Es wird eine Installation der Java Runtime Environment (JRE) in Version 21 vorausgesetzt.
+        \item \textbf{Dateitypen}: Das System wurde hauptsächlich mit Dateitypen getestet, die als Plaintext vorliegen, wie beispielsweise Log- oder Textdateien.
+        \item \textbf{KI-Modell}: Für die Nutzung des OpenAI-Modells wird eine Internetverbindung sowie ein gültiger API-Key benötigt.
+    \end{itemize}
+    
     \clearpage
 
     \subsection{Testkonzept}
@@ -1243,7 +1266,7 @@ file content:
     Die Benutzer-Prompt ist bewusst kurz gehalten, damit sich das Modell auf die relevanten Informationen konzentrieren kann.
 
     \clearpage
-    \section{Prozesse}
+    \section{Prozesse}\label{sec:prozesse}
     \url{https://www.ganttlab.com} \\
     \url{https://www.hermes.admin.ch/de/projektmanagement/verstehen/ubersicht-hermes/methodenubersicht.html}
 
