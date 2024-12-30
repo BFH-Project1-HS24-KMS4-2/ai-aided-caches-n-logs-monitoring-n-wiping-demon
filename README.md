@@ -111,7 +111,7 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
 
 ## Technologies Used
 
-- AI APIs _TBD_ ❗
+- OpenAI GPT-4o mini
 - File System Management
 - Java
 
@@ -124,7 +124,7 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
 
 ## License
 
-This project is licensed under the FLOSS License.
+This project is licensed under the MIT License.
 
 ## Contact
 
