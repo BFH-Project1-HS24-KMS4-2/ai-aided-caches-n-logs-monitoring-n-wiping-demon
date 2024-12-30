@@ -14,7 +14,6 @@
 \usepackage{pdfpages}
 \usepackage{rotating}
 
-
 \lstset{
     backgroundcolor=\color{black}, % Black background
     basicstyle=\ttfamily\small\color{white}, % Monospace font, white text
@@ -75,16 +74,16 @@
     comment=[l]{:\ "},
     morecomment=[l]{:"},
     literate=
-        *{0}{{{\color{numb}0}}}{1}
-         {1}{{{\color{numb}1}}}{1}
-         {2}{{{\color{numb}2}}}{1}
-         {3}{{{\color{numb}3}}}{1}
-         {4}{{{\color{numb}4}}}{1}
-         {5}{{{\color{numb}5}}}{1}
-         {6}{{{\color{numb}6}}}{1}
-         {7}{{{\color{numb}7}}}{1}
-         {8}{{{\color{numb}8}}}{1}
-         {9}{{{\color{numb}9}}}{1}
+    *{0}{{{\color{numb}0}}}{1}
+        {1}{{{\color{numb}1}}}{1}
+        {2}{{{\color{numb}2}}}{1}
+        {3}{{{\color{numb}3}}}{1}
+        {4}{{{\color{numb}4}}}{1}
+        {5}{{{\color{numb}5}}}{1}
+        {6}{{{\color{numb}6}}}{1}
+        {7}{{{\color{numb}7}}}{1}
+        {8}{{{\color{numb}8}}}{1}
+        {9}{{{\color{numb}9}}}{1}
 }
 
 
@@ -421,7 +420,7 @@
         \item \textbf{Dateitypen}: Das System wurde hauptsächlich mit Dateitypen getestet, die als Plaintext vorliegen, wie beispielsweise Log- oder Textdateien.
         \item \textbf{KI-Modell}: Für die Nutzung des OpenAI-Modells wird eine Internetverbindung sowie ein gültiger API-Key benötigt.
     \end{itemize}
-    
+
     \clearpage
 
     \subsection{Testkonzept}
@@ -1216,7 +1215,8 @@ buildTreeRecursively(parent, snapshot, files):
         },
         {}
       ]
-    } \end{lstlisting}
+    }
+    \end{lstlisting}
 
     \paragraph*{Prompt-Engineering}
     Die Qualität der Antwort des KI-Modells hängt stark von der Qualität des System- und Benutzer-Prompts ab.
@@ -1267,9 +1267,104 @@ file content:
     Die Benutzer-Prompt ist bewusst kurz gehalten, damit sich das Modell auf die relevanten Informationen konzentrieren kann.
 
     \clearpage
+
+
     \section{Prozesse}\label{sec:prozesse}
-    \url{https://www.ganttlab.com} \\
-    \url{https://www.hermes.admin.ch/de/projektmanagement/verstehen/ubersicht-hermes/methodenubersicht.html}
+    In diesem Kapitel wird auf die Verwendung der Projektmethode Scrum während des Projekts eingegangen.
+    Dabei ist wichtig wie Scrum adaptiert wurde, um so gut wie möglich im vorgegebenen Projektrahmen zu funktionieren.
+
+    \subsection{Rollen}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{Developer}     & Ganzes Team  \\ \hline
+            \textbf{Scrum Master}  & Luca Ammann  \\ \hline
+            \textbf{Product Owner} & Luca Scherer \\ \hline
+        \end{tabular}
+        \caption{Scrum Rollen}\label{tab:scrum-roles}
+    \end{table}
+    Wir versuchen alle zu entwickeln und dabei die Arbeitslast mit Rücksicht auf die
+    zusätzlichen Aufgaben der SM- und PO-Rollen so gleichmässig wie möglich zu verteilen.
+
+    \subsubsection*{Weitere Rollen}
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{Berater}    & Dr. Simon Kramer \\ \hline
+            \textbf{PM-Berater} & Frank Helbling   \\ \hline
+        \end{tabular}
+        \caption{Weitere Rollen}\label{tab:additional-roles}
+    \end{table}
+
+    \subsection{Sprintziele}
+    % todo: list 2 examples
+
+    \subsection{Anwendung}
+
+    \subsubsection{Epics}
+    Epics werden in Gitlab auf Stufe einer Group verwaltet.
+    User Storys können zu einem Epic promoted werden.
+    Epics sind grob beschrieben und kapseln mehrere kohärente Funktionen in Form von User Stories.
+    % todo: mby image
+
+    \subsubsection{User Stories} % todo: mby image
+    Eine User Story wird in Gitlab als Issue bezeichnet.
+    Sie lebt auf der Stufe eines Projektes (Repository) und kann einem Epic zugeordnet sein.
+    Sie kann ebenfalls sogenannte Tasks enthalten, welche kleinere Arbeiten der User Stories (meistens aus Entwickler-Sicht) repräsentieren.
+    Jede User Story ist gemäß folgendem Schema dokumentiert:
+    \\
+    \texttt{Als <Benutzerrolle> möchte ich <Funktion>, sodass <Begründung/Benefit>.}
+
+    \subsubsection{Sprints}
+    Die Sprints leben ebenfalls auf Stufe einer Group in Gitlab.
+    Sie werden als Iterations bezeichnet.
+    Issues können explizit zu einer Iteration zugewiesen werden.
+
+    \subsubsection{Taskboard} % todo: mby image
+    Das Taskboard lebt ebenfalls in unserem Gitlab Project.
+    Es beinhaltet folgende Spalten: Open (Product Backlog), Sprint Backlog, Spalte pro Entwickler sowie die Spalte Closed.
+    Dies ist die empfohlene Vorgehensweise, da Gitlab so automatisch versteht, welche Issues in welchen Sprint gezogen und auch darin erledigt wurden.
+    Gitlab kann so beispielsweise, ohne jegliche Konfigurationen, Burndowncharts pro Iteration erstellen.
+
+    \subsubsection{Definition of Ready}
+    Damit eine User Story in ein Sprint Backlog gezogen werden darf, muss sie die Definition of Ready erfüllen.
+    Wir haben diese, anlehnend an die INVEST-Kriterien, wie folgt definiert:
+    \begin{itemize}
+        \item \textbf{Independent:} if possible, a user story should not depend on other user stories.
+        \item \textbf{Estimable:} The story must be possible to estimate, and an estimate in Story Points is provided.
+        \item \textbf{Small:} The effort for the implementation should be manageable.
+        A few hours to a max of a few days.
+        \item \textbf{Testable:} Their successful implementation should be verifiable with objective criteria.
+        Every story must have acceptance criteria.
+        \item Does not violate a non-functional requirement (provided in the project report).
+    \end{itemize}
+
+    \subsubsection{Definition of Done}
+    Damit eine User Story in die Closed-Spalte gezogen werden darf, muss nachfolgende Definition of Done erreicht sein:
+    \begin{itemize}
+        \item Pull (Merge) Request is approved by another developer.
+        Code Review is done.
+        \item Acceptance criteria met.
+        \item Functionality tested by someone who was not involved in the story as a developer.
+        \item Documentation is done.
+    \end{itemize}
+
+    \subsection{Adaptionen}
+    Die \textbf{Sprint-Dauer} haben wir auf \textbf{1 Woche} gesetzt, um so in Bezug auf Änderungen
+    schneller reagieren zu können, da unsere Projektdauer eher kurz ist im Vergleich zu
+    vielen anderen Scrum-Projekten.
+    Ausserdem können wir so jede Woche den aktuellen Stand und vor allem die Neuerungen besprechen.
+    Das hilft uns, unseren Fokus auf das Ziel und die Deadlines zu halten.
+    \\\\
+    Das \textbf{Daily} können wir aufgrund unserer beschränkten Zeit, die wir am Projekt arbeiten können, nicht täglich durchführen.
+    Dafür sind wir fast täglich per Chat im Austausch und können so kurzfristig, je nach Gebrauch, Besprechungen per Video-Call planen.
+    \\\\
+    Die \textbf{Scrum-Zeremonien} (Review, Retro, Planning) führen wir en bloc \textbf{jeden Freitag} zum
+    Sprint-Abschluss durch und starten sogleich den nächsten geplanten Sprint.
 
 
     \chapter{Evaluation und Tests}
@@ -1495,44 +1590,69 @@ monitoring database.
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
             \begin{enumerate}
-                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list\end{verbatim}
+                \item \begin{verbatim}ts monitor add [PFAD] && ts monitor list
+                \end{verbatim}
                 \item Erwartet: Auflistung des zu überwachenden Pfads, sowie dessen [ID].
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
                 \item Erwartet: Liste mit genau 1 Snapshot.
                 \item Eine Datei test.log in [PFAD] erstellen und mit Inhalt füllen.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis zweiter Snapshot in Datenbank vorhanden ist.
                 Mit nachfolgendem Schritt überprüfen.
-                \item \begin{verbatim}ts snapshots list [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots list [ID]
+                \end{verbatim}
                 \item Erwartet: Liste mit genau 2 Snapshots.
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 3 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 4 Snapshots vorhanden sind.
                 (siehe oben)
-                \item Den Inhalte der Datei test.log ändern.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item Den Inhalt der Datei test.log ändern.
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 5 Snapshots vorhanden sind.
                 (siehe oben)
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+            \end{enumerate} \\ \hline
+        \end{tabular}\label{tab:e2e-7.1}
+    \end{table}
+    \clearpage
+
+    \begin{table}[h!]
+        \centering
+        \setlength{\leftmargini}{0.8cm}
+        \begin{tabular}{|c|p{10cm}|}
+            \hline
+            \textbf{Ablauf} &
+            \begin{enumerate}
+                \setcounter{enumi}{20}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Unterschied in der Datei test.log wird aufgelistet.
                 HIER
                 \item test.log löschen.
-                \item \begin{verbatim}ts kill && ts run\end{verbatim}
+                \item \begin{verbatim}ts kill && ts run
+                \end{verbatim}
                 \item Warten bis in Datenbank genau 6 Snapshots vorhanden sind.
-                \item \begin{verbatim}ts snapshots compare [ID]\end{verbatim}
+                \item \begin{verbatim}ts snapshots compare [ID]
+                \end{verbatim}
                 \item Erwartet: Löschung der Datei test.log wird aufgelistet.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Snapshots werden generiert und drei verschiedenen Zeitintervalle verglichen.
             Erstellung, Änderung und Löschung einer Datei werden erkannt. \\ \hline
         \end{tabular}
-        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7}
+        \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7.2}
     \end{table}
 
     \clearpage
@@ -2421,6 +2541,8 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
     \section{Originale Projektbeschreibung}\label{sec:originale-projektbeschreibung}
     \vspace*{\fill}
     \includepdf[pages=-]{../misc/proposal.pdf}
@@ -2429,6 +2551,8 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
     \section{API-Dokumentation}\label{sec:api-spec}
     \vspace*{\fill}
     \includepdf[pages=-]{assets/api-documentation.pdf}
@@ -2436,6 +2560,8 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
     \section{Klassendiagramm CLI \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
     \label{sec:class-diag-cli}
 
@@ -2451,6 +2577,8 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
     \section{Klassendiagramm Daemon \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
     \label{sec:class-diag-daemon}
 
