@@ -29,6 +29,7 @@
 
 \usepackage{geometry}
 \usepackage{booktabs}
+\usepackage{cleveref}
 \geometry{
     top=1in,
     left=1in,
@@ -94,8 +95,9 @@
         \textit{Berner Fachhochschule}\\[0.2em]
         \textit{BTI3031 Project 1}
         \vfill
-        {\huge \textbf{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}}\\[4em]
-        {\large Luca Scherer, Janic Scherer, Luca Ammann }\\[0.5em]
+        {\huge \textbf{TraceSentry}}\\[1em]
+        {\Large AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}\\[4em]
+        {\large Luca Scherer, Janic Scherer, Luca Ammann}\\[0.5em]
         \begin{tabular}{ll}
             \textbf{Betreuer:}\hspace{0.5em}Dr. Simon Kramer \\
         \end{tabular}
@@ -103,6 +105,7 @@
         \vfill
         \textit{\today}
     \end{titlepage}
+
 
 % Abstract
     \begin{abstract}
@@ -178,41 +181,120 @@
     Zurückpriorisierte Funktioalitäten, sowie Erweiterungen werden im Kapitel \nameref{sec:zukunftigearbeiten} beschrieben.
 
 
-    \chapter{Spezifikation}
-
-
-    \section{Systemabgrenzung}
-
-    \subsection{Systemumgebung (statisch)}
-
+    \chapter{Spezifikation}\label{ch:spezifikation}
+    \section{Systemabgrenzung}\label{sec:systemabgrenzung}
+    \subsection{Systemumgebung (statisch)}\label{subsec:systemumgebung-(statisch)}
     \subsubsection{Systemübersicht}
-    Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in einem bestimmten Verzeichnis.
-    Dabei liegt der Fokus auf Log- und Cache-Dateien, welche auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
-    Diese Überprüfung erfolgt in einem Hintergrundprozess (Daemon), welcher autonom und periodisch die Dateien überwacht.
-    Die Resultate dieser Überwachung werden persistiert und dem Benutzer über eine Benutzerschnittstelle zugänglich gemacht.
-    Der Benutzer hat zusätzlich die Möglichkeit, nach Dateien zu suchen, um sinnvolle Verzeichnisse für die Überwachung zu finden.
-    Findet der Benutzer eine für ihn interessante Datei durch die Suche oder Überwachung, kann er eine Inspektion dieser Datei anfordern.
-    Dabei analysiert ein KI-Modell die Datei und gibt eine Einschätzung ab, ob die Datei schädlich ist und wie damit umgegangen werden sollte.
-    Über die Benutzerschnittstelle kann der Benutzer zusätzlich Dateien leeren oder löschen, insofern es für Ihn oder das KI-Modell sinnvoll erscheint.
+    Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in bestimmten Verzeichnissen.
+    Dabei liegt der Fokus auf Log- und Cache-Dateien, welche periodisch auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
+    Diese periodische Überwachung soll in einem Hintergrundprozess, einem so genannten Daemon, stattfinden.
+    Notwendige Daten für die Überwachung sowie, durch die Überwachung entstandene Daten, werden in einer Datenbank gespeichert.
+    Verdächtige Dateien können durch eine KI-gestützte Analyse bewertet und anschliessend geleert oder gelöscht werden.
 
-    \subsubsection{Systemkontext}
+    \subsubsection{Softwarekomponenten}
+    Die System- sowie Softwarearchitektur wurde im Rahmen dieser Arbeit entworfen und grundlegende Entscheide im Kapitel \nameref{subsec:technische-variantenentscheide} festgehalten.
+    Alle Softwarekomponenten wurden in Java unter der Verwendung des Spring-Frameworks entwickelt.
+    Die endgültig erarbeitete Architektur wird im Kapitel \nameref{subsec:loesungsarchitektur} beschrieben.
+    Nachfolgend eine vereinfachte Übersicht der Softwarekomponenten:
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{assets/komponenten-grob}
+        \caption{Softwarekomponenten (High-Level)}
+        \label{fig:komponenten-grob}
+    \end{figure}
+    Die Bereitstellung und Laufzeitumgebung des Systems wird im Kapitel \nameref{chap:bereitstellung-integration} beschrieben.
+
+    \subsubsection{Hardwarekompatibilität}
     Der TraceSentry ist ein eigenständiges, plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
-    Grundsätzlich wird dabei zwischen dem Daemon und der Benutzerschnittstelle unterschieden.
+    Entwickelt und getestet wurde auf folgenden Betriebssystemen:
     \begin{itemize}
-        \item \textbf{Daemon}: Der Daemon läuft im Hintergrund ohne direkte Benutzerinteraktion und übernimmt die grundlegende Geschäftslogik, wie die Interaktion mit dem Dateisystem.
-        \item \textbf{Benutzerschnittstelle}: Die Benutzerschnittstelle ist die Schnittstelle zwischen dem Benutzer und dem Daemon und enthält keine Geschäftslogik.
+        \item Windows 11--10.0
+        \item Linux 6.1.0-28
+        \item macOS Sequoia 15.2
     \end{itemize}
 
-    TODO im Team definieren, ob Endscheidungen wie CLI, GPT etc. hier rein sollen oder in die Architektur.
+    \subsubsection{Benutzerschnittstelle}
+    Im Rahmen der Anforderungsspezifikation wurde eine Benutzerschnittstelle in Form eines Command-Line-Interfaces (CLI) spezifiziert.
+    Im Hinblick auf Erweiterung und Wartbarkeit ist die Benutzerschnittstelle logisch von der Geschäftslogik getrennt.
+    Aufgrund dessen wurde die Benutzerschnittstelle als eigenständige Laufzeiteinheit definiert und entwickelt.
+    Die Kommunikation zwischen CLI und Daemon erfolgt über eine REST-API.
+    Diese Wahl wurde im Kapitel \nameref{subsec:technische-variantenentscheide} begründet.
 
+    \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
+    Die Datenbank wird für die Persistierung von Überwachsungs-Metadaten sowie -Ergebnissen verwendet.
+    Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank.
+    Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel \nameref{subsubsec:technologieentscheid} und \nameref{subsubsec:realisierung-datenbank} beschrieben.
+
+    \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
+    Gemäss Anforderungsspezifikation wird ein KI-Modell zur Bewertung von Dateien eingebunden.
+    Die Entwicklung eines eigenen KI-Modells war nicht Teil dieser Arbeit.
+    Stattdessen wurde das KI-Modell \textit{GPT-4o mini} von OpenAI verwendet.
+    Die Anbindung an das KI-Modell wird im Kapitel \nameref{subsubsec:ki-anbindung} beschrieben.
+    Zudem wurde eine Fallstudie zur Evaluation des Potentials eines aktuellen KI-Modells im Kontext des TraceSentry durchgeführt.
+    Die Vorgehensweise sowie die Resultate dieser Fallstudie sind im Kapitel \nameref{sec:ki-fallstudie} dokumentiert.
 
     \clearpage
+    \subsection{Prozessumgebung (dynamisch)}\label{subsec:prozessumgebung}
+    \subsubsection{Daemon Lifecycle}
+    Der Daemon-Prozess kann on-demand oder als Autostart-Service gestartet werden.
+    Er läuft autonom im Hintergrund und kann über die CLI angesteuert werden.
 
-    \subsection{Prozessumgebung}
+    \subsubsection{CLI Lifecycle}
+    Die CLI wird on-demand pro Benutzerinteraktion gestartet und beendet.
+    Das bedeutet, dass die Lebensdauer der CLI auf die Dauer einer Benutzerinteraktion beschränkt ist.
+    Zusätzlich hat der Benutzer die Möglichkeit, die CLI im sogenannten \textit{interactive mode} zu starten.
+    In diesem Modus steht dem Benutzer eine interaktive Shell zur Verfügung, in welcher er mehrere Befehle hintereinander ausführen kann.
+    Im \textit{interactive mode} wird die CLI nicht beendet, bis der Benutzer dies explizit veranlasst.
+    Dies ist ein gängiges Verhalten von Command-Line-Interfaces und ermöglicht eine effiziente Interaktion mit dem System, ohne dass für jede Benutzerinteraktion ein neuer Prozess gestartet werden muss.
 
+    \subsubsection{Prozessübersicht}
+    Nachfolgend wird davon ausgegangen, dass der Daemon-Prozess beim Systemstart gestartet wurde und sich der Benutzer im interaktiven Modus der CLI befindet.
+
+    \paragraph*{Prozess KI-Bewertung}
+    In diesem Communication Diagram wird der Prozess der, durch den Benutzer angeforderten, KI-Bewertung dargestellt.
+    Die Interaktion mit dem Dateisystem ist nicht modelliert.
+
+    Der Prozess ist für andere Funktionen des Systems identisch, weswegen auf weitere Modellierung verzichtet wird.
+    Relevant für alle Prozesse ist die Kommunikation zwischen Benutzer und Daemon via CLI.
+    Je nach Funktion interagiert der Daemon-Prozess mit dem Dateisystem, der Datenbank und dem KI-Modell.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{assets/communication}
+        \caption{Prozess KI-Bewertung}
+        \label{fig:communication}
+    \end{figure}
     \clearpage
 
+    \paragraph*{Prozess periodische Überwachung}
+    Ein spezieller Prozess im System ist die periodische Überwachung von Dateien, da dieser autonom und ohne Benutzerinteraktion abläuft.
+    Im folgenden Communication Diagram wird dieser Prozess modelliert.
+    Der Daemon-Prozess ist selbständig für die Auslösung der Überwachung verantwortlich und in dieser Hinsicht nicht vom Betriebssystem abhängig.
+    Die Interaktion mit dem Dateisystem ist nicht modelliert.
 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{assets/communication-scheduler}
+        \caption{Prozess periodische Überwachung}
+        \label{fig:communication-scheduler}
+    \end{figure}
+
+
+    \subsubsection{Fehlerbehandlung}
+    Wie in der Abbildung \ref{fig:communication} ersichtlich, werden Fehler grundsätzlich auf zwei Ebenen behandelt.
+
+    \paragraph*{CLI}
+    Syntaktische oder semantische Fehler eines Kommandos werden durch die CLI behandelt.
+    Die CLI gibt dem Benutzer, ohne Kommunikation mit dem Daemon, eine entsprechende Fehlermeldung zurück.
+
+    \paragraph*{Daemon}
+    Fehler, die erst während der Ausführung eines Befehls entstehen, werden durch den Daemon behandelt.
+    Ein Beispiel dafür wäre eine nicht vorhandene bzw. lesbare Datei.
+    In diesem Fall wird der Fehler via REST-API an die CLI zurückgegeben und dem Benutzer angezeigt.
+    Fehler, die während einer periodischen Überwachung entstehen, werden geloggt und falls notwendig wird die Überwachung verworfen.
+
+    \clearpage
     \section{Anforderungen}\label{sec:anforderungen}
     Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal sowie einem initialen Termin mit Herr Kramer.
 
@@ -463,7 +545,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \section{Architektur}
 
-    \subsection{Technische Variantenentscheide}
+    \subsection{Technische Variantenentscheide}\label{subsec:technische-variantenentscheide}
 
     \subsubsection{Architekturentscheid}
     In diesem Abschnitt werden die Überlegungen zur Architektur des Systems dargestellt.
@@ -607,7 +689,7 @@ schädlich, also empfehle ich es zu leeren.
     Zudem ist die Implementierung dank vorhandener Frameworks verhältnismäßig einfach und effizient.
     \clearpage
 
-    \subsubsection{Technologieentscheid}
+    \subsubsection{Technologieentscheid}\label{subsubsec:technologieentscheid}
     In diesem Abschnitt werden die Überlegungen zu den Technologien für die verschiedenen Systemkomponenten dargestellt.
     Basierend auf einer Analyse der Vor- und Nachteile wurde eine Entscheidung für die geeignetsten Technologien getroffen.
 
@@ -747,6 +829,10 @@ schädlich, also empfehle ich es zu leeren.
     Die Einschränkungen hinsichtlich KI-Integration waren für dieses Projekt zu wenig gewichtig.
     Frameworks wie Spring erleichtern zudem die Implementierung der CLI/Daemon-Architektur.
     % todo: spring hinzufügen
+
+
+    \paragraph*{3. KI-Modell}\mbox{}\\
+    Die Auswahl des KI-Modells wird ausführlich im Abschnitt~\nameref{sec:ki-fallstudie} behandelt.
     \clearpage
 
     \subsection{Lösungsarchitektur}\label{subsec:loesungsarchitektur}
@@ -757,6 +843,8 @@ schädlich, also empfehle ich es zu leeren.
     Ausserdem stellt er der
     CLI eine REST-Schnittstelle zur Verfügung.
     Ein Datenbanksystem speichert die Applikationsdaten.
+    Diese Architektur ermöglicht eine klare Trennung von Benutzerschnittstelle und Geschäftslogik.
+    Jegliche Interaktionen mit Dateisystem, Datenbank und KI-Modell werden über den Daemon abgewickelt.
 
     \begin{figure}[h]
         \centering
@@ -960,7 +1048,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \clearpage
 
-    \subsubsection{Datenbank}
+    \subsubsection{Datenbank}\label{subsubsec:realisierung-datenbank}
     Produktiv wird eine SQLite-Datenbank verwendet, welche lokal auf dem System des Benutzers in Form einer einzigen *.db-Datei gespeichert wird.
     Für die automatisierten Tests wurde eine H2-In-Memory-Datenbank verwendet, welche für jeden Test mit dem gleichen Schema,
     das auch für die produktive Datenbank verwendet wird jeweils initialisiert wird.
@@ -1043,7 +1131,7 @@ buildTreeRecursively(parent, snapshot, files):
     Siehe~\nameref{sec:api-spec} im Anhang.
     \clearpage
 
-    \subsubsection{KI-Anbindung}
+    \subsubsection{KI-Anbindung}\label{subsubsec:ki-anbindung}
     \paragraph*{Architektur und Funktionsweise}
     Die Anbindung an KI-Modelle erfolgt über den \textit{InspectController}, der die HTTP-Anfragen der CLI entgegennimmt.
     Dieser liest die zu analysierende Datei ein und ruft eine Implementierung des \textit{InspectionService} Interfaces auf, welche für die Kommunikation mit einem spezifischen KI-Modell zuständig ist.
@@ -2011,7 +2099,7 @@ index forbidden by rule: /var/www/html/
     \clearpage
 
 
-    \chapter{Bereitstellung/Integration}
+    \chapter{Bereitstellung/Integration}\label{chap:bereitstellung-integration}
 
     \begin{figure}[h]
         \centering
