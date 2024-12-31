@@ -2511,22 +2511,34 @@ echo ts run >> ~/.zprofile
     Für Funktionen wie \texttt{search} und \texttt{delete} wird keine Produktivitätssteigerung angenommen, da sie nur Shell-Befehle umhüllen.
     Administrationsbefehle wie \texttt{kill}, \texttt{run} etc.\ werden ebenfalls nicht betrachtet, diese sind \("\)Mittel zum Zweck\("\) und es gibt logischerweise keine äquivalenten Vorgänge ohne die Software.
 
-    \subsubsection{Annahmen}
+    \clearpage
+    \subsubsection{Berechnung}
+
+    \paragraph*{Annahmen}
     Für die Berechnung der Produktivitätssteigerung werden folgende Annahmen getroffen:
     \begin{itemize}
+        \item TraceSentry ist gemäss Installationshandbuch installiert (inkl.\ Autostart).
         \item Das Hochladen einer Datei in die GPT-Prompt dauert inkl.\ dem Vorschlagen der Output-Formulierung bzw.\ -Formatierung ca.\ 20 Sekunden.
         \item Die Analyse einer Datei in der GPT-Prompt dauert ca.\ 5 Sekunden.
         \item TraceSentry benötigt im Schnitt 4 Sekunden für das \texttt{inspect} Kommando (für eine beliebige Datei).
         \item Der durchschnittliche Studenlohn beträgt 38 CHF\@.
+        \item Eine Datei wird im Schnitt für eine Woche überwacht.
+        \item Ein Computer läuft im Schnitt 6 Stunden pro Tag.
+        \item TraceSentry benötigt im Schnitt 600ms für das Erstellen eines Snapshots.
+        \item Das Erstellen einer Kopie einer Datei (manueller Snapshot) dauert ca.\ 10 Sekunden.
+        \item Das Vergleichen zweier Dateien dauert ca.\ 20 Sekunden.
     \end{itemize}
 
     \clearpage
 
-    \subsubsection{Analyse \texttt{inspect} Funktion}
+    Texte als Variablen sind folgend als Zeitdauer zu verstehen. \\
+
+    \textbf{Analyse \texttt{inspect} Funktion} \\
+
     \textbf{Ohne TraceSentry:} \\
     \begin{align*}
-        \text{Input vorbereiten}&: \text{Dauer für Dateiinhalt in GPT-Prompt kopieren/hochladen}\\
-        \text{Output abwarten}&: \text{GPT-Response Dauer} \\
+        \text{Input vorbereiten}&: \text{Dateiinhalt in GPT-Prompt kopieren/hochladen}\\
+        \text{Output abwarten}&: \text{GPT-Response} \\
         \text{Aufgabendauer ohne SW} &= \text{(Input vorbereiten + Output abwarten)} \\
         &= 20s + 5s \\
         &= 25s \\
@@ -2534,21 +2546,58 @@ echo ts run >> ~/.zprofile
 
     \text{\textbf{Mit TraceSentry:}} \\
     \begin{align*}
-        \text{Aufgabendauer mit SW} &= \text{\texttt{inspect} Dauer} \\
+        \text{Aufgabendauer mit SW} &= \text{\texttt{inspect}} \\
         &= 4s
     \end{align*}
 
     \text{\textbf{Produktivitätssteigerung:}} \\
     \begin{align*}
-        \text{Zeitersparnis} &= 25 - 4 = 21s \\
-        \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx \text{0.63/Minute} \\
-        \text{Gesamtkostenersparnis} &= 21s * 0.63 \text{CHF/Minute} \\ &= 13.23 \text{ Rappen pro Datei} \\ \\
-        \text{Produktivitätssteigerung} &= \left( \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}} \right) \\ &= 84\%
+        \text{Zeitersparnis} &= 25 - 4 = 21s = 0.35min \\
+        \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx 0.63 \text{CHF/Minute} \\
+        \text{Gesamtkostenersparnis} &= 0.35 * 0.63 \text{CHF/Minute} \\ &= 0.2205 \text{ CHF} \\ &= 22.05 \text{ Rappen (pro Datei)} \\
+        \\
+        \text{Produktivitätssteigerung} &= \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}}
+        \\ &= \frac{\text{21}}{\text{25}}
+        \\ &= 84\%
     \end{align*}
 
+    \newpage
+
+    \textbf{Analyse Monitoring Funktion} \\
+
+    \textbf{Ohne TraceSentry:} \\
     \\
 
-    \subsubsection{Analyse Monitoring Funktion}
+    Erläuterung: Der Benutzer speichert hierbei für eine Woche, 6 Mal am Tag manuell die Datei (als Snapshot) in einen dafür vorgesehenen Ordner.
+    \begin{align*}
+        \text{Manueller Snapshot erstellen}&: \text{Datei in einen Ordner speichern}\\
+        \text{Snapshots vergleichen}&: \text{zwei aufeinander folgende Snapshots vergleichen} \\
+        \text{Aufgabendauer ohne SW} &= \text{6 * 7 * (Manueller Snapshot erstellen + Snapshots vergleichen)} \\
+        &= 6 * 7 * (10s + 20s) \\
+        &= 1260s \\
+        &= 21min \\
+    \end{align*}
+
+    \textbf{Mit TraceSentry:} \\
+    \begin{align*}
+        \text{Aufgabendauer mit SW} &= \text{6 * 7 * Snapshot erstellen} \\
+        &= 6 * 7 * 600ms \\
+        &= 25200ms \\
+        &\approx 25s \\
+    \end{align*}
+
+    \text{\textbf{Produktivitätssteigerung:}} \\
+    \begin{align*}
+        \text{Zeitersparnis} &= 1260 - 25 = 1235s \\
+        &\approx 20.58min \\
+        \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx 0.63 \text{CHF/Minute} \\
+        \text{Gesamtkostenersparnis} &= 20.58 * 0.63 \text{CHF/Minute} \\ &= 12.9654 \text{ CHF (pro überwachte Datei)} \\
+        \\
+        \text{Produktivitätssteigerung} &= \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}}
+        \\ &= \frac{\text{1235}}{\text{1260}}
+        \\ &\approx 98\%
+    \end{align*}
+
 
     \clearpage
 
