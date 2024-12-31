@@ -15,8 +15,8 @@
 \usepackage{rotating}
 
 \lstset{
-    backgroundcolor=\color{black}, % Black background
-    basicstyle=\ttfamily\small\color{white}, % Monospace font, white text
+    backgroundcolor=\color{lightgray}, % Black background
+    basicstyle=\ttfamily\small\color{black}, % Monospace font, white text
     frame=single, % Box around the code
     rulecolor=\color{gray}, % Border color
     breaklines=true, % Allow breaking long lines
@@ -1204,7 +1204,7 @@ buildTreeRecursively(parent, snapshot, files):
     Dieser wird im Vorfeld aus der Umgebungsvariable \texttt{OPENAI\_API\_KEY} ausgelesen.
     Die Anfrage ist wie folgt strukturiert:
 
-    \begin{lstlisting}[language=json,label={lst:openai-request}]
+    \begin{lstlisting}[language=json,caption={OpenAI Anfrage},label={lst:openai-request}]
     {
       "model": "gpt-4o-mini",
       "messages": [
@@ -1224,8 +1224,7 @@ buildTreeRecursively(parent, snapshot, files):
     Die Antwort der OpenAI Schnittstelle ist deutlich umfangreicher und enthält neben der eigentlichen Antwort auch Metadaten.
     Für die Analyse wird lediglich der Antworttext benötigt, welcher aus der JSON-Response extrahiert wird.
 
-    TODO: ist das für das Code-Verzeichnis?
-    \begin{lstlisting}[language=json,label={lst:openai-response}]
+    \begin{lstlisting}[language=json,caption={OpenAI Antwort},label={lst:openai-response}]
     {
       "choices": [
         {
@@ -1245,8 +1244,6 @@ buildTreeRecursively(parent, snapshot, files):
     Das Benutzer-Prompt beinhaltet den absoluten Pfad im Dateisystem sowie den gesamten Inhalt der zu analysierenden Datei.
 
     \clearpage
-    System-Prompt: TODO mit anderen listings abgleichen, DESIGN
-
     \begin{lstlisting}[label={lst:system-prompt}]
 You will receive the entire file content, including its name
 and path. These are typically log or cache files. Your task
