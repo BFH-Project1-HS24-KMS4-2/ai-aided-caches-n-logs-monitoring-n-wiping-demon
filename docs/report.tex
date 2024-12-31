@@ -178,7 +178,7 @@
     Dazu gehören vor allem die Suche und Überwachung von Dateien.
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
-    Zurückpriorisierte Funktioalitäten, sowie Erweiterungen werden im Kapitel \nameref{sec:zukunftigearbeiten} beschrieben.
+    Zurückpriorisierte Funktioalitäten, sowie Erweiterungen werden im Kapitel~\nameref{sec:zukunftigearbeiten} beschrieben.
 
 
     \chapter{Spezifikation}\label{ch:spezifikation}
@@ -196,9 +196,9 @@
     Verdächtige Dateien können durch eine KI-gestützte Analyse bewertet und anschliessend geleert oder gelöscht werden.
 
     \subsubsection{Softwarekomponenten}
-    Die System- sowie Softwarearchitektur wurde im Rahmen dieser Arbeit entworfen und grundlegende Entscheide im Kapitel \nameref{subsec:technische-variantenentscheide} festgehalten.
+    Die System- sowie Softwarearchitektur wurde im Rahmen dieser Arbeit entworfen und grundlegende Entscheide im Kapitel~\nameref{subsec:technische-variantenentscheide} festgehalten.
     Alle Softwarekomponenten wurden in Java unter der Verwendung des Spring-Frameworks entwickelt.
-    Die endgültig erarbeitete Architektur wird im Kapitel \nameref{subsec:loesungsarchitektur} beschrieben.
+    Die endgültig erarbeitete Architektur wird im Kapitel~\nameref{subsec:loesungsarchitektur} beschrieben.
     Nachfolgend eine vereinfachte Übersicht der Softwarekomponenten:
 
     \begin{figure}[h]
@@ -207,7 +207,7 @@
         \caption{Softwarekomponenten (High-Level)}
         \label{fig:komponenten-grob}
     \end{figure}
-    Die Bereitstellung und Laufzeitumgebung des Systems wird im Kapitel \nameref{chap:bereitstellung-integration} beschrieben.
+    Die Bereitstellung und Laufzeitumgebung des Systems wird im Kapitel~\nameref{chap:bereitstellung-integration} beschrieben.
 
     \subsubsection{Hardwarekompatibilität}
     Der TraceSentry ist ein eigenständiges, plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
@@ -222,21 +222,21 @@
     Im Rahmen der Anforderungsspezifikation wurde eine Benutzerschnittstelle in Form eines Command-Line-Interfaces (CLI) spezifiziert.
     Im Hinblick auf Erweiterung und Wartbarkeit ist die Benutzerschnittstelle logisch von der Geschäftslogik getrennt.
     Aufgrund dessen wurde die Benutzerschnittstelle als eigenständige Laufzeiteinheit definiert und entwickelt.
-    Die Kommunikation zwischen CLI und Daemon erfolgt über eine REST-API.
-    Diese Wahl wurde im Kapitel \nameref{subsec:technische-variantenentscheide} begründet.
+    Die Kommunikation zwischen CLI und Daemon erfolgt über eine REST-API\@.
+    Diese Wahl wurde im Kapitel~\nameref{subsec:technische-variantenentscheide} begründet.
 
     \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
     Die Datenbank wird für die Persistierung von Überwachsungs-Metadaten sowie -Ergebnissen verwendet.
     Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank.
-    Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel \nameref{subsubsec:technologieentscheid} und \nameref{subsubsec:realisierung-datenbank} beschrieben.
+    Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
     Gemäss Anforderungsspezifikation wird ein KI-Modell zur Bewertung von Dateien eingebunden.
     Die Entwicklung eines eigenen KI-Modells war nicht Teil dieser Arbeit.
     Stattdessen wurde das KI-Modell \textit{GPT-4o mini} von OpenAI verwendet.
-    Die Anbindung an das KI-Modell wird im Kapitel \nameref{subsubsec:ki-anbindung} beschrieben.
+    Die Anbindung an das KI-Modell wird im Kapitel~\nameref{subsubsec:ki-anbindung} beschrieben.
     Zudem wurde eine Fallstudie zur Evaluation des Potentials eines aktuellen KI-Modells im Kontext des TraceSentry durchgeführt.
-    Die Vorgehensweise sowie die Resultate dieser Fallstudie sind im Kapitel \nameref{sec:ki-fallstudie} dokumentiert.
+    Die Vorgehensweise sowie die Resultate dieser Fallstudie sind im Kapitel~\nameref{sec:ki-fallstudie} dokumentiert.
 
     \clearpage
 
@@ -262,7 +262,7 @@
     Die Interaktion mit dem Dateisystem ist nicht modelliert.
 
     Der Prozess ist für andere Funktionen des Systems identisch, weswegen auf weitere Modellierung verzichtet wird.
-    Relevant für alle Prozesse ist die Kommunikation zwischen Benutzer und Daemon via CLI.
+    Relevant für alle Prozesse ist die Kommunikation zwischen Benutzer und Daemon via CLI\@.
     Je nach Funktion interagiert der Daemon-Prozess mit dem Dateisystem, der Datenbank und dem KI-Modell.
 
     \begin{figure}[h]
@@ -287,7 +287,7 @@
     \end{figure}
 
     \subsubsection{Fehlerbehandlung}
-    Wie in der Abbildung \ref{fig:communication} ersichtlich, werden Fehler grundsätzlich auf zwei Ebenen behandelt.
+    Wie in der Abbildung~\ref{fig:communication} ersichtlich, werden Fehler grundsätzlich auf zwei Ebenen behandelt.
 
     \paragraph*{CLI}
     Syntaktische oder semantische Fehler eines Kommandos werden durch die CLI behandelt.
@@ -303,7 +303,7 @@
 
 
     \section{Anforderungen}\label{sec:anforderungen}
-    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang \ref{sec:originale-projektbeschreibung}).
+    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang~\ref{sec:originale-projektbeschreibung}).
     sowie einem initialen Termin mit Herr Kramer.
 
     \subsection{Funktionale Anforderungen}\label{subsec:funktionale-anforderungen}
@@ -323,7 +323,7 @@
         \item Das System kann angegebene Dateien leeren oder löschen.
     \end{itemize}
     Auf die detaillierte Darstellung aller User Stories wird bewusst verzichtet.
-    Der Einsatz von Scrum als agile Arbeitsmethode wird im Kapitel \nameref{sec:prozesse} beschrieben.
+    Der Einsatz von Scrum als agile Arbeitsmethode wird im Kapitel~\nameref{sec:prozesse} beschrieben.
 
     \newpage
 
@@ -400,7 +400,7 @@
             \textbf{Beschreibung} & Minimaler, modularer und selbserklärender Code \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
-                \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B. GUI)
+                \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B.\ GUI)
                 \item Tests gemäss Testkonzept.
                 \item Statische Analysen zeigen keine schwerwiegenden verstösse gegen Linting-Regeln.
                 \item Anwendungen von gängigen Design-Prinzipen vie SOLID, DRY, KISS etc.
@@ -416,10 +416,10 @@
     \begin{itemize}
         \item \textbf{KI-Modell}: Im Rahmen dieser Arbeit wurde nur das KI-Modell \textit{GPT-4o mini} von OpenAI integriert.
         Mit diesem lassen sich Dateien von knapp 128'000 Token bzw. rund 320'000 Zeichen analysieren.
-        (siehe \nameref{subsec:erweiterung-der-ki-modelle})
-        \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB.
+        (siehe~\nameref{subsec:erweiterung-der-ki-modelle})
+        \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB\@.
         Diese Limitation hängt mit der Java Files API zusammen.
-        (siehe \nameref{subsec:dateikompatibilitat})
+        (siehe~\nameref{subsec:dateikompatibilitat})
     \end{itemize}
 
     \subsubsection{Voraussetzungen}
@@ -437,7 +437,7 @@
     \subsubsection{Ziel des Testkonzepts}
     \begin{itemize}
         \item Sicherstellen, dass das gesamte System stabil läuft und seine Hauptfunktionen zuverlässig verfügbar sind.
-        \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z. B. kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
+        \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z.B.\ kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
         \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
         \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
     \end{itemize}
@@ -778,7 +778,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \paragraph*{Vorteile}
     \begin{itemize}
-        \item Integration in Java: Optimiert für Java-Anwendungen und unterstützt JDBC.
+        \item Integration in Java: Optimiert für Java-Anwendungen und unterstützt JDBC\@.
         \item Vielseitigkeit: Kann als eingebettete oder serverbasierte Datenbank eingesetzt werden.
         \item Erweiterte Funktionen: Unterstützung für in-memory-Datenbanken und Multi-Threaded-Betrieb.
     \end{itemize}
@@ -910,7 +910,7 @@ schädlich, also empfehle ich es zu leeren.
     Der Rest Adapter kapselt Funktionen zur Interaktion mit der REST-Schnittstelle.
 
     \subsubsection{Rest Controller}
-    Der Rest Controller implementiert die Endpunkte der REST-Schnittstelle gemäss API-Spezifikation. TODO Querverweis
+    Der Rest Controller implementiert die Endpunkte der REST-Schnittstelle gemäss API-Spezifikation. % TODO Querverweis
 
     \subsubsection{Domain Service}
     Der Domain Service implementiert die Applikations- bzw.\ Geschäftslogik.
@@ -960,7 +960,7 @@ schädlich, also empfehle ich es zu leeren.
     \subsubsection{Frontend (CLI)}
     \paragraph*{Beispiel Komponenteninteraktion}
     Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss der~\nameref{subsec:loesungsarchitektur}.
-    In diesem Fall handelt es sich um das Inspect Kommando (siehe Benutzerhandbuch). TODO Querverweis
+    In diesem Fall handelt es sich um das Inspect Kommando (siehe Benutzerhandbuch). % TODO Querverweis
     Die Klasse InspectCommand ist Teil der Shell (siehe~\nameref{subsubsec:shell}). Der DaemonAdapter ist die Implementation des RestAdapters (siehe~\nameref{subsubsec:rest-adapter}).
     \begin{figure}[h]
         \centering
@@ -1733,7 +1733,7 @@ monitoring database.
             \textbf{Beschreibung}        & Leeren und Löschen einer Datei   \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
-                \item Datei unter [PFAD] ist nicht geschützt. (z.B. durch Berechtigungen)
+                \item Datei unter [PFAD] ist nicht geschützt. (z.B.\ durch Berechtigungen)
                 \item Daemon läuft
             \end{itemize} \\ \hline
             \textbf{Ablauf} &
@@ -2061,7 +2061,7 @@ monitoring database.
     Darüber hinaus ermöglicht generative KI eine effiziente Verarbeitung und Interpretation von Textdaten, was sie zu einer idealen Wahl für den Anwendungsfall von TraceSentry macht.
 
     \subsubsection{OpenAI GPT-4o mini}\label{subsubsec:openai-gpt-4o}
-    Die Wahl des KI-Modells fiel auf das GPT-4o mini Modell von OpenAI.
+    Die Wahl des KI-Modells fiel auf das GPT-4o mini Modell von OpenAI\@.
     Dieses Modell befindet sich zusammen mit den Modellen GPT-4o, o1 und o1-mini im Flagship-Portfolio von OpenAI (Stand September 2024).
     Es ist zudem das aktuelle Standardmodell auf \url{https://chatgpt.com/} und ohne Einschränkung im Gratis-Tarif verfügbar.
     Die genaue Modellbezeichnung lautet \texttt{gpt-4o-mini-2024-07-18}, wobei o für \textit{omni} steht, was den breiten Anwendungsbereich des Modells beschreibt.
@@ -2083,7 +2083,7 @@ monitoring database.
 
     \subsubsection{Praxisbeispiel}\label{subsubsec:praxisbeispiel}
     Nachfolgend eine Zeile aus einer Webserver-Logdatei:
-    \begin{verbatim}[Thu Jul 07 07:54:05 2005] [error] [client 221.203.160.2] Directory
+    \begin{verbatim}[Thu Jul 07--07:54:05 2005] [error] [client 221.203.160.2] Directory
 index forbidden by rule: /var/www/html/
     \end{verbatim}
     Diese 107 Zeichen lange Zeile entspricht 40 Tokens.
@@ -2214,8 +2214,8 @@ index forbidden by rule: /var/www/html/
     Insgesamt wurde für alle 7 Log-Typen folgende Anzahl an Testdateien generiert:
     \begin{itemize}
         \item 2 normale Testdateien ohne Anomalien
-        \item 2 Testdateien mit seltenen Anomalien (alle 40-60 Zeilen)
-        \item 2 Testdateien mit häufigeren Anomalien (alle 18-25 Zeilen)
+        \item 2 Testdateien mit seltenen Anomalien (alle 40--60 Zeilen)
+        \item 2 Testdateien mit häufigeren Anomalien (alle 18--25 Zeilen)
     \end{itemize}
     Dies führte zu insgesamt 42 generierten Testdateien.
     Dazu wurden 2 normale sowie 2 anomale (häufig) Logdateien aus der Gitlab CI/CD Pipeline verwendet.
