@@ -178,7 +178,7 @@
     Dazu gehören vor allem die Suche und Überwachung von Dateien.
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
-    Zurückpriorisierte Funktioalitäten, sowie Erweiterungen werden im Kapitel~\nameref{sec:zukunftigearbeiten} beschrieben.
+    Zurück priorisierte Funktionalitäten, sowie Erweiterungen werden im Kapitel~\nameref{sec:zukunftigearbeiten} beschrieben.
 
 
     \chapter{Spezifikation}\label{ch:spezifikation}
@@ -226,7 +226,7 @@
     Diese Wahl wurde im Kapitel~\nameref{subsec:technische-variantenentscheide} begründet.
 
     \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
-    Die Datenbank wird für die Persistierung von Überwachsungs-Metadaten sowie -Ergebnissen verwendet.
+    Die Datenbank wird für die Persistierung von Überwachungs-Metadaten sowie -Ergebnissen verwendet.
     Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank.
     Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
@@ -324,7 +324,7 @@
         (inkl. Unterverzeichnisse)
         \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
         Unterverzeichnisse nach Log- oder Cache-Dateien.
-        \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinerander zu vergleichen.
+        \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinander zu vergleichen.
         \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
         \item Das System bewertet Dateien nach deren Schädlichkeit und gibt eine Empfehlung ab, ob die Datei gelöscht oder geleert werden soll.
         \item Das System kann angegebene Dateien leeren oder löschen.
@@ -336,7 +336,7 @@
 
     \subsection{Grenz- und Vorbedingungen}
 
-    \subsubsection{Nichfunktionale Anforderungen}\label{subsubsec:nichtfunktionale-anforderungen}
+    \subsubsection{Nichtfunktionale Anforderungen}\label{subsubsec:nichtfunktionale-anforderungen}
     Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw.
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
     Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
@@ -404,7 +404,7 @@
             \hline
             \textbf{ID}           & NFR-004                                        \\ \hline
             \textbf{Anforderung}  & Codequalität \& erweiterbare Architektur       \\ \hline
-            \textbf{Beschreibung} & Minimaler, modularer und selbserklärender Code \\ \hline
+            \textbf{Beschreibung} & Minimaler, modularer und selbsterklärender Code \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
                 \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B.\ GUI)
@@ -535,7 +535,7 @@ internal/cache.json
         \end{verbatim}
 
         \item \textbf{Dateien überwachen}\\
-        Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innnerhalb des Programmverzeichnisses genauer überwachen.
+        Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innerhalb des Programmverzeichnisses genauer überwachen.
         Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
 
         \item \textbf{Snapshots vergleichen}\\
@@ -920,7 +920,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsubsection{Domain Service}
     Der Domain Service implementiert die Applikations- bzw.\ Geschäftslogik.
-    Dazu gehört Serverseitige Validierung, Datenverarbeitung und -persistierung.
+    Dazu gehört Serverseitige Validierung, Datenverarbeitung und -Persistierung.
 
     \subsubsection{Operations Scheduler}
     Der Monitoring Scheduler führt periodisch Operationen aus.
@@ -1087,7 +1087,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \paragraph*{Linearisierung}
 
-    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persisitieren.
+    Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persistieren.
     Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
 
     \clearpage
@@ -1478,7 +1478,7 @@ file content:
                 \item Erwartet: \begin{verbatim}daemon is running
                 \end{verbatim}
             \end{enumerate} \\ \hline
-            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gesartet. \\ \hline
+            \textbf{Erwartetes Ergebnis} & Daemon wird via Autostart gestartet. \\ \hline
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-002}\label{tab:e2e-2}
     \end{table}
@@ -2059,7 +2059,7 @@ monitoring database.
         Obwohl einzelne Logdateien strukturiert sind, ist die Gesamtheit verschiedener Logdateien unstrukturiert und schwer zu interpretieren bzw. übergreifende Muster zu erkennen.
         \item sie in der Lage ist, grundlegende semantische Zusammenhänge zu erkennen und dadurch sensible oder schädliche Informationen zu identifizieren.
         \item die Popularität und der breite Einsatz von Modellen wie ChatGPT darauf hinweisen, dass generative KI eine vielversprechende Technologie ist und breite Anwendungsfälle hat.
-        \item ein praxisnaher Anwendungsfall evaluiert werden sollte, um die Grenzen und Möglichkeiten von aktuellen KI-Techologien zu untersuchen.
+        \item ein praxisnaher Anwendungsfall evaluiert werden sollte, um die Grenzen und Möglichkeiten von aktuellen KI-Technologien zu untersuchen.
     \end{itemize}
     Darüber hinaus ermöglicht generative KI eine effiziente Verarbeitung und Interpretation von Textdaten, was sie zu einer idealen Wahl für den Anwendungsfall von TraceSentry macht.
 
@@ -2134,7 +2134,7 @@ index forbidden by rule: /var/www/html/
             \begin{itemize}
                 \item SQL-Injektion
                 \item Ungültiger Statuscode
-                \item Unauthorisierter Zugriff
+                \item Unautorisierter Zugriff
             \end{itemize} \\ \hline
 
             \textnormal{System} &
@@ -2149,7 +2149,7 @@ index forbidden by rule: /var/www/html/
             \end{itemize} &
             \begin{itemize}
                 \item Kernel Panic
-                \item Unauthorisierter Zugriff
+                \item Unautorisierter Zugriff
             \end{itemize} \\ \hline
 
             \textnormal{MySQL} &
@@ -2170,7 +2170,7 @@ index forbidden by rule: /var/www/html/
                 \item Packet Abgelehnt
             \end{itemize} &
             \begin{itemize}
-                \item Unauthorisierter Zugriff
+                \item Unautorisierter Zugriff
                 \item Port-Scanning
                 \item DoS-Attacke
             \end{itemize} \\ \hline
@@ -2182,7 +2182,7 @@ index forbidden by rule: /var/www/html/
             \end{itemize} &
             \begin{itemize}
                 \item Brute Force
-                \item Unauthorisierter Zugriff
+                \item Unautorisierter Zugriff
             \end{itemize} \\ \hline
 
             \textnormal{SMTP} &
@@ -2206,7 +2206,7 @@ index forbidden by rule: /var/www/html/
                 \item Image-Pull fehlgeschlagen
                 \item Speicherlimit erreicht
                 \item Speicherplatz niedrig
-                \item Unauthorisierter Zugriff
+                \item Unautorisierter Zugriff
             \end{itemize} \\ \hline
 
         \end{tabular}
@@ -2457,7 +2457,7 @@ echo ts run >> ~/.zprofile
         Der Unterschied besteht darin, dass beim interaktiven Modus zu Beginn ein einziges Mal die CLI mit einer neuen Session gestartet wird und
         dann alle folgenden Befehle in dieser Session/Laufzeit ausgeführt werden.
         Dieser interaktive Modus wird gestartet, indem in einem Host-Terminal nur der Befehl \texttt{ts} ausgeführt wird.
-        Hingegegen wird beim nicht-interaktiven Modus die gesamte CLI-Applikation bei jedem Befehl neu gestartet und nach dessen beendeter Ausführung auch direkt wieder beendet.
+        Hingegen wird beim nicht-interaktiven Modus die gesamte CLI-Applikation bei jedem Befehl neu gestartet und nach dessen beendeter Ausführung auch direkt wieder beendet.
         Der nicht-interaktive Modus wird gestartet, indem in einem Host-Terminal der Befehl \texttt{ts <Befehl>} ausgeführt wird.
         \item Im TraceSentry ist ein \texttt{help}-Befehl eingebaut, welcher eine Übersicht über alle verfügbaren Befehle und deren Verwendung anzeigt.
         Dieser Befehl wird genau gleich wie alle anderen Befehle ausgeführt, indem im Host-Terminal \texttt{ts help} eingegeben wird.
@@ -2474,7 +2474,7 @@ echo ts run >> ~/.zprofile
     Das Projekt hat die Relevanz der Problematik im Umgang mit Cache- und Log-Dateien aufgezeigt und eine erste Lösung erarbeitet, mit der ein Anwender die Integrität dieser Dateien überwachen kann.
     Die Nutzung von generativen KI-Modellen zur Analyse von solchen Dateien hat sich dabei als effektives Mittel erwiesen, um Anomalien zu erkennen und einzuordnen.
 
-    Die Verwendug ebendieser KI-Modelle regt aber auch neue Diskussionen an, insbesondere im Hinblick auf den Datenschutz und die Privatsphäre.
+    Die Verwendung ebendieser KI-Modelle regt aber auch neue Diskussionen an, insbesondere im Hinblick auf den Datenschutz und die Privatsphäre.
     Denkt man an das Kernproblem - dem Schutz von sensiblen Daten - so ist die Verwendung eines kommerziellen und proprietären KI-Modells wie es die GPT-Modelle sind, durchaus kritisch zu betrachten
     und regen im Grunde das selbe Problem an, das sie eigentlich lösen sollen.
 
@@ -2638,7 +2638,7 @@ echo ts run >> ~/.zprofile
     Insbesondere eine grafische Benutzeroberfläche (GUI) könnte die Benutzerfreundlichkeit des Systems erheblich verbessern und die Zielgruppe erweitern.
     Die REST-Schnittstelle des Daemons bietet die notwendige Flexibilität dafür.
 
-    In Belagen der Benutzerfreundlichkeit wäre ausserdem eine Verbesserung der Fehlermeldungen (mit besserem Exceptionhandling) in Betracht zu ziehen.
+    In Belangen der Benutzerfreundlichkeit wäre ausserdem eine Verbesserung der Fehlermeldungen (mit besserem Exceptionhandling) in Betracht zu ziehen.
 
     \clearpage
 
