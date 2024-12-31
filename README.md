@@ -1,7 +1,5 @@
 # Project 1 AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon
 
-**License**: FLOSS (Free/Libre and Open Source Software)
-
 ## Project Overview
 
 The Cache-n-Log Wiper is a platform-independent tool designed to monitor and manage the cache and log files on your
@@ -10,6 +8,7 @@ This project aims to help users regain control over their computer's file system
 
 ## Features
 
+- **Search**: Allows users to search for log/cache-files or specific files with a given pattern within the file system.
 - **Monitoring**: Tracks cache and log files within the file system.
 - **AI Integration**: Analyzes files to understand their utility and whether deletion is recommended.
 - **File Wiping/Deletion**: Securely wipes or deletes files based on AI recommendations and user approval.
@@ -32,8 +31,10 @@ As a prerequisite, a Java runtime environment must already be installed on the c
    ```
    PATH=$PATH:$TRACE_SENTRY_DIR
    ```
-4. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
-   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+4. If you want to use the inspection feature, create an OpenAI API key by following the instructions
+   at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI
+   API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
    Then set the generated API key as an environment variable at the end of the file `/etc/profile`:
     ```
     export OPENAI_API_KEY=<generated API-KEY>
@@ -50,6 +51,7 @@ As a prerequisite, a Java runtime environment must already be installed on the c
 6. After a system restart you are ready to use TraceSentry.
 
 ### Windows
+
 1. Browse the latest artifact built by the main branch from this repository and download
    the `target/tracesentry-<version>-submission.zip` to your machine.
 2. Extract the archive to your desired installation directory for TraceSentry.
@@ -62,24 +64,29 @@ As a prerequisite, a Java runtime environment must already be installed on the c
     $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
     [System.Environment]::SetEnvironmentVariable("Path", "$currentPath;<absolute path to the installation directory>", "User")
     ```
-5. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
-   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+5. If you want to use the inspection feature, create an OpenAI API key by following the instructions
+   at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI
+   API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
    Then set the generated API key as an environment variable via PowerShell:
     ```powershell
     [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generated API key>", "User")
     ```
    If you skip this step, you will not have access to the inspection feature.
-6. If you want the daemon to start automatically in the background at system startup, copy the file `ts-daemon.bat` from the installation directory to the Startup folder:
+6. If you want the daemon to start automatically in the background at system startup, copy the file `ts-daemon.bat` from
+   the installation directory to the Startup folder:
     ```powershell
     Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
     ```
    On the next system startup, the daemon will start automatically.
-   The first time you start it, a security warning may appear, in which you will need to uncheck a checkbox to prevent it from appearing again in the future.
+   The first time you start it, a security warning may appear, in which you will need to uncheck a checkbox to prevent
+   it from appearing again in the future.
 7. Restart the terminal, and you are ready to use TraceSentry.
 
-
 ### macOS
-For simplicity, only configurations in the .zprofile file are used here. The following commands write the configurations directly to the file.
+
+For simplicity, only configurations in the .zprofile file are used here. The following commands write the configurations
+directly to the file.
 
 1. Browse the latest artifact built by the main branch from this repository and download
    the `target/tracesentry-<version>-submission.zip` to your machine.
@@ -90,8 +97,10 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
    echo export TRACE_SENTRY_DIR="<absolute path to installation dir>" >> ~/.zprofile
    echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
    ```
-4. If you want to use the inspection feature, create an OpenAI API key by following the instructions at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
-   Add credit to your account to use the OpenAI API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
+4. If you want to use the inspection feature, create an OpenAI API key by following the instructions
+   at [OpenAI API keys](https://platform.openai.com/settings/organization/api-keys).
+   Add credit to your account to use the OpenAI
+   API: [OpenAI billing overview](https://platform.openai.com/settings/organization/billing/overview).
    The following command will add the API-KEY to the `~/.zprofile` file:
     ```
     echo export OPENAI_API_KEY=<generated API-KEY> >> ~/.zprofile
@@ -103,7 +112,8 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
    echo ts run >> ~/.zprofile
    ```
    This is recommended as the most pragmatic solution. Alternatively, you can also use launchd.
-6. Restart the terminal. If you followed step 5, the daemon will start automatically. You are now ready to use TraceSentry.
+6. Restart the terminal. If you followed step 5, the daemon will start automatically. You are now ready to use
+   TraceSentry.
 
 ## Usage
 
@@ -112,8 +122,8 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
 ## Technologies Used
 
 - OpenAI GPT-4o mini
-- File System Management
-- Java
+- Java/Spring/Maven
+- SQLite/H2
 
 ## Contribution
 
@@ -124,7 +134,7 @@ For simplicity, only configurations in the .zprofile file are used here. The fol
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License: [LICENSE](./LICENSE)
 
 ## Contact
 
