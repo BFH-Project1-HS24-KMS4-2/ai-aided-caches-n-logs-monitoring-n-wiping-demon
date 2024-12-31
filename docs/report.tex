@@ -151,7 +151,8 @@
     geboten werden.
 
     \subsection{Antrag}\label{subsec:stakeholder}
-    Das Projekt-Proposal TODO Querverweis umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt,
+    Das Projekt-Proposal % TODO Querverweis
+    umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt,
     andererseits das Ermitteln des Potentials aktueller KI-Modelle zur Lösung des genannten Problems.\\
     Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
 
@@ -456,10 +457,11 @@
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
         \begin{itemize}
             \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
-            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren. (Happy- sowie Exception-Paths)
+            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren.
+            (Happy- sowie Exception-Paths)
         \end{itemize}
         \item \textbf{End-to-End Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
-        (Siehe \nameref{sec:manuelle-end-2-end-tests})
+        (Siehe~\nameref{sec:manuelle-end-2-end-tests})
     \end{itemize}
 
     \subsubsection{Test-Setup und -Konfiguration}
@@ -1275,7 +1277,7 @@ necessary.]
     Diese System-Prompt beschreibt bereits die zu erwartende Struktur der Benutzer-Prompt, wie auch die zu erwartende Antwortstruktur.
     Dank dieser ausführlichen System-Prompt erfolgen die Antworten des Modells zuverlässig und konsistent (siehe~\nameref{sec:ki-fallstudie}).
 
-    Benutzer-Prompt: TODO mit anderen listings abgleichen, DESIGN
+    Benutzer-Prompt: % TODO mit anderen listings abgleichen, DESIGN
     \begin{lstlisting}[label={lst:user-prompt}]
 file path: <absoluter Pfad>
 file content:
@@ -2510,6 +2512,7 @@ echo ts run >> ~/.zprofile
     Administrationsbefehle wie \texttt{kill}, \texttt{run} etc.\ werden ebenfalls nicht betrachtet, diese sind \("\)Mittel zum Zweck\("\) und es gibt logischerweise keine äquivalenten Vorgänge ohne die Software.
 
     \clearpage
+
     \subsubsection{Berechnung}
 
     \paragraph*{Annahmen}
