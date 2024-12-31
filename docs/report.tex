@@ -310,11 +310,18 @@
 
     Alle funktionalen Anforderungen werden in Form von User Stories im Scrum Product Backlog geführt.
     Dieser wird laufend erweitert beziehungsweise konkretisiert.
-    Nachfolgend wurden die grundlegenden Anforderungen an das System definiert.
-    Diese wurden konkretisiert, aufgebrochen und in User Stories inkl. Akzeptanzkriterien abgebildet:
+    Nachfolgend werden die grundlegenden Anwendungsfälle aus Benutzersicht aufgezeigt.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{assets/usecase}
+        \caption{Anwendungsfälle (UML Use Case Diagram)}
+        \label{fig:usecase}
+    \end{figure}
+    Die Anwendungsfälle wurden in folgende Hauptanforderungen an das System übersetzt,
+    welche laufend konkretisiert, aufgebrochen und in User Stories inkl. Akzeptanzkriterien abgebildet wurden.
     \begin{itemize}
         \item Das System findet jegliche Dateien (insbesondere Log- und Cache-Dateien), welche sich in einem angegebenen Verzeichnis befinden.
-        Dabei werden auch alle Unterverzeichnisse berücksichtigt.
+        (inkl. Unterverzeichnisse)
         \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
         Unterverzeichnisse nach Log- oder Cache-Dateien.
         \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinerander zu vergleichen.
@@ -436,25 +443,23 @@
 
     \subsubsection{Ziel des Testkonzepts}
     \begin{itemize}
-        \item Sicherstellen, dass das gesamte System stabil läuft und seine Hauptfunktionen zuverlässig verfügbar sind.
-        \item Minimales Testing-Setup, das nur dort Unit-Tests verwendet, wo es Sinn ergibt (z.B.\ kritische Algorithmen), um den Entwicklungsaufwand gering zu halten.
+        \item Sicherstellen, dass das gesamte System stabil betrieben werden kann und seine Hauptfunktionen zuverlässig verfügbar sind.
+        \item Minimales Testing-Setup, um den Entwicklungsaufwand gering zu halten.
         \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
         \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
     \end{itemize}
 
     \subsubsection{Testarten und Testabdeckung}
     \begin{itemize}
-        \item \textbf{Unit-Tests}: Nur für kritische, isolierbare Logiken wie:
-        \begin{itemize}
-            \item \textbf{Hash-Algorithmen}: Test der Konsistenz und Korrektheit, insbesondere, wenn Hashes fürs Verzeichnis Monitoring verwendet werden.
-            \item \textbf{File-Suche}: Suchalgorithemen für Log- oder Cache-Dateien.
-        \end{itemize}
+        \item \textbf{Unit-Tests}: Auf Unit-Tests wird verzichtet und eine möglichst hohe Code-Coverage durch Integrationstests angestrebt.
+        In konkreten Fällen wie Funktionen für die Such- und Überwachungsfunktionalität, können Unit-Tests für isolierte Logik implementiert werden.
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
         \begin{itemize}
             \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
             \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren. (Happy- sowie Exception-Paths)
         \end{itemize}
         \item \textbf{End-to-End Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
+        (Siehe \nameref{sec:manuelle-end-2-end-tests})
     \end{itemize}
 
     \subsubsection{Test-Setup und -Konfiguration}
@@ -1414,8 +1419,8 @@ file content:
     \chapter{Evaluation und Tests}
 
 
-    \section{Manuelle End-2-End Tests}
-    Wie durch das Testkonzept definiert, wurden die End-2-End Tests mehrmals manuell durchgeführt.
+    \section{Manuelle End-2-End Tests}\label{sec:manuelle-end-2-end-tests}
+    Wie durch das Testkonzept definiert, wurden die End-2-End Tests auf mehreren Endgeräten manuell durchgeführt.
 
     \subsection{Testfälle}
 
