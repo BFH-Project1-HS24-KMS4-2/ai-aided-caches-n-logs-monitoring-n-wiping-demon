@@ -2437,6 +2437,22 @@ echo ts run >> ~/.zprofile
 
     \section{Benutzerhandbuch}
     \label{sec:user-manual}
+    In diesem Abschnitt soll der Nutzer eine Anleitung für die Verwendung des TraceSentry-Systems erhalten.
+    Dazu hier der Verweis auf die CLI-Dokumentation im Anhang~\ref{sec:cli-doc}.
+    \\
+    Vorab noch einige Hinweise zur Verwendung des Systems:
+    \begin{itemize}
+        \item Der TraceSentry kann sowohl im interaktiven Modus, sowie auch im nicht-interaktiven Modus verwendet werden.
+        Der Unterschied besteht darin, dass beim interaktiven Modus zu Beginn ein einziges Mal die CLI mit einer neuen Session gestartet wird und
+        dann alle folgenden Befehle in dieser Session/Laufzeit ausgeführt werden.
+        Dieser interaktive Modus wird gestartet, indem in einem Host-Terminal nur der Befehl \texttt{ts} ausgeführt wird.
+        Hingegegen wird beim nicht-interaktiven Modus die gesamte CLI-Applikation bei jedem Befehl neu gestartet und nach dessen beendeter Ausführung auch direkt wieder beendet.
+        Der nicht-interaktive Modus wird gestartet, indem in einem Host-Terminal der Befehl \texttt{ts <Befehl>} ausgeführt wird.
+        \item Im TraceSentry ist ein \texttt{help}-Befehl eingebaut, welcher eine Übersicht über alle verfügbaren Befehle und deren Verwendung anzeigt.
+        Dieser Befehl wird genau gleich wie alle anderen Befehle ausgeführt, indem im Host-Terminal \texttt{ts help} eingegeben wird.
+        Um genauere Informationen zu einem bestimmten Befehl des TraceSentry's zu erhalten kann nach dem \texttt{help}-Befehl auch der Name des gewünschten Befehls angegeben werden (z.B. \texttt{ts help monitor}).
+        \item Für die Verwendung mit \textbf{Windows} ist zu beachten, dass alle Pfade in den Befehlen mit \textbf{zwei} Backslash (\textbackslash) geschrieben werden müssen.
+    \end{itemize}
 
 
     \chapter{Fazit}
@@ -2664,6 +2680,15 @@ echo ts run >> ~/.zprofile
     }
     \vspace*{\fill}
     \includepdf[pages=-]{assets/lib_class_diag.png}
+
+    \vspace*{\fill}
+    \thispagestyle{empty}
+    \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+
+    \section{CLI Dokumentation}\label{sec:cli-doc}
+    \vspace*{\fill}
+    \includepdf[pages=-]{assets/cli-doc.pdf}
 
 
     \section{Erklärung zur Urheberschaft}

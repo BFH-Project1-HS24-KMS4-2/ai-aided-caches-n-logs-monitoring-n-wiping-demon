@@ -28,7 +28,7 @@ If the path is not provided, the command will attempt to infer the path from the
 
 #### Usage:
 ```bash
-ts run <path>
+  ts run <path>
 ```
 
 #### Parameters:
@@ -36,8 +36,8 @@ ts run <path>
 
 #### Examples:
 ```bash
-ts run ./path/to/daemon.jar # relative path unix 
-ts run C:\\Path\\To\\Daemon.jar # absolute path windows
+  ts run ./path/to/daemon.jar # relative path unix 
+  ts run C:\\Path\\To\\Daemon.jar # absolute path windows
 ```
 Success message:
 ```
@@ -54,16 +54,16 @@ Failed to start daemon.
 ---
 
 ### 2. `status`
-This command checks the status of the daemon process. 
+This command checks the status of the daemon process.
 
 #### Usage:
 ```bash
-ts status
+  ts status
 ```
 
 #### Example:
 ```bash
-ts status
+  ts status
 ```
 Output:
 ```
@@ -81,12 +81,12 @@ This command stops the daemon process if it is running.
 
 #### Usage:
 ```bash
-ts kill
+  ts kill
 ```
 
 #### Example:
 ```bash
-ts kill
+  ts kill
 ```
 Success message:
 ```
@@ -103,7 +103,6 @@ error killing daemon
 
 ---
 
-
 ### 4. `search`
 This command initiates a search operation in the specified directory. The search mode can be customized, and subdirectory scanning is enabled by default unless the `--no-subdirs` flag is set. Additionally, a regex pattern can be used to filter files when the `pattern` mode is selected.
 
@@ -115,10 +114,10 @@ ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-sub
 #### Parameters:
 - **`path`**: The full path to the directory you want to search. Either the relative path from the current directory or the absolute path can be used.
 - **`--mode`**: Defines the search mode:
-  - `log`: Search for log files.
-  - `cache`: Search for cache files.
-  - `full`: Search for both log and cache files (default).
-  - `pattern`: Search for files that match a custom regex pattern (requires `--pattern` parameter).
+    - `log`: Search for log files.
+    - `cache`: Search for cache files.
+    - `full`: Search for both log and cache files (default).
+    - `pattern`: Search for files that match a custom regex pattern (requires `--pattern` parameter).
 - **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
 - **`--no-subdirs`**: If this flag is present, the search will not include subdirectories (default is to search subdirectories).
 
@@ -136,6 +135,7 @@ ts search <path> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-sub
   ```bash
   ts search /path/to/directory --mode pattern --pattern ".*\.log$"
   ```
+
 Successful search:
 ```
 Listing 2 files in /path/to/directory...
@@ -146,6 +146,7 @@ Error message:
 ```
 Failed to search directory.
 ```
+
 #### Notes:
 - Ensure that the path you provide is absolute or relative to the current working directory.
 - If no mode is specified, the search defaults to `full` mode.
@@ -158,17 +159,17 @@ This command adds a specified path for monitoring. Paths added will be tracked f
 
 #### Usage:
 ```bash
-ts monitor add --path <path/to/monitor> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
+  ts monitor add --path <path/to/monitor> [--mode <log|cache|full|pattern>] [--pattern <regex>] [--no-subdirs]
 ```
 
 #### Parameters:
 - **`--path`**: The full path you want to add for monitoring. This can be a relative path from the current directory or an absolute path.
-It might be a directory or a specific file.
+  It might be a directory or a specific file.
 - **`--mode`**: Defines the monitoring mode:
-  - `log`: Monitor log files.
-  - `cache`: Monitor cache files.
-  - `full`: Monitor both log and cache files (default).
-  - `pattern`: Monitor files that match a custom regex pattern (requires `--pattern` parameter).
+    - `log`: Monitor log files.
+    - `cache`: Monitor cache files.
+    - `full`: Monitor both log and cache files (default).
+    - `pattern`: Monitor files that match a custom regex pattern (requires `--pattern` parameter).
 - **`--pattern`**: If the mode is set to `pattern`, this parameter defines the regular expression to match files.
 - **`--no-subdirs`**: If this flag is present, the monitoring will not include subdirectories (default is to monitor subdirectories).
 
@@ -182,23 +183,24 @@ It might be a directory or a specific file.
   ```bash
   ts monitor add --path File\\To\\Monitor\\cache.log # Windows
   ```
+
 Successful addition:
-  ```
-  Successfully added /path/to/monitor to the monitoring database.
-  ```
+```
+Successfully added /path/to/monitor to the monitoring database.
+```
 Exact path already monitored:
-  ```
-  Error: /path/to/monitor is already being monitored.
-  ```
+```
+Error: /path/to/monitor is already being monitored.
+```
 
 ---
-// TODO: fix list
+
 ### 6. `monitor list`
 This command retrieves and displays all paths currently being monitored. Each entry shows the ID, path, and date of addition.
 
 #### Usage:
 ```bash
-ts monitor list
+  ts monitor list
 ```
 
 #### Examples:
@@ -206,8 +208,9 @@ ts monitor list
   ```bash
   ts monitor list
   ```
+
 Example output:
-  ```
+```
 +----+------------------------------------+-------+----------+----------+----------+
 |ID  |path                                |mode   |pattern   |no-subdirs|created at|
 +----+------------------------------------+-------+----------+----------+----------+
@@ -217,11 +220,12 @@ Example output:
 +----+------------------------------------+-------+----------+----------+----------+
 |0003|C:\Users\CooolDude\IdeaProjects\_bfh|PATTERN|env       |false     |2024-11-27|
 +----+------------------------------------+-------+----------+----------+----------+ 
-  ```
+```
+
 If no paths are being monitored:
-  ```
-  No paths are currently being monitored.
-  ```
+```
+No paths are currently being monitored.
+```
 
 ---
 
@@ -230,7 +234,7 @@ This command removes a specified path from monitoring by its unique ID. The spec
 
 #### Usage:
 ```bash
-ts monitor remove --id <ID>
+  ts monitor remove --id <ID>
 ```
 
 #### Parameters:
@@ -241,14 +245,15 @@ ts monitor remove --id <ID>
   ```bash
   ts monitor remove --id 3210
   ```
+
 Successful removal:
-  ```
-  Successfully removed path with ID 3210 from the monitoring database.
-  ```
+```
+Successfully removed path with ID 3210 from the monitoring database.
+```
 Error message if the ID does not exist:
-  ```
-  Error: No monitored path found with ID 3210.
-  ```
+```
+Error: No monitored path found with ID 3210.
+```
 
 ---
 ### 8. `snapshots list`
@@ -267,7 +272,8 @@ This command lists all snapshots taken for a monitored path.
   ```bash
   ts snapshots list --id 1
   ```
-Example output of successful execution:
+
+__Example output of successful execution:__
 ```
 +------+-------------------+--+
 |Number|Timestamp          |ID|
@@ -277,10 +283,9 @@ Example output of successful execution:
 |2     |18.12.2024 22:41:15|1 |
 +------+-------------------+--+
 ```
-Example output of unsuccessful execution:
-```
-Error: could not list snapshots.
-```
+
+__Example outputs of unsuccessful execution:__
+
 If the path is not monitored:
 ```
 No monitored path found with ID [id].
@@ -289,6 +294,11 @@ If no snapshots are available:
 ```
 No snapshots found for monitored path with ID [id].
 ```
+Other:
+```
+Error: could not list snapshots.
+```
+
 ---
 
 ### 9. `snapshots compare`
@@ -310,7 +320,8 @@ The parameters `start` and `end` refer to the `Number` column in the output of t
   ```bash
   ts snapshots compare --id 1 --start 1 --end 5
   ```
-Example output of successful execution:
+
+__Example output of successful execution:__
 ```
 Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
 +-------------------+-------------------+-----------+
@@ -323,7 +334,8 @@ Listing comparison of /test from 01.12.2024 15:30:00 to 01.12.2024 17:30:00...
 |                   | 8                 | CHANGED   |
 +-------------------+-------------------+-----------+
 ```
-Example output of unsuccessful execution:
+
+__Example outputs of unsuccessful execution:__
 
 If the range is too big for the existing snapshots:
 ```
@@ -337,21 +349,19 @@ If it is an unexpected error:
 ```
 Error: could not compare snapshots.
 ```
+
 ---
 
 ### 10. `inspect`
-> **⚠️**  
 > This command sends the contents of the file to the OpenAI API for analysis.  
 > Ensure that no sensitive, confidential, or private data is included in the file before proceeding.  
 > By using this command, you agree to the terms and conditions of the OpenAI API.
 
-
-This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key
-is required so that this can be queried.
+This command allows you to inspect a specific file. The output comes directly from an OpenAI AI-model. The `OPENAI_API_KEY` environment variable containing the API key is required so that this can be queried.
 
 #### Usage:
 ```bash
-ts inspect <path>
+  ts inspect <path>
 ```
 
 #### Parameters:
@@ -362,10 +372,10 @@ ts inspect <path>
   ```bash
   ts inspect /path/to/apache.log
   ```
-  
+
 Successful inspection:
 ```
-Intended use:  
+Intended use:
 The file `apache.log` appears to be a web server access log, capturing various HTTP requests [...] not valid IP addresses and may indicate malicious activity or probing attempts. [...] the abnormal entries warrant further investigation.
 
 Assessment:  
@@ -395,7 +405,7 @@ This command wipes a given file.  This either means to clear the content of the 
 
 #### Usage:
 ```bash
-ts wipe <path> [--remove]
+  ts wipe <path> [--remove]
 ```
 
 #### Parameters:
@@ -407,12 +417,12 @@ ts wipe <path> [--remove]
   ```bash
   ts wipe /path/to/cool.log
   ```
-  
+
 - Remove a file:
   ```bash
-    ts wipe /path/to/cool.log --remove
-    ```
-  
+  ts wipe /path/to/cool.log --remove
+  ```
+
 Successful clearing:
 ```
 Successfully cleared file.
