@@ -416,8 +416,10 @@
     \begin{itemize}
         \item \textbf{KI-Modell}: Im Rahmen dieser Arbeit wurde nur das KI-Modell \textit{GPT-4o mini} von OpenAI integriert.
         Mit diesem lassen sich Dateien von knapp 128'000 Token bzw. rund 320'000 Zeichen analysieren.
+        (siehe \nameref{subsec:erweiterung-der-ki-modelle})
         \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB.
         Diese Limitation hängt mit der Java Files API zusammen.
+        (siehe \nameref{subsec:dateikompatibilitat})
     \end{itemize}
 
     \subsubsection{Voraussetzungen}
@@ -805,6 +807,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Nachteile}
     \begin{itemize}
         \item Begrenzte Skalierbarkeit: Nicht geeignet für Anwendungen mit hohem gleichzeitigen Datenzugriff.
+        (Single-Writer-Prinzip)
         \item Eingeschränkte Funktionalität: Unterstützt nicht alle erweiterten SQL-Funktionen.
         \item Performance-Einbußen bei großen Datenmengen.
     \end{itemize}
@@ -2585,10 +2588,17 @@ echo ts run >> ~/.zprofile
     Das Hinzufügen von Authentifizierung und Autorisierung (v.a.\ der REST-Schnittstelle), wäre also ein wichtiger Schritt in einer zukünftigen Version.
 
     \subsection{Erweiterung der KI-Modelle bzw. Anbindung}\label{subsec:erweiterung-der-ki-modelle}
-    TODO
+    Im Rahmen dieser Arbeit wurde nur ein einziges KI-Modell (GPT-4o mini) eingebunden.
+    Dieses ist, obwohl nicht primär dafür entwickelt, durchaus in der Lage, die Anforderungen des TraceSentry zu erfüllen.
+    In einer zukünftigen Version könnte die Anbindung von weiteren Modellen, die spezifisch für Anomalieerkennung in Dateien entwickelt wurden, in Betracht gezogen werden.
+    Falls notwendig, könnte auch ein eigenes Modell entwickelt werden.
 
-
-    \url{https://doi.org/10.1145/3664811}
+    \subsection{Dateikompatibilität}\label{subsec:dateikompatibilitat}
+    Bei der Inspektion von Dateien durch KI sowie dem Erstellen eines Merkle-Trees für die periodische Überwachung wird jeweils der gesamte Dateiinhalt via Java Files-API eingelesen.
+    Dies Funktion \texttt{readAllBytes} hat dabei eine Limitierung von 2 GB pro Datei\footnote{Java Files-API Dokumentation: \url{https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html\#readAllBytes-java.nio.file.Path-}}.
+    Hierbei könnte man in einer zukünftigen Version die Dateien für die Inspektion in kleinere Teile aufteilen und diese separat analysieren.
+    Für die Erstellung des Merkle-Trees wäre ein möglicher Ansatz, die Dateien in Blöcke von 2 GB zu teilen und diese einzeln zu hashen.
+    Die Hashes aller Blöcke könnten dann konkateniert und gehasht werden, um den Hash-Wert der gesamten Datei zu erhalten.
 
     %------------ Glossary -------------------
     \printglossary
