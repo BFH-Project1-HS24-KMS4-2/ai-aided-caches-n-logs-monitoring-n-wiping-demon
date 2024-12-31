@@ -151,8 +151,7 @@
     geboten werden.
 
     \subsection{Antrag}\label{subsec:stakeholder}
-    Das Projekt-Proposal % TODO Querverweis
-    umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt,
+    Das Projekt-Proposal (siehe~\nameref{sec:originale-projektbeschreibung}) umfasst einerseits die Entwicklung einer Software, welche die besagten Anforderungen erfüllt
     andererseits das Ermitteln des Potentials aktueller KI-Modelle zur Lösung des genannten Problems.\\
     Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
 
@@ -917,7 +916,7 @@ schädlich, also empfehle ich es zu leeren.
     Der Rest Adapter kapselt Funktionen zur Interaktion mit der REST-Schnittstelle.
 
     \subsubsection{Rest Controller}
-    Der Rest Controller implementiert die Endpunkte der REST-Schnittstelle gemäss API-Spezifikation. % TODO Querverweis
+    Der Rest Controller implementiert die Endpunkte der REST-Schnittstelle gemäss \hyperref[sec:api-spec]{API-Spezifikation}.
 
     \subsubsection{Domain Service}
     Der Domain Service implementiert die Applikations- bzw.\ Geschäftslogik.
@@ -967,7 +966,7 @@ schädlich, also empfehle ich es zu leeren.
     \subsubsection{Frontend (CLI)}
     \paragraph*{Beispiel Komponenteninteraktion}
     Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss der~\nameref{subsec:loesungsarchitektur}.
-    In diesem Fall handelt es sich um das Inspect Kommando (siehe Benutzerhandbuch). % TODO Querverweis
+    In diesem Fall handelt es sich um das \texttt{inspect} Kommando (siehe~\nameref{sec:user-manual}).
     Die Klasse InspectCommand ist Teil der Shell (siehe~\nameref{subsubsec:shell}). Der DaemonAdapter ist die Implementation des RestAdapters (siehe~\nameref{subsubsec:rest-adapter}).
     \begin{figure}[h]
         \centering
@@ -2507,6 +2506,8 @@ echo ts run >> ~/.zprofile
     \subsection{Berechnung der Produktivitätssteigerung}\label{subsec:berechnung-der-produktivitatssteigerung}
     In diesem Abschnitt wird die geschätzte Produktivitätssteigerung für Benutzer von \\TraceSentry berechnet.
     Die Berechnungsfaktoren umfassen die \textbf{Aufgabendauer ohne und mit der Software}, die resultierende  \textbf{Zeitersparnis}, die  \textbf{Kosten pro Zeiteinheit} und die  \textbf{Gesamtkostenersparnis}.
+
+    Die folgenden Befehle sind in der~\nameref{sec:cli-doc} spezifiziert.
     \\Es wird das \texttt{inspect} Kommando und die Monitoring-Funktionen betrachtet.
     Für Funktionen wie \texttt{search} und \texttt{wipe} wird keine Produktivitätssteigerung angenommen, da sie nur Shell-Befehle umhüllen.
     Administrationsbefehle wie \texttt{kill}, \texttt{run} etc.\ werden ebenfalls nicht betrachtet, diese sind \("\)Mittel zum Zweck\("\) und es gibt logischerweise keine äquivalenten Vorgänge ohne die Software.
