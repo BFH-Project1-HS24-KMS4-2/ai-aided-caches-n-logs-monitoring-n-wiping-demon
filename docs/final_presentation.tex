@@ -109,14 +109,56 @@
 
 
 
-
 \section{Lösung}\label{sec:loesung}
 \setbeamertemplate{Lösung}[BFH-ruled]
 \frame{\sectionpage}
 
-\begin{frame}{Lösung Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
+\begin{frame}{Der Daemon}
+	\begin{columns}
+		\begin{column}{0.7\textwidth}
+			\begin{itemize}
+				\item \textbf{Periodisch \& automatisch:} Ausführung von Überwachungsaufgaben
+				\begin{itemize}
+					\item Erstellen von Dateisystem-Snapshots (Hashbäume).
+					\item Vergleich von Snapshots (mit Vor- bzw.\ Nachfolger).
+				\end{itemize}
+				\item \textbf{Via REST-API:} Kommunikation mit Benutzer
+				\begin{itemize}
+						  \item Suche von Dateien (z.B.\ mit regulären Ausdrücken).
+						  \item Management von überwachten Pfaden.
+						  \item Operationen auf Snapshots.
+						  \item Anfragen von KI-Einschätzungen.
+						  \item Löschen von Dateien.
+						  \item Administrative Funktionen (Starten/Stoppen des Daemons).
+				\end{itemize}
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.3\textwidth}
+			\begin{center}
+				\includegraphics[width=0.5\textwidth]{assets/presentation/ghost-smile}
+			\end{center}
+		\end{column}
+	\end{columns}
+	\note[item]{https://www.svgrepo.com/}
+
+\end{frame}
+
+\begin{frame}{Die CLI}
+	\framesubtitle{Kommandozeilen-Schnittstelle}
+	\begin{columns}
+		\begin{column}{0.7\textwidth}
+			\begin{itemize}
+				\item \textbf ...
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.3\textwidth}
+			\begin{center}
+				\includegraphics[width=0.5\textwidth]{assets/presentation/prompt}
+			\end{center}
+		\end{column}
+	\end{columns}
+	\note[item]{...}
+
 \end{frame}
 
 \section{Demo}\label{sec:demo}
