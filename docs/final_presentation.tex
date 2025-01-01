@@ -20,36 +20,98 @@
 %Im Allgemeinen nicht notwendig!
 \let\code\texttt
 
-\title{\LaTeX-Beamer using BFH CI}
-\subtitle{Version 0.4}
-\author[M. Peischl]{Marei Peischl}
-\institute{pei\TeX}
-\titlegraphic*{\includegraphics{example-image}}%is only used with BFH-graphic and BFH-fullgraphic
+\title{TraceSentry}
+\subtitle{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}
+\author[L. Ammann, J. Scherer, L. Scherer]{Luca Ammann, Janic Scherer, Luca Scherer}
+\date{8. Januar 2025}
+\institute{BFH-TI}
+\titlegraphic*{\includegraphics{assets/presentation/title}}%is only used with BFH-graphic and BFH-fullgraphic
 
 %Activate the output of a frame number:
 %\setbeamertemplate{page number in head/foot}[framenumber]
 
 \begin{document}
 
-\maketitle
-
-%second title variant
-\setbeamertemplate{title page}[BFH-Orange]
-\maketitle
-
 \setbeamertemplate{title page}[BFH-graphic]
 \maketitle
 
-\setbeamertemplate{title page}[BFH-fullgraphic]
-\maketitle
-
-\section{Example Frames}
-
-\begin{frame}{Frame with a subtitle}
-	\framesubtitle{Subtitle}
-	Example Content.
+\begin{frame}{Inhalt}
+	\framesubtitle{Übersicht}
+	\begin{columns}
+		\begin{column}{0.4\textwidth}
+			\tableofcontents
+		\end{column}
+		\begin{column}{0.6\textwidth}
+			\begin{center}
+				%\includegraphics[width=0.3\textwidth]
+				%\includegraphics[width=0.6\textwidth]
+			\end{center}
+		\end{column}
+	\end{columns}
 \end{frame}
 
+
+\section{Problemstellung}\label{sec:problemstellung}
+\setbeamertemplate{Problemstellung}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Problemmstellung Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+
+\section{Lösung}\label{sec:loesung}
+\setbeamertemplate{Lösung}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Lösung Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\section{Demo}\label{sec:demo}
+\setbeamertemplate{Demo}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Demo Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\section{Projektmanagement}\label{sec:projektmanagement}
+\setbeamertemplate{Projektmanagement}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Projektmanagement Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\section{Fazit}\label{sec:fazit}
+\setbeamertemplate{Fazit}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Fazit Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\section{Ausblick}\label{sec:ausblick}
+\setbeamertemplate{Ausblick}[BFH-ruled]
+\frame{\sectionpage}
+
+\begin{frame}{Ausblick Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\begin{frame}{Fragen Frame}
+	\framesubtitle{Untertitel}
+	Bla Bla
+\end{frame}
+
+\section{examples}\label{sec:examples}
 \begin{frame}{Blocks}
 	\begin{block}{Block with a title}
 		Content.
@@ -70,25 +132,6 @@
 		Content.
 	\end{example}
 \end{frame}
-
-\section{section pages}
-%These can be automaticlly called by using \AtBeginSection{\sectionpage}
-
-\frame{\sectionpage}
-
-\setbeamertemplate{section page}[BFH-ruled]
-
-\frame{\sectionpage}
-
-%Change base color scheme (option can be added)
-
-\setbeamercolor{BFH}{parent=BFH-Orange}
-
-\frame{\sectionpage}
-
-\setbeamertemplate{section page}[BFH]
-
-\frame{\sectionpage}
 
 \end{document}
 
