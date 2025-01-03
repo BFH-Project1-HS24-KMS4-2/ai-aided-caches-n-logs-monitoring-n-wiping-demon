@@ -16,7 +16,9 @@
 \usepackage{biblatex}
 \usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{mathtools}%kompatibilität mit TeX Versionen vor April 2018
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{beamerbasenotes}%kompatibilität mit TeX Versionen vor April 2018
 \fi
 
 
@@ -62,14 +64,22 @@
     \begin{frame}{Problemstellung}
         \framesubtitle{Problem}
         \begin{itemize}
-            \item Cache- und Logdateien: tempor\"are Dateien von Betriebssystemen und Anwendungen.
+            \item Cache- und Logdateien: Dateien von \textbf{Betriebssystemen} und \textbf{Anwendungen}.
             \item Viele Benutzer wissen nicht:
             \begin{itemize}
-                \item Welche Dateien existieren.
-                \item Welche Anwendungen diese manipulieren.
+                \item \textbf{Welche} und \textbf{wie viele} Dateien existieren.
+                \item Welche Anwendungen diese \textbf{manipulieren}.
             \end{itemize}
             \item Risiken: Datenschutzprobleme und fehlende Kontrolle.
         \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Problemstellung}
+        \framesubtitle{Avast 2020}
+        \begin{center}
+            \includegraphics[width=0.5\textwidth]{assets/presentation/avast-logo}
+        \end{center}
+        \footnote{\url{https://www.cbsnews.com/news/ftc-avast-browsing-data-privacy/}}
     \end{frame}
 
     \begin{frame}{Problemstellung}
@@ -85,10 +95,10 @@
             \end{itemize}
             \item Nutzung eines KI-Modells f\"ur:
             \begin{itemize}
-                \item Analyse von Struktur (Syntax) und Bedeutung (Semantik) von Dateien.
+                \item Analyse von \textbf{Struktur} (Syntax) und \textbf{Bedeutung} (Semantik) von Dateien.
                 \item Bewertung des Dateiinhalts bzgl.
-                dessen Schädlichkeit.
-                \item Empfehlungen von n\"otigen Massnahmen.
+                dessen \textbf{Schädlichkeit}.
+                \item Empfehlungen von n\"otigen \textbf{Massnahmen}.
             \end{itemize}
         \end{itemize}
     \end{frame}
@@ -231,16 +241,25 @@
     \end{frame}
 
     \begin{frame}{KI-Fallstudie}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \item Ziel:
+                \item Evaluation des Potentials von aktuellen KI-Technologien im Bereich der Dateianalyse.
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \item Vorgehen:
+                \begin{itemize}
+                    \item Auswahl einer KI-Technologie und eines Modells.
+                    \item Generierung von Testdateien.
+                    \item Evaluation und Aufbereitung der Resultate.
+                \end{itemize}
+            \end{column}
+        \end{columns}
     \end{frame}
 
     \section{Demo}\label{sec:demo}
     \setbeamertemplate{Demo}[BFH-ruled]
     \frame{\sectionpage}
-
-    \begin{frame}{Demo Frame}
-        \framesubtitle{Untertitel}
-        Bla Bla
-    \end{frame}
 
     \section{Projektmanagement}\label{sec:projektmanagement}
     \setbeamertemplate{Projektmanagement}[BFH-ruled]
@@ -386,67 +405,30 @@
     \setbeamertemplate{Fazit}[BFH-ruled]
     \frame{\sectionpage}
 
-    \begin{frame}{Lessons learned}
-        \framesubtitle{Perspektive des Teams}
+    \begin{frame}{Fazit}
         \begin{itemize}
-            \item Erkenntnisse Rahmenbedingungen
-            \begin{itemize}
-                \item ein bisschen mühsam immer Termine zu finden die für alle passen
-                \item eher schwierig die gewünschte Zeit zu investieren
-                \item positiv, dass wir bei allem recht "frei" waren
-                \item durch den Rahmen auch recht schwierig Scrum diszipliniert/konstant anzuwenden
-            \end{itemize}
-            \item Erkenntnisse Zusammenarbeit (im Team, Fachbetreuer, PM-Coach)
-            \begin{itemize}
-                \item Betreuer waren immer zur Verfügung für alle Anfragen per Mail und Herr Kramer auch für persönliche Besprechungen im Projektzeitfenster und antworteten hilfreich.
-                \item Betreuer schränkte gar nicht ein bezüglich Entscheidungen sondern gab hilfreiche Tipps.
-                \item Zusammenarbeit im Team hat sehr gut geklappt, dank dem, dass wir uns schon lange kennen harmonieren wir dementsprechend auch schon von Anfang an gut.
-                \item Dadurch, dass wir uns auch oft neben dem Projektmodul treffen konnten wir auch oft nebenbei uns kurz darüber austauschen.
-            \end{itemize}
+            \item Alle definierten \textbf{Ziele und Lieferobjekte} wurden erreicht.
+            \item Viel gelernt, insbesondere in den Bereichen \textbf{Projektmanagement und Technologien}.
+            \item \textbf{Potential} von aktuellen KI-Technologien sowie unserer Software wurde aufgezeigt.
         \end{itemize}
-    \end{frame}
-
-    \begin{frame}{Fazit zu Software & KI-Potenzial}
-        \framesubtitle{Untertitel}
-        Haben wir unsere Fragen beantwortet?
-        Ziele erreicht?
     \end{frame}
 
     \section{Ausblick}\label{sec:ausblick}
     \setbeamertemplate{Ausblick}[BFH-ruled]
     \frame{\sectionpage}
 
-    \begin{frame}{Ausblick Frame}
-        \framesubtitle{Untertitel}
-        Bla Bla
+    \begin{frame}{Zukünftige Arbeiten}
+        \begin{itemize}
+            \item Schlussfolgerungen aus Änderungen von Dateien ziehen.
+            \item Schreibende Prozesse erkennen.
+            \item Höhere Dateikompatibilität.
+            \item Evaluation von dedizierten KI-Modellen für Anomalieerkennung.
+        \end{itemize}
     \end{frame}
 
-    \begin{frame}{Fragen Frame}
-        \framesubtitle{Untertitel}
-        Bla Bla
+    \begin{frame}{Fragen}
+        \begin{center}
+            \includegraphics[width=0.4\textwidth]{assets/presentation/questions_frame_image}
+        \end{center}
     \end{frame}
-
-
-    \section{examples}\label{sec:examples}
-    \begin{frame}{Blocks}
-        \begin{block}{Block with a title}
-            Content.
-        \end{block}
-        \begin{block}{}
-            Without title
-        \end{block}
-    \end{frame}
-
-    \begin{frame}{Block types}
-        \begin{exampleblock}{Exampleblock}
-            Content.
-        \end{exampleblock}
-        \begin{alertblock}{Alertblock}
-            Content.
-        \end{alertblock}
-        \begin{example}[Example environment]
-            Content.
-        \end{example}
-    \end{frame}
-
 \end{document}
