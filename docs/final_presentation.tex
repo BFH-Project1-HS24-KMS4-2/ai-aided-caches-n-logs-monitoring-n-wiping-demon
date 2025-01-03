@@ -57,55 +57,55 @@
     \frame{\sectionpage}
 
     \begin{frame}{Problemstellung}
-	\framesubtitle{Problem}
-	\begin{itemize}
-		\item Cache- und Logdateien: tempor\"are Dateien von Betriebssystemen und Anwendungen.
-		\item Viele Benutzer wissen nicht:
-		\begin{itemize}
-			\item Welche Dateien existieren.
-			\item Welche Anwendungen diese manipulieren.
-		\end{itemize}
-		\item Risiken: Datenschutzprobleme und fehlende Kontrolle.
-	\end{itemize}
-\end{frame}
+        \framesubtitle{Problem}
+        \begin{itemize}
+            \item Cache- und Logdateien: tempor\"are Dateien von Betriebssystemen und Anwendungen.
+            \item Viele Benutzer wissen nicht:
+            \begin{itemize}
+                \item Welche Dateien existieren.
+                \item Welche Anwendungen diese manipulieren.
+            \end{itemize}
+            \item Risiken: Datenschutzprobleme und fehlende Kontrolle.
+        \end{itemize}
+    \end{frame}
 
-\begin{frame}{Problemstellung}
+    \begin{frame}{Problemstellung}
         \framesubtitle{Chance}
-	\begin{itemize}
+        \begin{itemize}
 
-		\item Entwickeln einer Software f\"ur:
-		\begin{itemize}
-			\item \textbf{Suche} von Dateien.
-			\item \textbf{\"Uberwachung} von Dateien bzgl. deren Erstellung, Ver\"anderung und L\"oschung.
-			\item \textbf{Analyse und Bewertung} von Dateien.
-			\item \textbf{Bereinigung} von Dateien.
-		\end{itemize}
-		\item Nutzung eines KI-Modells f\"ur:
-		\begin{itemize}
-			\item Analyse von Struktur (Syntax) und Bedeutung (Semantik) von Dateien.
-			\item Bewertung des Dateiinhalts bzgl.
-			dessen Schädlichkeit.
-			\item Empfehlungen von n\"otigen Massnahmen.
-		\end{itemize}
-	\end{itemize}
-\end{frame}
+            \item Entwickeln einer Software f\"ur:
+            \begin{itemize}
+                \item \textbf{Suche} von Dateien.
+                \item \textbf{Monitoring} von Dateien bzgl. deren Erstellung, Ver\"anderung und L\"oschung.
+                \item \textbf{Analyse und Bewertung} von Dateien.
+                \item \textbf{Bereinigung} von Dateien.
+            \end{itemize}
+            \item Nutzung eines KI-Modells f\"ur:
+            \begin{itemize}
+                \item Analyse von Struktur (Syntax) und Bedeutung (Semantik) von Dateien.
+                \item Bewertung des Dateiinhalts bzgl.
+                dessen Schädlichkeit.
+                \item Empfehlungen von n\"otigen Massnahmen.
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
 
-\begin{frame}{Projektziel}
-	\begin{itemize}
-		\item Entwicklung einer \textbf{plattformunabh\"angigen, benutzerfreundlichen} Anwendung mit Dokumentation.
-		\item Praxisnahe \textbf{Fallstudie} zur Evaluation des Potentials von aktuellen KI-Technologien.
-		\item Fokus auf \textbf{Resultate} und Kernfunktionalit\"at.
-	\end{itemize}
-\end{frame}
+    \begin{frame}{Projektziel}
+        \begin{itemize}
+            \item Entwicklung einer \textbf{plattformunabh\"angigen, benutzerfreundlichen} Anwendung mit Dokumentation.
+            \item Praxisnahe \textbf{Fallstudie} zur Evaluation des Potentials von aktuellen KI-Technologien.
+            \item Fokus auf \textbf{Resultate} und Kernfunktionalit\"at.
+        \end{itemize}
+    \end{frame}
 
-\begin{frame}{Rahmenbedingungen}
-	\begin{itemize}
-		\item Entwicklung eines Hintergrundprozesses (\textbf{Daemon}).
-		\item Kommandozeilen-Interface f\"ur Benutzerinteraktion (\textbf{CLI}).
-		\item \textbf{Cache- und Log}dateien als prim\"arer Fokus, Erweiterung auf andere Dateitypen m\"oglich.
-        \item \textbf{FLOSS-lizenzierte} und \textbf{plattformunabh\"angige} Software.
-		\item Evaluation eines aktuellen KI-Modells. \textbf{Keine Eigenentwicklung}.
-	\end{itemize}
+    \begin{frame}{Rahmenbedingungen}
+        \begin{itemize}
+            \item Entwicklung eines Hintergrundprozesses (\textbf{Daemon}).
+            \item Kommandozeilen-Interface f\"ur Benutzerinteraktion (\textbf{CLI}).
+            \item \textbf{Cache- und Log}dateien als prim\"arer Fokus, Erweiterung auf andere Dateitypen m\"oglich.
+            \item \textbf{FLOSS-lizenzierte} und \textbf{plattformunabh\"angige} Software.
+            \item Evaluation eines aktuellen KI-Modells. \textbf{Keine Eigenentwicklung}.
+        \end{itemize}
     \end{frame}
 
 
@@ -113,53 +113,64 @@
     \setbeamertemplate{Lösung}[BFH-ruled]
     \frame{\sectionpage}
 
-    \begin{frame}{Der Daemon}
-	\begin{columns}
-		\begin{column}{0.7\textwidth}
-			\begin{itemize}
-				\item \textbf{Periodisch \& automatisch:} Ausführung von Überwachungsaufgaben
-				\begin{itemize}
-					\item Erstellen von Dateisystem-Snapshots (Hashbäume).
-					\item Vergleich von Snapshots (mit Vor- bzw.\ Nachfolger).
-				\end{itemize}
-				\item \textbf{Via REST-API:} Kommunikation mit Benutzer
-				\begin{itemize}
-						  \item Suche von Dateien (z.B.\ mit regulären Ausdrücken).
-						  \item Management von überwachten Pfaden.
-						  \item Operationen auf Snapshots.
-						  \item Anfragen von KI-Einschätzungen.
-						  \item Löschen von Dateien.
-						  \item Administrative Funktionen (Starten/Stoppen des Daemons).
-				\end{itemize}
-			\end{itemize}
-		\end{column}
-		\begin{column}{0.3\textwidth}
-			\begin{center}
-				\includegraphics[width=0.5\textwidth]{assets/presentation/ghost-smile}
-			\end{center}
-		\end{column}
-	\end{columns}
-	\note[item]{https://www.svgrepo.com/}
-
-\end{frame}
-
-\begin{frame}{Die CLI}
-        \framesubtitle{Kommandozeilen-Schnittstelle}
-        \begin{columns}
-		\begin{column}{0.7\textwidth}
-			\begin{itemize}
-				\item \textbf ...
-			\end{itemize}
-		\end{column}
-		\begin{column}{0.3\textwidth}
-			\begin{center}
-				\includegraphics[width=0.5\textwidth]{assets/presentation/prompt}
-			\end{center}
-		\end{column}
-	\end{columns}
-	\note[item]{...}
+    \begin{frame}{Architektur}
     \end{frame}
 
+    \begin{frame}{Der Daemon}
+        \begin{columns}
+            \begin{column}{0.7\textwidth}
+                \begin{itemize}
+                    \item \textbf{Periodisch \& automatisch:} Ausführung von Monitoringaufgaben
+                    \begin{itemize}
+                        \item Erstellen von Dateisystem-Snapshots (Hashbäume).
+                        \item Vergleich von Snapshots (mit Vor- bzw.\ Nachfolger).
+                    \end{itemize}
+                    \item \textbf{Via REST-API:} Kommunikation mit Benutzer
+                    \begin{itemize}
+                        \item Suche von Dateien (z.B.\ mit regulären Ausdrücken).
+                        \item Management von überwachten Pfaden.
+                        \item Operationen auf Snapshots.
+                        \item Anfragen von KI-Einschätzungen.
+                        \item Löschen von Dateien.
+                        \item Administrative Funktionen (Starten/Stoppen des Daemons).
+                    \end{itemize}
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{center}
+                    \includegraphics[width=0.5\textwidth]{assets/presentation/ghost-smile}
+                \end{center}
+            \end{column}
+        \end{columns}
+        \note[item]{https://www.svgrepo.com/}
+
+    \end{frame}
+
+    \begin{frame}{Die CLI}
+        \framesubtitle{Kommandozeilen-Schnittstelle}
+        \begin{columns}
+            \begin{column}{0.7\textwidth}
+                \begin{itemize}
+                    \item \textbf ...
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{center}
+                    \includegraphics[width=0.5\textwidth]{assets/presentation/prompt}
+                \end{center}
+            \end{column}
+        \end{columns}
+        \note[item]{...}
+    \end{frame}
+
+    \begin{frame}{Datenbank}
+    \end{frame}
+
+    \begin{frame}{Monitoring (Hashbäume)}
+    \end{frame}
+
+    \begin{frame}{KI-Fallstudie}
+    \end{frame}
 
     \section{Demo}\label{sec:demo}
     \setbeamertemplate{Demo}[BFH-ruled]
@@ -169,7 +180,6 @@
         \framesubtitle{Untertitel}
         Bla Bla
     \end{frame}
-
 
     \section{Projektmanagement}\label{sec:projektmanagement}
     \setbeamertemplate{Projektmanagement}[BFH-ruled]
@@ -183,12 +193,12 @@
                 \textbf{Ziel}                & \textbf{Erreicht} \\
                 \hline
                 Plattformunabhängig          & Ja                \\
-                AI-Einbindung mit Fallstudie & Ja (Abgegrenzt)   \\
+                Suche von Dateien            & Ja                \\
                 Periodisches Monitoring      & Ja                \\
-                Snapshots vergleichen        & Ja                \\
                 Datei-Bereinigung            & Ja                \\
                 Modular und erweiterbar      & Ja                \\
                 Automatische Testabdeckung   & Ja                \\
+                AI-Einbindung mit Fallstudie & Ja                \\
             \end{tabular}\par
         }
 
@@ -197,6 +207,7 @@
 
     \begin{frame}{Sprintziele}
         \framesubtitle{Nach SMART definiert}
+        Ziele der ersten 2 Sprints:
         \begin{columns}
             \column{0.7\textwidth}
             \begin{enumerate}
