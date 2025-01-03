@@ -13,7 +13,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage{blkarray}
 \usepackage{graphicx}
-\usepackage{biblatex}%kompatibilität mit TeX Versionen vor April 2018
+\usepackage{biblatex}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}%kompatibilität mit TeX Versionen vor April 2018
 \fi
 
 
@@ -114,9 +117,13 @@
     \frame{\sectionpage}
 
     \begin{frame}{Architektur}
+        \begin{center}
+            \includegraphics[width=0.7\textwidth]{assets/DeplDiagram}
+        \end{center}
     \end{frame}
 
     \begin{frame}{Der Daemon}
+        \framesubtitle{Spring basierter Service}
         \begin{columns}
             \begin{column}{0.7\textwidth}
                 \begin{itemize}
@@ -146,12 +153,22 @@
 
     \end{frame}
 
-    \begin{frame}{Die CLI}
-        \framesubtitle{Kommandozeilen-Schnittstelle}
+    \begin{frame}{Die Kommandozeilen}
+        \framesubtitle{Spring Shell basierte CLI}
         \begin{columns}
             \begin{column}{0.7\textwidth}
                 \begin{itemize}
-                    \item \textbf ...
+                    \item \textbf{Warum eine CLI?}
+                    \begin{itemize}
+                        \item Effizienz bei der Entwicklung.
+                        \item Zielgruppe: technisch versierte Benutzer.
+                        \item Architektur würde in Zukunft auch eine GUI erlauben.
+                    \end{itemize}
+                    \item \textbf{Funktionalitäten:}
+                    \begin{itemize}
+                        \item Parsing und Validierung von Benutzereingaben.
+                        \item Kommunikation mit dem Daemon via REST-API\@.
+                    \end{itemize}
                 \end{itemize}
             \end{column}
             \begin{column}{0.3\textwidth}
@@ -164,9 +181,53 @@
     \end{frame}
 
     \begin{frame}{Datenbank}
+        \framesubtitle{SQLite}
+        \begin{columns}
+            \begin{column}{0.7\textwidth}
+                \begin{itemize}
+                    \item File-basiert (serverlos)
+                    \item Light-weight
+                    \item Kompatibel mit Spring Data (JPA)
+                    \begin{itemize}
+                        \item JDBC-/Hibernate-Kompatibilität
+                        \item Transaktionen
+                        \item Grundlegende SQL-Funktionen
+                        \item etc.
+                    \end{itemize}
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \begin{center}
+                    \includegraphics[width=1\textwidth]{assets/presentation/db}
+                \end{center}
+            \end{column}
+        \end{columns}
     \end{frame}
 
-    \begin{frame}{Monitoring (Hashbäume)}
+    \begin{frame}{Monitoring (Hashb\"aume)}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \item Struktur:
+                \begin{itemize}
+                    \item Die \textbf{Wurzel} entspricht dem überwachten Pfad.
+                    \item \textbf{Innere Knoten} entsprechen Unterverzeichnissen.
+                    \item \textbf{Blätter} entsprechen Dateien (oder leeren Verzeichnissen).
+                \end{itemize}
+                \item Hashing:
+                \begin{align*}
+                    B &\coloneqq \text{Blatt} \\
+                    N &\coloneqq \text{Nicht-Blatt} \\
+                    K &\coloneqq \text{Kind} \\
+                    H(B) &= H(Datei)\\
+                    H(N) &= H((H(K_1) \|H(K_2) \| \dots \|H(K_k))\\
+                \end{align*}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{center}
+                    \includegraphics[width=1\textwidth]{assets/presentation/hashtree}
+                \end{center}
+            \end{column}
+        \end{columns}
     \end{frame}
 
     \begin{frame}{KI-Fallstudie}
