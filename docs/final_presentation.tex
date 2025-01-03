@@ -1,8 +1,8 @@
 \documentclass[
-	ngerman,%globale Übergabe der Hauptsprache
+    ngerman,%globale Übergabe der Hauptsprache
 %	logofile=example-image, %Falls die Logo Dateien nicht vorliegen
-	authorontitle=true,
-	]{bfhbeamer}
+    authorontitle=true,
+]{bfhbeamer}
 
 
 %\usepackage[main=ngerman]{babel}
@@ -12,13 +12,14 @@
 \ifPDFTeX
 \usepackage[utf8]{inputenc}
 \usepackage{blkarray}
-\usepackage{graphicx}%kompatibilität mit TeX Versionen vor April 2018
+\usepackage{graphicx}
+\usepackage{biblatex}%kompatibilität mit TeX Versionen vor April 2018
 \fi
 
 
 %Makros für Formatierungen der Doku
 %Im Allgemeinen nicht notwendig!
-\let\code\texttt
+% \let\code\texttt
 
 \title{TraceSentry}
 \subtitle{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}
@@ -32,30 +33,30 @@
 
 \begin{document}
 
-\setbeamertemplate{title page}[BFH-graphic]
-\maketitle
+    \setbeamertemplate{title page}[BFH-graphic]
+    \maketitle
 
-\begin{frame}{Inhalt}
-	\framesubtitle{Übersicht}
-	\begin{columns}
-		\begin{column}{0.4\textwidth}
-			\tableofcontents
-		\end{column}
-		\begin{column}{0.6\textwidth}
-			\begin{center}
-				%\includegraphics[width=0.3\textwidth]
-				%\includegraphics[width=0.6\textwidth]
-			\end{center}
-		\end{column}
-	\end{columns}
-\end{frame}
+    \begin{frame}{Inhalt}
+        \framesubtitle{Übersicht}
+        \begin{columns}
+            \begin{column}{0.4\textwidth}
+                \tableofcontents
+            \end{column}
+            \begin{column}{0.6\textwidth}
+                \begin{center}
+                    %\includegraphics[width=0.3\textwidth]
+                    %\includegraphics[width=0.6\textwidth]
+                \end{center}
+            \end{column}
+        \end{columns}
+    \end{frame}
 
 
-\section{Problemstellung}\label{sec:problemstellung}
-\setbeamertemplate{Problemstellung}[BFH-ruled]
-\frame{\sectionpage}
+    \section{Problemstellung}\label{sec:problemstellung}
+    \setbeamertemplate{Problemstellung}[BFH-ruled]
+    \frame{\sectionpage}
 
-\begin{frame}{Problemstellung}
+    \begin{frame}{Problemstellung}
 	\framesubtitle{Problem}
 	\begin{itemize}
 		\item Cache- und Logdateien: tempor\"are Dateien von Betriebssystemen und Anwendungen.
@@ -69,7 +70,7 @@
 \end{frame}
 
 \begin{frame}{Problemstellung}
-	\framesubtitle{Chance}
+        \framesubtitle{Chance}
 	\begin{itemize}
 
 		\item Entwickeln einer Software f\"ur:
@@ -102,18 +103,17 @@
 		\item Entwicklung eines Hintergrundprozesses (\textbf{Daemon}).
 		\item Kommandozeilen-Interface f\"ur Benutzerinteraktion (\textbf{CLI}).
 		\item \textbf{Cache- und Log}dateien als prim\"arer Fokus, Erweiterung auf andere Dateitypen m\"oglich.
-		\item \textbf{FLOSS-lizenzierte} und \textbf{plattformunabh\"angige} Software.
+        \item \textbf{FLOSS-lizenzierte} und \textbf{plattformunabh\"angige} Software.
 		\item Evaluation eines aktuellen KI-Modells. \textbf{Keine Eigenentwicklung}.
 	\end{itemize}
-\end{frame}
+    \end{frame}
 
 
+    \section{Lösung}\label{sec:loesung}
+    \setbeamertemplate{Lösung}[BFH-ruled]
+    \frame{\sectionpage}
 
-\section{Lösung}\label{sec:loesung}
-\setbeamertemplate{Lösung}[BFH-ruled]
-\frame{\sectionpage}
-
-\begin{frame}{Der Daemon}
+    \begin{frame}{Der Daemon}
 	\begin{columns}
 		\begin{column}{0.7\textwidth}
 			\begin{itemize}
@@ -144,8 +144,8 @@
 \end{frame}
 
 \begin{frame}{Die CLI}
-	\framesubtitle{Kommandozeilen-Schnittstelle}
-	\begin{columns}
+        \framesubtitle{Kommandozeilen-Schnittstelle}
+        \begin{columns}
 		\begin{column}{0.7\textwidth}
 			\begin{itemize}
 				\item \textbf ...
@@ -158,71 +158,224 @@
 		\end{column}
 	\end{columns}
 	\note[item]{...}
+    \end{frame}
 
-\end{frame}
 
-\section{Demo}\label{sec:demo}
-\setbeamertemplate{Demo}[BFH-ruled]
-\frame{\sectionpage}
+    \section{Demo}\label{sec:demo}
+    \setbeamertemplate{Demo}[BFH-ruled]
+    \frame{\sectionpage}
 
-\begin{frame}{Demo Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
-\end{frame}
+    \begin{frame}{Demo Frame}
+        \framesubtitle{Untertitel}
+        Bla Bla
+    \end{frame}
 
-\section{Projektmanagement}\label{sec:projektmanagement}
-\setbeamertemplate{Projektmanagement}[BFH-ruled]
-\frame{\sectionpage}
 
-\begin{frame}{Projektmanagement Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
-\end{frame}
+    \section{Projektmanagement}\label{sec:projektmanagement}
+    \setbeamertemplate{Projektmanagement}[BFH-ruled]
+    \frame{\sectionpage}
 
-\section{Fazit}\label{sec:fazit}
-\setbeamertemplate{Fazit}[BFH-ruled]
-\frame{\sectionpage}
+    \begin{frame}{Rückblick}
+        \framesubtitle{Produktziele}
+        {
+            \centering
+            \begin{tabular}{l|c}
+                \textbf{Ziel}                & \textbf{Erreicht} \\
+                \hline
+                Plattformunabhängig          & Ja                \\
+                AI-Einbindung mit Fallstudie & Ja (Abgegrenzt)   \\
+                Periodisches Monitoring      & Ja                \\
+                Snapshots vergleichen        & Ja                \\
+                Datei-Bereinigung            & Ja                \\
+                Modular und erweiterbar      & Ja                \\
+                Automatische Testabdeckung   & Ja                \\
+            \end{tabular}\par
+        }
 
-\begin{frame}{Fazit Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
-\end{frame}
+        % todo: Product / Sprint Backlog Management, mby Burndown-Chart
+    \end{frame}
 
-\section{Ausblick}\label{sec:ausblick}
-\setbeamertemplate{Ausblick}[BFH-ruled]
-\frame{\sectionpage}
+    \begin{frame}{Sprintziele}
+        \framesubtitle{Nach SMART definiert}
+        \begin{columns}
+            \column{0.7\textwidth}
+            \begin{enumerate}
+                \item Aufsetzen von lauffähiger CLI- und Daemon-Komponente und
+                vollständige, sowie getestete Implementation der Search-Funktion (gemäss Testkonzept).
+                \item Monitoring-Kommandos (gemäss Spezifikation) für das Persistieren
+                und Auflisten der Dateipfade sind vollständig implementiert und
+                getestet (gemäss Testkonzept).
+            \end{enumerate}
 
-\begin{frame}{Ausblick Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
-\end{frame}
+            \column{0.3\textwidth}
+            \textbf{S}pecific\\
+            \textbf{M}easurable\\
+            \textbf{A}chievable\\
+            \textbf{R}elevant\\
+            \textbf{T}ime-bound
+        \end{columns}
 
-\begin{frame}{Fragen Frame}
-	\framesubtitle{Untertitel}
-	Bla Bla
-\end{frame}
+    \end{frame}
 
-\section{examples}\label{sec:examples}
-\begin{frame}{Blocks}
-	\begin{block}{Block with a title}
-		Content.
-	\end{block}
-	\begin{block}{}
-		Without title
-	\end{block}
-\end{frame}
+    \begin{frame}{Einrichtung}
+        \begin{enumerate}
+            \item Erfassung Ausganssituation
+            \begin{itemize}
+                \item Proposal und Mail von Herr Kramer gelesen und im Team besprochen
+                \item Kick-Off Meeting im Team mit Herr Kramer
+            \end{itemize}
+            \item Themen-Analyse
+            \begin{enumerate}
+                \item PO hat Epics für Grundfunktionalitäten erstellt, soweit dass die Anforderungen vom Proposal abgedeckt werden konnten.
+                \item Epics sinnvoll priorisiert (nach Wichtigkeit und praktischer Umsetzbarkeit)
+            \end{enumerate}
+            \item Organisation
+            \begin{itemize}
+                \item SCRUM-Management in GitLab (Board, Epics, Issues, Iterations)
+                \item Kommunikation im Team über Teams/Discord und Whatsapp.
+                Mit den Betreuern über Mail und BigBlueButton.
+            \end{itemize}
+        \end{enumerate}
+    \end{frame}
 
-\begin{frame}{Block types}
-	\begin{exampleblock}{Exampleblock}
-		Content.
-	\end{exampleblock}
-	\begin{alertblock}{Alertblock}
-		Content.
-	\end{alertblock}
-	\begin{example}[Example environment]
-		Content.
-	\end{example}
-\end{frame}
+    \begin{frame}{Retro 1}
+        \framesubtitle{Erfahrungen bezüglich SCRUM-Rollen und Stakeholdern}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{p{3cm}|p{3.5cm}}
+                    \textbf{Rolle} & \textbf{Teammitglied} \\
+                    \hline
+                    Product Owner  & Luca Scherer          \\
+                    Scrum Master   & Luca Ammann           \\
+                    Developer      & Team                  \\
+                \end{tabular}
+            \end{table}
+            \smallskip
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{p{3cm}|p{3.5cm}}
+                    \textbf{Rolle} & \textbf{Name}    \\
+                    \hline
+                    Betreuer       & Dr. Simon Kramer \\
+                    PM-Betreuer    & Frank Helbling   \\
+                \end{tabular}
+            \end{table}
+
+            \column{0.5\textwidth}
+
+            \vspace{0.5cm}
+
+            => Arbeitslast gut aufgeteilt und konnten gegenseitig bei den Rollen unterstützen.
+
+            \vspace{2cm}
+
+            => Angenehm mit weniger Stakeholdern, da es weniger Kommunikationsaufwand gibt.
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Retro 2}
+        \framesubtitle{Erfahrungen bezüglich Scrum Events und Artifacts}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \textbf{Events:}
+            \begin{itemize}
+                \item \textbf{Retro}: wurde bereits jederzeit im Team gelebt
+                \item \textbf{Review}: verlief sehr effizient durch paralleles Erklären und Anschauen der MRs im ganzen Team
+                \item \textbf{Planning}: ebenfalls effizient dadurch, dass Issues schon von PO vorbereitet waren,
+                also konnte er sie direkt vorstellen, dann im Team besprechen, schätzen, zuweisen und Sprint-Ziel definieren.
+            \end{itemize}
+
+            \column{0.5\textwidth}
+            \textbf{Artifacts:}
+            \begin{itemize}
+                \item \textbf{Board/Sprint}: war manchmal schwierig zu entscheiden, ob es in den Sprint kommt wenn es "nur" eine administrative Story ist.
+                \item \textbf{Velocity}: war schwierig konstant zu halten und Commitment war eher nach Gefühl.
+                \item \textbf{Subtasks}: eher overhead.
+                \item \textbf{Burndown-Chart}: nicht wirklich hilfreich.
+            \end{itemize}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Retro 3}
+        \framesubtitle{Erkenntnisse zu verwendeten Tools}
+        \begin{itemize}
+            \item \textbf{Discord/Teams}: vor allem Gruppencall mit ScreenSharing genutzt (nichts vermisst).
+            \item \textbf{GitLab}: etwas gewöhnungsbedürftig zu Beginn, im Vergleich zu Jira schon um einiges eingeschränkter aber reichte für unseren Rahmen gut aus.
+            (nichts vermisst)
+            \item \textbf{Latex}: war wichtig für uns einmal anzuschauen und wahrscheinlich konnten alle daraus am meisten lernen in diesem Projekt, was für Zukunft sehr hilfreich ist.
+            Braucht schon immer wieder Zeit um gewisse Dinge herauszufingen wie es in Latex gemacht werden kann aber lohnt sich.
+            Sehr praktisch durch "docs as code" um über git zusammenzuarbeiten und es mit dem Projekt zusammen zu versionieren.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Lessons learned}
+        \framesubtitle{Perspektive des Teams}
+        \begin{itemize}
+            \item Erkenntnisse Rahmenbedingungen
+            \begin{itemize}
+                \item ein bisschen mühsam immer Termine zu finden die für alle passen
+                \item eher schwierig die gewünschte Zeit zu investieren
+                \item positiv, dass wir bei allem recht "frei" waren
+                \item durch den Rahmen auch recht schwierig Scrum diszipliniert/konstant anzuwenden
+            \end{itemize}
+            \item Erkenntnisse Zusammenarbeit (im Team, Fachbetreuer, PM-Coach)
+            \begin{itemize}
+                \item Betreuer waren immer zur Verfügung für alle Anfragen per Mail und Herr Kramer auch für persönliche Besprechungen im Projektzeitfenster und antworteten hilfreich.
+                \item Betreuer schränkte gar nicht ein bezüglich Entscheidungen sondern gab hilfreiche Tipps.
+                \item Zusammenarbeit im Team hat sehr gut geklappt, dank dem, dass wir uns schon lange kennen harmonieren wir dementsprechend auch schon von Anfang an gut.
+                \item Dadurch, dass wir uns auch oft neben dem Projektmodul treffen konnten wir auch oft nebenbei uns kurz darüber austauschen.
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Fazit}\label{sec:fazit}
+    \setbeamertemplate{Fazit}[BFH-ruled]
+    \frame{\sectionpage}
+
+    \begin{frame}{Fazit Frame}
+        \framesubtitle{Untertitel}
+        Bla Bla
+    \end{frame}
+
+
+    \section{Ausblick}\label{sec:ausblick}
+    \setbeamertemplate{Ausblick}[BFH-ruled]
+    \frame{\sectionpage}
+
+    \begin{frame}{Ausblick Frame}
+        \framesubtitle{Untertitel}
+        Bla Bla
+    \end{frame}
+
+    \begin{frame}{Fragen Frame}
+        \framesubtitle{Untertitel}
+        Bla Bla
+    \end{frame}
+
+
+    \section{examples}\label{sec:examples}
+    \begin{frame}{Blocks}
+        \begin{block}{Block with a title}
+            Content.
+        \end{block}
+        \begin{block}{}
+            Without title
+        \end{block}
+    \end{frame}
+
+    \begin{frame}{Block types}
+        \begin{exampleblock}{Exampleblock}
+            Content.
+        \end{exampleblock}
+        \begin{alertblock}{Alertblock}
+            Content.
+        \end{alertblock}
+        \begin{example}[Example environment]
+            Content.
+        \end{example}
+    \end{frame}
 
 \end{document}
-
