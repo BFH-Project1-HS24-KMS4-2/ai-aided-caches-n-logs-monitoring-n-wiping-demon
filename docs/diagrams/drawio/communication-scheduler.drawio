@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.2">
+  <diagram name="Seite-1" id="OugE_Da0BNDIx95Ucckc">
+    <mxGraphModel dx="1502" dy="1291" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-1" value="Periodische Überwachung" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=120;height=30;" vertex="1" parent="1">
+          <mxGeometry width="450" height="225" as="geometry" />
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-2" value=":Daemon" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="50" y="135" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-3" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.998;entryY=0.301;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="n1alNaBPGcqHg-QNzC8F-2" target="n1alNaBPGcqHg-QNzC8F-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="140" as="sourcePoint" />
+            <mxPoint x="170" y="90" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="105" y="110" />
+              <mxPoint x="180" y="110" />
+              <mxPoint x="180" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-4" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="90" as="sourcePoint" />
+            <mxPoint x="170" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-5" value="2.1: Auf nächste&lt;div&gt;Überwachung warten&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="35" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-6" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="n1alNaBPGcqHg-QNzC8F-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="160" as="sourcePoint" />
+            <mxPoint x="240" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-7" value="2.2: SQL-Query" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="185" y="105" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-8" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="224" y="140" as="sourcePoint" />
+            <mxPoint x="274" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-9" value="" style="endArrow=open;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="274" y="180" as="sourcePoint" />
+            <mxPoint x="224" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-10" value="2.3: Antwort" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="185" y="185" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="n1alNaBPGcqHg-QNzC8F-11" value=":SQLite DB" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="315" y="135" width="110" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
