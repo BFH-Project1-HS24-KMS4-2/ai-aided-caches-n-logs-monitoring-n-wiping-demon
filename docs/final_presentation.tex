@@ -128,7 +128,7 @@
 
     \begin{frame}{Architektur}
         \begin{center}
-            \includegraphics[width=0.7\textwidth]{assets/DeplDiagram}
+            \includegraphics[width=0.7\textwidth]{assets/DeplDiagram} % todo: replace with new diagram
         \end{center}
     \end{frame}
 
@@ -269,67 +269,58 @@
 
     \begin{frame}{Rückblick}
         \framesubtitle{Produktziele}
-        {
-            \centering
-            \begin{tabular}{l|c}
-                \textbf{Ziel}                & \textbf{Erreicht} \\
-                \hline
-                Plattformunabhängig          & Ja                \\
-                Suche von Dateien            & Ja                \\
-                Periodisches Monitoring      & Ja                \\
-                Datei-Bereinigung            & Ja                \\
-                Modular und erweiterbar      & Ja                \\
-                Automatische Testabdeckung   & Ja                \\
-                AI-Einbindung mit Fallstudie & Ja                \\
-            \end{tabular}\par
-        }
-    \end{frame} % todo: picture
-
-    \begin{frame}{Setup}
-        \begin{center}
-            \setlength{\arrayrulewidth}{0.3mm}
-
-            \begin{tabular}{>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{4cm}|>{\centering\arraybackslash}m{4cm}}
-                \textbf{1.} & \textbf{2.} & \textbf{3.} \\
-                Erfassung Ausganssituation
-                \note{Proposal und Mail von Herr Kramer gelesen und im Team besprochen, Kick-Off Meeting im Team mit Herr Kramer} &
-                Themen-Analyse
-                \note{PO hat Epics für Grundfunktionalitäten erstellt, soweit dass die Anforderungen vom Proposal abgedeckt werden konnten.
-                Epics sinnvoll priorisiert (nach Wichtigkeit und praktischer Umsetzbarkeit)} &
-                Organisation
-                \note{SCRUM-Management in GitLab (Board, Epics, Issues, Iterations), Kommunikation im Team über Teams/Discord und Whatsapp.}
-            \end{tabular}
-        \end{center}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{tabular}{l|c}
+                    \textbf{Ziel}                & \textbf{Erreicht} \\
+                    \hline
+                    Suche von Dateien            & Ja                \\
+                    Periodisches Monitoring      & Ja                \\
+                    Datei-Bereinigung            & Ja                \\
+                    Plattformunabhängig          & Ja                \\
+                    Modular und erweiterbar      & Ja                \\
+                    Automatische Testabdeckung   & Ja                \\
+                    AI-Einbindung mit Fallstudie & Ja                \\
+                \end{tabular}\par
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                % todo: picture
+            \end{column}
+        \end{columns}
     \end{frame}
 
     \begin{frame}{Retro}
         \framesubtitle{Erfahrungen und Erkenntnisse}
+        \begin{columns}[t]
 
-        \begin{center}
-            \setlength{\arrayrulewidth}{0.3mm}
+            \begin{column}{0.5\textwidth}
+                \textbf{Rollen und Stakeholder}
+                \begin{itemize}
+                    \item Arbeitsaufteilung
+                    \note{gut aufgeteilt und konnten gegenseitig bei den Rollen unterstützen}
 
-            \begin{tabular}{p{4.2cm}|p{5cm}|p{3cm}}
-                \textbf{Rollen und Stakeholder} & \textbf{Scrum Events und Artifacts} & \textbf{Tools} \\
-                \begin{itemize}
-                    \item Arbeitslast \note{gut aufgeteilt und konnten gegenseitig bei den Rollen unterstützen}
-                    \item Kommunikation \note{Angenehm mit weniger Stakeholdern, da es weniger Kommunikationsaufwand gibt.}
-                \end{itemize} &
-                \begin{itemize}
-                    \item Retro
-                    \item Review
-                    \item Planning
-                    \note{Probleme wurden jederzeit angesprochen, effizient durch 1 wöchige Sprints und code review, effizient dank Vorbereitung von PO}
+                    \item Kommunikation
+                    \note{Angenehm mit weniger Stakeholdern, da es weniger Kommunikationsaufwand gibt.}
                 \end{itemize}
+            \end{column}
+
+            \begin{column}{0.5\textwidth}
+                \textbf{Scrum Events und Artifacts}
                 \begin{itemize}
-                    \item Sprint \note{war manchmal schwierig zu entscheiden, ob es in den Sprint kommt wenn es "nur" eine administrative Story ist.}
-                    \item Velocity/Burn-Down-Chart \note{Velocity war schwierig konstant zu halten und Commitment war eher nach Gefühl. Burndown-Chart so nicht wirklich hilfreich.}
-                \end{itemize} &
-                \begin{itemize}
-                    \item Gitlab
-                    \item Latex
-                \end{itemize} \\
-            \end{tabular}
-        \end{center}
+                    \item Retro, Review, Planning
+                    \note{hat gut funktioniert mit 1 wöchigen Sprints, Probleme im Team wurden immer direkt angesprochen und geklärt,
+                        Verbesserungspotential erkannten wir auch}
+
+                    \item Sprint
+                    \note{war manchmal schwierig zu entscheiden, ob es in den Sprint kommt wenn es "nur" eine administrative Story ist.}
+
+                    \item Velocity/Burn-Down-Chart
+                    \note{Velocity war schwierig konstant zu halten und Commitment war eher nach Gefühl.
+                    Burndown-Chart so nicht wirklich hilfreich.}
+                \end{itemize}
+            \end{column}
+
+        \end{columns}
     \end{frame}
 
 
@@ -344,6 +335,7 @@
             \item \textbf{Potential} von aktuellen KI-Technologien sowie unserer Software wurde aufgezeigt.
         \end{itemize}
     \end{frame}
+    \note{bei weitem noch nicht ausgeschöpft, weshalb Luca jetzt noch etwas zum Ausblick sagt}
 
 
     \section{Ausblick}\label{sec:ausblick}
