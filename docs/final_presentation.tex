@@ -23,10 +23,6 @@
 \fi
 
 
-%Makros für Formatierungen der Doku
-%Im Allgemeinen nicht notwendig!
-% \let\code\texttt
-
 \title{TraceSentry}
 \subtitle{AI-Aided Caches-n-Logs Monitoring-n-Wiping Daemon}
 \author[L. Ammann, J. Scherer, L. Scherer]{Luca Ammann, Janic Scherer, Luca Scherer}
@@ -34,8 +30,8 @@
 \institute{BFH-TI}
 \titlegraphic*{\includegraphics{assets/presentation/title}}%is only used with BFH-graphic and BFH-fullgraphic
 
-%Activate the output of a frame number:
-%\setbeamertemplate{page number in head/foot}[framenumber]
+% Activate the output of a frame number:
+\setbeamertemplate{page number in head/foot}[framenumber]
 
 \begin{document}
 
@@ -44,17 +40,7 @@
 
     \begin{frame}{Inhalt}
         \framesubtitle{Übersicht}
-        \begin{columns}
-            \begin{column}{0.4\textwidth}
-                \tableofcontents
-            \end{column}
-            \begin{column}{0.6\textwidth}
-                \begin{center}
-                    %\includegraphics[width=0.3\textwidth]
-                    %\includegraphics[width=0.6\textwidth]
-                \end{center}
-            \end{column}
-        \end{columns}
+        \tableofcontents
     \end{frame}
 
 
@@ -86,19 +72,19 @@
     \begin{frame}{Problemstellung}
         \framesubtitle{Chance}
         \begin{itemize}
-            \item Entwickeln einer Software f\"ur:
+            \item Entwickeln einer Software für:
             \begin{itemize}
                 \item \textbf{Suche} von Dateien.
-                \item \textbf{Monitoring} von Dateien bzgl. deren Erstellung, Ver\"anderung und L\"oschung.
+                \item \textbf{Monitoring} von Dateien bzgl. deren Erstellung, Veränderung und Löschung.
                 \item \textbf{Analyse und Bewertung} von Dateien.
                 \item \textbf{Bereinigung} von Dateien.
             \end{itemize}
-            \item Nutzung eines KI-Modells f\"ur:
+            \item Nutzung eines KI-Modells für:
             \begin{itemize}
                 \item Analyse von \textbf{Struktur} (Syntax) und \textbf{Bedeutung} (Semantik) von Dateien.
                 \item Bewertung des Dateiinhalts bzgl.
                 dessen \textbf{Schädlichkeit}.
-                \item Empfehlungen von n\"otigen \textbf{Massnahmen}.
+                \item Empfehlungen von nötigen \textbf{Massnahmen}.
             \end{itemize}
         \end{itemize}
     \end{frame}
@@ -187,7 +173,7 @@
                 \end{center}
             \end{column}
         \end{columns}
-        \note[item]{...}
+        \note[item]{...} % todo: was das?
     \end{frame}
 
     \begin{frame}{Datenbank}
@@ -284,43 +270,35 @@
                 \end{tabular}\par
             \end{column}
             \begin{column}{0.5\textwidth}
-                % todo: picture
+                \includegraphics[width=1\textwidth]{assets/presentation/goals}
             \end{column}
         \end{columns}
     \end{frame}
 
     \begin{frame}{Retro}
         \framesubtitle{Erfahrungen und Erkenntnisse}
-        \begin{columns}[t]
+        \begin{center}
+            \begin{columns}[t]
+                \begin{column}{0.3\textwidth}
+                    \textbf{Rollen und Stakeholder}
+                    \begin{itemize}
+                        \item Arbeitsaufteilung
+                        \item Kommunikation
+                    \end{itemize}
+                \end{column}
 
-            \begin{column}{0.5\textwidth}
-                \textbf{Rollen und Stakeholder}
-                \begin{itemize}
-                    \item Arbeitsaufteilung
-                    \note{gut aufgeteilt und konnten gegenseitig bei den Rollen unterstützen}
 
-                    \item Kommunikation
-                    \note{Angenehm mit weniger Stakeholdern, da es weniger Kommunikationsaufwand gibt.}
-                \end{itemize}
-            \end{column}
+                \begin{column}{0.4\textwidth}
+                    \textbf{Scrum Events und Artifacts}
+                    \begin{itemize}
+                        \item Retro, Review, Planning
+                        \item Sprint
+                        \item Velocity/Burn-Down-Chart
+                    \end{itemize}
+                \end{column}
 
-            \begin{column}{0.5\textwidth}
-                \textbf{Scrum Events und Artifacts}
-                \begin{itemize}
-                    \item Retro, Review, Planning
-                    \note{hat gut funktioniert mit 1 wöchigen Sprints, Probleme im Team wurden immer direkt angesprochen und geklärt,
-                        Verbesserungspotential erkannten wir auch}
-
-                    \item Sprint
-                    \note{war manchmal schwierig zu entscheiden, ob es in den Sprint kommt wenn es "nur" eine administrative Story ist.}
-
-                    \item Velocity/Burn-Down-Chart
-                    \note{Velocity war schwierig konstant zu halten und Commitment war eher nach Gefühl.
-                    Burndown-Chart so nicht wirklich hilfreich.}
-                \end{itemize}
-            \end{column}
-
-        \end{columns}
+            \end{columns}
+        \end{center}
     \end{frame}
 
 
@@ -335,7 +313,6 @@
             \item \textbf{Potential} von aktuellen KI-Technologien sowie unserer Software wurde aufgezeigt.
         \end{itemize}
     \end{frame}
-    \note{bei weitem noch nicht ausgeschöpft, weshalb Luca jetzt noch etwas zum Ausblick sagt}
 
 
     \section{Ausblick}\label{sec:ausblick}
