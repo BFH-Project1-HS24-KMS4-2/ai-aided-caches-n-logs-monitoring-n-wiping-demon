@@ -5,7 +5,7 @@
 \usepackage{tocbibind} % For adding ToC to the table of contents
 \usepackage{titlesec}  % For customizing titles
 \usepackage[ngerman]{babel}
-\usepackage{wasysym}
+% \usepackage{wasysym}
 \usepackage{parskip}
 \usepackage{bm}
 \usepackage{xcolor}
@@ -22,21 +22,21 @@
     breaklines=true, % Allow breaking long lines
     showstringspaces=false, % Don't show spaces as symbols
     xleftmargin=5pt, % Margin for padding
-    xrightmargin=5pt
+    xrightmargin=5pt,
+    literate={ü}{{\"u}}1 {ö}{{\"o}}1 {ä}{{\"a}}1
 }
-
 
 \usepackage{geometry}
 \usepackage{booktabs}
-\usepackage{cleveref}
 \usepackage{amsmath}
+\usepackage{cleveref}
+
 \geometry{
     top=1in,
     left=1in,
     right=1in,
     bottom=1in
 }
-
 
 \titleformat{\chapter}[block]   % Set chapter format to block style (both on same line)
 {\normalfont\huge\bfseries}     % Format for the chapter number and title
@@ -56,7 +56,6 @@
 \definecolor{eclipseStrings}{RGB}{42,0.0,255}
 \definecolor{eclipseKeywords}{RGB}{127,0,85}
 \colorlet{numb}{magenta!60!black}
-
 
 \lstdefinelanguage{json}{
     basicstyle=\normalfont\ttfamily,
@@ -117,7 +116,6 @@
         \vfill
         \textit{\today}
     \end{titlepage}
-
 
 % Abstract
     \begin{abstract}
@@ -227,7 +225,7 @@
         \caption{Softwarekomponenten (High-Level)}
         \label{fig:komponenten-grob}
     \end{figure}
-    Die Bereitstellung und Laufzeitumgebung des Systems wird im Kapitel~\nameref{chap:bereitstellung-integration} beschrieben.
+    Die Bereitstellung und Laufzeitumgebung des Systems wird im Kapitel~\nameref{ch:bereitstellung-integration} beschrieben.
 
     \subsubsection{Hardwarekompatibilität}
     Der TraceSentry ist ein eigenständiges, plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
@@ -1002,8 +1000,8 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \paragraph*{Monitoring}
-    \\Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
+    \paragraph*{Monitoring}\mbox{}\\
+    Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
     Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
     Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
     Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
@@ -1022,12 +1020,10 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \paragraph*{Optimierungen}
-
+    \paragraph*{Optimierungen}\mbox{}\\
     In den folgenden zwei Szenarien wurde geprüft, ob die Implementierung eines \textbf{Caching-Mechanismus} sinnvoll ist.
     Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
     Die Entscheidungsgrundlage wird im Folgenden erläutert:
-
     \begin{enumerate}
         \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte Merkle-Tree zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
         ohne ihn erneut aus der Datenbank laden zu müssen.
@@ -1055,7 +1051,7 @@ schädlich, also empfehle ich es zu leeren.
     Er besteht aus Knoten, die Hashes von Dateien oder Unterverzeichnissen enthalten.
     \\Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
 
-    \begin{lstlisting}[language=Pseudo,label={lst:merkle-pseudo}]
+    \begin{lstlisting}[label={lst:merkle-pseudo}]
 buildMerkleTree(path, snapshot):
     1. ueberpruefe, ob der Pfad gueltig ist. Falls nicht: Abbrechen.
     2. Erstelle Wurzel-Knoten fuer das Verzeichnis.
@@ -1074,8 +1070,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \end{lstlisting}
 
-    \subsubsubsection{\textbf{Komplexität}}
-
+    \subsubsection{\textbf{Komplexität}}
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
     Eine Analyse der Komplexität der verschiedenen Operationen des Merkle-Trees ist daher angebracht.
@@ -1086,19 +1081,17 @@ buildTreeRecursively(parent, snapshot, files):
     Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
 
     \paragraph*{Konstruktion}
-
     Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
     was einer Komplexität von $O(n)$ für das Traversieren entspricht.
     Das Hashen eines Ordners mit $k$ Kindern setzt eine Iteration über alle Kinder voraus, was einer Komplexität von $O(k)$ entspricht.
     Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
     \\\\
-    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also \boldsymbol{$O(n * s)$}
+    Die Gesamtkomplexität des Bauens des Hashbaums beträgt also $\boldsymbol{O(n \cdot s)}$
     Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
 
     \paragraph*{Linearisierung}
-
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persistieren.
-    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von  \boldsymbol{$O(n)$} entspricht.
+    Es werden für alle Knoten die Referenzen in einer Liste gespeichert, was einer Komplexität von $\boldsymbol{O(n)}$ entspricht.
 
     \clearpage
 
@@ -2299,11 +2292,11 @@ index forbidden by rule: /var/www/html/
     \clearpage
 
 
-    \chapter{Bereitstellung/Integration}\label{chap:bereitstellung-integration}
+    \chapter{Bereitstellung/Integration}\label{ch:bereitstellung-integration}
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=1\textwidth]{assets/DeplDiagram}
+        \includegraphics[width=1\textwidth]{assets/DeplDiagram-v2}
         \caption{UML Deploymentdiagramm}
         \label{fig:depl-diag}
     \end{figure}
@@ -2685,46 +2678,46 @@ echo ts run >> ~/.zprofile
     \clearpage
     \begin{thebibliography}{99}
 
-    \bibitem{javaAPI}
-    Oracle.
-    \textit{Java Files-API Dokumentation: \url{https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html\#readAllBytes-java.nio.file.Path-}}.
-    Zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{javaAPI}
+        Oracle.
+        \textit{Java Files-API Dokumentation: \url{https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html\#readAllBytes-java.nio.file.Path-}}.
+        Zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{appleDeveloper}
-    Developer Apple.
-    \textit{Creating Launchd Jobs}.
-    \url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{appleDeveloper}
+        Developer Apple.
+        \textit{Creating Launchd Jobs}.
+        \url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}, zuletzt aufgerufen am 10. Januar 2025.
 
 
         \bibitem{geeksforgeeks2025}
-    GeeksforGeeks.
-    \textit{Introduction to Merkle Tree}.
-    \url{https://www.geeksforgeeks.org/introduction-to-merkle-tree/}, zuletzt aufgerufen am 10. Januar 2025.
+        GeeksforGeeks.
+        \textit{Introduction to Merkle Tree}.
+        \url{https://www.geeksforgeeks.org/introduction-to-merkle-tree/}, zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{wikipedia2025}
-    Wikipedia.
-    \textit{Merkle Tree}.
-    \url{https://en.wikipedia.org/wiki/Merkle_tree}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{wikipedia2025}
+        Wikipedia.
+        \textit{Merkle Tree}.
+        \url{https://en.wikipedia.org/wiki/Merkle_tree}, zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{baeldung2025}
-    Baeldung.
-    \textit{Merkle Trees}.
-    \url{https://www.baeldung.com/cs/merkle-trees}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{baeldung2025}
+        Baeldung.
+        \textit{Merkle Trees}.
+        \url{https://www.baeldung.com/cs/merkle-trees}, zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{spring2025}
-    Spring Framework.
-    \textit{Spring Shell - Getting Started}.
-    \url{https://docs.spring.io/spring-shell/reference/3.3/getting-started.html}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{spring2025}
+        Spring Framework.
+        \textit{Spring Shell - Getting Started}.
+        \url{https://docs.spring.io/spring-shell/reference/3.3/getting-started.html}, zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{mckinsey2025}
-    McKinsey & Company.
-    \textit{The Economic Potential of Generative AI: The Next Productivity Frontier}.
-    \url{https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{mckinsey2025}
+        McKinsey \& Company.
+        \textit{The Economic Potential of Generative AI: The Next Productivity Frontier}.
+        \url{https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier}, zuletzt aufgerufen am 10. Januar 2025.
 
-    \bibitem{openai2025}
-    OpenAI.
-    \textit{Models Documentation}.
-    \url{https://platform.openai.com/docs/models}, zuletzt aufgerufen am 10. Januar 2025.
+        \bibitem{openai2025}
+        OpenAI\@.
+        \textit{Models Documentation}.
+        \url{https://platform.openai.com/docs/models}, zuletzt aufgerufen am 10. Januar 2025.
 
     \end{thebibliography}
 
@@ -2758,6 +2751,7 @@ echo ts run >> ~/.zprofile
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
+
     \section{API-Dokumentation}\label{sec:api-spec}
     \vspace*{\fill}
     \includepdf[pages=-]{assets/api-documentation.pdf}
@@ -2765,6 +2759,7 @@ echo ts run >> ~/.zprofile
     \vspace*{\fill}
     \thispagestyle{empty}
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
+
 
     \section{Klassendiagramm CLI}
     \label{sec:class-diag-cli}
@@ -2828,6 +2823,7 @@ echo ts run >> ~/.zprofile
 
     \vspace*{\fill}
     \includepdf[pages=-]{assets/lib_class_diag.png}
+
 
     \section{Erklärung zur Urheberschaft}
 
