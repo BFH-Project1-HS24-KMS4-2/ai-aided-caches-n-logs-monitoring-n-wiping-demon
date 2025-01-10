@@ -86,6 +86,8 @@
         {9}{{{\color{numb}9}}}{1}
 }
 
+\usepackage{makeidx}
+\makeindex
 
 \begin{document}
 
@@ -341,7 +343,7 @@
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
     Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
     Diese beeinflussten massgeblich die Architektur des Systems.
-    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
+    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die \index{DoD} Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
         \centering
@@ -402,8 +404,8 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}           & NFR-004                                        \\ \hline
-            \textbf{Anforderung}  & Codequalität \& erweiterbare Architektur       \\ \hline
+            \textbf{ID}           & NFR-004                                         \\ \hline
+            \textbf{Anforderung}  & Codequalität \& erweiterbare Architektur        \\ \hline
             \textbf{Beschreibung} & Minimaler, modularer und selbsterklärender Code \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -1454,8 +1456,8 @@ file content:
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{ID}                  & E2E-002                             \\ \hline
-            \textbf{Beschreibung}        & Autostart                           \\ \hline
+            \textbf{ID}                  & E2E-002                              \\ \hline
+            \textbf{Beschreibung}        & Autostart                            \\ \hline
             \textbf{Vorbedingungen} &
             \begin{itemize}
                 \item Autostart Konfiguration gem.\ Installationshandbuch
@@ -2795,5 +2797,27 @@ echo ts run >> ~/.zprofile
 
 
     \section{Erklärung zur Urheberschaft}
+
+    Hiermit erklären wir, dass die vorliegende Arbeit selbstständig verfasst wurde und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt wurden.
+    \\\\
+    Alle Stellen, die wörtlich oder sinngemäß aus anderen Quellen entnommen wurden, sind als solche gekennzeichnet.
+    \\\\
+    Ich erkläre mich damit einverstanden, dass die vorliegende Arbeit in elektronischer Form mit geeigneter Software überprüft werden darf.
+
+    \begin{flushleft}
+        \today
+    \end{flushleft}
+
+    \vspace{1cm}
+
+    \begin{center}
+        \begin{tabular}{c c c}
+            \includegraphics[width=3cm]{assets/signature1} &
+            \includegraphics[width=3cm]{assets/signature2} &
+            \includegraphics[width=3cm]{assets/signature3} \\
+            \rule{3cm}{0.4pt} & \rule{3cm}{0.4pt} & \rule{3cm}{0.4pt} \\
+            J. Scherer        & L. Scherer        & L. Ammann
+        \end{tabular}
+    \end{center}
 
 \end{document}
