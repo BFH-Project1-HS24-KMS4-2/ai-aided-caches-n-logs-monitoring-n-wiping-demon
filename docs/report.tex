@@ -121,7 +121,15 @@
 
 % Abstract
     \begin{abstract}
-        \ldots
+        TraceSentry ist eine plattformunabhängige und KI-gestützte Anwendung zur Suche, Über\-wachung, Bewertung und Bereinigung von Cache- und Logdateien.
+        Das, in einer praxisnahen Fallstudie ausgewählte und evaluierte, KI-Modell \textit{GPT-4o Mini} von OpenAI wird eingesetzt, um Dateiinhalte zu bewerten und potenzielle Risiken zu erkennen.
+        Die Anwendung besteht aus einer Befehlszeilenschnittstelle (CLI) und einem Hintergrundprozess (Daemon), der in regelmäßigen Abständen Snapshots der überwachten Verzeichnisse erstellt.
+        Diese Snapshots gelten als Momentaufnahme eines Verzeichnisses, werden als Merkle-Baum konstruiert und miteinander verglichen.
+        Eine SQLite-Datenbank wird zur Persistierung der Snapshot sowie den erkannten Änderungen verwendet.
+        Die modulare Architektur der Anwendung, die in Java unter Verwendung des Spring-Frameworks implementiert wurde, unterstützt die Erweiterung um zusätzliche Funktionen oder Benutzeroberflächen.
+
+        Dieses Dokument beschreibt die technische Spezifikation und Realisierung, verwendete Prozesse, eine umfangreiche Evaluation der Anwendung, eine Fallstudie zur Bewertung des  Potentials
+        des KI-Modells und einen Ausblick auf zukünftige Arbeiten.
     \end{abstract}
 
 % Table of Contents
