@@ -2741,15 +2741,21 @@ echo ts run >> ~/.zprofile
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
 
-    \section{Klassendiagramm CLI \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
+    \section{Klassendiagramm CLI}
     \label{sec:class-diag-cli}
 
-    \footnotetext[1]{Diagramm erstellt mit IntelliJ IDEA Ultimate.}
-    \footnotetext[2]{Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.}
-    \footnotetext[3]{
-        Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
-        \texttt{docs/diagrams/intellij/cli.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/cli\_class\_diag.png}
+    \begingroup
+    \renewcommand{\thefootnote}{\roman{footnote}}
+    \footnotetext[0]{
+        \begin{itemize}
+            \item Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
+            \texttt{docs/diagrams/intellij/cli.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/cli\_class\_diag.png}
+            \item Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.
+            \item Diagramm erstellt mit IntelliJ IDEA Ultimate.
+        \end{itemize}
     }
+    \endgroup
+
     \vspace*{\fill}
     \includepdf[pages=-]{assets/cli_class_diag.png}
 
@@ -2758,15 +2764,21 @@ echo ts run >> ~/.zprofile
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
 
-    \section{Klassendiagramm Daemon \protect\footnotemark[1]  \protect\footnotemark[2] \protect\footnotemark[3]}
+    \section{Klassendiagramm Daemon}
     \label{sec:class-diag-daemon}
 
-    \footnotetext[1]{Diagramm erstellt mit IntelliJ IDEA Ultimate.}
-    \footnotetext[2]{Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.}
-    \footnotetext[3]{
-        Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
-        \texttt{docs/diagrams/intellij/daemon.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/daemon\_class\_diag.png}
+    \begingroup
+    \renewcommand{\thefootnote}{\roman{footnote}}
+    \footnotetext[0]{
+        \begin{itemize}
+            \item Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
+            \texttt{docs/diagrams/intellij/daemon.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/daemon\_class\_diag.png}
+            \item Wegen dem Spring IoC Container: nicht alle Beziehungen zwischen Klassen abgebildet.
+            \item Diagramm erstellt mit IntelliJ IDEA Ultimate.
+        \end{itemize}
     }
+    \endgroup
+
     \vspace*{\fill}
     \includepdf[pages=-]{assets/daemon_class_diag.png}
 
@@ -2775,14 +2787,20 @@ echo ts run >> ~/.zprofile
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
 
-    \section{Klassendiagramm Lib \protect\footnotemark[1]  \protect\footnotemark[2]}
+    \section{Klassendiagramm Lib}
     \label{sec:class-diag-lib}
 
-    \footnotetext[1]{Diagramm erstellt mit IntelliJ IDEA Ultimate.}
-    \footnotetext[2]{
-        Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
-        \texttt{docs/diagrams/intellij/lib.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/lib\_class\_diag.png}
+    \begingroup
+    \renewcommand{\thefootnote}{\roman{footnote}}
+    \footnotetext[0]{
+        \begin{itemize}
+            \item Falls das Diagramm nicht optimal dargestellt wird, kann es im Abgabeordner unter folgenden Pfaden gefunden werden:
+            \texttt{docs/diagrams/intellij/lib.uml} (kann nur mit IntelliJ IDEA geöffnet werden) bzw. \texttt{docs/assets/lib\_class\_diag.png}
+            \item Diagramm erstellt mit IntelliJ IDEA Ultimate.
+        \end{itemize}
     }
+    \endgroup
+
     \vspace*{\fill}
     \includepdf[pages=-]{assets/lib_class_diag.png}
 
