@@ -2429,7 +2429,7 @@ echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
 echo ts run >> ~/.zprofile
         \end{lstlisting}
         Dies wird als pragmatische Lösung empfohlen.
-        Alternativ können Sie auch \textit{launchd} verwenden.\footnote{\url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}}
+        Alternativ können Sie auch \textit{launchd} verwenden. \cite{appleDeveloper}
         \item Starten Sie das Terminal neu, dadurch wird der Daemon automatisch gestartet (sofern Sie Schritt 6 befolgt haben), und Sie sind bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
@@ -2647,7 +2647,7 @@ echo ts run >> ~/.zprofile
 
     \subsection{Dateikompatibilität}\label{subsec:dateikompatibilitat}
     Bei der Inspektion von Dateien durch KI sowie dem Erstellen eines Merkle-Trees für die periodische Überwachung wird jeweils der gesamte Dateiinhalt via Java Files-API eingelesen.
-    Dies Funktion \texttt{readAllBytes} hat dabei eine Limitierung von 2 GB pro Datei\footnote{Java Files-API Dokumentation: \url{https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html\#readAllBytes-java.nio.file.Path-}}.
+    Dies Funktion \texttt{readAllBytes} hat dabei eine Limitierung von 2 GB pro Datei~\cite{javaAPI}.
     Hierbei könnte man in einer zukünftigen Version die Dateien für die Inspektion in kleinere Teile aufteilen und diese separat analysieren.
     Für die Erstellung des Merkle-Trees wäre ein möglicher Ansatz, die Dateien in Blöcke von 2 GB zu teilen und diese einzeln zu hashen.
     Die Hashes aller Blöcke könnten dann konkateniert und gehasht werden, um den Hash-Wert der gesamten Datei zu erhalten.
@@ -2665,7 +2665,18 @@ echo ts run >> ~/.zprofile
     \clearpage
     \begin{thebibliography}{99}
 
-    \bibitem{geeksforgeeks2025}
+    \bibitem{javaAPI}
+    Oracle.
+    \textit{Java Files-API Dokumentation: \url{https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html\#readAllBytes-java.nio.file.Path-}}.
+    Zuletzt aufgerufen am 10. Januar 2025.
+
+    \bibitem{appleDeveloper}
+    Developer Apple.
+    \textit{Creating Launchd Jobs}.
+    \url{https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingLaunchdJobs.html}, zuletzt aufgerufen am 10. Januar 2025.
+
+
+        \bibitem{geeksforgeeks2025}
     GeeksforGeeks.
     \textit{Introduction to Merkle Tree}.
     \url{https://www.geeksforgeeks.org/introduction-to-merkle-tree/}, zuletzt aufgerufen am 10. Januar 2025.
