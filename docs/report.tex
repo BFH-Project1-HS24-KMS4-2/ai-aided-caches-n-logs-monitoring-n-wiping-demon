@@ -1304,11 +1304,11 @@ buildTreeRecursively(parent, snapshot, files):
         Falls der Snapshot gelöscht wird, werden auch alle zugehörigen Knoten gelöscht.
         \item \textbf{parent\_id} (INTEGER): Fremdschlüssel auf den Parent-Knoten.
         Falls der Parent-Knoten gelöscht wird, wird auch der Kind-Knoten gelöscht.
-        \item \textbf{hash} (TEXT): Hash der Datei, die von diesem Knoten abgebildet wird.
-        \item \textbf{path} (TEXT): Absoluter Pfad der Datei, die von diesem Knotens abgebildet wird.
-        \item \textbf{has\_changed} (BOOLEAN): Gibt an, ob sich die Datei, die von diesem Knoten abgebildet wird
-        seit dem letzten Snapshot geändert hat oder sie neu hinzugefügt wurde.
-        \item \textbf{deleted\_in\_next\_snapshot} (BOOLEAN): Gibt an, ob die Datei, die von diesem Knoten abgebildet wird
+        \item \textbf{hash} (TEXT): Hash des Elements, welches von diesem Knoten abgebildet wird.
+        \item \textbf{path} (TEXT): Absoluter Pfad des Elements, welches von diesem Knoten abgebildet wird.
+        \item \textbf{has\_changed} (BOOLEAN): Gibt an, ob sich das Element, welches von diesem Knoten abgebildet wird,
+        seit dem letzten Snapshot geändert hat oder neu hinzugefügt wurde.
+        \item \textbf{deleted\_in\_next\_snapshot} (BOOLEAN): Gibt an, ob das Element, welches von diesem Knoten abgebildet wird,
         im nächsten Snapshot nicht mehr existiert.
     \end{itemize}
 
@@ -2818,7 +2818,7 @@ echo ts run >> ~/.zprofile
 
     \subsection{Dateikompatibilität}\label{subsec:dateikompatibilitat}
     Bei der Inspektion von Dateien durch KI sowie dem Erstellen eines Merkle-Trees für die periodische Überwachung wird jeweils der gesamte Dateiinhalt via Java Files-API eingelesen.
-    Dies Funktion \texttt{readAllBytes} hat dabei eine Limitierung von 2 GB pro Datei~\cite{javaAPI}.
+    Die Funktion \texttt{readAllBytes} hat dabei eine Limitierung von 2 GB pro Datei~\cite{javaAPI}.
     Hierbei könnte man in einer zukünftigen Version die Dateien für die Inspektion in kleinere Teile aufteilen und diese separat analysieren.
     Für die Erstellung des Merkle-Trees wäre ein möglicher Ansatz, die Dateien in Blöcke von 2 GB zu teilen und diese einzeln zu hashen.
     Die Hashes aller Blöcke könnten dann konkateniert und gehasht werden, um den Hash-Wert der gesamten Datei zu erhalten.
