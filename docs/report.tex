@@ -358,7 +358,7 @@
         \\Programme sind bessere Modelle (Spezifikations- und Design-Endlosschlaufen vermeiden)
     \end{quote}
 
-    Priorisiert sollen dabei in erster Linie Funktionalitäten eines \gls{mvp} (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen. % TODO Kernfunktionalität Einzahl korrekt?
+    Priorisiert sollen dabei in erster Linie Funktionalitäten eines \gls{mvp} (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen.
     Dazu gehören vor allem die Suche und Überwachung von Dateien.
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
@@ -646,9 +646,8 @@
 
     \subsubsection{Test-Setup und -Konfiguration}
     \begin{itemize}
-        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe in den Unit-Tests, um sie isoliert zu halten. % TODO komisch formuliert
+        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe.
         \item \textbf{Testumgebung}: Sofern sinvoll, werden z.B.\ In-Memory-Datenbanken verwendet.\ Für Tests mit Dateisystem-Abhängigkeit können temporäre Verzeichnisse erstellt werden.
-        \item \textbf{Automatisierte Testausführung}: Integration der Tests in die CI/CD-Pipeline, um sicherzustellen, dass das System stabil bleibt. % TODO haben wir nicht?
     \end{itemize}
 
     \clearpage
