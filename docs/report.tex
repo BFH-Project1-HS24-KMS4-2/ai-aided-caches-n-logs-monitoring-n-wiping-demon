@@ -1216,7 +1216,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsection{Merkle-Tree (Hashbaum)}\index{Merkle-Tree
+    \subsubsection{Merkle-Tree (Hashbaum)}\index{Merkle-Tree}
     Ein Merkle-Tree ist eine binäre Baumstruktur, die zur effizienten Überprüfung von Datenintegrität verwendet wird.
     Er eignet sich für das Vergleichen von Baumstrukturen, wie sie in Dateisystemen vorkommen.
     \\Bei der Erstellung eines Snapshots\index{Snapshots} eines überwachten Pfades wird ein eben solcher Baum erstellt.
@@ -1242,7 +1242,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \end{lstlisting}
 
-    \subsubsection{\textbf{Komplexität}}\index{Merkle-Tree
+    \subsubsection{\textbf{Komplexität}}\index{Merkle-Tree}
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
     Eine Analyse der Komplexität der verschiedenen Operationen des Merkle-Trees ist daher angebracht.
@@ -1305,7 +1305,7 @@ buildTreeRecursively(parent, snapshot, files):
     \end{itemize}
 
     \paragraph*{snapshot\_node}\mbox{}\\
-    In dieser Tabelle werden die Knoten des Merkle-Trees\index{Merkle-Tree gespeichert, welche die Dateien und Verzeichnisse des überwachten Pfades repräsentieren.
+    In dieser Tabelle werden die Knoten des Merkle-Trees\index{Merkle-Tree} gespeichert, welche die Dateien und Verzeichnisse des überwachten Pfades repräsentieren.
     Durch die Natur von relationalen Datenbanken wird der Baum linearisiert gespeichert und die Beziehungen durch Fremdschlüssel auf die gleiche Entität (Parent-Knoten) rekursiv abgebildet.
 
     Attribute:
