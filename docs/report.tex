@@ -2684,7 +2684,7 @@ echo ts run >> ~/.zprofile
         \item Das Hochladen einer Datei in die GPT-Prompt dauert (inkl.\ dem Vorschlagen der Output-Formulierung bzw.\ -Formatierung) ca.\ 20 Sekunden.
         \item Die Analyse einer Datei in der GPT-Prompt dauert ca.\ 4 Sekunden.
         (Hierbei spielt vor allem die Qualität der Prompt-Formulierung eine Rolle.)
-        \item TraceSentry benötigt im Schnitt 4 Sekunden für das \texttt{inspect} Kommando (für eine beliebige Datei).
+        \item Das Analysieren einer Datei mit TraceSentry (\texttt{inspect}) dauert samt CLI-Aufruf ca.\ 10 Sekunden.
         \item Das Analysieren einer Datei mit GPT-4o mini kostet gemäss~\nameref{sec:ki-fallstudie} 0.011 USD $\approx$ 0.01 CHF.
         \item Der durchschnittliche Studenlohn beträgt 38 CHF\@.
         \item Eine Datei wird im Schnitt für eine Woche überwacht.
@@ -2710,19 +2710,19 @@ echo ts run >> ~/.zprofile
     \text{\textbf{Mit TraceSentry:}} \\
     \begin{align*}
         \text{Aufgabendauer mit SW} &= \text{\texttt{inspect}} \\
-        &= 4s
+        &= 10s
     \end{align*}
 
     \text{\textbf{Produktivitätssteigerung:}} \\
     \begin{align*}
-        \text{Zeitersparnis} &= 24 - 4 = 20s = 0.33min \\
+        \text{Zeitersparnis} &= 24 - 10 = 14s = 0.23min \\
         \text{GPT-4o mini Kosten} &= 0.01 \text{ CHF (pro Datei)} \\
         \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx 0.63 \text{CHF/Minute} \\
-        \text{Gesamtkostenersparnis} &= 0.33 * 0.63 \text{CHF/Minute} - 0.01 \text{CHF} \\ &= 0.1979 \text{ CHF} \\ &= 19.79 \text{ Rappen (pro Datei)} \\
+        \text{Gesamtkostenersparnis} &= 0.23 * 0.63 \text{CHF/Minute} - 0.01 \text{CHF} \\ &= 0.137 \text{ CHF} \\ &= 13.70 \text{ Rappen (pro Datei)} \\
         \\
         \text{Produktivitätssteigerung} &= \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}}
-        \\ &= \frac{\text{20}}{\text{24}}
-        \\ &= 83\%
+        \\ &= \frac{\text{14}}{\text{24}}
+        \\ &= 58\%
     \end{align*}
 
     \newpage
