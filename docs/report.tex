@@ -2463,14 +2463,13 @@ index forbidden by rule: /var/www/html/
 
     Das ganze System befindet sich während der Laufzeit auf dem Host-Gerät des Anwenders.
     Dazu werden zwei separate Jar-Dateien ausgeliefert.
-    Die Erste sollte bereits beim Start des Geräts ausgeführt werden und die JVM für den Daemon starten.
-    Dieser startet einen Webservice, der REST-Schnittstellen für die Steuerung des Daemons anbietet.
-    Dieser REST-Service kommuniziert ausserdem über JDBC mit einem RDBMS, welches in Form von einer einzigen Datei (SQLite)
-    in der Daemon-Applikation embedded ist.
+    Die Erste sollte bereits beim Start des Geräts ausgeführt werden (Autostart) und die JVM für den Daemon starten.
+    Dieser startet einen Webservice in Form einer REST-Schnittstelle für dessen Steuerung.
+    Der Daemon kommuniziert ausserdem via JDBC mit der SQLite-Datenbank, die als Datei auf dem Host-Gerät gespeichert wird.
 
-    Das zweite Jar sollte dann manuell vom Anwender gestartet werden sobald er Funktionen des Daemons ausführen möchte.
-    Dieses Jar startet wiederum eine zweite JVM, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
-    Diese CLI sendet dann über HTTP die entsprechenden Anfragen an den Daemon, die zur Erfüllung der Anweisungen des Anwenders führen.
+    Das zweite Jar wird manuell vom Anwender gestartet werden, sobald er Funktionen des Daemons ausführen möchte.
+    Dieses Jar startet wiederum eine JVM, welche ein CLI für den Anwender mit bestimmten Kommandos zur Verfügung stellt.
+    Dieses CLI konsumiert die REST-Schnittstelle des Daemons zur Ausführung der Kommandos.
 
 
     \section{Lizenzierung}
