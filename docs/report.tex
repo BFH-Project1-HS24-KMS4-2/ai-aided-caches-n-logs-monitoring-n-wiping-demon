@@ -287,7 +287,7 @@
     \begin{abstract}
         TraceSentry ist eine plattformunabhängige und KI-gestützte Anwendung zur Suche, Über\-wachung, Bewertung und Bereinigung von Cache- und Logdateien.
         In einer praxisorientierten Fallstudie wurde das KI-Modell \textit{GPT-4o Mini} von OpenAI ausgewählt und evaluiert, um Dateiinhalte zu bewerten und potenzielle Risiken zu erkennen.
-        Die Anwendung umfasst eine Befehlszeilenschnittstelle (CLI) und einen Hintergrundprozess (Daemon), der in regelmäßigen Abständen Snapshots der überwachten Verzeichnisse erstellt.
+        Die Anwendung umfasst eine Befehlszeilenschnittstelle (CLI) und einen Hintergrundprozess (Daemon), der in regelmässigen Abständen Snapshots der überwachten Verzeichnisse erstellt.
         Diese Snapshots dienen als Momentaufnahmen der Verzeichnisse, werden als Merkle-Bäume konstruiert und miteinander verglichen.
         Eine SQLite-Datenbank wird verwendet, um die Snapshots sowie die erkannten Änderungen zu persistieren.
         Die modulare Architektur der Anwendung, die in Java unter Verwendung des Spring-Frameworks implementiert wurde, ermöglicht die Erweiterung um zusätzliche Funktionen oder Benutzeroberflächen.
@@ -553,7 +553,7 @@
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
                 \item Der Daemon kann via CLI gestartet werden.
-                \item Alle Konfigurationen und Aktionen des Daemon sind via CLI verfügbar.
+                \item Jegliche Interaktionen mit dem Daemon sind via CLI verfügbar.
             \end{itemize}
             \\ \hline
         \end{tabular}
@@ -699,15 +699,15 @@
         Der Nutzer hat kürzlich in seinem Task-Manager ein Programm entdeckt, das komischerweise
         ziemlich viel Speicher braucht.
         Also verwendet er den search-Befehl mit dem Pfad auf die Installation von diesem Programm
-        und ihm werden die in diesem Verzeichnis gefundenen Cache- sowie \gls{logfiles} aufgelistet:
+        und ihm werden, die in diesem Verzeichnis gefundenen, Cache- sowie \gls{logfiles} aufgelistet:
         \begin{verbatim}
 internal/test.log
-internal/cache.json
+internal/cache.jsonx
         \end{verbatim}
 
         \item \textbf{Dateien überwachen}\\
         Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innerhalb des Programmverzeichnisses genauer überwachen.
-        Also fügt er diesen Pfad mit dem \texttt{monitor}-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
+        Also fügt er diesen Pfad mit dem \texttt{monitor add}-Befehl hinzu, wonach dieses Verzeichnis vom TraceSentry stündlich überwacht wird.
 
         \item \textbf{Snapshots vergleichen}\\
         Nach einigen Stunden möchte der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
@@ -724,12 +724,7 @@ test.log CHANGED 7-times
         Als nächstes möchte der Nutzer wissen, wofür diese test.log Datei ist, angesichts der Tatsache, dass sich diese jede Stunde ändert.
         Also nutzt er den \texttt{inspect}-Befehl, um die angebundene KI abzufragen, wofür diese Datei genau ist, ob sie ein Sicherheitsrisiko darstellt
         und ob er die Datei evtl.\ leeren oder sogar löschen sollte.
-        Es resultiert eine standardisierte Ausgabe:
-        %TODO richtiges Beispiel
-        \begin{verbatim}
-Die Datei ist unbekannt für dieses Programm und deswegen potenziell
-schädlich, also empfehle ich es zu leeren.
-        \end{verbatim}
+        Es resultiert eine standardisierte Ausgabe, welche den Verwendungszweck, eine Schädlichkeitsbewertung und eine Empfehlung enthält.
 
         \item \textbf{Datei leeren oder löschen}\\
         Der Nutzer kann nun selbst entscheiden, was er mit dieser Information anfangen möchte.
@@ -740,12 +735,12 @@ schädlich, also empfehle ich es zu leeren.
     \newpage
 
     \subsection{UX-Prototyping}\label{subsec:ux-prototyping}
-    Da das System ausschließlich über ein Command-Line-Interface (CLI) verfügt,
+    Da das System ausschliesslich über ein Command-Line-Interface (CLI) verfügt,
     wird die Dokumentation dieser Schnittstelle im Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch}
     umfassend behandelt.
     Diese Dokumentation wurde im Rahmen eines iterativen und agilen Entwicklungsprozesses
-    kontinuierlich während der Implementierung der einzelnen Befehle erstellt.
-    Sie enthält eine detaillierte Beschreibung aller verfügbaren Befehle, einschließlich ihrer Syntax, Parameter und Anwendungsbeispiele.
+    kontinuierlich, während der Implementierung der einzelnen Befehle, erstellt.
+    Sie enthält eine detaillierte Beschreibung aller verfügbaren Befehle, einschliesslich ihrer Syntax, Parameter und Anwendungsbeispiele.
     Darüber hinaus werden mögliche Systemantworten im Kontext verschiedener Szenarien erläutert,
     um eine praxisnahe Nutzung zu gewährleisten.
 
@@ -788,12 +783,12 @@ schädlich, also empfehle ich es zu leeren.
 
     \paragraph*{1.2 Remote}\mbox{}\\
     Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk vom Abnehmer aus angesprochen.
-    Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäß funktioniert.
+    Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäss funktioniert.
 
     \paragraph*{Vorteile}
     \begin{itemize}
         \item Höhere Datensicherheit, da die Daten auf einem separaten System gespeichert werden können, welches durch Backup-Strategien abgesichert ist.
-        \item Größere Speicherkapazität, da die Skalierung auf leistungsfähige Server oder Cloud-Dienste möglich ist.
+        \item Grössere Speicherkapazität, da die Skalierung auf leistungsfähige Server oder Cloud-Dienste möglich ist.
     \end{itemize}
 
     \paragraph*{Nachteile}
@@ -805,7 +800,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Fazit}
     Die Remote-Datenbank wurde als ungeeignet für die vorhandenen Anwendungsfälle bewertet.
     Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind nicht essentiell.
-    Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismäßigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
+    Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismässigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
 
     \paragraph*{\underline{1.3 File-basiert (serverlos)}}\mbox{}\\
     Eine Datenbank wird lokal als Ressource in Form einer Datei dem Programms bereitgestellt und ist ohne äusserliche Einwirkungen persistent.
@@ -836,7 +831,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \paragraph*{2.1 Inter-Prozess-Kommunikation (IPC)}\mbox{}\\
     Diese Variante nutzt einen gemeinsamen Speicherbereich, beispielsweise ein geteiltes Verzeichnis, um Dateien für die Kommunikation zwischen CLI und Daemon auszutauschen.
-    Die CLI schreibt Anweisungen in Dateien, die der Daemon anschließend ausliest und verarbeitet.
+    Die CLI schreibt Anweisungen in Dateien, die der Daemon anschliessend ausliest und verarbeitet.
 
     \paragraph*{Vorteile}
     \begin{itemize}
@@ -896,7 +891,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Fazit}
     Die REST-Schnittstelle wurde als die bevorzugte Option gewählt, da sie eine klare und standardisierte technische Kommunikation ermöglicht.
     Sie ist stabil, flexibel und erweiterbar, was besonders wichtig für den langfristigen Betrieb und mögliche zukünftige Anforderungen, wie die Systemtrennung von CLI und Daemon, ist.
-    Zudem ist die Implementierung dank vorhandener Frameworks verhältnismäßig einfach und effizient.
+    Zudem ist die Implementierung dank vorhandener Frameworks verhältnismässig einfach und effizient.
     \clearpage
 
     \subsubsection{Technologieentscheid}\label{subsubsec:technologieentscheid}
@@ -908,12 +903,12 @@ schädlich, also empfehle ich es zu leeren.
     Dabei wurde zunächst die grundsätzliche Entscheidung zwischen \textbf{NoSQL} und \textbf{SQL} analysiert.
 
     \paragraph*{1.1 NoSQL}\mbox{}\\
-    NoSQL-Datenbanken verwenden flexible Datenmodelle wie Dokumente, Key-Value oder Graphen und sind für hohe Skalierbarkeit sowie große Datenmengen ausgelegt.
+    NoSQL-Datenbanken verwenden flexible Datenmodelle wie Dokumente, Key-Value oder Graphen und sind für hohe Skalierbarkeit sowie grosse Datenmengen ausgelegt.
 
     \paragraph*{Vorteile}
     \begin{itemize}
         \item Hohe Flexibilität: Anpassbare Datenstrukturen ohne festes Schema.
-        \item Einfache horizontale Skalierbarkeit: Gut geeignet für große Datenmengen.
+        \item Einfache horizontale Skalierbarkeit: Gut geeignet für grosse Datenmengen.
         \item Spezialisierung: Verschiedene Modelle für spezifische Anwendungsfälle.
     \end{itemize}
 
@@ -943,7 +938,7 @@ schädlich, also empfehle ich es zu leeren.
     \begin{itemize}
         \item Feste Schemata: Weniger flexibel bei Änderungen in der Datenstruktur.
         \item Begrenzte horizontale Skalierbarkeit: Schwieriger als bei NoSQL umzusetzen.
-        \item Suboptimale Performance bei großen unstrukturierten Datenmengen.
+        \item Suboptimale Performance bei grossen unstrukturierten Datenmengen.
     \end{itemize}
 
     \paragraph*{Fazit}
@@ -963,13 +958,13 @@ schädlich, also empfehle ich es zu leeren.
 
     \paragraph*{Nachteile}
     \begin{itemize}
-        \item Eingeschränkte Eignung für große Workloads: Nicht für datenintensive Anwendungen ausgelegt.
+        \item Eingeschränkte Eignung für grosse Workloads: Nicht für datenintensive Anwendungen ausgelegt.
         \item Java-Abhängigkeit: Begrenzte Unterstützung in nicht-Java-Umgebungen.
         \item Persistenzprobleme: Daten können im Speicher verloren gehen, wenn nicht korrekt gesichert.
     \end{itemize}
 
     \paragraph*{Fazit}
-    H2 wurde ausgeschlossen, da es nicht für große Datenmengen ausgelegt ist und eine zu starke Abhängigkeit von Java besteht.
+    H2 wurde ausgeschlossen, da es nicht für grosse Datenmengen ausgelegt ist und eine zu starke Abhängigkeit von Java besteht.
     Zudem erfüllt SQLite unsere Anforderungen besser.
 
     \paragraph*{\underline{1.2.2 SQLite}}\mbox{}\\
@@ -987,7 +982,7 @@ schädlich, also empfehle ich es zu leeren.
         \item Begrenzte Skalierbarkeit: Nicht geeignet für Anwendungen mit hohem gleichzeitigen Datenzugriff.
         (Single-Writer-Prinzip)
         \item Eingeschränkte Funktionalität: Unterstützt nicht alle erweiterten SQL-Funktionen.
-        \item Performance-Einbußen bei großen Datenmengen.
+        \item Performance-Einbussen bei grossen Datenmengen.
     \end{itemize}
 
     \paragraph*{Fazit}
@@ -1010,7 +1005,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Nachteile}
     \begin{itemize}
         \item Geringere Performance: Nicht ideal für rechenintensive Anwendungen.
-        \item Dynamische Typisierung: Kann bei großen Projekten zu Wartungsproblemen führen.
+        \item Dynamische Typisierung: Kann bei grossen Projekten zu Wartungsproblemen führen.
         \item Distributionsprobleme: Erfordert oft spezielle Umgebungen oder Pakete.
     \end{itemize}
 
@@ -1095,7 +1090,7 @@ schädlich, also empfehle ich es zu leeren.
     Dazu gehört serverseitige Validierung, Datenverarbeitung und -Persistierung.
 
     \subsubsection{Operations Scheduler}
-    Der Monitoring Scheduler führt periodisch Operationen aus.
+    Der Operations Scheduler führt periodisch Operationen aus.
 
     \subsubsection{Repository}
     Das Repository stellt den Zugang zur Persistenzschicht zur Verfügung.
@@ -1165,8 +1160,8 @@ schädlich, also empfehle ich es zu leeren.
     \clearpage
 
     \paragraph*{Monitoring}\mbox{}\\
-    Der Monitoring Scheduler ist die Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
-    Er speichert periodisch Snapshots\index{Snapshots} von überwachten Pfaden in der Datenbank (1.1).
+    Der Monitoring Scheduler ist die Implementation des Operations Schedulers (siehe\\~\nameref{subsec:loesungsarchitektur}).
+    Er speichert periodisch Snapshots\index{Snapshots} von überwachten Pfaden in der Datenbank (1.1)\footnote{Diese Nummerierung bezieht sich auf das nachfolgende Sequenzdiagramm}.
     Für jeden überwachten Pfad wird ein \gls{snapshot} (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
     Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
     Falls ein Knoten nicht mehr existiert, wird dafür ein Flag im alten Snapshot gesetzt.
@@ -1251,7 +1246,9 @@ buildTreeRecursively(parent, snapshot, files):
     Das Hashen eines Blattes (Datei) ist abhängig von der Grösse $s$ der Datei und hat eine Komplexität von $O(s)$.
     \\\\
     Die Gesamtkomplexität des Bauens des Hashbaums beträgt also $\boldsymbol{O(n \cdot s)}$
-    Hier ist $s$ die durchschnittliche Dateigrösse. $k$ ist implizit in $n$ enthalten.
+    Um die Berechnung einfach zu halten, wird hierbei $s$ als konstant angenommen.
+    In der Praxis variiert die Grösse der Dateien jedoch stark, weshalb die Komplexität in der Realität ebenfalls variiert.
+    $k$ ist implizit in $n$ enthalten.
 
     \paragraph*{Linearisierung}
     Es gibt Fälle, in denen der Hashbaum linearisiert wird, um z.B.\ die Java Stream API zu verwenden oder direkt alle Knoten miteinander zu persistieren.
@@ -1327,7 +1324,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \textit{Index nicht sinnvoll:}
     \begin{itemize}
-        \item Die Tabelle ist von geringer Größe.
+        \item Die Tabelle ist von geringer Grösse.
         \item Das Attribut wird häufig manipuliert.
     \end{itemize}
 
@@ -1470,7 +1467,7 @@ file content:
         \end{tabular}
         \caption{Scrum Rollen}\label{tab:scrum-roles}
     \end{table}
-    Wir versuchen alle zu entwickeln und dabei die Arbeitslast mit Rücksicht auf die
+    Wir arbeiten alle als Entwickler und versuchen dabei die Arbeitslast mit Rücksicht auf die
     zusätzlichen Aufgaben der SM- und PO-Rollen so gleichmässig wie möglich zu verteilen.
 
     \subsubsection*{Weitere Rollen}
@@ -1520,7 +1517,7 @@ file content:
     Eine User Story wird in Gitlab als Issue bezeichnet.
     Sie lebt auf der Stufe eines Projektes (Repository) und kann einem Epic zugeordnet sein.
     Sie kann ebenfalls sogenannte Tasks enthalten, welche kleinere Arbeiten der User Stories (meistens aus Entwickler-Sicht) repräsentieren.
-    Jede User Story ist gemäß folgendem Schema dokumentiert:
+    Jede User Story ist gemäss folgendem Schema dokumentiert:
     \\
     \texttt{Als <Benutzerrolle> möchte ich <Funktion>, sodass <Begründung/Benefit>.}
     Dazu folgendes Beispiel:
@@ -2279,7 +2276,7 @@ index forbidden by rule: /var/www/html/
     \subsubsection{Sammlung eigener Testdateien}
     Da kein Dataset in der passenden Form gefunden werden konnte, wurden eigene Testdateien generiert sowie Logs aus der Gitlab CI/CD Pipeline verwendet.
     Zur Generierung der Logdateien für unsere Fallstudie wurde ein Python-Skript erstellt.
-    Dieses Skript enthält sogenannte Template-Funktionen für die Log-Typen HTTP, System (linux), MySQL, Router, Authentifizierung, SMTP und Docker der Form:
+    Dieses Skript enthält sogenannte Template-Funktionen für die Log-Typen HTTP, System (Linux), MySQL, Router, Authentifizierung, SMTP und Docker der Form:
     \begin{verbatim}def logtyp_template(is_anomalous=False)
     \end{verbatim}
     Die Funktion generiert genau eine Zeile, wobei der Parameter \texttt{is\_anomalous} bestimmt, ob die Zeile anomalous sein soll.
@@ -2530,7 +2527,7 @@ PATH=$PATH:$TRACE_SENTRY_DIR
         \end{lstlisting}
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
+        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
 export OPENAI_API_KEY=<generierter API-Schlüssel>
         \end{lstlisting}
@@ -2561,7 +2558,7 @@ $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
         \end{lstlisting}
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
+        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
         \begin{lstlisting}[label={lst:lstlisting-windows-3}]
 [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schluessel>","User")
         \end{lstlisting}
@@ -2595,7 +2592,7 @@ echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
         \end{lstlisting}
         \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
         Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschließend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File:
+        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File:
         \begin{lstlisting}[label={lst:lstlisting-mac-3}]
 echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \end{lstlisting}
@@ -2627,7 +2624,7 @@ echo ts run >> ~/.zprofile
         Der nicht-interaktive Modus wird gestartet, indem in einem Host-Terminal der Befehl \texttt{ts <Befehl>} ausgeführt wird.
         \item Im TraceSentry ist ein \texttt{help}-Befehl eingebaut, welcher eine Übersicht über alle verfügbaren Befehle und deren Verwendung anzeigt.
         Dieser Befehl wird genau gleich wie alle anderen Befehle ausgeführt, indem im Host-Terminal \texttt{ts help} eingegeben wird.
-        Um genauere Informationen zu einem bestimmten Befehl des TraceSentry's zu erhalten kann nach dem \texttt{help}-Befehl auch der Name des gewünschten Befehls angegeben werden (z.B. \texttt{ts help monitor}).
+        Um genauere Informationen zu einem bestimmten Befehl des TraceSentry's zu erhalten kann nach dem \texttt{help}-Befehl auch der Name des gewünschten Befehls angegeben werden (z.B. \texttt{ts help search}).
         \item Für die Verwendung mit \textbf{Windows} ist zu beachten, dass alle Pfade in den Befehlen mit \textbf{zwei} Backslash (\textbackslash) geschrieben werden müssen.
         \item Pfade welche Leerzeichen enthalten, müssen in Anführungszeichen gesetzt werden.
     \end{itemize}
@@ -2698,8 +2695,6 @@ echo ts run >> ~/.zprofile
     \end{itemize}
 
     \clearpage
-
-    Texte als Variablen sind folgend als Zeitdauer zu verstehen. \\
 
     \textbf{Analyse \texttt{inspect} Funktion} \\
 
@@ -2992,7 +2987,7 @@ echo ts run >> ~/.zprofile
 
     Hiermit erklären wir, dass die vorliegende Arbeit selbstständig verfasst wurde und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt wurden.
     \\\\
-    Alle Stellen, die wörtlich oder sinngemäß aus anderen Quellen entnommen wurden, sind als solche gekennzeichnet.
+    Alle Stellen, die wörtlich oder sinngemäss aus anderen Quellen entnommen wurden, sind als solche gekennzeichnet.
     \\\\
     Ich erkläre mich damit einverstanden, dass die vorliegende Arbeit in elektronischer Form mit geeigneter Software überprüft werden darf.
 
