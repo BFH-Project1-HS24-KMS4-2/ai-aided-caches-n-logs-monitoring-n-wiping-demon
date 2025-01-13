@@ -324,10 +324,10 @@
     und fehlender Kontrolle führen.
 
     \subsection{Chance}\label{subsec:chance}\index{Produktivitätssteigerung}
-    Durch das Angebot an generativen KI-Modellen\index{KI-Modell}, die – meist frei oder relativ günstig - im
+    Durch das Angebot an generativen KI-Modellen\index{KI-Modell}, die - meist frei oder relativ günstig - im
     Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
     Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
-    Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
+    Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evaluation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
     Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
     welche unter anderem Momentaufnahmen (sogenannte\ Snapshots\index{Snapshots}) relevanter Dateipfade und Metadaten speichert,
     sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
@@ -458,7 +458,7 @@
     \paragraph*{Prozess - periodische Überwachung}
     Ein spezieller Prozess im System ist die periodische Überwachung von Dateien, da dieser autonom und ohne Benutzerinteraktion abläuft.
     Im folgenden Communication Diagram wird dieser Prozess modelliert.
-    Der Daemon-Prozess ist selbständig für die Auslösung der Überwachung verantwortlich und in dieser Hinsicht nicht vom Betriebssystem abhängig.
+    Der Daemon-Prozess ist selbstständig für die Auslösung der Überwachung verantwortlich und in dieser Hinsicht nicht vom Betriebssystem abhängig.
     Die Interaktion mit dem Dateisystem ist nicht modelliert.
 
     \begin{figure}[h]
@@ -518,11 +518,11 @@
     \subsection{Grenz- und Vorbedingungen}
 
     \subsubsection{Nichtfunktionale Anforderungen}\label{subsubsec:nichtfunktionale-anforderungen}
-    Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw.
+    Im Scrum Product Backlog werden nichtfunktionale Anforderungen bzw.
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
     Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
     Diese beeinflussen massgeblich die Architektur des Systems.
-    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
+    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzen, was durch die Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
         \centering
@@ -530,7 +530,7 @@
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & NFR-001                                                                                            \\ \hline
-            \textbf{Anforderung}  & Hintergrundprozess mit periodischem Task (Deamon)                                                  \\ \hline
+            \textbf{Anforderung}  & Hintergrundprozess mit periodischem Task (Daemon)                                                  \\ \hline
             \textbf{Beschreibung} & Das System muss einen Hintergrundprozess implementieren, der periodisch Aktionen durchführen kann. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -590,8 +590,8 @@
             \begin{itemize}
                 \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können (z.B.\ GUI).
                 \item Tests gemäss Testkonzept.
-                \item Statische Analysen zeigen keine schwerwiegenden verstösse gegen Linting-Regeln.
-                \item Anwendungen von gängigen Design-Prinzipen vie SOLID, DRY, KISS etc.
+                \item Statische Analysen zeigen keine schwerwiegenden Verstösse gegen Linting-Regeln.
+                \item Anwendungen von gängigen Design-Prinzipien wie SOLID, DRY, KISS etc.
                 \item Für jede Codeerweiterung wird ein Codereview durch einen zweiten Entwickler vorgenommen.
             \end{itemize}
             \\ \hline
@@ -611,7 +611,7 @@
     \end{itemize}
 
     \subsubsection{Voraussetzungen}
-    Das System wurden unter den folgenden Voraussetzungen entwickelt und getestet:
+    Das System wurde unter den folgenden Voraussetzungen entwickelt und getestet:
     \begin{itemize}
         \item \textbf{Java}: Es wird eine Installation der Java Runtime Environment (JRE) in der Version 21 vorausgesetzt.
         \item \textbf{Dateitypen}: Das System wurde hauptsächlich mit Dateitypen getestet, die als Plaintext vorliegen, wie beispielsweise Log- oder Textdateien.
@@ -636,7 +636,7 @@
         In konkreten Fällen wie Funktionen für die Such- und Überwachungsfunktionalität, können Unit-Tests für isolierte Logik implementiert werden.
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
         \begin{itemize}
-            \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
+            \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (z.B. \texttt{run} oder \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
             \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle \gls{http}-Schnittstellen korrekt reagieren.
             (Happy- sowie Exception-Paths)
         \end{itemize}
@@ -674,11 +674,11 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|p{2.5cm}|p{7cm}|}
             \hline
-            \textbf{Aufgaben}    & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten)                      \\
+            \textbf{Aufgaben}    & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten)                       \\
             \hline
-            \textbf{Ziele}       & Veränderungen beobachten können und diese besser verstehen.               \\
+            \textbf{Ziele}       & Veränderungen beobachten können und diese besser verstehen.                \\
             \hline
-            \textbf{Wünsche}     & Intuitive Benutzerschnittstelle und Automatisierung.             \\
+            \textbf{Wünsche}     & Intuitive Benutzerschnittstelle und Automatisierung.                       \\
             \hline
             \textbf{Hindernisse} & Trotz Erfahrung in der Informatik, sind teilweise Wissenslücken vorhanden. \\
             \hline
@@ -1978,14 +1978,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{7cm}|}
             \hline
-            \textbf{System}                                            & Betriebssystem und Architektur                                                  \\ \hline
-            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                                \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                          \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                       \\ \hline
+            \textbf{System}                                            & Betriebssystem und Architektur                                                 \\ \hline
+            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                               \\ \hline
+            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                         \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                      \\ \hline
             \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
             \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
-            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                  \\ \hline
+            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                            \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                         & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                 \\ \hline
         \end{tabular}
         \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
     \end{table}
