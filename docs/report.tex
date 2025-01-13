@@ -2683,12 +2683,14 @@ echo ts run >> ~/.zprofile
     \begin{itemize}
         \item TraceSentry ist gemäss Installationshandbuch installiert (inkl.\ Autostart).
         \item Das Hochladen einer Datei in die GPT-Prompt dauert inkl.\ dem Vorschlagen der Output-Formulierung bzw.\ -Formatierung ca.\ 20 Sekunden.
-        \item Die Analyse einer Datei in der GPT-Prompt dauert ca.\ 5 Sekunden.
+        \item Die Analyse einer Datei in der GPT-Prompt dauert ca.\ 4 Sekunden.
+        (Hierbei spielt vor allem die Qualität der Prompt-Formulierung eine Rolle.)
         \item TraceSentry benötigt im Schnitt 4 Sekunden für das \texttt{inspect} Kommando (für eine beliebige Datei).
+        \item Das Analysieren einer Datei mit GPT-4o mini kostet gemäss KI Fallstudie 0.011 USD $\approx$ 0.01 CHF.
         \item Der durchschnittliche Studenlohn beträgt 38 CHF\@.
         \item Eine Datei wird im Schnitt für eine Woche überwacht.
         \item Ein Computer läuft im Schnitt 6 Stunden pro Tag.
-        \item TraceSentry benötigt im Schnitt 600ms für das Erstellen eines Snapshots.
+        \item Aufnahme eines Verzeichnisses, damit TraceSentry die Dateien überwachen kann, dauert ca.\ 10 Sekunden.
         \item Das Erstellen einer Kopie einer Datei (manueller Snapshot) dauert ca.\ 10 Sekunden.
         \item Das Vergleichen zweier Dateien dauert ca.\ 20 Sekunden.
     \end{itemize}
@@ -2702,8 +2704,8 @@ echo ts run >> ~/.zprofile
         \text{Input vorbereiten}&: \text{Dateiinhalt in GPT-Prompt kopieren/hochladen}\\
         \text{Output abwarten}&: \text{GPT-Response} \\
         \text{Aufgabendauer ohne SW} &= \text{(Input vorbereiten + Output abwarten)} \\
-        &= 20s + 5s \\
-        &= 25s \\
+        &= 20s + 4s \\
+        &= 24s \\
     \end{align*}
 
     \text{\textbf{Mit TraceSentry:}} \\
@@ -2714,13 +2716,14 @@ echo ts run >> ~/.zprofile
 
     \text{\textbf{Produktivitätssteigerung:}} \\
     \begin{align*}
-        \text{Zeitersparnis} &= 25 - 4 = 21s = 0.35min \\
+        \text{Zeitersparnis} &= 24 - 4 = 20s = 0.33min \\
+        \text{GPT-4o mini Kosten} &= 0.01 \text{ CHF (pro Datei)} \\
         \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx 0.63 \text{CHF/Minute} \\
-        \text{Gesamtkostenersparnis} &= 0.35 * 0.63 \text{CHF/Minute} \\ &= 0.2205 \text{ CHF} \\ &= 22.05 \text{ Rappen (pro Datei)} \\
+        \text{Gesamtkostenersparnis} &= 0.33 * 0.63 \text{CHF/Minute} - 0.01 \text{CHF} \\ &= 0.1979 \text{ CHF} \\ &= 19.79 \text{ Rappen (pro Datei)} \\
         \\
         \text{Produktivitätssteigerung} &= \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}}
-        \\ &= \frac{\text{21}}{\text{25}}
-        \\ &= 84\%
+        \\ &= \frac{\text{20}}{\text{24}}
+        \\ &= 83\%
     \end{align*}
 
     \newpage
@@ -2731,6 +2734,8 @@ echo ts run >> ~/.zprofile
     \\
 
     Erläuterung: Der Benutzer speichert hierbei für eine Woche, 6 Mal am Tag manuell die Datei (als Snapshot) in einen dafür vorgesehenen Ordner.
+    Mit TraceSentry wäre es möglich mehrere Dateien zu überwachen, was nochmals zu einer signifikanteren Steigerung führen würde.
+    Nachfolgend wird die Berechnung für eine Datei durchgeführt.
     \begin{align*}
         \text{Manueller Snapshot erstellen}&: \text{Datei in einen Ordner speichern}\\
         \text{Snapshots vergleichen}&: \text{zwei aufeinander folgende Snapshots vergleichen} \\
@@ -2742,22 +2747,20 @@ echo ts run >> ~/.zprofile
 
     \textbf{Mit TraceSentry:} \\
     \begin{align*}
-        \text{Aufgabendauer mit SW} &= \text{6 * 7 * Snapshot erstellen} \\
-        &= 6 * 7 * 600ms \\
-        &= 25200ms \\
-        &\approx 25s \\
+        \text{Aufgabendauer mit SW} &= \text{Aufnahme eines Verzeichnisses} \\
+        &= 10s
     \end{align*}
 
     \text{\textbf{Produktivitätssteigerung:}} \\
     \begin{align*}
-        \text{Zeitersparnis} &= 1260 - 25 = 1235s \\
-        &\approx 20.58min \\
+        \text{Zeitersparnis} &= 1260 - 10 = 1250s \\
+        &\approx 20.83min \\
         \text{Kosten pro Zeiteinheit} &= 38 \text{CHF/Stunde} \\ &\approx 0.63 \text{CHF/Minute} \\
-        \text{Gesamtkostenersparnis} &= 20.58 * 0.63 \text{CHF/Minute} \\ &= 12.9654 \text{ CHF (pro überwachte Datei)} \\
+        \text{Gesamtkostenersparnis} &= 20.83 * 0.63 \text{CHF/Minute} \\ &= 13.12 \text{ CHF (pro überwachte Datei)} \\
         \\
         \text{Produktivitätssteigerung} &= \frac{\text{Zeitersparnis}}{\text{Aufgabendauer ohne SW}}
-        \\ &= \frac{\text{1235}}{\text{1260}}
-        \\ &\approx 98\%
+        \\ &= \frac{\text{1250}}{\text{1260}}
+        \\ &\approx 99\%
     \end{align*}
 
 
