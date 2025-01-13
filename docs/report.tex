@@ -1262,7 +1262,7 @@ buildTreeRecursively(parent, snapshot, files):
     \subsubsection{Datenbank}\label{subsubsec:realisierung-datenbank}
     Produktiv wird eine SQLite-Datenbank\index{SQLite} verwendet, welche lokal auf dem System des Benutzers in Form einer einzigen *.db-Datei gespeichert wird.
     Für die automatisierten Tests wurde eine H2-In-Memory-Datenbank verwendet, welche für jeden Test mit dem gleichen Schema,
-    das auch für die produktive Datenbank verwendet wird jeweils initialisiert wird.
+    das auch für die produktive Datenbank verwendet wird, initialisiert wird.
 
     \paragraph*{Modell}\mbox{}\\
     \begin{figure}[h]
@@ -1479,8 +1479,8 @@ file content:
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|c|p{10cm}|}
             \hline
-            \textbf{Berater}    & Dr. Simon Kramer \\ \hline
-            \textbf{PM-Berater} & Frank Helbling   \\ \hline
+            \textbf{Betreuer}    & Dr. Simon Kramer \\ \hline
+            \textbf{PM-Betreuer} & Frank Helbling   \\ \hline
         \end{tabular}
         \caption{Weitere Rollen}\label{tab:additional-roles}
     \end{table}
@@ -1526,7 +1526,7 @@ file content:
     Dazu folgendes Beispiel:
     \begin{figure}[h]
         \centering
-        \includegraphics[width=1\textwidth]{assets/user-story-example}
+        \includegraphics[width=0.9\textwidth]{assets/user-story-example}
         \caption{User-Story Beispiel}
         \label{fig:user-story-example}
     \end{figure}
@@ -1986,8 +1986,8 @@ monitoring database.
             \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                                \\ \hline
             \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                          \\ \hline
             \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnissen \\ \hline
+            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
+            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
             \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                             \\ \hline
             \textbf{Dauer (Stichprobenmittel)}                         & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                  \\ \hline
         \end{tabular}
