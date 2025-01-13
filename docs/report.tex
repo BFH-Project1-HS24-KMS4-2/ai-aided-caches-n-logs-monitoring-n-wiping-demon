@@ -311,7 +311,7 @@
     \section{Ausgangssituation}
 
     \subsection{Problem}\label{subsec:problem}
-    Cache- und Logdateien\index{Cache- und Logdateien} sind temporäre Dateien, die von Betriebssystemen und
+    Cache- und Logdateien\index{Cache- und Logdateien} sind (temporäre) Dateien, die von Betriebssystemen und
     Anwendungen zur Speicherung von Zwischenständen, Nutzeraktivitäten und
     Systemereignissen erstellt werden.
     Viele Computerbenutzer sind sich nicht bewusst, welche Arten dieser Dateien auf ihrem
@@ -329,7 +329,7 @@
     Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
     Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
     Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
-    welche unter anderem Momentaufnahmen (sogenannte\ Snapshots\index{Snapshots}) relevanter Dateipfaden und Metadaten speichert,
+    welche unter anderem Momentaufnahmen (sogenannte\ Snapshots\index{Snapshots}) relevanter Dateipfade und Metadaten speichert,
     sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
     Benutzer auf einfache Art und Weise die Möglichkeit zur Kontrolle und Erleichterung dieses Umstandes
     geboten werden.
@@ -351,14 +351,14 @@
 
     \section{Prioritäten}
     Grundsätzlich soll ein fertiges Produkt, welches dem Benutzer einen Mehrwert bietet, im Vordergrund stehen.
-    Gemäss Checkliste (via Mail von Simon Kramer am 26.09.2024):
+    Gemäss Checkliste\footnote{via Mail von Simon Kramer am 26.09.2024}:
     \begin{quote}
         Resultat- statt Prozess-Orientierung priorisieren:
         \\Fertiges Projekt anstreben (Prozesse, die unfertige Resultate produzieren, vermeiden)
         \\Programme sind bessere Modelle (Spezifikations- und Design-Endlosschlaufen vermeiden)
     \end{quote}
 
-    Priorisiert sollen dabei in erster Linie Funktionalitäten eines \gls{mvp} (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen.
+    Priorisiert sollen dabei in erster Linie Funktionalitäten eines \gls{mvp} (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen. % TODO Kernfunktionalität Einzahl korrekt?
     Dazu gehören vor allem die Suche und Überwachung von Dateien.
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
@@ -376,7 +376,7 @@
     Der Hauptverwendungszweck des \gls{tracesentry} ist das Überwachen von Dateien in bestimmten Verzeichnissen.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche periodisch auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
     Diese periodische Überwachung soll in einem Hintergrundprozess, einem so genannten \gls{daemon}\index{Daemon}, stattfinden.
-    Notwendige Daten für die Überwachung sowie, durch die Überwachung entstandene Daten, werden in einer Datenbank gespeichert.
+    Notwendige Daten für die Überwachung sowie durch die Überwachung entstandene Daten, werden in einer Datenbank gespeichert.
     Verdächtige Dateien können durch eine KI-gestützte Analyse bewertet und anschliessend geleert oder gelöscht werden.
 
     \subsubsection{Softwarekomponenten}
@@ -412,11 +412,11 @@
     \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
     Die Datenbank wird für die Persistierung von Überwachungs-Metadaten sowie -Ergebnissen verwendet.
     Sie befindet sich lokal auf dem System in Form einer \gls{sqlite}-Datenbank\index{SQLite}.
-    Die Wahl des \gls{dbms} sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
+    Die Wahl des \gls{dbms} sowie dessen genaue Implementierung wird in den Kapiteln~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
     Gemäss Anforderungsspezifikation wird ein KI-Modell\index{KI-Modell} zur Bewertung von Dateien eingebunden.
-    Die Entwicklung eines eigenen KI-Modells war nicht Teil dieser Arbeit.
+    Die Entwicklung eines eigenen KI-Modells ist nicht Teil dieser Arbeit.
     Stattdessen wurde das KI-Modell \textit{\gls{gpt}-4o mini} von \gls{openai} verwendet.
     Die Anbindung an das KI-Modell wird im Kapitel~\nameref{subsubsec:ki-anbindung} beschrieben.
     Zudem wurde eine Fallstudie zur Evaluation des Potentials eines aktuellen KI-Modells im Kontext des TraceSentry durchgeführt.
@@ -441,13 +441,13 @@
     \subsubsection{Prozessübersicht}
     Nachfolgend wird davon ausgegangen, dass der Daemon-Prozess beim Systemstart gestartet wurde und sich der Benutzer im interaktiven Modus der CLI befindet.
 
-    \paragraph*{Prozess KI-Bewertung}
-    In diesem Communication Diagram wird der Prozess der, durch den Benutzer angeforderten, KI-Bewertung dargestellt.
+    \paragraph*{Prozess - KI-Bewertung}
+    In diesem Communication Diagram wird der Prozess der durch den Benutzer angeforderten KI-Bewertung dargestellt.
     Die Interaktion mit dem Dateisystem ist nicht modelliert.
 
     Der Prozess ist für andere Funktionen des Systems identisch, weswegen auf weitere Modellierung verzichtet wird.
     Relevant für alle Prozesse ist die Kommunikation zwischen Benutzer und Daemon via CLI\@.
-    Je nach Funktion interagiert der Daemon-Prozess mit dem Dateisystem, der Datenbank und dem KI-Modell.
+    Je nach Funktion interagiert der Daemon-Prozess mit dem Dateisystem, der Datenbank und/oder dem KI-Modell.
 
     \begin{figure}[h]
         \centering
@@ -457,7 +457,7 @@
     \end{figure}
     \clearpage
 
-    \paragraph*{Prozess periodische Überwachung}
+    \paragraph*{Prozess - periodische Überwachung}
     Ein spezieller Prozess im System ist die periodische Überwachung von Dateien, da dieser autonom und ohne Benutzerinteraktion abläuft.
     Im folgenden Communication Diagram wird dieser Prozess modelliert.
     Der Daemon-Prozess ist selbständig für die Auslösung der Überwachung verantwortlich und in dieser Hinsicht nicht vom Betriebssystem abhängig.
@@ -504,10 +504,9 @@
     Die Anwendungsfälle wurden in folgende Hauptanforderungen an das System übersetzt,
     welche laufend konkretisiert, aufgebrochen und in User Stories inkl. Akzeptanzkriterien abgebildet wurden.
     \begin{itemize}
-        \item Das System findet jegliche Dateien (insbesondere Cache- und Logdateien\index{Cache- und Logdateien} ), welche sich in einem angegebenen Verzeichnis befinden.
-        (inkl. Unterverzeichnisse)
-        \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
-        Unterverzeichnisse nach Log- oder \gls{cachefiles}.
+        \item Das System findet jegliche Dateien (insbesondere Cache- und Logdateien\index{Cache- und Logdateien}), welche sich in einem angegebenen Verzeichnis (inkl.\ Unterverzeichnisse) befinden.
+        \item Das System durchsucht periodisch angegebene Verzeichnisse (inkl.
+        Unterverzeichnisse) nach Log- oder \gls{cachefiles}.
         \item Das System erstellt periodisch sogenannte Snapshots\index{Snapshots} der gefundenen Dateien, um diese später miteinander zu vergleichen.
         \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
         \item Das System bewertet Dateien nach deren Schädlichkeit und gibt eine Empfehlung ab, ob die Datei gelöscht oder geleert werden soll.
@@ -524,7 +523,7 @@
     Im Scrum Product Backlog werden nichtfunktionalen Anforderungen bzw.
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
     Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
-    Diese beeinflussten massgeblich die Architektur des Systems.
+    Diese beeinflussen massgeblich die Architektur des Systems.
     Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
@@ -533,7 +532,7 @@
         \begin{tabular}{|c|p{10cm}|}
             \hline
             \textbf{ID}           & NFR-001                                                                                            \\ \hline
-            \textbf{Anforderung}  & Hintergrundprozess mit periodischem Task (deamon)                                                  \\ \hline
+            \textbf{Anforderung}  & Hintergrundprozess mit periodischem Task (Deamon)                                                  \\ \hline
             \textbf{Beschreibung} & Das System muss einen Hintergrundprozess implementieren, der periodisch Aktionen durchführen kann. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
@@ -552,11 +551,11 @@
             \hline
             \textbf{ID}           & NFR-002                                                              \\ \hline
             \textbf{Anforderung}  & Benutzerschnittstelle via Konsole (CLI)                              \\ \hline
-            \textbf{Beschreibung} & Mit dem laufenden deamon soll via Konsole interagiert werden können. \\ \hline
+            \textbf{Beschreibung} & Mit dem laufenden Daemon soll via Konsole interagiert werden können. \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
-                \item Der deamon kann via CLI gestartet werden.
-                \item Alle Konfigurationen und Aktionen des deamon sind via CLI verfügbar
+                \item Der Daemon kann via CLI gestartet werden.
+                \item Alle Konfigurationen und Aktionen des Daemon sind via CLI verfügbar.
             \end{itemize}
             \\ \hline
         \end{tabular}
@@ -591,11 +590,11 @@
             \textbf{Beschreibung} & Minimaler, modularer und selbsterklärender Code \\ \hline
             \textbf{Akzeptanzkriterien} &
             \begin{itemize}
-                \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können. (z.B.\ GUI)
+                \item Die Architketur wird so aufgebaut, dass neue Features problemlos ergänzt werden können (z.B.\ GUI).
                 \item Tests gemäss Testkonzept.
                 \item Statische Analysen zeigen keine schwerwiegenden verstösse gegen Linting-Regeln.
                 \item Anwendungen von gängigen Design-Prinzipen vie SOLID, DRY, KISS etc.
-                \item Für jede Codeerweiterung wird eine Codereview durch einen zweiten Entwickler vorgenommen.
+                \item Für jede Codeerweiterung wird ein Codereview durch einen zweiten Entwickler vorgenommen.
             \end{itemize}
             \\ \hline
         \end{tabular}
@@ -606,7 +605,7 @@
     Die Funktionalität des Systems ist wie folgt eingeschränkt:
     \begin{itemize}
         \item \textbf{KI-Modell}: Im Rahmen dieser Arbeit wurde nur das KI-Modell \textit{GPT-4o mini} von OpenAI integriert.
-        Mit diesem lassen sich Dateien von knapp 128'000 \gls{token} bzw. rund 320'000 Zeichen analysieren.
+        Mit diesem lassen sich Dateien von knapp 128'000 \gls{token} bzw.\ rund 320'000 Zeichen analysieren.
         (siehe~\nameref{subsec:erweiterung-der-ki-modelle})
         \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB\@.
         Diese Limitation hängt mit der Java Files API zusammen.
@@ -616,7 +615,7 @@
     \subsubsection{Voraussetzungen}
     Das System wurden unter den folgenden Voraussetzungen entwickelt und getestet:
     \begin{itemize}
-        \item \textbf{Java}: Es wird eine Installation der Java Runtime Environment (JRE) in Version 21 vorausgesetzt.
+        \item \textbf{Java}: Es wird eine Installation der Java Runtime Environment (JRE) in der Version 21 vorausgesetzt.
         \item \textbf{Dateitypen}: Das System wurde hauptsächlich mit Dateitypen getestet, die als Plaintext vorliegen, wie beispielsweise Log- oder Textdateien.
         \item \textbf{KI-Modell}: Für die Nutzung des OpenAI-Modells wird eine Internetverbindung sowie ein gültiger API-Key benötigt.
     \end{itemize}
@@ -649,9 +648,9 @@
 
     \subsubsection{Test-Setup und -Konfiguration}
     \begin{itemize}
-        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe in den Unit-Tests, um sie isoliert zu halten.
-        \item \textbf{Testumgebung}: Erstellen einer dedizierten Test-DB und eines Testverzeichnisses.
-        \item \textbf{Automatisierte Testausführung}: Integration der Tests in die CI/CD-Pipeline, um sicherzustellen, dass das System stabil bleibt.
+        \item \textbf{Mocking von Ressourcen}: Verwenden von Mocks für Datenbank- und Dateisystemzugriffe in den Unit-Tests, um sie isoliert zu halten. % TODO komisch formuliert
+        \item \textbf{Testumgebung}: Sofern sinvoll, werden z.B.\ In-Memory-Datenbanken verwendet.\ Für Tests mit Dateisystem-Abhängigkeit können temporäre Verzeichnisse erstellt werden.
+        \item \textbf{Automatisierte Testausführung}: Integration der Tests in die CI/CD-Pipeline, um sicherzustellen, dass das System stabil bleibt. % TODO haben wir nicht?
     \end{itemize}
 
     \clearpage
@@ -666,11 +665,11 @@
 
     Thomas ist ein 35-Jähriger Berufsschullehrer, der Informatiker und Elektroniker unterrichtet.
     Für seine Schüler unterrichtet er unter anderem auch
-    Systemadministration und IT-Sicherheit.
-    Thomas ist sehr interessiert an neuen Technologien und probiert gerne neue Software aus.
+    Systemadministration und IT-Sicherheit. \\
+    Thomas ist sehr interessiert an neuen Technologien und ist was Sicherheitsaspekte betrifft sehr sensibilisiert.
     Daher stellt er sich die Frage, warum so viele Log- und Cache-Dateien auf seinem Rechner sind, ob diese alle
-    ihre Daseinsberechtigung haben und auch ob das Lesen und Schreiben dieser Dateien nicht ein Sicherheitsrisiko
-    darstellt.
+    ihre Daseinsberechtigung haben und auch, ob das Lesen und Schreiben dieser Dateien durch Drittsoftware nicht ein Sicherheitsrisiko
+    darstellt. \\
     Thomas ist ein sehr erfahrener Benutzer und hat keine Probleme mit der Kommandozeile.
 
     \begin{table}[h!]
@@ -678,13 +677,13 @@
         \setlength{\leftmargini}{0.4cm}
         \begin{tabular}{|p{2.5cm}|p{7cm}|}
             \hline
-            \textbf Aufgaben    & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten)                      \\
+            \textbf{Aufgaben}    & KnowHow stärken (in Bezug auf seine Lehrtätigkeiten)                      \\
             \hline
-            \textbf Ziele       & Veränderungen beobachten können und diese überprüfen lassen               \\
+            \textbf{Ziele}       & Veränderungen beobachten können und diese besser verstehen.               \\
             \hline
-            \textbf Wünsche     & Intuitive Benutzerschnittstelle und teilweise Automatisierung             \\
+            \textbf{Wünsche}     & Intuitive Benutzerschnittstelle und Automatisierung.             \\
             \hline
-            \textbf Hindernisse & Trotz Erfahrung in der Informatik, sind teilweise Wissenslücken vorhanden \\
+            \textbf{Hindernisse} & Trotz Erfahrung in der Informatik, sind teilweise Wissenslücken vorhanden. \\
             \hline
         \end{tabular}
         \label{tab:table7}
@@ -710,11 +709,11 @@ internal/cache.json
 
         \item \textbf{Dateien überwachen}\\
         Nun möchte der Nutzer dieses Verzeichnis \texttt{/internal} innerhalb des Programmverzeichnisses genauer überwachen.
-        Also fügt er diesen Pfad mit dem monitor-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
+        Also fügt er diesen Pfad mit dem \texttt{monitor}-Befehl hinzu und schon wird dieses Verzeichnis vom TraceSentry stündlich überwacht.
 
         \item \textbf{Snapshots vergleichen}\\
         Nach einigen Stunden möchte der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
-        Dafür nutzt er den snapshots compare-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
+        Dafür nutzt er den  \texttt{snapshots compare}-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
         Das System gibt ihm eine entsprechende Ausgabe:
         \begin{verbatim}
 Vergleich vom Verzeichnis /internal
@@ -724,26 +723,27 @@ test.log CHANGED 7-times
         \end{verbatim}
 
         \item \textbf{KI-Abfrage für eine Datei}\\
-        Als nächstes möchte der Nutzer natürlich wissen, wofür diese test.log Datei ist, wenn sich diese jede Stunde ändert.
-        Also nutzt er den inspect-Befehl, um die angebundene KI abzufragen, wofür diese Datei genau ist, ob sie ein Sicherheitsrisiko darstellt
-        und ob er die Datei evtl. leeren oder sogar löschen kann.
-        Daraus kommt dann eine standardisierte Ausgabe von der KI:
+        Als nächstes möchte der Nutzer wissen, wofür diese test.log Datei ist, angesichts der Tatsache, dass sich diese jede Stunde ändert.
+        Also nutzt er den \texttt{inspect}-Befehl, um die angebundene KI abzufragen, wofür diese Datei genau ist, ob sie ein Sicherheitsrisiko darstellt
+        und ob er die Datei evtl.\ leeren oder sogar löschen sollte.
+        Es resultiert eine standardisierte Ausgabe:
+        %TODO richtiges Beispiel
         \begin{verbatim}
 Die Datei ist unbekannt für dieses Programm und deswegen potenziell
 schädlich, also empfehle ich es zu leeren.
         \end{verbatim}
 
         \item \textbf{Datei leeren oder löschen}\\
-        Zum Schluss kann der Nutzer dann selbst entscheiden was er mit dieser Information anfangen möchte.
+        Der Nutzer kann nun selbst entscheiden, was er mit dieser Information anfangen möchte.
         In diesem Fall möchte er dem Ratschlag der KI folgen und die Datei leeren.
-        Also nutzt er den wipe-Befehl mit dem Pfad der test.log Datei und das System leert die Datei wie gewünscht.
+        Er nutzt also den \texttt{wipe}-Befehl, gibt dabei den Pfad der test.log Datei an und das System leert die Datei.
     \end{enumerate}
 
     \newpage
 
-    \subsection{UX-Prototyping}
+    \subsection{UX-Prototyping}\label{subsec:ux-prototyping}
     Da das System ausschließlich über ein Command-Line-Interface (CLI) verfügt,
-    wird die Dokumentation dieser Schnittstelle im nachfolgenden Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch}
+    wird die Dokumentation dieser Schnittstelle im Kapitel \hyperref[sec:user-manual]{Benutzerhandbuch}
     umfassend behandelt.
     Diese Dokumentation wurde im Rahmen eines iterativen und agilen Entwicklungsprozesses
     kontinuierlich während der Implementierung der einzelnen Befehle erstellt.
