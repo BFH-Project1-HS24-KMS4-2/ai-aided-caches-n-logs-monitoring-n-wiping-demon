@@ -329,8 +329,8 @@
     Diese Unkenntnis kann zu Datenschutzrisiken
     und fehlender Kontrolle führen.
 
-    \subsection{Chance}\label{subsec:chance}
-    Durch das Angebot an generativen KI-Modellen, die – meist frei oder relativ günstig - im
+    \subsection{Chance}\label{subsec:chance}\index{Produktivitätssteigerung}
+    Durch das Angebot an generativen KI-Modellen\index{KI-Modell}, die – meist frei oder relativ günstig - im
     Internet zugänglich sind, lässt sich schnell Fachkenntnis zu solchen Dateien einholen.
     Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
     Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
@@ -346,7 +346,7 @@
     Einziger Stakeholder ist Simon Kramer als Betreuer und Auftraggeber.\\
 
 
-    \section{Projektziel}\label{sec:projektziel}
+    \section{Projektziel}\label{sec:projektziel}\index{Projektziel}
     Es soll eine Anwendung entwickelt werden, welche die \textbf{Suche, Überwachung und Löschung von Cache- und Logdateien\index{Cache- und Logdateien}} ermöglicht.
     Dazu gehört das \textbf{Einholen von Einschätzungen eines KI-Modells}, welches die Dateien analysiert und bewertet.
     Die Applikation soll \textbf{plattformunabhängig}, \textbf{benutzerfreundlich} und mit der nötigen \textbf{Dokumentation} für den Benutzer (User-Manual u.a.) ausgestattet sein.
@@ -421,7 +421,7 @@
     Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
-    Gemäss Anforderungsspezifikation wird ein KI-Modell zur Bewertung von Dateien eingebunden.
+    Gemäss Anforderungsspezifikation wird ein KI-Modell\index{KI-Modell} zur Bewertung von Dateien eingebunden.
     Die Entwicklung eines eigenen KI-Modells war nicht Teil dieser Arbeit.
     Stattdessen wurde das KI-Modell \textit{GPT-4o mini} von OpenAI verwendet.
     Die Anbindung an das KI-Modell wird im Kapitel~\nameref{subsubsec:ki-anbindung} beschrieben.
@@ -498,7 +498,7 @@
 
     \subsection{Funktionale Anforderungen}\label{subsec:funktionale-anforderungen}
 
-    Alle funktionalen Anforderungen werden in Form von User Stories im Scrum Product Backlog geführt.
+    Alle funktionalen Anforderungen werden in Form von User Stories im Scrum\index{Scrum} Product Backlog geführt.
     Dieser wird laufend erweitert beziehungsweise konkretisiert.
     Nachfolgend werden die grundlegenden Anwendungsfälle aus Benutzersicht aufgezeigt.
     \begin{figure}[h]
@@ -531,7 +531,7 @@
     Grenz- oder Vorbedingungen nicht explizit als User Story geführt.
     Aus dem Projekt-Proposal und dem initialen Termin zu Projektstart ergaben sich nachfolgende nichtfunktionale Anforderungen.
     Diese beeinflussten massgeblich die Architektur des Systems.
-    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die \index{DoD} Definition of Done sichergestellt und laufend geprüft wird.
+    Keine User Story darf eine oder mehrere nichtfunktionale Anforderungen verletzten, was durch die Definition of Done sichergestellt und laufend geprüft wird.
 
     \begin{table}[h!]
         \centering
@@ -634,7 +634,7 @@
     \subsubsection{Ziel des Testkonzepts}
     \begin{itemize}
         \item Sicherstellen, dass das gesamte System stabil betrieben werden kann und seine Hauptfunktionen zuverlässig verfügbar sind.
-        \item Minimales Testing-Setup, um den Entwicklungsaufwand gering zu halten.
+        \item Minimales Testing\index{Testing}-Setup, um den Entwicklungsaufwand gering zu halten.
         \item Fokus auf Integrationstests und funktionale Tests zur Überprüfung der gesamten Systemfunktionalität.
         \item Klare Definition, welche Tests während der Entwicklung (Teil einer User Story) umgesetzt werden sollen.
     \end{itemize}
@@ -1463,7 +1463,7 @@ file content:
 
 
     \section{Prozesse}\label{sec:prozesse}
-    In diesem Kapitel wird auf die Verwendung der Projektmethode Scrum während des Projekts eingegangen.
+    In diesem Kapitel wird auf die Verwendung der Projektmethode Scrum\index{Scrum} während des Projekts eingegangen.
     Dabei ist wichtig wie Scrum adaptiert wurde, um so gut wie möglich im vorgegebenen Projektrahmen zu funktionieren.
 
     \subsection{Rollen}
@@ -2226,7 +2226,7 @@ monitoring database.
     \subsection{Wahl des KI-Modells}\label{subsec:wahl-des-ki-modells}
 
     \subsubsection{Generative KI}\label{subsubsec:generative-ki}
-    Generative KI-Modelle, wie die GPT-Modelle von OpenAI sind in der Lage unstrukturierte Daten zu analysieren und Einschätzungen in Form von Text auszugeben.
+    Generative KI-Modelle\index{KI-Modell}, wie die GPT-Modelle von OpenAI sind in der Lage unstrukturierte Daten zu analysieren und Einschätzungen in Form von Text auszugeben.
     Diese Technologie hat in den letzten Jahren erheblich an Popularität gewonnen und wird sehr breit als Lern- oder Arbeitswerkzeug eingesetzt.
     Für den Anwendungsfall von TraceSentry wurde sich für generative KI entschieden, da:
     \begin{itemize}
@@ -2468,7 +2468,7 @@ index forbidden by rule: /var/www/html/
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=1\textwidth]{assets/DeplDiagram-v2}
+        \includegraphics[width=1\textwidth]{assets/DeplDiagram-v2} % todo: update diag
         \caption{UML Deploymentdiagramm}
         \label{fig:depl-diag}
     \end{figure}
@@ -2678,7 +2678,7 @@ echo ts run >> ~/.zprofile
 
     Die primäre Zielsetzung wurde erreicht und das Erweiterungspotential wird im folgenden Kapitel diskutiert.
 
-    \subsection{Berechnung der Produktivitätssteigerung}\label{subsec:berechnung-der-produktivitatssteigerung}
+    \subsection{Berechnung der Produktivitätssteigerung}\label{subsec:berechnung-der-produktivitatssteigerung}\index{Produktivitätssteigerung}
     In diesem Abschnitt wird die geschätzte Produktivitätssteigerung für Benutzer von \\TraceSentry berechnet.
     Die Berechnungsfaktoren umfassen die \textbf{Aufgabendauer ohne und mit der Software}, die resultierende  \textbf{Zeitersparnis}, die  \textbf{Kosten pro Zeiteinheit} und die  \textbf{Gesamtkostenersparnis}.
 
