@@ -89,6 +89,7 @@
 \makeindex
 
 \usepackage{glossaries}
+\usepackage{datagidx}
 
 % Define glossary entries
 \newglossaryentry{acid}{
@@ -99,12 +100,6 @@
 \newglossaryentry{api}{
     name=API,
     description={Application Programming Interface, eine Schnittstelle zur Kommunikation zwischen Software-Komponenten}
-}
-
-\newglossaryentry{bash}{
-    name=Bash,
-    description={Eine Unix-Shell und Skriptsprache, häufig für Systemadministration und Automatisierung verwendet.
-    In diesem Dokument für die Installation und Ausführung der Anwendung verwendet}
 }
 
 \newglossaryentry{cli}{
@@ -219,7 +214,7 @@
 
 \newglossaryentry{rest}{
     name=REST,
-    description={Representational State Transfer, ein Architekturstil für Webservices (APIs)}
+    description={Representational State Transfer, ein Architekturstil für Webservices bzw. APIs}
 }
 
 \newglossaryentry{regexpattern}{
@@ -292,11 +287,11 @@
 % Abstract
     \begin{abstract}
         TraceSentry ist eine plattformunabhängige und KI-gestützte Anwendung zur Suche, Über\-wachung, Bewertung und Bereinigung von Cache- und Logdateien.
-        In einer praxisorientierten Fallstudie wurde das KI-Modell \textit{GPT-4o Mini} von OpenAI ausgewählt und evaluiert, um Dateiinhalte zu bewerten und potenzielle Risiken zu erkennen.
-        Die Anwendung umfasst eine Befehlszeilenschnittstelle (CLI) und einen Hintergrundprozess (Daemon), der in regelmäßigen Abständen Snapshots der überwachten Verzeichnisse erstellt.
+        In einer praxisorientierten Fallstudie wurde das \gls{kimodell} \textit{\gls{gpt}-4o Mini} von \gls{openai} ausgewählt und evaluiert, um Dateiinhalte zu bewerten und potenzielle Risiken zu erkennen.
+        Die Anwendung umfasst eine Befehlszeilenschnittstelle (\gls{cli}) und einen Hintergrundprozess (\gls{daemon}), der in regelmäßigen Abständen Snapshots der überwachten Verzeichnisse erstellt.
         Diese Snapshots dienen als Momentaufnahmen der Verzeichnisse, werden als Merkle-Bäume konstruiert und miteinander verglichen.
         Eine SQLite-Datenbank wird verwendet, um die Snapshots sowie die erkannten Änderungen zu persistieren.
-        Die modulare Architektur der Anwendung, die in Java unter Verwendung des Spring-Frameworks implementiert wurde, ermöglicht die Erweiterung um zusätzliche Funktionen oder Benutzeroberflächen.
+        Die modulare Architektur der Anwendung, die in \gls{java} unter Verwendung des Spring-Frameworks implementiert wurde, ermöglicht die Erweiterung um zusätzliche Funktionen oder Benutzeroberflächen.
 
         Dieses Dokument beschreibt die technische Spezifikation und Umsetzung, die verwendeten Prozesse, eine umfangreiche Evaluation der Anwendung,
         die KI-Fallstudie sowie einen Ausblick auf zukünftige Arbeiten.
@@ -364,7 +359,7 @@
         \\Programme sind bessere Modelle (Spezifikations- und Design-Endlosschlaufen vermeiden)
     \end{quote}
 
-    Priorisiert sollen dabei in erster Linie Funktionalitäten eines MVP (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen.
+    Priorisiert sollen dabei in erster Linie Funktionalitäten eines \gls{mvp} (Minimum Viable Product) sein, welche die Kernfunktionalität des Produkts sicherstellen.
     Dazu gehören vor allem die Suche und Überwachung von Dateien.
     Zur Überwachung gehört das Erstellen von Snapshots und das Vergleichen dieser, sowie das Einholen von Einschätzungen eines KI-Modells.
     Zudem werden alle Tätigkeiten, die dabei mitschwingen, wie Dokumentation, Tests und Codequalität, als wichtig erachtet.
@@ -379,7 +374,7 @@
     \subsection{Systemumgebung (statisch)}\label{subsec:systemumgebung-(statisch)}
 
     \subsubsection{Systemübersicht}
-    Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in bestimmten Verzeichnissen.
+    Der Hauptverwendungszweck des \gls{tracesentry} ist das Überwachen von Dateien in bestimmten Verzeichnissen.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche periodisch auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
     Diese periodische Überwachung soll in einem Hintergrundprozess, einem so genannten Daemon\index{Daemon}, stattfinden.
     Notwendige Daten für die Überwachung sowie, durch die Überwachung entstandene Daten, werden in einer Datenbank gespeichert.
@@ -387,7 +382,7 @@
 
     \subsubsection{Softwarekomponenten}
     Die System- sowie Softwarearchitektur wurde im Rahmen dieser Arbeit entworfen und grundlegende Entscheide im Kapitel~\nameref{subsec:technische-variantenentscheide} festgehalten.
-    Alle Softwarekomponenten wurden in Java unter der Verwendung des Spring-Frameworks entwickelt.
+    Alle Softwarekomponenten wurden in Java unter der Verwendung des \gls{spring}-Frameworks entwickelt.
     Die endgültig erarbeitete Architektur wird im Kapitel~\nameref{subsec:loesungsarchitektur} beschrieben.
     Nachfolgend eine vereinfachte Übersicht der Softwarekomponenten:
 
@@ -412,13 +407,13 @@
     Im Rahmen der Anforderungsspezifikation wurde eine Benutzerschnittstelle in Form eines Command-Line-Interfaces (CLI) spezifiziert.
     Im Hinblick auf Erweiterung und Wartbarkeit ist die Benutzerschnittstelle logisch von der Geschäftslogik getrennt.
     Aufgrund dessen wurde die Benutzerschnittstelle als eigenständige Laufzeiteinheit definiert und entwickelt.
-    Die Kommunikation zwischen CLI\index{CLI} und Daemon erfolgt über eine\index{REST-API} REST-API\@.
+    Die Kommunikation zwischen CLI\index{CLI} und Daemon erfolgt über eine\index{REST-API} \gls{rest}-\gls{api}\@.
     Diese Wahl wurde im Kapitel~\nameref{subsec:technische-variantenentscheide} begründet.
 
     \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
     Die Datenbank wird für die Persistierung von Überwachungs-Metadaten sowie -Ergebnissen verwendet.
-    Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank\index{SQLite}.
-    Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
+    Sie befindet sich lokal auf dem System in Form einer \gls{sqlite}-Datenbank\index{SQLite}.
+    Die Wahl des \gls{dbms} sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
     Gemäss Anforderungsspezifikation wird ein KI-Modell\index{KI-Modell} zur Bewertung von Dateien eingebunden.
@@ -440,7 +435,7 @@
     Die CLI wird on-demand pro Benutzerinteraktion gestartet und beendet.
     Das bedeutet, dass die Lebensdauer der CLI auf die Dauer einer Benutzerinteraktion beschränkt ist.
     Zusätzlich hat der Benutzer die Möglichkeit, die CLI im sogenannten \textit{interactive mode} zu starten.
-    In diesem Modus steht dem Benutzer eine interaktive Shell zur Verfügung, in welcher er mehrere Befehle hintereinander ausführen kann.
+    In diesem Modus steht dem Benutzer eine interaktive \gls{shell} zur Verfügung, in welcher er mehrere Befehle hintereinander ausführen kann.
     Im \textit{interactive mode} wird die CLI nicht beendet, bis der Benutzer dies explizit veranlasst.
     Dies ist ein gängiges Verhalten von Command-Line-Interfaces und ermöglicht eine effiziente Interaktion mit dem System, ohne dass für jede Benutzerinteraktion ein neuer Prozess gestartet werden muss.
 
@@ -493,7 +488,7 @@
 
 
     \section{Anforderungen}\label{sec:anforderungen}
-    Die Anforderungen für den AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang~\ref{sec:originale-projektbeschreibung}).
+    Die Anforderungen für den AI-Aided Caches-n-Logs \gls{monitoring}-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang~\ref{sec:originale-projektbeschreibung}).
     sowie einem initialen Termin mit Herr Kramer.
 
     \subsection{Funktionale Anforderungen}\label{subsec:funktionale-anforderungen}
@@ -513,7 +508,7 @@
         \item Das System findet jegliche Dateien (insbesondere Cache- und Logdateien\index{Cache- und Logdateien} ), welche sich in einem angegebenen Verzeichnis befinden.
         (inkl. Unterverzeichnisse)
         \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
-        Unterverzeichnisse nach Log- oder Cache-Dateien.
+        Unterverzeichnisse nach Log- oder \gls{cachefiles}.
         \item Das System erstellt periodisch sogenannte Snapshots\index{Snapshots} der gefundenen Dateien, um diese später miteinander zu vergleichen.
         \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
         \item Das System bewertet Dateien nach deren Schädlichkeit und gibt eine Empfehlung ab, ob die Datei gelöscht oder geleert werden soll.
@@ -612,7 +607,7 @@
     Die Funktionalität des Systems ist wie folgt eingeschränkt:
     \begin{itemize}
         \item \textbf{KI-Modell}: Im Rahmen dieser Arbeit wurde nur das KI-Modell \textit{GPT-4o mini} von OpenAI integriert.
-        Mit diesem lassen sich Dateien von knapp 128'000 Token bzw. rund 320'000 Zeichen analysieren.
+        Mit diesem lassen sich Dateien von knapp 128'000 \gls{token} bzw. rund 320'000 Zeichen analysieren.
         (siehe~\nameref{subsec:erweiterung-der-ki-modelle})
         \item \textbf{Dateigrösse}: Die maximale unterstützte Dateigrösse für die Analyse und periodische Überwachung beträgt 2GB\@.
         Diese Limitation hängt mit der Java Files API zusammen.
@@ -646,7 +641,7 @@
         \item \textbf{Integrationstests}: Testen der Zusammenarbeit mehrerer Komponenten.
         \begin{itemize}
             \item \textbf{CLI-Befehle}: Überprüfen, dass die CLI-Kommandos (\texttt{run}, \texttt{search}) korrekt ausgeführt werden und die erwarteten Parameter validieren.
-            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle HTTP-Schnittstellen korrekt reagieren.
+            \item \textbf{REST-HTTP-Anfragen}: Testen, ob alle \gls{http}-Schnittstellen korrekt reagieren.
             (Happy- sowie Exception-Paths)
         \end{itemize}
         \item \textbf{End-to-End Tests}: Fokus auf End-to-End-Szenarien zur Validierung der zentralen Funktionalität.
@@ -708,7 +703,7 @@
         Der Nutzer hat kürzlich in seinem Task-Manager ein Programm entdeckt, das komischerweise
         ziemlich viel Speicher braucht.
         Also verwendet er den search-Befehl mit dem Pfad auf die Installation von diesem Programm
-        und ihm werden die in diesem Verzeichnis gefundenen Cache- sowie Log-Dateien aufgelistet:
+        und ihm werden die in diesem Verzeichnis gefundenen Cache- sowie \gls{logfiles} aufgelistet:
         \begin{verbatim}
 internal/test.log
 internal/cache.json
@@ -720,7 +715,7 @@ internal/cache.json
 
         \item \textbf{Snapshots vergleichen}\\
         Nach einigen Stunden möchte der Nutzer wissen was in diesem überwachten Verzeichnis passiert ist.
-        Dafür nutzt er den snapshot compare-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
+        Dafür nutzt er den snapshots compare-Befehl, um alle Zustände des Verzeichnisses vom aktuellen Zeitpunkt bis zum Start der Überwachung vergleichen zu können.
         Das System gibt ihm eine entsprechende Ausgabe:
         \begin{verbatim}
 Vergleich vom Verzeichnis /internal
@@ -928,7 +923,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Nachteile}
     \begin{itemize}
         \item Fehlende Standardisierung: Unterschiedliche Abfragesprachen und Protokolle je nach Implementierung.
-        \item Eingeschränkte Transaktionssicherheit: ACID-Eigenschaften werden häufig zugunsten der Performance vernachlässigt.
+        \item Eingeschränkte Transaktionssicherheit: \gls{acid}-Eigenschaften werden häufig zugunsten der Performance vernachlässigt.
         \item Höhere Komplexität: Abfragen sind weniger intuitiv als in SQL-basierten Systemen.
     \end{itemize}
 
@@ -937,7 +932,7 @@ schädlich, also empfehle ich es zu leeren.
     Auch aufgrund mangelnder Erfahrung im Team mit NoSQL-Systemen wurde diese Option verworfen.
 
     \paragraph*{\underline{1.2 SQL}}\mbox{}\\
-    SQL-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.\index{SQLite}
+    \gls{sql}-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.\index{SQLite}
     Sie verwenden die standardisierte Abfragesprache SQL und sind besonders geeignet für datenintensive Anwendungen mit hohen Anforderungen an Konsistenz.
 
     \paragraph*{Vorteile}
@@ -960,7 +955,7 @@ schädlich, also empfehle ich es zu leeren.
     Die Nachteile, wie begrenzte Skalierbarkeit, sind für dieses Projekt vernachlässigbar.
 
     \paragraph*{1.2.1 H2}\mbox{}\\
-    H2 ist eine leichtgewichtige, Java-basierte relationale Datenbank, die sowohl eingebettet als auch im Servermodus betrieben werden kann.
+    \gls{h2} ist eine leichtgewichtige, Java-basierte relationale Datenbank, die sowohl eingebettet als auch im Servermodus betrieben werden kann.
 
     \paragraph*{Vorteile}
     \begin{itemize}
@@ -1107,7 +1102,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsubsection{Repository}
     Das Repository stellt den Zugang zur Persistenzschicht zur Verfügung.
-    Dabei handelt es sich um Create, Read, Update, Delete (CRUD) Operationen in Form von Datenbankqueries.
+    Dabei handelt es sich um Create, Read, Update, Delete (\gls{crud}) Operationen in Form von Datenbankqueries.
 
     \subsubsection{Technologien}
     \begin{table}[h!]
@@ -1175,7 +1170,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Monitoring}\mbox{}\\
     Der Monitoring Scheduler ist die Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
     Er speichert periodisch Snapshots\index{Snapshots} von überwachten Pfaden in der Datenbank (1.1).
-    Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
+    Für jeden überwachten Pfad wird ein \gls{snapshot} (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
     Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
     Falls ein Knoten nicht mehr existiert, wird dafür ein Flag im alten Snapshot gesetzt.
     Diese zwei Flags sind die einzigen Felder, die auf Informationen vom Vorgänger (1.1.1, 1.1.2) bzw.\ Nachfolger zurückgreifen,
@@ -1197,7 +1192,7 @@ schädlich, also empfehle ich es zu leeren.
     Basierend auf den analysierten Aspekten wurde jedoch entschieden, darauf zu verzichten.
     Die Entscheidungsgrundlage wird im Folgenden erläutert:
     \begin{enumerate}
-        \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte Merkle-Tree zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
+        \item Für jeden \texttt{MonitoredPath} könnte der zuletzt erzeugte \gls{merkletree} zwischengespeichert werden, um diesen beim nächsten Snapshot direkt mit dem neuen Baum vergleichen zu können,
         ohne ihn erneut aus der Datenbank laden zu müssen.
         \begin{itemize}
             \item Ein Caching-Ansatz ist nur dann sinnvoll, wenn dieselben Daten mehrfach genutzt werden.
@@ -1287,7 +1282,7 @@ buildTreeRecursively(parent, snapshot, files):
         \item \textbf{id} (INTEGER): Eindeutige ID des überwachten Pfades.
         \item \textbf{path} (TEXT): Absoluter Pfad des überwachten Verzeichnisses.
         \item \textbf{mode} (TEXT): Gibt an, mit welchem Modus der Pfad durchsucht werden soll.
-        \item \textbf{pattern} (TEXT): Regex-Pattern für Dateien, nach denen im Verzeichnis des Pfads gesucht werden soll.
+        \item \textbf{pattern} (TEXT): \gls{regexpattern} für Dateien, nach denen im Verzeichnis des Pfads gesucht werden soll.
         \item \textbf{no\_subdirs} (BOOLEAN): Gibt an, ob Unterverzeichnisse durchsucht werden sollen.
         \item \textbf{created\_at} (DATE): Zeitpunkt der Erstellung des überwachten Pfades.
     \end{itemize}
@@ -1414,7 +1409,7 @@ buildTreeRecursively(parent, snapshot, files):
     \end{lstlisting}
 
     \paragraph*{Prompt-Engineering}
-    Die Qualität der Antwort des KI-Modells hängt stark von der Qualität des System- und Benutzer-Prompts ab.
+    Die Qualität der Antwort des KI-Modells hängt stark von der Qualität des System- und Benutzer-\gls{prompt} ab.
     Beide Prompts werden in derselben Anfrage an die OpenAI-API übergeben.
     Das System-Prompt ist fix und definiert den Kontext, in dem die Antwort generiert wird.
     Das Benutzer-Prompt beinhaltet den absoluten Pfad im Dateisystem sowie den gesamten Inhalt der zu analysierenden Datei.
@@ -1451,7 +1446,7 @@ necessary.]
     Diese System-Prompt beschreibt bereits die zu erwartende Struktur der Benutzer-Prompt, wie auch die zu erwartende Antwortstruktur.
     Dank dieser ausführlichen System-Prompt erfolgen die Antworten des Modells zuverlässig und konsistent (siehe~\nameref{sec:ki-fallstudie}).
 
-    Benutzer-Prompt: % TODO mit anderen listings abgleichen, DESIGN
+    Benutzer-Prompt:
     \begin{lstlisting}[label={lst:user-prompt}]
 file path: <absoluter Pfad>
 file content:
@@ -2277,7 +2272,7 @@ index forbidden by rule: /var/www/html/
     \subsection{Testdateien}\label{subsec:testdateien}
     Im Internet existieren zwar zahlreiche reale, vorgelabelte und gesäuberte Datasets, welche für das Erkennen von Anomalien in Logdateien verwendet werden können.
     Diese befinden sich jedoch vorwiegend in einer Form, welche sich für Machine Learning eignet.
-    Sprich, in CSV-Dateien oder als riesige, zusammengeführte Textdateien, welche sich oft über mehrere Gigabyte erstrecken.
+    Sprich, in \gls{csv}-Dateien oder als riesige, zusammengeführte Textdateien, welche sich oft über mehrere Gigabyte erstrecken.
 
     \subsubsection{Beispiele:}
     \begin{itemize}
@@ -2486,7 +2481,7 @@ index forbidden by rule: /var/www/html/
 
 
     \section{Lizenzierung}
-    Unser Projekt basiert auf den Prinzipien von \textbf{Free/Libre and Open Source Software (FLOSS)} und ist unter der \textbf{MIT-Lizenz} veröffentlicht.
+    Unser Projekt basiert auf den Prinzipien von \textbf{Free/Libre and Open Source Software (\gls{floss})} und ist unter der \textbf{\gls{mit}-Lizenz} veröffentlicht.
     Diese Lizenz ermöglicht es, die Software frei zu nutzen, zu modifizieren und weiterzuverbreiten, sowohl für private als auch kommerzielle Zwecke, solange der ursprüngliche Lizenztext beibehalten wird.
 
     \subsection{Open-Source Abhängigkeiten}
@@ -2494,7 +2489,7 @@ index forbidden by rule: /var/www/html/
 
     \begin{itemize}
         \item \textbf{Java}: Entwickelt unter der \textbf{GPL v2 mit Classpath Exception}, was die Nutzung in geschlossenen Projekten ermöglicht.
-        \item \textbf{Maven}: Unter der \textbf{Apache License 2.0}, die eine flexible Nutzung und Modifikation erlaubt.
+        \item \textbf{\gls{maven}}: Unter der \textbf{Apache License 2.0}, die eine flexible Nutzung und Modifikation erlaubt.
         \item \textbf{Spring}: Ebenfalls lizenziert unter der \textbf{Apache License 2.0}, was eine Integration und Anpassung in eigenen Projekten ohne Einschränkungen unterstützt.
         \item \textbf{SQLite}: Steht unter der \textbf{Public Domain} bzw. der \textbf{blessing license}, wodurch es uneingeschränkt genutzt und verteilt werden kann.
         \item \textbf{H2}: Unter der \textbf{Mozilla Public License 2.0} (MPL 2.0), die flexible Nutzung, Modifikation und Distribution erlaubt, solange Änderungen am Quellcode unter derselben Lizenz veröffentlicht werden.
@@ -2521,7 +2516,7 @@ index forbidden by rule: /var/www/html/
         \item macOS Sequoia 15.2
     \end{itemize}
 
-    \textbf{Eine Installation der Java Laufzeitumgebung (JRE) wird für die Installation vorausgesetzt.}
+    \textbf{Eine Installation der Java Laufzeitumgebung (\gls{jre}) wird für die Installation vorausgesetzt.}
 
     \subsection{Linux}\label{subsec:linux}
     \begin{enumerate}
@@ -2559,7 +2554,7 @@ crontab -e
         \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
         \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
         \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
-        \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} via Systemsteuerung oder via PowerShell:
+        \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} via Systemsteuerung oder via \gls{powershell}:
         \begin{lstlisting}[label={lst:lstlisting-windows-1}]
 [System.Environment]::SetEnvironmentVariable("TRACE_SENTRY_DIR", "<absoluter Pfad zum Installationsverzeichnis>","User")
         \end{lstlisting}
@@ -2657,7 +2652,7 @@ echo ts run >> ~/.zprofile
     Diese haben zwar auch Bedarf an einer solchen Lösung, jedoch sind sie eher in der Lage, auch ohne ein solches Tool die Risiken einzuschätzen und zu minimieren.
     Gerade für weniger technische versierte Anwender, die oft nicht in der Lage sind, die Risiken zu erkennen und zu minimieren, wäre eine einfache und intuitive Lösung umso wichtiger.
 
-    Für eine zukünftige Weiterentwicklung könnten neben der besagten UX-Verbesserung etliche Funktionen und technische Verbesserungen vorgenommen werden.
+    Für eine zukünftige Weiterentwicklung könnten neben der besagten \gls{ux}-Verbesserung etliche Funktionen und technische Verbesserungen vorgenommen werden.
     Das Problem bietet sehr viel Raum dafür.
 
     Nichtsdestotrotz ist die Lösung in ihrer jetzigen Form ein Anfang, löst das ursprüngliche Problem und bietet eine Basis, auf der weiter aufgebaut werden kann.
