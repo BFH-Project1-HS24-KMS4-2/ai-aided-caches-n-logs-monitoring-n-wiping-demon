@@ -2233,8 +2233,8 @@ monitoring database.
     Die genaue Modellbezeichnung lautet \texttt{gpt-4o-mini-2024-07-18}, wobei o für \textit{omni} steht, was den breiten Anwendungsbereich des Modells beschreibt.
     \textit{mini} steht für die leichtgewichtige Variante des grossen 4o Modells.
     Es ist speziell für schnelle und ressourcenschonende, fokussierte Anwendungen entwickelt worden.
-    Es kann durch sogenannte \texttt{fine-tuning}- oder \texttt{distillation}-Techniken annähernd an die Leistung des grossen 4o Modells herankommen, dies sogar oft mit weniger Kosten und Latenz.
-    Der sogenannte \texttt{knowledge-cutoff} des Modells liegt im Oktober 2023.
+    Es kann durch sogenannte \textit{fine-tuning}- oder \textit{distillation}-Techniken annähernd an die Leistung des grossen 4o Modells herankommen, dies sogar oft mit weniger Kosten und Latenz.
+    Der sogenannte \textit{knowledge-cutoff} des Modells liegt im Oktober 2023.
     Dies bedeutet, dass das Modell mit Daten bis zu diesem Zeitpunkt trainiert wurde.
     Für den Anwendungsfall des TraceSentry wurden die Modelle 4o und o1-mini initial evaluiert.
     Die Resultate wiesen jedoch keine signifikanten Unterschiede auf.
@@ -2253,14 +2253,14 @@ monitoring database.
 index forbidden by rule: /var/www/html/
     \end{verbatim}
     Diese 107 Zeichen lange Zeile entspricht 40 Tokens.
-    Angenommen die System-Prompt und Completion soll 2000 Tokens lang sein, so könnte ein Logdatei mit maximal \sfrac{128'000 - 2'000}{40} = 3'150 Zeilen analysiert werden.
+    Angenommen die System-Prompt und Completion soll 2'000 Tokens lang sein, so könnte ein Logdatei mit maximal \sfrac{128'000 - 2'000}{40} = 3'150 Zeilen analysiert werden.
 
     \subsection{Vorgehensweise}\label{subsec:vorgehensweise}
     Ziel war es die Testdateien per HTTP-Schnittstelle an den Daemon zu senden, welcher diese mit der System-Prompt an das KI-Modell weiterleitet.
     Alle Testdateien befanden sich auf dem Testsystem.
     Der Aufruf der HTTP-Schnittstelle erfolgte über einen SpringBootTest im Daemon-Projekt.
     Die Antworten des KI-Modells wurden in einem Ausgabe-Verzeichnis als Textdateien abgelegt.
-    Diese wurden schliesslich manuell bewertet und mit, der zuvor definierten, Erwartungshaltung verglichen.
+    Diese wurden schliesslich manuell bewertet und mit der zuvor definierten Erwartungshaltung verglichen.
 
     \subsection{Testdateien}\label{subsec:testdateien}
     Im Internet existieren zwar zahlreiche reale, vorgelabelte und gesäuberte Datasets, welche für das Erkennen von Anomalien in Logdateien verwendet werden können.
@@ -2392,7 +2392,7 @@ index forbidden by rule: /var/www/html/
     \subsubsection{Normale Testdateien}
     Aus den 16 normalen Testdateien wurden 9 als unschädlich und 7 als potenziell schädlich eingestuft.
     Die empfohlene Aktion für alle 7 potenziell schädlichen Dateien war diese zu leeren.
-    Die Gründe für die \textbf{potenzielle Schädlichkeit} waren:
+    Die Gründe für die potenzielle Schädlichkeit waren:
     \begin{itemize}
         \item Auth: viele fehlgeschlagene Login-Versuche
         \item MySQL: viele manipulative SQL-Queries
@@ -2404,7 +2404,7 @@ index forbidden by rule: /var/www/html/
 
     \subsubsection{Anomale Testdateien (seltene Anomalien)}
     Aus den 14 Testdateien mit seltenen Anomalien wurden 11 als potenziell schädlich und 2 als schädlich und 1 als unschädlich eingestuft.
-    Die empfohlene Aktionen korrelierten mit der Einstufung.
+    Die empfohlenen Aktionen korrelierten mit der Einstufung.
     Alle potenziell schädlichen Dateien sollten geleert, alle schädlichen Dateien gelöscht und die unschädliche Datei ignoriert werden.
 
     Nennenswerte Ergebnisse:
@@ -2432,7 +2432,7 @@ index forbidden by rule: /var/www/html/
 
     \subsection{Kostenanalyse}\label{subsec:kostenanalyse}
     Die genauen Kosten sind auf \url{https://platform.openai.com/} ersichtlich und werden pro Tag und Modell dargestellt.
-    Die Kosten für die Analyse der 46 Testdateien beliefen sich auf insgesamt \textbf{0.58 USD}.
+    Die Kosten für die Analyse der 46 Testdateien beliefen sich auf insgesamt 0.58 USD\@.
     Diese lassen sich in nachfolgende Kategorien unterteilen:
     \begin{itemize}
         \item 0.561 USD für das Annehmen des Inputs (System-Prompt + Testdatei)
