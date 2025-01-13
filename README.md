@@ -138,4 +138,8 @@ This project is licensed under the MIT License: [LICENSE](./LICENSE)
 
 ## Contact
 
+- **Group**: 
+  - [Janic Scherer](mailto:janic.scherer@students.bfh.ch)
+  - [Luca Ammann](mailto:luca.ammann@students.bfh.ch)
+  - [Luca Scherer](mailto:luca.scherer@students.bfh.ch)
 - **Advisor**: Dr. Simon Kramer
