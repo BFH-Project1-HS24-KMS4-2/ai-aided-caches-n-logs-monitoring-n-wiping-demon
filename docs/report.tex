@@ -805,19 +805,19 @@ schädlich, also empfehle ich es zu leeren.
     \end{itemize}
 
     \paragraph*{Fazit}
-    Die Remote-Datenbank wurde als ungeeignet für diesen Anwendungsfall bewertet.
-    Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind für das derzeitige System nicht notwendig, da es sich um eine kleine, lokal betriebene Anwendung handelt.
+    Die Remote-Datenbank wurde als ungeeignet für die vorhandenen Anwendungsfälle bewertet.
+    Die Vorteile wie erhöhte Datensicherheit und Skalierbarkeit sind nicht essentiell.
     Die zusätzlichen Anforderungen an Infrastruktur und die Abhängigkeit von einer Netzwerkverbindung stellen einen unverhältnismäßigen Mehraufwand dar, der den Nutzen nicht rechtfertigt.
 
-    \paragraph*{\underline{1.3 Eingebettet}}\mbox{}\\
-    Eine eingebettete Datenbank wird als Ressource des Programms bereitgestellt und bleibt persistent, solange die entsprechenden Dateien im Programmverzeichnis nicht gelöscht werden.
+    \paragraph*{\underline{1.3 File-basiert (serverlos)}}\mbox{}\\
+    Eine Datenbank wird lokal als Ressource in Form einer Datei dem Programms bereitgestellt und ist ohne äusserliche Einwirkungen persistent.
     Sie bietet eine leichtgewichtige Lösung für kleinere Anwendungen.
 
     \paragraph*{Vorteile}
     \begin{itemize}
         \item Keine Notwendigkeit für externe Infrastruktur, wodurch die Einrichtung vereinfacht wird.
         \item Volle Offline-Funktionalität, da keine Verbindung zu externen Diensten erforderlich ist.
-        \item Hohe Performance durch direkte Anbindung an das Programm.
+        \item Hohe Performanz durch direkte Anbindung an das Programm.
     \end{itemize}
 
     \paragraph*{Nachteile}
@@ -827,10 +827,10 @@ schädlich, also empfehle ich es zu leeren.
     \end{itemize}
 
     \paragraph*{Fazit}
-    Die eingebettete Datenbank wurde als die am besten geeignete Option identifiziert.
-    Sie erfüllt die Anforderungen eines kleinen Systems ohne die Notwendigkeit zusätzlicher Infrastruktur und ermöglicht eine einfache und schnelle Einrichtung.
-    Da das System hauptsächlich offline betrieben werden soll, bietet diese Lösung eine optimale Balance zwischen Effizienz und Funktionalität.
-    Die Verantwortung für die Datenbank wird dabei auf den Anwender übertragen, was den Verwaltungsaufwand reduziert.
+    Die file-basierte und serverlose Datenbank wurde als die am besten geeignetste Option identifiziert.
+    Sie erfüllt die Anforderungen eines kleinen Systems ohne die Notwendigkeit zusätzlicher Infrastruktur und ermöglicht eine einfache und schnelle Einrichtung und Verwendung.
+    Die Verantwortung für die Datenbank wird auf den Anwender übertragen, was den Verwaltungsaufwand reduziert.
+    Zudem ist so generell ein Offline-Betrieb möglich (im Kontext des Monitorings).
 
     \paragraph*{2. Schnittstelle CLI $\leftrightarrow$ Daemon}\mbox{}\\
     Für die Kommunikation zwischen der CLI (Command Line Interface) und dem Daemon ist eine geeignete Schnittstelle erforderlich, um Anweisungen des Anwenders effizient und zuverlässig zu übertragen.
@@ -959,7 +959,7 @@ schädlich, also empfehle ich es zu leeren.
     \paragraph*{Vorteile}
     \begin{itemize}
         \item Integration in Java: Optimiert für Java-Anwendungen und unterstützt JDBC\@.
-        \item Vielseitigkeit: Kann als eingebettete oder serverbasierte Datenbank eingesetzt werden.
+        \item Vielseitigkeit: Kann als eingebettete (bzw.\ file-basierte) oder serverbasierte Datenbank eingesetzt werden.
         \item Erweiterte Funktionen: Unterstützung für in-memory-Datenbanken und Multi-Threaded-Betrieb.
     \end{itemize}
 
