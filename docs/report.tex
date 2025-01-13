@@ -1882,7 +1882,7 @@ monitoring database.
             \begin{enumerate}
                 \item \begin{verbatim}ts search [PFAD]
                 \end{verbatim}
-                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche \("\)cache\("\) oder \("\)log\("\) enthalten.
+                \item Erwartet: Auflistung der Inhalte unter [PFAD] welche ``cache`` oder ``log`` enthalten.
             \end{enumerate} \\ \hline
             \textbf{Erwartetes Ergebnis} & Auflistung von Dateiinhalten in einem Verzeichnis. \\ \hline
         \end{tabular}
@@ -2671,7 +2671,7 @@ echo ts run >> ~/.zprofile
     Die folgenden Befehle sind in der~\nameref{sec:cli-doc} spezifiziert.
     \\Es wird das \texttt{inspect} Kommando und die Monitoring-Funktionen betrachtet.
     Für Funktionen wie \texttt{search} und \texttt{wipe} wird keine Produktivitätssteigerung angenommen, da sie nur Shell-Befehle umhüllen.
-    Administrationsbefehle wie \texttt{kill}, \texttt{run} etc.\ werden ebenfalls nicht betrachtet, diese sind \("\)Mittel zum Zweck\("\) und es gibt logischerweise keine äquivalenten Vorgänge ohne die Software.
+    Administrationsbefehle wie \texttt{kill}, \texttt{run} etc.\ werden ebenfalls nicht betrachtet, diese sind ``Mittel zum Zweck`` und es gibt logischerweise keine äquivalenten Vorgänge ohne die Software.
 
     \clearpage
 
@@ -2681,15 +2681,15 @@ echo ts run >> ~/.zprofile
     Für die Berechnung der Produktivitätssteigerung werden folgende Annahmen getroffen:
     \begin{itemize}
         \item TraceSentry ist gemäss Installationshandbuch installiert (inkl.\ Autostart).
-        \item Das Hochladen einer Datei in die GPT-Prompt dauert inkl.\ dem Vorschlagen der Output-Formulierung bzw.\ -Formatierung ca.\ 20 Sekunden.
+        \item Das Hochladen einer Datei in die GPT-Prompt dauert (inkl.\ dem Vorschlagen der Output-Formulierung bzw.\ -Formatierung) ca.\ 20 Sekunden.
         \item Die Analyse einer Datei in der GPT-Prompt dauert ca.\ 4 Sekunden.
         (Hierbei spielt vor allem die Qualität der Prompt-Formulierung eine Rolle.)
         \item TraceSentry benötigt im Schnitt 4 Sekunden für das \texttt{inspect} Kommando (für eine beliebige Datei).
-        \item Das Analysieren einer Datei mit GPT-4o mini kostet gemäss KI Fallstudie 0.011 USD $\approx$ 0.01 CHF.
+        \item Das Analysieren einer Datei mit GPT-4o mini kostet gemäss~\nameref{sec:ki-fallstudie} 0.011 USD $\approx$ 0.01 CHF.
         \item Der durchschnittliche Studenlohn beträgt 38 CHF\@.
         \item Eine Datei wird im Schnitt für eine Woche überwacht.
         \item Ein Computer läuft im Schnitt 6 Stunden pro Tag.
-        \item Aufnahme eines Verzeichnisses, damit TraceSentry die Dateien überwachen kann, dauert ca.\ 10 Sekunden.
+        \item Das Hinzufügen eines zu überwachenden Verzeichnisses, damit TraceSentry die darin enthaltenen Dateien überwachen kann, dauert ca.\ 10 Sekunden.
         \item Das Erstellen einer Kopie einer Datei (manueller Snapshot) dauert ca.\ 10 Sekunden.
         \item Das Vergleichen zweier Dateien dauert ca.\ 20 Sekunden.
     \end{itemize}
@@ -2746,7 +2746,7 @@ echo ts run >> ~/.zprofile
 
     \textbf{Mit TraceSentry:} \\
     \begin{align*}
-        \text{Aufgabendauer mit SW} &= \text{Aufnahme eines Verzeichnisses} \\
+        \text{Aufgabendauer mit SW} &= \text{Hinzufügen eines zu überwachenden Verzeichnisses} \\
         &= 10s
     \end{align*}
 
@@ -2807,7 +2807,7 @@ echo ts run >> ~/.zprofile
     \subsection{Sicherheit}\label{subsec:sicherheit}
     In der jetzigen Lösung wurde wenig bis gar keine Rücksicht auf Sicherheitsaspekte genommen.
     Das deshalb, weil das System als Ganzes nur auf dem Host des Anwenders läuft und keine externen Schnittstellen bietet.
-    Es sind also primär Angriffe \("\)von innen\("\) möglich.
+    Es sind also primär Angriffe ``von innen`` möglich.
     Dabei ist vor allem die ungesicherte REST-Schnittstelle des Daemons anfällig.
     Das Hinzufügen von Authentifizierung und Autorisierung (v.a.\ der REST-Schnittstelle), wäre also ein wichtiger Schritt in einer zukünftigen Version.
 
