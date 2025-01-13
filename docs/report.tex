@@ -928,7 +928,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \subsubsection{Domain Service}
     Der Domain Service implementiert die Applikations- bzw.\ Geschäftslogik.
-    Dazu gehört Serverseitige Validierung, Datenverarbeitung und -Persistierung.
+    Dazu gehört serverseitige Validierung, Datenverarbeitung und -Persistierung.
 
     \subsubsection{Operations Scheduler}
     Der Monitoring Scheduler führt periodisch Operationen aus.
@@ -982,7 +982,7 @@ schädlich, also empfehle ich es zu leeren.
         \caption{Sequenzdiagramm Inspect Command}
         \label{fig:seq-diag-inspect-commands}
     \end{figure}
-    \\Dieses Muster ist für alle Kommandos in der Shell identisch, daher wird dieses Kapitel in prägnanter Form gehalten.
+    \\Dieses Muster ist für alle Kommandos in der Shell identisch, daher wird dieser Abschnitt in prägnanter Form gehalten.
 
     \subsubsection{Backend (Daemon)}
     \paragraph*{Beispiel Komponenteninteraktion}
@@ -1001,7 +1001,7 @@ schädlich, also empfehle ich es zu leeren.
     \clearpage
 
     \paragraph*{Monitoring}\mbox{}\\
-    Der Monitoring Scheduler ist eine Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
+    Der Monitoring Scheduler ist die Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
     Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
     Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
     Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
@@ -1078,7 +1078,7 @@ buildTreeRecursively(parent, snapshot, files):
     Jeder Ordner und jede Datei wird als Knoten im Hashbaum repräsentiert.
     Die Wurzel des Hashbaums repräsentiert den zu überwachenden Pfad.
     Dateien sind stets Blätter.\newline
-    Sei $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
+    Folgend ist $n$ die Anzahl der Knoten im Verzeichnis des zu überwachenden Pfades.
 
     \paragraph*{Konstruktion}
     Der Baualgorithmus besucht rekursiv alle Dateien und Ordner im zu überwachenden Pfad,
@@ -2479,7 +2479,7 @@ echo ts run >> ~/.zprofile
 
     Die Verwendung ebendieser KI-Modelle regt aber auch neue Diskussionen an, insbesondere im Hinblick auf den Datenschutz und die Privatsphäre.
     Denkt man an das Kernproblem - dem Schutz von sensiblen Daten - so ist die Verwendung eines kommerziellen und proprietären KI-Modells wie es die GPT-Modelle sind, durchaus kritisch zu betrachten
-    und regen im Grunde das selbe Problem an, das sie eigentlich lösen sollen.
+    und regt im Grunde das selbe Problem an, das sie eigentlich lösen sollte.
 
     Des Weiteren ist die umgesetzte Lösung mit der Kommandozeilenschnittstelle vor allem für technisch versierte Anwender geeignet.
     Diese haben zwar auch Bedarf an einer solchen Lösung, jedoch sind sie eher in der Lage, auch ohne ein solches Tool die Risiken einzuschätzen und zu minimieren.
@@ -2489,7 +2489,7 @@ echo ts run >> ~/.zprofile
     Das Problem bietet sehr viel Raum dafür.
 
     Nichtsdestotrotz ist die Lösung in ihrer jetzigen Form ein Anfang, löst das ursprüngliche Problem und bietet eine Basis, auf der weiter aufgebaut werden kann.
-    Die Arbeit bietet zudem die Möglichkeit, das Potential von generativen KI-Modellen für spezifische Anwendungsfälle zu erkennen und einen Konsens zu schaffen, wie diese in Zukunft eingesetzt werden können.
+    Die Arbeit bietet zudem die Möglichkeit, das Potential von generativen KI-Modellen für spezifische Anwendungsfälle zu erkennen und ein Verständnis zu schaffen, wie diese in Zukunft eingesetzt werden können.
 
     \clearpage
 
