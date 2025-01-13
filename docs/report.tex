@@ -485,7 +485,7 @@
 
 
     \section{Anforderungen}\label{sec:anforderungen}
-    Die Anforderungen für den AI-Aided Caches-n-Logs \gls{monitoring}-n-Wiping Demon ergaben sich aus dem Projekt Proposal (siehe Anhang~\ref{sec:originale-projektbeschreibung}).
+    Die Anforderungen für den AI-Aided Caches-n-Logs \gls{monitoring}-n-Wiping Demon (TraceSentry) ergaben sich aus dem Projekt Proposal (siehe Anhang~\ref{sec:originale-projektbeschreibung}).
     sowie einem initialen Termin mit Herr Kramer.
 
     \subsection{Funktionale Anforderungen}\label{subsec:funktionale-anforderungen}
@@ -767,7 +767,7 @@ test.log CHANGED 7-times
     \paragraph*{Vorteile}
     \begin{itemize}
         \item Sehr hohe Zugriffsgeschwindigkeit, da die Daten im Arbeitsspeicher gehalten werden.
-        \item Einfache Integration ohne dauerhaften Speicherbedarf.
+        \item Einfache Integration
     \end{itemize}
 
     \paragraph*{Nachteile}
@@ -781,7 +781,7 @@ test.log CHANGED 7-times
     Eine In-Memory-Datenbank würde nicht ermöglichen, dass Analysen auch nach einem Neustart des Systems verfügbar bleiben.
 
     \paragraph*{1.2 Remote}\mbox{}\\
-    Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk vom Abnehmer aus angesprochen.
+    Bei dieser Variante wird die Datenbank auf einem externen System betrieben und über das Netzwerk angesprochen.
     Die Daten bleiben persistent, solange sie auf dem externen System nicht gelöscht werden und dieses ordnungsgemäss funktioniert.
 
     \paragraph*{Vorteile}
