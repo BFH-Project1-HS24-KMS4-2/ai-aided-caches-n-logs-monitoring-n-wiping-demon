@@ -317,7 +317,7 @@
     \section{Ausgangssituation}
 
     \subsection{Problem}\label{subsec:problem}
-    Cache- und Logdateien sind temporäre Dateien, die von Betriebssystemen und
+    Cache- und Logdateien\index{Cache- und Logdateien} sind temporäre Dateien, die von Betriebssystemen und
     Anwendungen zur Speicherung von Zwischenständen, Nutzeraktivitäten und
     Systemereignissen erstellt werden.
     Viele Computerbenutzer sind sich nicht bewusst, welche Arten dieser Dateien auf ihrem
@@ -335,7 +335,7 @@
     Betrachtet werden hierbei vor allem die Struktur (Syntax) und Bedeutung (Semantik) von Dateiinhalten.
     Des Weiteren lassen sich Schlüsse aus Änderungen, Löschungen und Neuerstellungen von Dateien ziehen.\footnote{Evalutation durch KI-Modell in Bezug auf die Bedeutung von Änderungen, Löschungen und Neuerstellungen nicht weiter realisiert, siehe Abschnitt \nameref{sec:zukunftigearbeiten} bzw. \nameref{subsec:funktionale-erweiterungen}.}
     Durch das automatisierte Abfragen dieser KI-Modelle in einer eigenen Anwendung,
-    welche unter anderem Momentaufnahmen (sogenannte\ Snapshots) relevanter Dateipfaden und Metadaten speichert,
+    welche unter anderem Momentaufnahmen (sogenannte\ Snapshots\index{Snapshots}) relevanter Dateipfaden und Metadaten speichert,
     sowie weitere Mehrwerte in Bezug auf die Nutzererfahrung realisiert, kann einem
     Benutzer auf einfache Art und Weise die Möglichkeit zur Kontrolle und Erleichterung dieses Umstandes
     geboten werden.
@@ -347,7 +347,7 @@
 
 
     \section{Projektziel}\label{sec:projektziel}
-    Es soll eine Anwendung entwickelt werden, welche die \textbf{Suche, Überwachung und Löschung von Cache- und Logdateien} ermöglicht.
+    Es soll eine Anwendung entwickelt werden, welche die \textbf{Suche, Überwachung und Löschung von Cache- und Logdateien\index{Cache- und Logdateien}} ermöglicht.
     Dazu gehört das \textbf{Einholen von Einschätzungen eines KI-Modells}, welches die Dateien analysiert und bewertet.
     Die Applikation soll \textbf{plattformunabhängig}, \textbf{benutzerfreundlich} und mit der nötigen \textbf{Dokumentation} für den Benutzer (User-Manual u.a.) ausgestattet sein.
     \\Das KI-Modell wird nur abgefragt bzw.\ eingebunden und dessen Entwicklung und Betrieb
@@ -381,7 +381,7 @@
     \subsubsection{Systemübersicht}
     Der Hauptverwendungszweck des TraceSentry ist das Überwachen von Dateien in bestimmten Verzeichnissen.
     Dabei liegt der Fokus auf Log- und Cache-Dateien, welche periodisch auf Änderungen in Form von Erstellung, Löschung oder Veränderung überprüft werden.
-    Diese periodische Überwachung soll in einem Hintergrundprozess, einem so genannten Daemon, stattfinden.
+    Diese periodische Überwachung soll in einem Hintergrundprozess, einem so genannten Daemon\index{Daemon}, stattfinden.
     Notwendige Daten für die Überwachung sowie, durch die Überwachung entstandene Daten, werden in einer Datenbank gespeichert.
     Verdächtige Dateien können durch eine KI-gestützte Analyse bewertet und anschliessend geleert oder gelöscht werden.
 
@@ -412,12 +412,12 @@
     Im Rahmen der Anforderungsspezifikation wurde eine Benutzerschnittstelle in Form eines Command-Line-Interfaces (CLI) spezifiziert.
     Im Hinblick auf Erweiterung und Wartbarkeit ist die Benutzerschnittstelle logisch von der Geschäftslogik getrennt.
     Aufgrund dessen wurde die Benutzerschnittstelle als eigenständige Laufzeiteinheit definiert und entwickelt.
-    Die Kommunikation zwischen CLI und Daemon erfolgt über eine REST-API\@.
+    Die Kommunikation zwischen CLI\index{CLI} und Daemon erfolgt über eine\index{REST-API} REST-API\@.
     Diese Wahl wurde im Kapitel~\nameref{subsec:technische-variantenentscheide} begründet.
 
     \subsubsection{Datenbank}\label{subsubsec:spezifikation-datenbank}
     Die Datenbank wird für die Persistierung von Überwachungs-Metadaten sowie -Ergebnissen verwendet.
-    Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank.
+    Sie befindet sich lokal auf dem System in Form einer SQLite-Datenbank\index{SQLite}.
     Die Wahl des DBMS sowie dessen genaue Implementierung wird in den Kapitel~\nameref{subsubsec:technologieentscheid} und~\nameref{subsubsec:realisierung-datenbank} beschrieben.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:spezifikation-ki-anbindung}
@@ -433,7 +433,7 @@
     \subsection{Prozessumgebung (dynamisch)}\label{subsec:prozessumgebung}
 
     \subsubsection{Daemon Lifecycle}
-    Der Daemon-Prozess kann on-demand oder als Autostart-Service gestartet werden.
+    Der Daemon-Prozess\index{Daemon} kann on-demand oder als Autostart-Service gestartet werden.
     Er läuft autonom im Hintergrund und kann über die CLI angesteuert werden.
 
     \subsubsection{CLI Lifecycle}
@@ -510,11 +510,11 @@
     Die Anwendungsfälle wurden in folgende Hauptanforderungen an das System übersetzt,
     welche laufend konkretisiert, aufgebrochen und in User Stories inkl. Akzeptanzkriterien abgebildet wurden.
     \begin{itemize}
-        \item Das System findet jegliche Dateien (insbesondere Log- und Cache-Dateien), welche sich in einem angegebenen Verzeichnis befinden.
+        \item Das System findet jegliche Dateien (insbesondere Cache- und Logdateien\index{Cache- und Logdateien} ), welche sich in einem angegebenen Verzeichnis befinden.
         (inkl. Unterverzeichnisse)
         \item Das System durchsucht periodisch angegebene Verzeichnisse inkl.
         Unterverzeichnisse nach Log- oder Cache-Dateien.
-        \item Das System erstellt periodisch sogenannte Snapshots der gefundenen Dateien, um diese später miteinander zu vergleichen.
+        \item Das System erstellt periodisch sogenannte Snapshots\index{Snapshots} der gefundenen Dateien, um diese später miteinander zu vergleichen.
         \item Das System identifiziert veränderte Dateien anhand der periodisch erstellten Snapshots.
         \item Das System bewertet Dateien nach deren Schädlichkeit und gibt eine Empfehlung ab, ob die Datei gelöscht oder geleert werden soll.
         \item Das System kann angegebene Dateien leeren oder löschen.
@@ -937,7 +937,7 @@ schädlich, also empfehle ich es zu leeren.
     Auch aufgrund mangelnder Erfahrung im Team mit NoSQL-Systemen wurde diese Option verworfen.
 
     \paragraph*{\underline{1.2 SQL}}\mbox{}\\
-    SQL-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.
+    SQL-Datenbanken basieren auf einem relationalen Modell mit festen Schemata.\index{SQLite}
     Sie verwenden die standardisierte Abfragesprache SQL und sind besonders geeignet für datenintensive Anwendungen mit hohen Anforderungen an Konsistenz.
 
     \paragraph*{Vorteile}
@@ -981,7 +981,7 @@ schädlich, also empfehle ich es zu leeren.
     Zudem erfüllt SQLite unsere Anforderungen besser.
 
     \paragraph*{\underline{1.2.2 SQLite}}\mbox{}\\
-    SQLite ist eine serverlose, eingebettete relationale Datenbank, die Daten in einer einzigen Datei speichert und keine separate Konfiguration erfordert.
+    SQLite\index{SQLite} ist eine serverlose, eingebettete relationale Datenbank, die Daten in einer einzigen Datei speichert und keine separate Konfiguration erfordert.
 
     \paragraph*{Vorteile}
     \begin{itemize}
@@ -1143,7 +1143,7 @@ schädlich, also empfehle ich es zu leeren.
     Geteilte Klassen sind in einer eigenen Bibliothek (\texttt{lib}) ausgelagert.
     Die Klassendiagramme für die CLI, den Daemon und die Lib sind im Anhang unter \hyperref[sec:class-diag-cli]{Klassendiagramm CLI}, \hyperref[sec:class-diag-daemon]{Klassendiagramm Daemon} und \hyperref[sec:class-diag-lib]{Klassendiagramm Lib} zu finden.
 
-    \subsubsection{Frontend (CLI)}
+    \subsubsection{Frontend (CLI)}\index{CLI}
     \paragraph*{Beispiel Komponenteninteraktion}
     Das folgende Sequenzdiagramm zeigt eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss der~\nameref{subsec:loesungsarchitektur}.
     In diesem Fall handelt es sich um das \texttt{inspect} Kommando (siehe~\nameref{sec:user-manual}).
@@ -1156,7 +1156,7 @@ schädlich, also empfehle ich es zu leeren.
     \end{figure}
     \\Dieses Muster ist für alle Kommandos in der Shell identisch, daher wird dieser Abschnitt in prägnanter Form gehalten.
 
-    \subsubsection{Backend (Daemon)}
+    \subsubsection{Backend (Daemon)}\index{Daemon}
     \paragraph*{Beispiel Komponenteninteraktion}
     Das folgende Sequenzdiagramm zeigt ebenfalls eine typische Interaktion zwischen Implementationen von Subkomponenten gemäss \\
     der~\nameref{subsec:loesungsarchitektur}.
@@ -1174,7 +1174,7 @@ schädlich, also empfehle ich es zu leeren.
 
     \paragraph*{Monitoring}\mbox{}\\
     Der Monitoring Scheduler ist die Implementation des Operations Schedulers (siehe~\nameref{subsec:loesungsarchitektur}).
-    Er speichert periodisch Snapshots von überwachten Pfaden in der Datenbank (1.1).
+    Er speichert periodisch Snapshots\index{Snapshots} von überwachten Pfaden in der Datenbank (1.1).
     Für jeden überwachten Pfad wird ein Snapshot (1.1.3), d.h.\ ein Hashbaum, erstellt (1.1.4).\\
     Für jeden Knoten des Baumes werden die Hashes mit dem letzten Snapshot verglichen und ein Flag gesetzt, falls sich der Knoten geändert hat.
     Falls ein Knoten nicht mehr existiert, wird dafür ein Flag im alten Snapshot gesetzt.
@@ -1201,7 +1201,7 @@ schädlich, also empfehle ich es zu leeren.
         ohne ihn erneut aus der Datenbank laden zu müssen.
         \begin{itemize}
             \item Ein Caching-Ansatz ist nur dann sinnvoll, wenn dieselben Daten mehrfach genutzt werden.
-            Da jedoch der Merkle-Tree des letzten Snapshots lediglich einmal (beim Vergleich mit dem neuen Baum) verwendet wird, ergibt sich hieraus kein signifikanter Nutzen.
+            Da jedoch der Merkle-Tree\index{Merkle-Tree} des letzten Snapshots lediglich einmal (beim Vergleich mit dem neuen Baum) verwendet wird, ergibt sich hieraus kein signifikanter Nutzen.
             \item Der Leistungsgewinn durch Caching wäre im Vergleich zum Laden aus der Datenbank marginal.
             Die Datenbank ist lokal angebunden, und die Abfrage weist eine geringe Komplexität auf, sodass ein effizienter Zugriff bereits gewährleistet ist.
         \end{itemize}
@@ -1216,10 +1216,10 @@ schädlich, also empfehle ich es zu leeren.
 
     \clearpage
 
-    \subsubsection{Merkle-Tree (Hashbaum)}
+    \subsubsection{Merkle-Tree (Hashbaum)}\index{Merkle-Tree
     Ein Merkle-Tree ist eine binäre Baumstruktur, die zur effizienten Überprüfung von Datenintegrität verwendet wird.
     Er eignet sich für das Vergleichen von Baumstrukturen, wie sie in Dateisystemen vorkommen.
-    \\Bei der Erstellung eines Snapshots eines überwachten Pfades wird ein eben solcher Baum erstellt.
+    \\Bei der Erstellung eines Snapshots\index{Snapshots} eines überwachten Pfades wird ein eben solcher Baum erstellt.
     Er besteht aus Knoten, die Hashes von Dateien oder Unterverzeichnissen enthalten.
     \\Folgender Pseudocode (stark vereinfacht) zeigt das Erstellen eines Merkle-Trees für einen Snapshot eines überwachten Pfades.
 
@@ -1242,7 +1242,7 @@ buildTreeRecursively(parent, snapshot, files):
 
     \end{lstlisting}
 
-    \subsubsection{\textbf{Komplexität}}
+    \subsubsection{\textbf{Komplexität}}\index{Merkle-Tree
     Unser System ist von Grund auf auf Effizienz und Performanz ausgelegt, der Hashbaum als zentrale Datenstruktur ermöglicht dies.
     Die Datenmenge mit der ein Benutzer arbeitet, kann sehr gross werden, daher ist es wichtig, dass die Skalierbarkeit des Systems gewährleistet ist.
     Eine Analyse der Komplexität der verschiedenen Operationen des Merkle-Trees ist daher angebracht.
@@ -1268,7 +1268,7 @@ buildTreeRecursively(parent, snapshot, files):
     \clearpage
 
     \subsubsection{Datenbank}\label{subsubsec:realisierung-datenbank}
-    Produktiv wird eine SQLite-Datenbank verwendet, welche lokal auf dem System des Benutzers in Form einer einzigen *.db-Datei gespeichert wird.
+    Produktiv wird eine SQLite-Datenbank\index{SQLite} verwendet, welche lokal auf dem System des Benutzers in Form einer einzigen *.db-Datei gespeichert wird.
     Für die automatisierten Tests wurde eine H2-In-Memory-Datenbank verwendet, welche für jeden Test mit dem gleichen Schema,
     das auch für die produktive Datenbank verwendet wird jeweils initialisiert wird.
 
@@ -1293,7 +1293,7 @@ buildTreeRecursively(parent, snapshot, files):
     \end{itemize}
 
     \paragraph*{snapshot}\mbox{}\\
-    In dieser Tabelle werden die Snapshots der überwachten Pfade gespeichert,
+    In dieser Tabelle werden die Snapshots\index{Snapshots} der überwachten Pfade gespeichert,
     welche periodisch mit einem definierten Intervall erstellt werden.
 
     Attribute:
@@ -1305,7 +1305,7 @@ buildTreeRecursively(parent, snapshot, files):
     \end{itemize}
 
     \paragraph*{snapshot\_node}\mbox{}\\
-    In dieser Tabelle werden die Knoten des Merkle-Trees gespeichert, welche die Dateien und Verzeichnisse des überwachten Pfades repräsentieren.
+    In dieser Tabelle werden die Knoten des Merkle-Trees\index{Merkle-Tree gespeichert, welche die Dateien und Verzeichnisse des überwachten Pfades repräsentieren.
     Durch die Natur von relationalen Datenbanken wird der Baum linearisiert gespeichert und die Beziehungen durch Fremdschlüssel auf die gleiche Entität (Parent-Knoten) rekursiv abgebildet.
 
     Attribute:
@@ -1346,7 +1346,7 @@ buildTreeRecursively(parent, snapshot, files):
         \item \texttt{snapshot\_node.deleted\_in\_next\_snapshot}
     \end{itemize}
 
-    \subsubsection{REST-Schnittstelle}
+    \subsubsection{REST-Schnittstelle}\index{REST-API}
     Siehe~\nameref{sec:api-spec} im Anhang.
 
     \subsubsection{KI-Anbindung}\label{subsubsec:ki-anbindung}
@@ -2544,7 +2544,7 @@ PATH=$PATH:$TRACE_SENTRY_DIR
 export OPENAI_API_KEY=<generierter API-Schlüssel>
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
-        \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
+        \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
         \begin{lstlisting}[label={lst:lstlisting-unix-4}]
 crontab -e
 // Fügen Sie die folgende Zeile am Ende der geöffneten Datei hinzu
@@ -2575,7 +2575,7 @@ $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
 [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schluessel>","User")
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
-        \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, muss die Datei \texttt{ts-daemon.bat} vom Installationsverzeichnis in den Autostart-Ordner kopiert werden:
+        \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, muss die Datei \texttt{ts-daemon.bat} vom Installationsverzeichnis in den Autostart-Ordner kopiert werden:
         \begin{lstlisting}[label={lst:lstlisting-windows-4}]
 Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
         \end{lstlisting}
@@ -2609,7 +2609,7 @@ echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
 echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \end{lstlisting}
         Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
-        \item Wenn der Daemon bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, passen Sie das \texttt{.zprofile} File in ihrem Home-Verzeichnis wie folgt an:
+        \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, passen Sie das \texttt{.zprofile} File in ihrem Home-Verzeichnis wie folgt an:
         \begin{lstlisting}[label={lst:lstlisting-mac-4}]
 echo ts run >> ~/.zprofile
         \end{lstlisting}
@@ -2915,7 +2915,7 @@ echo ts run >> ~/.zprofile
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
 
-    \section{CLI Dokumentation}\label{sec:cli-doc}
+    \section{CLI Dokumentation}\label{sec:cli-doc}\index{CLI}
     \vspace*{\fill}
     \includepdf[pages=-]{assets/cli-doc.pdf}
 
@@ -2924,7 +2924,7 @@ echo ts run >> ~/.zprofile
     \titleformat{\section}{\centering\normalfont\Large\bfseries}{\thesection}{1em}{}
 
 
-    \section{API-Dokumentation}\label{sec:api-spec}
+    \section{API-Dokumentation}\label{sec:api-spec}\index{REST-API}
     \vspace*{\fill}
     \includepdf[pages=-]{assets/api-documentation.pdf}
 
