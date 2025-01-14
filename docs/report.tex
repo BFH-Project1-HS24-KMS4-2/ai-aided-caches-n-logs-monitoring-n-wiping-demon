@@ -1864,8 +1864,6 @@ monitoring database.
         \caption{Manueller End-2-End Test E2E-007}\label{tab:e2e-7.2}
     \end{table}
 
-    \clearpage
-
     \begin{table}[h!]
         \centering
         \setlength{\leftmargini}{0.8cm}
@@ -1888,6 +1886,7 @@ monitoring database.
         \end{tabular}
         \caption{Manueller End-2-End Test E2E-008}\label{tab:e2e-8}
     \end{table}
+    \clearpage
 
     \begin{table}[h!]
         \centering
@@ -1967,7 +1966,7 @@ monitoring database.
     \section{Messungen (Performanztests)}\label{sec:performanztests}
     Um eine Aussage über die Performanz unseres Systems zu machen, haben wir einige Performanztests durchgeführt.
     Diese dienen lediglich als Indikator und sind nicht repräsentativ für alle möglichen Szenarien.
-    Es werden nur Kernfunktionen getestet, die Performanz kritisch sein könnten.
+    Es werden nur Kernfunktionen getestet, die performanzkritisch sein könnten.
 
     \subsection{Suchfunktion}\label{subsec:testduchfuhrung}
     Es wird im Modus FULL (Cache- und Logdateien) im spezifizierten Pfad nach Dateien gesucht.
@@ -1978,16 +1977,16 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{7cm}|}
             \hline
-            \textbf{System}                                            & Betriebssystem und Architektur                                                 \\ \hline
-            \textbf{Pfad}                                              & Verzeichnis, in dem gesucht wird                                               \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                         \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & Anzahl Unterverzeichnisse                                                      \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
-            \textbf{Gefundene Dateien}                                 & Anzahl Dateien, die gefunden wurden                                            \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                 \\ \hline
+            \textbf{System}                                     & Betriebssystem und Architektur                                                 \\ \hline
+            \textbf{Pfad}                                       & Verzeichnis, in dem gesucht wird                                               \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & Anzahl Dateien im Pfad (mit allen Unterverzeichnissen)                         \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & Anzahl Unterverzeichnisse                                                      \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & Anzahl Ebenen im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & Anzahl Knoten im konstruierten Baum aller gefundenen Dateien und Verzeichnisse \\ \hline
+            \textbf{Gefundene Dateien}                          & Anzahl Dateien, die gefunden wurden                                            \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & Mittelwert der Dauer in Millisekunden aus mehreren Stichproben                 \\ \hline
         \end{tabular}
-        \caption{Beschreibung Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
+        \caption{Umgebungsangaben und Metriken Suchfunktion-Performanztest}\label{tab:perf-search-metrics}
     \end{table}
 
     \newpage
@@ -1998,14 +1997,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & Windows 11--10.0 / amd64 \\ \hline
-            \textbf{Pfad}                                              & C:\textbackslash Windows \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 188'428                  \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 51'184                   \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 14                       \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 54'682                   \\ \hline
-            \textbf{Gefundene Dateien}                                 & 3'455                    \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 8'800ms                  \\ \hline
+            \textbf{System}                                     & Windows 11--10.0 / amd64 \\ \hline
+            \textbf{Pfad}                                       & C:\textbackslash Windows \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 188'428                  \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 51'184                   \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 14                       \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 54'682                   \\ \hline
+            \textbf{Gefundene Dateien}                          & 3'455                    \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 8'800ms                  \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-1}\label{tab:perf-search-win-1}
     \end{table}
@@ -2015,14 +2014,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & Windows 11--10.0 / amd64       \\ \hline
-            \textbf{Pfad}                                              & C:\textbackslash Program Files \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 66'386                         \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 8'925                          \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 20                             \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 10'109                         \\ \hline
-            \textbf{Gefundene Dateien}                                 & 1'183                          \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 800ms                          \\ \hline
+            \textbf{System}                                     & Windows 11--10.0 / amd64       \\ \hline
+            \textbf{Pfad}                                       & C:\textbackslash Program Files \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 66'386                         \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 8'925                          \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 20                             \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 10'109                         \\ \hline
+            \textbf{Gefundene Dateien}                          & 1'183                          \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 800ms                          \\ \hline
         \end{tabular}
         \caption{Performanztest Suche WIN-2}\label{tab:perf-search-win-2}
     \end{table}
@@ -2032,14 +2031,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Logs/               \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 229                          \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 89                           \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 9                            \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 120                          \\ \hline
-            \textbf{Gefundene Dateien}                                 & 31                           \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 6.6ms                        \\ \hline
+            \textbf{System}                                     & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                       & /Library/Logs/               \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 229                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 89                           \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 9                            \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 120                          \\ \hline
+            \textbf{Gefundene Dateien}                          & 31                           \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 6.6ms                        \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-1}\label{tab:perf-search-mac-1}
     \end{table}
@@ -2049,14 +2048,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & macOS Sequoia 15.2 / aarch64 \\ \hline
-            \textbf{Pfad}                                              & /Library/Caches/             \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 677                          \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 8                            \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 3                            \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 6                            \\ \hline
-            \textbf{Gefundene Dateien}                                 & 0                            \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 0.6ms                        \\ \hline
+            \textbf{System}                                     & macOS Sequoia 15.2 / aarch64 \\ \hline
+            \textbf{Pfad}                                       & /Library/Caches/             \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 677                          \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 8                            \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 3                            \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 6                            \\ \hline
+            \textbf{Gefundene Dateien}                          & 0                            \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 0.6ms                        \\ \hline
         \end{tabular}
         \caption{Performanztest Suche MAC-2}\label{tab:perf-search-mac-2}
     \end{table}
@@ -2066,14 +2065,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & Linux 6.1.0-28 / amd64    \\ \hline
-            \textbf{Pfad}                                              & /opt/idea-IU-242.22855.74 \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 2248                      \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 793                       \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 10                        \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 806                       \\ \hline
-            \textbf{Gefundene Dateien}                                 & 13                        \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 21ms                      \\ \hline
+            \textbf{System}                                     & Linux 6.1.0-28 / amd64    \\ \hline
+            \textbf{Pfad}                                       & /opt/idea-IU-242.22855.74 \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 2248                      \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 793                       \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 10                        \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 806                       \\ \hline
+            \textbf{Gefundene Dateien}                          & 13                        \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 21ms                      \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-1}\label{tab:perf-search-lin-1}
     \end{table}
@@ -2083,14 +2082,14 @@ monitoring database.
         \setlength{\leftmargini}{0.8cm}
         \begin{tabular}{|p{7cm}|p{5cm}|}
             \hline
-            \textbf{System}                                            & Linux 6.1.0-28 / amd64 \\ \hline
-            \textbf{Pfad}                                              & /home/luca             \\ \hline
-            \textbf{Anz. Dateien im Pfad}                              & 47'3915                \\ \hline
-            \textbf{Anz. Verzeichnisse im Pfad}                        & 9'8549                 \\ \hline
-            \textbf{Anz. Ebenen \newline des Baumes relevanter Knoten} & 29                     \\ \hline
-            \textbf{Anz. Knoten \newline des Baumes relevanter Knoten} & 104'448                \\ \hline
-            \textbf{Gefundene Dateien}                                 & 5'429                  \\ \hline
-            \textbf{Dauer (Stichprobenmittel)}                         & 2'663ms                \\ \hline
+            \textbf{System}                                     & Linux 6.1.0-28 / amd64 \\ \hline
+            \textbf{Pfad}                                       & /home/luca             \\ \hline
+            \textbf{Anz. Dateien im Pfad}                       & 47'3915                \\ \hline
+            \textbf{Anz. Verzeichnisse im Pfad}                 & 9'8549                 \\ \hline
+            \textbf{Anz. Ebenen \newline des erstellten Baumes} & 29                     \\ \hline
+            \textbf{Anz. Knoten \newline des erstellten Baumes} & 104'448                \\ \hline
+            \textbf{Gefundene Dateien}                          & 5'429                  \\ \hline
+            \textbf{Dauer (Stichprobenmittel)}                  & 2'663ms                \\ \hline
         \end{tabular}
         \caption{Performanztest Suche LIN-2}\label{tab:perf-search-lin-2}
     \end{table}
@@ -2113,7 +2112,7 @@ monitoring database.
             \textbf{Benötigte Zeit}                                        & Gesamte Zeit, die benötigt wurde, um alle Snapshots zu erstellen            \\ \hline
             \textbf{Durchschnittliche Dauer zum Erstellen eines Snapshots} & Durchschnittliche Dauer, die benötigt wurde, um einen Snapshot zu erstellen \\ \hline
         \end{tabular}
-        \caption{Beschreibung Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
+        \caption{Umgebungsangaben und Metriken Monitoring-Performanztest}\label{tab:monitoring-perftest-metrics}
     \end{table}
 
     \subsubsection{Ergebnisse}
@@ -2252,7 +2251,7 @@ monitoring database.
 index forbidden by rule: /var/www/html/
     \end{verbatim}
     Diese 107 Zeichen lange Zeile entspricht 40 Tokens.
-    Angenommen die System-Prompt und Completion soll 2'000 Tokens lang sein, so könnte ein Logdatei mit maximal \sfrac{128'000 - 2'000}{40} = 3'150 Zeilen analysiert werden.
+    Angenommen die System-Prompt und Completion soll 2'000 Tokens lang sein, so könnte eine Logdatei mit maximal \sfrac{128'000 - 2'000}{40} = 3'150 Zeilen analysiert werden.
 
     \subsection{Vorgehensweise}\label{subsec:vorgehensweise}
     Ziel war es die Testdateien per HTTP-Schnittstelle an den Daemon zu senden, welcher diese mit der System-Prompt an das KI-Modell weiterleitet.
@@ -2291,7 +2290,7 @@ index forbidden by rule: /var/www/html/
             \textbf{Log-Typ} & \textbf{Normale Zeilen} & \textbf{Anomalien} \\ \hline
             \textnormal{HTTP} &
             \begin{itemize}
-                \item Einfache GET-Request
+                \item Einfacher GET-Request
             \end{itemize} &
             \begin{itemize}
                 \item SQL-Injektion
@@ -2328,8 +2327,8 @@ index forbidden by rule: /var/www/html/
 
             \textnormal{Router} &
             \begin{itemize}
-                \item Packet Akzeptiert
-                \item Packet Abgelehnt
+                \item Packet akzeptiert
+                \item Packet abgelehnt
             \end{itemize} &
             \begin{itemize}
                 \item Unautorisierter Zugriff
@@ -2339,8 +2338,8 @@ index forbidden by rule: /var/www/html/
 
             \textnormal{Auth} &
             \begin{itemize}
-                \item Login Akzeptiert
-                \item Login Abgelehnt
+                \item Login akzeptiert
+                \item Login abgelehnt
             \end{itemize} &
             \begin{itemize}
                 \item Brute Force
@@ -2402,7 +2401,7 @@ index forbidden by rule: /var/www/html/
     Das Ergebnis ist vor allem auf die Beschaffenheit der Testdateien zurückzuführen.
 
     \subsubsection{Anomale Testdateien (seltene Anomalien)}
-    Aus den 14 Testdateien mit seltenen Anomalien wurden 11 als potenziell schädlich und 2 als schädlich und 1 als unschädlich eingestuft.
+    Aus den 14 Testdateien mit seltenen Anomalien wurden 11 als potenziell schädlich, 2 als schädlich und 1 als unschädlich eingestuft.
     Die empfohlenen Aktionen korrelierten mit der Einstufung.
     Alle potenziell schädlichen Dateien sollten geleert, alle schädlichen Dateien gelöscht und die unschädliche Datei ignoriert werden.
 
@@ -2623,7 +2622,7 @@ echo ts run >> ~/.zprofile
         \item Im TraceSentry ist ein \texttt{help}-Befehl eingebaut, welcher eine Übersicht über alle verfügbaren Befehle und deren Verwendung anzeigt.
         Dieser Befehl wird genau gleich wie alle anderen Befehle ausgeführt, indem im Host-Terminal \texttt{ts help} eingegeben wird.
         Um genauere Informationen zu einem bestimmten Befehl zu erhalten, kann nach dem \texttt{help}-Befehl auch der Name des gewünschten Befehls angegeben werden (z.B. \texttt{ts help search}).
-        \item Für \textbf{die Verwendung mit Windows} ist zu beachten, dass alle Pfade in den Befehlen mit \textbf{zwei} Backslashes (\textbackslash) geschrieben werden müssen.
+        \item Für \textbf{die Verwendung mit Windows} ist zu beachten, dass alle Pfade in den Befehlen mit \textbf{zwei} Backslashes (\textbackslash\textbackslash) geschrieben werden müssen.
         \item Pfade welche Leerzeichen enthalten, müssen in Anführungszeichen gesetzt werden.
     \end{itemize}
 
@@ -2641,7 +2640,7 @@ echo ts run >> ~/.zprofile
 
     Des Weiteren ist die umgesetzte Lösung mit der Kommandozeilenschnittstelle vor allem für technisch versierte Anwender geeignet.
     Diese haben zwar auch Bedarf an einer solchen Lösung, jedoch sind sie eher in der Lage, auch ohne ein solches Tool die Risiken einzuschätzen und zu minimieren.
-    Gerade für weniger technische versierte Anwender, die oft nicht in der Lage sind, die Risiken zu erkennen und zu minimieren, wäre eine einfache und intuitive Lösung umso wichtiger.
+    Gerade für weniger technisch versierte Anwender, die oft nicht in der Lage sind, die Risiken zu erkennen und zu minimieren, wäre eine einfache und intuitive Lösung umso wichtiger.
 
     Für eine zukünftige Weiterentwicklung könnten neben der besagten \gls{ux}-Verbesserung etliche Funktionen und technische Verbesserungen vorgenommen werden.
     Das Problem bietet sehr viel Raum dafür.
@@ -2686,7 +2685,7 @@ echo ts run >> ~/.zprofile
         (Hierbei spielt vor allem die Qualität der Prompt-Formulierung eine Rolle.)
         \item Das Analysieren einer Datei mit TraceSentry (\texttt{inspect}) dauert samt Befehlseingabe ca.\ 10 Sekunden.
         \item Das Analysieren einer Datei mit GPT-4o mini kostet gemäss~\nameref{sec:ki-fallstudie} 0.011 USD $\approx$ 0.01 CHF.
-        \item Der durchschnittliche Studenlohn beträgt 38 CHF\@.
+        \item Der durchschnittliche Stundenlohn beträgt 38 CHF\@.
         \item Eine Datei wird im Schnitt für eine Woche überwacht.
         \item Ein Computer läuft im Schnitt 6 Stunden pro Tag.
         \item Das Hinzufügen eines zu überwachenden Verzeichnisses, damit TraceSentry die darin enthaltenen Dateien überwachen kann, dauert ca.\ 10 Sekunden.
@@ -2782,7 +2781,7 @@ echo ts run >> ~/.zprofile
     \subsubsection{Generelle Ideen für zukünftige Features}
     \begin{itemize}
         \item \textbf{Individuelle Monitoring Intervalle}: Der Anwender soll die Möglichkeit haben, die Periodizität des Monitorings pro überwachter Datei individuell einzustellen.
-        \item \textbf{Monitoring von geschützten Verzeichnissen/Dateien}: Der Anwender soll die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystems), geschützte Verzeichnisse/Dateien zu überwachen.
+        \item \textbf{Monitoring von geschützten Verzeichnissen/Dateien}: Der Anwender soll die Möglichkeit haben (eventuell mit Erfordernissen via Betriebssystem), geschützte Verzeichnisse/Dateien zu überwachen.
         \item \textbf{Doppel-Backslash in Windows}: Wegen des Escapings von Java sind momentan in Windows-Pfaden doppelte Backslashes notwendig.
         Dies könnte mit einer Erweiterung im \texttt{ts.bat} Skript für Windows behoben werden.
     \end{itemize}
@@ -2984,13 +2983,13 @@ echo ts run >> ~/.zprofile
     \includepdf[pages=-]{assets/lib_class_diag.png}
 
 
-    \section{Erklärung zur Urheberschaft}
-
-    Hiermit erklären wir, dass die vorliegende Arbeit selbstständig verfasst wurde und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt wurden.
+    \section{Eigenständigkeitserklärung}
+    Hiermit erklären wir, dass wir die vorliegende Arbeit selbstständig und ohne unzulässige Hilfe Dritter angefertigt haben.
     \\\\
-    Alle Stellen, die wörtlich oder sinngemäss aus anderen Quellen entnommen wurden, sind als solche gekennzeichnet.
+    Alle verwendeten Quellen, Inhalte und Hilfsmittel sind vollständig und ordnungsgemäß angegeben.
+    Wörtlich oder inhaltlich übernommene Stellen sind als solche gekennzeichnet.
     \\\\
-    Ich erkläre mich damit einverstanden, dass die vorliegende Arbeit in elektronischer Form mit geeigneter Software überprüft werden darf.
+    Wir erklären uns damit einverstanden, dass die vorliegende Arbeit in elektronischer Form mit geeigneter Software überprüft werden darf.
 
     \begin{flushleft}
         \today
