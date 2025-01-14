@@ -14,4 +14,5 @@ Installationsanleitung:
 - Siehe src/README.md (in Englisch)
 
 Benutzerhandbuch:
+- Siehe Kapitel 5.3 im Bericht
 - Siehe CLI-Dokumentation unter src/docs/cli.md
