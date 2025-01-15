@@ -22,6 +22,4 @@ source ~/.zprofile
 
 clear
 
-echo -e "Setup complete and CLI running. Type help for a list of commands.\nPlease restart your terminal after closing the CLI."
-
-ts
+echo -e "Setup complete please restart your terminal and type 'ts' to run TraceSentry."
