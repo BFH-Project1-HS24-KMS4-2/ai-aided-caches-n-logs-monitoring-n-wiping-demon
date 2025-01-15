@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo -e "\n\n# Added for TraceSentry" >> ~/.zprofile
+echo "export TRACE_SENTRY_DIR=$(pwd)" >> ~/.zprofile
+echo "export PATH=\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
+
+# for the project submission we will provide the apikey.txt file
+keyFilePath="apikey.txt"
+
+if [[ -f "$keyFilePath" ]]; then
+    apiKey=$(cat "$keyFilePath")
+
+    echo "export OPENAI_API_KEY=$apiKey" >> ~/.zprofile
+
+    echo "OpenAI API key set."
+else
+    echo "API key file not found. Set the environment variable OPENAI_API_KEY manually later."
+fi
+
+echo "ts run" >> ~/.zprofile
+source ~/.zprofile
+
+clear
+
+echo -e "Setup complete and CLI running. Type help for a list of commands.\nPlease restart your terminal after closing the CLI."
+
+ts

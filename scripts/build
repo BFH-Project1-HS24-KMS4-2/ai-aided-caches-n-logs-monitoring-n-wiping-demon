@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd src
+mvn clean package -DskipTests
+
+cp daemon/target/daemon.jar ../bin/daemon.jar
+cp cli/target/cli.jar ../bin/cli.jar
