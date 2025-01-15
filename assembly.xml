@@ -38,13 +38,6 @@
                 <include>*.jar</include>
             </includes>
         </fileSet>
-        <fileSet>
-            <directory>${basedir}/lib/target</directory>
-            <outputDirectory>bin</outputDirectory>
-            <includes>
-                <include>*.jar</include>
-            </includes>
-        </fileSet>
         <!-- Include scripts -->
         <fileSet>
             <directory>${basedir}/scripts</directory>
