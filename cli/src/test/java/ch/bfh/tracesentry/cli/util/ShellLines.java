@@ -2,14 +2,12 @@ package ch.bfh.tracesentry.cli.util;
 
 import java.util.List;
 
-/**
- * Utility class for shell tests.
- */
 public class ShellLines {
 
     /**
      * Joins all lines of a shell output and trims them.
-     * This is needed because the shell test client has a internal line length limit.
+     * This is needed because the shell test client has a internal line length limit,
+     * which cannot be changed in the current version of the shell test client.
      * @param shellLines List returned by ShellTestClient.screen().lines()
      * @return joined String of all trimmed lines
      */

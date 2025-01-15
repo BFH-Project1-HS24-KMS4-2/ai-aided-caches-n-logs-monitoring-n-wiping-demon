@@ -14,5 +14,4 @@ public class CliApplication {
             System.exit(1);
         }
     }
-
 }

@@ -69,7 +69,7 @@ public class PerformanceTest {
      * A node (dir or file) can manually be changed/added/removed while the test is running to also test the comparison functionality.
      * There are 720 snapshot creations, simulating a month of monitoring.
      **/
-    @Test
+    // @Test // uncomment to run
     public void testMonitoringOverLongPeriod() {
         var monitorings = List.of(
                 "/home/luca/tracesentry-1.0.2",
@@ -123,10 +123,10 @@ public class PerformanceTest {
     /**
      * Outputs simple metrics about the search operation.
      */
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "/home/luca", "/opt/idea-IU-242.22855.74"}
-    )
+    // @ParameterizedTest // uncomment to run
+    // @ValueSource(strings = {
+    //         "/home/luca", "/opt/idea-IU-242.22855.74"}
+    // )
     public void testSearch(String path) {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
 

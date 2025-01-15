@@ -75,7 +75,7 @@ public class SearchCommandsITest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"log", "cache", "full"}) // pattern is tested separately
+    @ValueSource(strings = {"log", "cache", "full"})
     void shouldAcceptValidSearchModes(String mode) {
         final Path relSearchPath = Paths.get("test");
         String url = DaemonAdapter.BASE_URL + "search?path=" + relSearchPath.toAbsolutePath() + "&mode=" + mode;

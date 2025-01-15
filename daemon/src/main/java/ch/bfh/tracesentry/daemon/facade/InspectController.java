@@ -22,9 +22,6 @@ public class InspectController {
         this.inspectionService = inspectionService;
     }
 
-    /*
-     * This endpoint is not tested because it relies on the openai model and therefore the only thing that would be tested is the reading of the file.
-     */
     @GetMapping("inspect")
     public String inspect(
             @RequestParam("path") String path
