@@ -89,6 +89,7 @@
 \makeindex
 
 \usepackage{glossaries}
+\usepackage{textcomp}
 
 % Define glossary entries
 \newglossaryentry{acid}{
@@ -2495,7 +2496,6 @@ index forbidden by rule: /var/www/html/
 
     \clearpage
 
-
     \section{Installationshandbuch \& Skript}
     In diesem Kapitel sind die Installationsanleitungen für alle unterstützten Plattformen beschrieben.
     Grundsätzlich ist der TraceSentry ein plattformunabhängiges System, welches auf den gängigen Betriebssystemen (Windows, Linux, MacOS) lauffähig ist.
@@ -2506,13 +2506,88 @@ index forbidden by rule: /var/www/html/
         \item macOS Sequoia 15.2
     \end{itemize}
 
-    \textbf{Eine Installation der Java Laufzeitumgebung (\gls{jre}) wird für die Installation vorausgesetzt.}
+    \textbf{Für alle nachfolgenden Schritte wird folgendes vorausgesetzt:}
+    \begin{itemize}
+        \item \textbf{Eine Installation von Java 21+ (\gls{jre}).}
+        \item \textbf{Eine aktuelle Maven-Installation (insofern manuell kompiliert wird).}
+        \item \textbf{Das zip-Archiv wurde am gewünschten Installationsort entpackt.}
+    \end{itemize}
 
-    \subsection{Linux}\label{subsec:linux}
+    \subsection{OpenAI API Key}
+    Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
+    Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
+    Dieser API Key wird in nachfolgenden Schritten benötigt.
+    Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
+
+    \subsection{Skripte}\label{subsec:skripte}
+    Für eine einfache Installation sind für alle unterstützten Plattformen Skripte im Installationsverzeichnis bereitgestellt.
+    \begin{itemize}
+        \item \texttt{build} Kompiliert das Projekt, erstellt die ausführbaren JAR-Dateien und ersetzt diese im \texttt{bin}-Ordner.
+        \item \texttt{setup} Erstellt notwendige Umgebungsvariablen und richtet den Autostart des Daemons ein.
+        \item \texttt{build-setup} Sequenzielle Ausführung von \texttt{build} und \texttt{setup}.
+    \end{itemize}
+    Da die JAR-Dateien bereits im Installationsverzeichnis enthalten sind, ist ein \textbf{manuelles Kompilieren nicht notwendig}.
+    Es wird im Folgenden empfohlen, direkt \texttt{setup} auszuführen.
+    Damit der OpenAI API Key von den Skripten erkannt wird, muss er sich in einer Datei namens \texttt{apikey.txt} im Installationsverzeichnis befinden.
+
+    \subsubsection{Linux}
+    Folgende Skripte sind für Linux verfügbar:
+    % TODO: Ammann wie unten die Listings einfügen
+
+    \subsubsection{Windows}
+    Folgende Skripte sind für Windows verfügbar:
+    \begin{itemize}
+        \item \texttt{build.ps1}
+        \item \texttt{setup-win.ps1}
+        \item \texttt{build-setup-win.ps1}
+    \end{itemize}
+
+    Im Vorfeld muss sichergestellt werden, dass die Skripte ausgeführt werden können.
+    \textbf{Achtung}: hierbei wir die Ausführung von allen lokalen Skripten erlaubt.
+    Diese Aktion kann nur von Administratoren durchgeführt werden und wird mit folgendem Befehl in PowerShell erreicht:
+    \begin{lstlisting}[label={lst:lstlisting-windows-inst-1},caption={Windows Berechtigungen}]
+        set-executionpolicy remotesigned
+    \end{lstlisting}
+
+    Nachfolgend die empfohlene Ausführung von \texttt{setup-win.ps1}:
+    \begin{lstlisting}[label={lst:lstlisting-windows-inst-2},caption={Windows Installation}]
+        .\setup-win.ps1
+    \end{lstlisting}
+
+    \subsubsection{MacOS}
+    Folgende Skripte sind für MacOS verfügbar:
+    \begin{itemize}
+        \item \texttt{build}
+        \item \texttt{setup-mac}
+        \item \texttt{build-setup-mac}
+    \end{itemize}
+
+    \textbf{Achtung}: Der Einfachheit halber werden ausschliesslich Konfigurationen im \texttt{$\sim$/.zprofile} File vorgenommen.
+    Diese können bei Bedarf manuell entfernt werden.
+    Das \texttt{setup} Skript sollte nur einmal ausgeführt werden, um doppelte Einträge im \texttt{$\sim$/.zprofile} zu vermeiden.
+
+    Im Vorfeld muss sichergestellt werden, dass die Skripte ausführbar sind.
+    Dies wird mit folgendem Befehl erreicht:
+    \begin{lstlisting}[label={lst:lstlisting-macos-2},caption={MacOS Berechtigungen}]
+        chmod +x <skript>
+    \end{lstlisting}
+
+    Sollte zusätzlich ein Quarantine-Tag gesetzt sein, kann dieser mit folgendem Befehl entfernt werden:
+    \begin{lstlisting}[label={lst:lstlisting-macos-3},caption={MacOS Quarantäne-Tag}]
+        xattr -d com.apple.quarantine <skript>
+    \end{lstlisting}
+
+    Nachfolgend die empfohlene Ausführung von \texttt{setup-mac}:
+    \begin{lstlisting}[label={lst:lstlisting-macos-1},caption={MacOS Installation}]
+        ./setup-mac
+    \end{lstlisting}
+
+
+    \clearpage
+    \subsection{Manuelle Installation}\label{sec:manuelle-installation}
+    Die manuelle Installation wird nur empfohlen, wenn die Skripte nicht funktionieren oder die Installation individuell angepasst werden soll.
+    \subsubsection{Linux}\label{subsec:linux}
     \begin{enumerate}
-        \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
-        \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
-        \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
         \item Definieren Sie die folgenden Umgebungsvariablen in der Datei \texttt{/etc/environment}:
         \begin{lstlisting}[label={lst:lstlisting-unix-1}]
 JAVA_HOME=<absoluter Pfad zum JDK-Ordner>
@@ -2522,13 +2597,10 @@ TRACE_SENTRY_DIR=<absoluter Pfad zum Installationsverzeichnis>
         \begin{lstlisting}[label={lst:lstlisting-unix-2}]
 PATH=$PATH:$TRACE_SENTRY_DIR
         \end{lstlisting}
-        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
-        Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
+        \item Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable am Ende der Datei \texttt{/etc/profile}:
         \begin{lstlisting}[label={lst:lstlisting-unix-3}]
 export OPENAI_API_KEY=<generierter API-Schlüssel>
         \end{lstlisting}
-        Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, können Sie Folgendes in einem Terminal ausführen:
         \begin{lstlisting}[label={lst:lstlisting-unix-4}]
 crontab -e
@@ -2539,10 +2611,9 @@ crontab -e
         \item Nach einem Systemneustart sind Sie bereit, TraceSentry zu verwenden.
     \end{enumerate}
 
-    \subsection{Windows}
+    \clearpage
+    \subsubsection{Windows}
     \begin{enumerate}
-        \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
-        \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
         \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
         \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} via Systemsteuerung oder via \gls{powershell}:
         \begin{lstlisting}[label={lst:lstlisting-windows-1}]
@@ -2553,13 +2624,10 @@ crontab -e
 $currentPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
 [System.Environment]::SetEnvironmentVariable("Path", "$currentPath;<absoluter Pfad zum Installationsverzeichnis>","User")
         \end{lstlisting}
-        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
-        Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
+        \item Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable via PowerShell:
         \begin{lstlisting}[label={lst:lstlisting-windows-3}]
 [System.Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "<generierter API-Schluessel>","User")
         \end{lstlisting}
-        Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, muss die Datei \texttt{ts-daemon.bat} vom Installationsverzeichnis in den Autostart-Ordner kopiert werden:
         \begin{lstlisting}[label={lst:lstlisting-windows-4}]
 Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
@@ -2571,13 +2639,10 @@ Copy-Item "$env:TRACE_SENTRY_DIR\ts-daemon.bat" "$env:APPDATA\Microsoft\Windows\
 
     \clearpage
 
-    \subsection{macOS}\label{subsec:macos}
+    \subsubsection{macOS}\label{subsec:macos}
     Der Einfachheit halber werden hier ausschliesslich Konfigurationen im \texttt{.zprofile} File benützt.
     Die nachfolgenden Befehle schreiben die Konfigurationen direkt in die Datei.
     \begin{enumerate}
-        \item Durchsuchen Sie das neueste Artefakt, das vom Hauptbranch dieses Repositorys erstellt wurde, und laden Sie die Datei
-        \texttt{target/tracesentry-\textless{}version\textgreater{}-submission.zip} auf Ihren Computer herunter.
-        \item Entpacken Sie das Archiv in Ihr gewünschtes Installationsverzeichnis für TraceSentry.
         \item Setzen Sie die Umgebungsvariable \texttt{TRACE\_SENTRY\_DIR} im \texttt{.zprofile} File (befindet sich in Ihrem Home-Verzeichnis):
         \begin{lstlisting}[label={lst:lstlisting-mac-1}]
 echo '\n# Added for TraceSentry' >> ~/.zprofile
@@ -2587,13 +2652,10 @@ echo export TRACE_SENTRY_DIR="<absoluter Pfad zum Installationsverzeichnis>" >> 
         \begin{lstlisting}[label={lst:lstlisting-mac-2}]
 echo export PATH="\$TRACE_SENTRY_DIR:\$PATH" >> ~/.zprofile
         \end{lstlisting}
-        \item Wenn Sie die Inspektionsfunktion nutzen möchten, erstellen Sie einen OpenAI-API-Schlüssel, indem Sie den Anweisungen unter \url{https://platform.openai.com/settings/organization/api-keys} folgen.
-        Fügen Sie Guthaben zu Ihrem Konto hinzu, um die OpenAI-API nutzen zu können: \url{https://platform.openai.com/settings/organization/billing/overview}.
-        Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File:
+        \item Setzen Sie anschliessend den generierten API-Schlüssel als Umgebungsvariable im \texttt{.zprofile} File:
         \begin{lstlisting}[label={lst:lstlisting-mac-3}]
 echo export OPENAI_API_KEY=<generierter API-Schluessel> >> ~/.zprofile
         \end{lstlisting}
-        Sollten Sie diesen Teil überspringen, werden Sie keinen Zugriff auf die Inspektionsfunktion haben.
         \item Wenn der Daemon\index{Daemon} bei jedem Systemstart automatisch im Hintergrund gestartet werden soll, passen Sie das \texttt{.zprofile} File in ihrem Home-Verzeichnis wie folgt an:
         \begin{lstlisting}[label={lst:lstlisting-mac-4}]
 echo ts run >> ~/.zprofile
