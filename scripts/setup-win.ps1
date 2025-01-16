@@ -31,5 +31,4 @@ if (Test-Path $daemonFile) {
     Write-Host "Daemon file not found. Please make sure the file exists."
 }
 
-java -jar ".\bin\daemon.jar"
-Write-Host "Setup complete please restart your terminal and type 'ts' to run TraceSentry."
+Write-Host "Setup complete please restart your terminal and type 'ts' to run TraceSentry. Daemon will start automatically on system startup or manually by running 'run' command."
