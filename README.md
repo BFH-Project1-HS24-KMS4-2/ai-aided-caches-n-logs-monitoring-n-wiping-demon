@@ -61,10 +61,10 @@ The following scripts are available for Windows:
 - `setup-win.ps1`
 - `build-setup-win.ps1`
 
-Before executing the scripts, ensure they can run. **Warning**: This action allows all local scripts to execute and must be performed by an administrator. Use the following command in PowerShell:
+Before executing the scripts, ensure they can run. **Warning**: This action allows all scripts to execute and must be performed by an administrator. Use the following command in PowerShell:
 
 ```powershell
-set-executionpolicy remotesigned
+set-executionpolicy unrestricted
 ```
 
 Recommended execution of `setup-win.ps1`:

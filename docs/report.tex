@@ -2543,10 +2543,10 @@ index forbidden by rule: /var/www/html/
     \end{itemize}
 
     Im Vorfeld muss sichergestellt werden, dass die Skripte ausgeführt werden können.
-    \textbf{Achtung}: hierbei wir die Ausführung von allen lokalen Skripten erlaubt.
+    \textbf{Achtung}: hierbei wir die Ausführung von allen Skripten erlaubt.
     Diese Aktion kann nur von Administratoren durchgeführt werden und wird mit folgendem Befehl in PowerShell erreicht:
     \begin{lstlisting}[label={lst:lstlisting-windows-inst-1},caption={Windows Berechtigungen}]
-        set-executionpolicy remotesigned
+        set-executionpolicy unrestricted
     \end{lstlisting}
 
     Nachfolgend die empfohlene Ausführung von \texttt{setup-win.ps1}:
@@ -2575,6 +2575,7 @@ index forbidden by rule: /var/www/html/
 
     Sollte zusätzlich ein Quarantine-Tag gesetzt sein, kann dieser mit folgendem Befehl entfernt werden:
     \begin{lstlisting}[label={lst:lstlisting-macos-3},caption={MacOS Quarantäne-Tag}]
+        xattr -d com.apple.quarantine ts
         xattr -d com.apple.quarantine <skript>
     \end{lstlisting}
 
