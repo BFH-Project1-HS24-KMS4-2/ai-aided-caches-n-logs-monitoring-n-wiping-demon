@@ -2566,10 +2566,11 @@ index forbidden by rule: /var/www/html/
     Diese können bei Bedarf manuell entfernt werden.
     Das \texttt{setup} Skript sollte nur einmal ausgeführt werden, um doppelte Einträge im \texttt{$\sim$/.zprofile} zu vermeiden.
 
-    Im Vorfeld muss sichergestellt werden, dass die Skripte ausführbar sind.
+    Im Vorfeld muss sichergestellt werden, dass die CLI und die Skripte ausgeführt werden können.
     Dies wird mit folgendem Befehl erreicht:
     \begin{lstlisting}[label={lst:lstlisting-macos-2},caption={MacOS Berechtigungen}]
-        chmod +x <skript>
+        chmod +x ts
+        chmod +x <verwendete Skripte>
     \end{lstlisting}
 
     Sollte zusätzlich ein Quarantine-Tag gesetzt sein, kann dieser mit folgendem Befehl entfernt werden:
