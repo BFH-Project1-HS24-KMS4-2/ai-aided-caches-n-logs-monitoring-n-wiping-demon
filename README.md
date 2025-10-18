@@ -1,10 +1,9 @@
-# Project 1 AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon
+# Tracesentry
+## AI-Aided Caches-n-Logs Monitoring-n-Wiping Demon
 
-## Project Overview
+## Overview
 
-The Cache-n-Log Wiper is a platform-independent tool designed to monitor and manage the cache and log files on your
-computer. With the help of AI, it analyzes each file to determine its purpose and whether it should be wiped or deleted.
-This project aims to help users regain control over their computer's file system and enhance privacy.
+TraceSentry is a cross-platform daemon and CLI that continuously monitors cache and log artifacts and helps you manage them safely. Powered by AI, it classifies files, explains their purpose, and recommends secure wiping or deletion where appropriate. The objective is to minimize unnecessary disk usage, improve system performance, and protect privacy without compromising stability.
 
 ## Features
 
